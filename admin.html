@@ -3,123 +3,142 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arnaud Admin - PIN Access</title>
+<title>Arnaud Admin - SECRET</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:15px}
-.card{background:#1e293b;padding:25px;border-radius:16px;width:100%;max-width:480px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#1e293b;padding:30px;border-radius:16px;width:100%;max-width:500px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 h2{text-align:center;margin-bottom:20px;color:#38bdf8}
-input,select{width:100%;padding:12px;margin:8px 0 14px;border-radius:8px;border:none;outline:none;background:#0f172a;color:#fff;border:1px solid #334155}
-label{font-size:13px;color:#94a3b8}
-button{width:100%;padding:13px;border:none;border-radius:8px;background:#38bdf8;color:#0f172a;font-weight:bold;font-size:15px;cursor:pointer;margin-top:10px}
-button:hover{background:#0ea5e9}
+input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;box-sizing:border-box}
+button{width:100%;padding:12px;margin-top:12px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+.btn-blue{background:#0ea5e9;color:#fff}
+.btn-green{background:#22c55e;color:#fff}
+.btn-dark{background:#334155;color:#fff}
+#adminPanel{display:none}
+#qrcode{display:flex;justify-content:center;margin:20px 0;background:#fff;padding:15px;border-radius:10px}
 .hidden{display:none}
-.note{background:#0f172a;padding:12px;border-radius:8px;font-size:12px;color:#94a3b8;margin-top:15px;line-height:1.5;border:1px dashed #334155}
-.success{background:#16a34a;padding:12px;border-radius:8px;text-align:center;margin:10px 0;display:none}
-code{word-break:break-all;background:#020617;padding:10px;display:block;border-radius:6px;margin-top:10px;font-size:12px}
+.success{background:#14532d;color:#bbf7d0;padding:10px;border-radius:8px;text-align:center;margin-top:15px}
 </style>
 </head>
 <body>
-<div class="card" id="loginCard">
-<h2>🔐 Admin Login</h2>
-<label>Enter Admin PIN</label>
-<input type="password" id="pinInput" placeholder="Enter PIN e.g. ARNAUD333649">
-<button onclick="checkPin()">Unlock Admin</button>
-<div class="note">PIN: <b>ARNAUD333649</b><br>Direct link: .../admin.html</div>
-<p id="loginError" style="color:#f87171;text-align:center;margin-top:10px;display:none">Wrong PIN!</p>
+
+<!-- LOGIN - SECRET, NO PIN SHOWN -->
+<div class="card" id="loginPanel">
+<h2>🔐 Admin Access</h2>
+<p style="text-align:center;color:#94a3b8;font-size:14px">Enter your secret password to access database</p>
+<input type="password" id="pinInput" placeholder="Enter secret password">
+<button class="btn-blue" onclick="unlock()">Unlock Admin</button>
+<p id="errorMsg" style="color:#f87171;text-align:center;margin-top:10px;display:none">❌ Wrong password</p>
 </div>
 
-<div class="card hidden" id="adminCard">
-<h2>✅ Add Certificate</h2>
-<div class="success" id="successMsg">Certificate ready! Download below</div>
+<!-- ADMIN - ONLY SHOWS AFTER CORRECT PIN -->
+<div class="card" id="adminPanel">
+<h2>✅ Arnaud Verification LTD<br><small style="font-size:12px;color:#94a3b8">Secret Database Office</small></h2>
 
-<label>Certificate Code</label>
-<input type="text" id="certCode" value="ARNAUD333649">
+<input type="text" id="certCode" placeholder="Certificate Code e.g. ARNAUD333649" value="ARNAUD333649">
+<input type="text" id="fullName" placeholder="Full Name e.g. John Doe">
+<input type="text" id="course" placeholder="Course Title e.g. Safety & Security">
+<input type="date" id="issueDate">
 
-<label>Full Name</label>
-<input type="text" id="fullName" placeholder="e.g. John Okafor">
+<button class="btn-blue" onclick="generateCert()">Generate Certificate + QR</button>
 
-<label>Course / Training Title</label>
-<input type="text" id="course" placeholder="e.g. Safety Training">
-
-<label>Date Issued</label>
-<input type="date" id="dateIssued" value="2026-09-18">
-
-<label>Status</label>
-<select id="status">
-<option value="Valid">Valid</option>
-<option value="Expired">Expired</option>
-<option value="Pending">Pending</option>
-</select>
-
-<button onclick="generateCert()">Generate Certificate File</button>
-<button onclick="downloadDB()" style="background:#22c55e">⬇️ Download database.json</button>
-<button onclick="logout()" style="background:#334155;color:#fff">Logout</button>
-
-<div id="outputArea" class="hidden">
-<code id="jsonOutput"></code>
-<div class="note">
-<strong>HOW TO MAKE IT LIVE:</strong><br>
-1. Click Download database.json<br>
-2. Go to GitHub repo > Add file > Upload files<br>
-3. Upload the database.json<br>
-4. Commit changes<br>
-5. Test: verify.html?code=ARNAUD333649
+<div id="qrSection" class="hidden">
+<h3 style="text-align:center">QR Code for Certificate</h3>
+<div id="qrcode"></div>
+<p style="text-align:center;font-size:12px;color:#94a3b8">Scan this QR to verify</p>
+<p id="verifyLink" style="text-align:center;font-size:11px;word-break:break-all;color:#38bdf8"></p>
+<button class="btn-dark" onclick="downloadQR()">Download QR Image</button>
 </div>
-</div>
+
+<div id="successMsg" class="hidden success">✅ Added to database! Now download database.json below</div>
+
+<hr style="margin:20px 0;border:0;border-top:1px solid #334155">
+
+<button class="btn-green" onclick="downloadDB()">📥 Download database.json (UPLOAD TO GITHUB)</button>
+<button class="btn-dark" onclick="logout()">🔒 Lock Admin</button>
+
+<h4 style="margin-top:20px">Current Database (<span id="count">0</span>)</h4>
+<div id="dbList" style="font-size:12px;max-height:150px;overflow-y:auto;background:#0f172a;padding:10px;border-radius:8px"></div>
 </div>
 
 <script>
-const CORRECT_PIN = "ARNAUD333649";
-let certificates = [];
-function checkPin(){
- const pin = document.getElementById('pinInput').value.trim();
- if(pin === CORRECT_PIN){
-   document.getElementById('loginCard').classList.add('hidden');
-   document.getElementById('adminCard').classList.remove('hidden');
-   loadExisting();
- } else {
-   document.getElementById('loginError').style.display='block';
- }
+const SECRET_PIN = "ARNAUD333649";
+let database = JSON.parse(localStorage.getItem('arnaud_db') || '{}');
+let currentQR = null;
+
+function unlock(){
+  const entered = document.getElementById('pinInput').value.trim();
+  if(entered === SECRET_PIN){
+    document.getElementById('loginPanel').style.display='none';
+    document.getElementById('adminPanel').style.display='block';
+    loadDB();
+  } else {
+    document.getElementById('errorMsg').style.display='block';
+  }
 }
+
 function logout(){
- document.getElementById('adminCard').classList.add('hidden');
- document.getElementById('loginCard').classList.remove('hidden');
- document.getElementById('pinInput').value='';
+  document.getElementById('adminPanel').style.display='none';
+  document.getElementById('loginPanel').style.display='block';
+  document.getElementById('pinInput').value='';
 }
-async function loadExisting(){
- try{
-   const res = await fetch('database.json?t='+Date.now());
-   if(res.ok){
-     const data = await res.json();
-     certificates = Array.isArray(data) ? data : (data.certificates || []);
-   }
- }catch(e){ certificates = []; }
-}
+
 function generateCert(){
- const code = document.getElementById('certCode').value.trim() || 'ARNAUD333649';
- const name = document.getElementById('fullName').value.trim();
- const course = document.getElementById('course').value.trim();
- const date = document.getElementById('dateIssued').value;
- const status = document.getElementById('status').value;
- if(!name || !course){ alert('Please fill Name and Course!'); return; }
- const newCert = { code: code, name: name, course: course, date: date, status: status, verification_link: `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?code=${code}` };
- certificates = certificates.filter(c => c.code !== code);
- certificates.push(newCert);
- document.getElementById('jsonOutput').textContent = JSON.stringify(certificates, null, 2);
- document.getElementById('outputArea').classList.remove('hidden');
- document.getElementById('successMsg').style.display='block';
- setTimeout(()=>{ document.getElementById('successMsg').style.display='none'; }, 4000);
+  const code = document.getElementById('certCode').value.trim();
+  const name = document.getElementById('fullName').value.trim();
+  const course = document.getElementById('course').value.trim();
+  const date = document.getElementById('issueDate').value || new Date().toISOString().split('T')[0];
+
+  if(!code ||!name ||!course){ alert('Fill all fields boss!'); return; }
+
+  database[code] = { fullName: name, course: course, issueDate: date, status: "VALID" };
+  localStorage.setItem('arnaud_db', JSON.stringify(database));
+
+  // Generate QR
+  document.getElementById('qrSection').classList.remove('hidden');
+  document.getElementById('qrcode').innerHTML='';
+  const verifyUrl = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?code=${code}`;
+  document.getElementById('verifyLink').innerText = verifyUrl;
+
+  new QRCode(document.getElementById('qrcode'), {
+    text: verifyUrl,
+    width: 200,
+    height: 200
+  });
+
+  document.getElementById('successMsg').classList.remove('hidden');
+  loadDB();
 }
+
+function loadDB(){
+  document.getElementById('count').innerText = Object.keys(database).length;
+  let html = '';
+  for(let code in database){
+    html += `<div>✅ <b>${code}</b> - ${database[code].fullName}</div>`;
+  }
+  document.getElementById('dbList').innerHTML = html || 'No certificates yet';
+}
+
 function downloadDB(){
- if(certificates.length===0){ alert('First click Generate!'); return; }
- const blob = new Blob([JSON.stringify(certificates, null, 2)], {type:'application/json'});
- const url = URL.createObjectURL(blob);
- const a = document.createElement('a');
- a.href=url; a.download='database.json'; a.click();
- URL.revokeObjectURL(url);
- alert('Downloaded! Now upload to GitHub!');
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(database, null, 2));
+  const a = document.createElement('a');
+  a.href = dataStr;
+  a.download = "database.json";
+  a.click();
+  alert('Now go to GitHub > Upload this database.json > Commit changes. After 2 mins, your certificates will be LIVE!');
 }
+
+function downloadQR(){
+  const canvas = document.querySelector('#qrcode canvas');
+  if(!canvas) return alert('Generate QR first');
+  const a = document.createElement('a');
+  a.href = canvas.toDataURL();
+  a.download = document.getElementById('certCode').value + "_QR.png";
+  a.click();
+}
+
+// auto set today
+document.getElementById('issueDate').valueAsDate = new Date();
 </script>
 </body>
 </html>
