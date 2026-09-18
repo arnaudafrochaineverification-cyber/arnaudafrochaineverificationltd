@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARNAUD AFROCHAINE VERIFICATION LTD</title>
+<style>
+body{margin:0;font-family:Arial;background:#0a3d0a;text-align:center}
+.header{background:linear-gradient(135deg,#0a3d0a,#1a6a1a);padding:20px}
+.logo{width:220px;height:220px;border-radius:50%;border:5px solid gold;background:white;object-fit:cover}
+h1{font-size:22px;margin:15px 0;color:gold}
+.card{background:white;margin:15px;padding:20px;border-radius:15px}
+.btn{display:block;background:#25D366;color:white;padding:15px;margin:10px 0;border-radius:10px;text-decoration:none;font-weight:bold;font-size:18px}
+.btn2{background:#0a3d0a}
+input{width:92%;padding:15px;margin:10px 0;font-size:18px;border:2px solid #0a3d0a;border-radius:10px;text-align:center;text-transform:uppercase}
+.verify-btn{background:gold;color:black;padding:15px 30px;font-size:20px;font-weight:bold;border:none;border-radius:10px}
+#result{margin-top:15px;font-size:18px;font-weight:bold;min-height:30px}
+</style>
+</head>
+<body>
+<div class="header">
+<img src="IMG-20260917-WA1432.jpg" class="logo" onerror="this.src='IMG-20260917-WA0032.jpg'">
+<h1>ARNAUD AFROCHAINE VERIFICATION LTD</h1>
+<p style="color:white;">9 okesutedo Baba junction ota, Sango ota, ogun<br>RC: 8604820</p>
+</div>
+<div class="card">
+<p style="font-size:22px;">🔍 Verify Certificate</p>
+<input type="text" id="certId" placeholder="Enter Certificate ID">
+<br><br>
+<button class="verify-btn" onclick="verifyCertificate()">VERIFY NOW</button>
+<div id="result"></div>
+</div>
+<div class="card">
+<h2>Contact Us</h2>
+<a class="btn" href="https://wa.me/2349132851465">💬 WhatsApp: 09132851465</a>
+<a class="btn btn2" href="tel:09132851465">📞 Call: 09132851465</a>
+</div>
+<script>
+function verifyCertificate(){
+let id=document.getElementById('certId').value.trim().toUpperCase();
+let r=document.getElementById('result');
+if(id===""){r.innerHTML="⚠️ Enter ID";r.style.color="orange";return;}
+let defaults=["TEST123","TESTING 123","ARNAUD-001","ARNAUD-002"];
+let saved=JSON.parse(localStorage.getItem('arnaud_certs')||'null');
+let certs=saved||defaults;
+let schools=JSON.parse(localStorage.getItem('arnaud_schools')||'{}');
+if(certs.includes(id)){
+let sn=schools[id]?"<br><small>"+schools[id]+"</small>":"";
+r.innerHTML="✅ VALID CERTIFICATE<br>"+id+sn+"<br>verified by ARNAUD AFROCHAINE";
+r.style.color="green";
+}else{
+r.innerHTML="❌ INVALID / FAKE<br>"+id+" not found";
+r.style.color="red";
+}
+}
+</script>
+</body>
+</html>
