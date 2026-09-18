@@ -1,0 +1,68 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Secure Admin - Arnaud</title><style>body{font-family:Arial;padding:20px;background:#0a192f;display:flex;justify-content:center;min-height:100vh;margin:0}.box{max-width:450px;width:100%;background:white;padding:30px;border-radius:12px}input,button,select{width:100%;padding:13px;margin:8px 0;border-radius:8px;border:1px solid #ccc;box-sizing:border-box}button{background:#0a192f;color:white;font-weight:bold;border:none;cursor:pointer}.green{background:green}.small{font-size:12px;color:#666;text-align:center}</style></head><body>
+<div class="box" id="loginBox">
+<h3>🔒 SECURE ADMIN LOGIN</h3>
+<p class="small">Use your GitHub Personal Access Token (not public password). This token never saved.</p>
+<input type="password" id="token" placeholder="Paste GitHub Token (ghp_xxx)">
+<input id="repo" value="arnaudafrochaineverification-cyber/arnaudafrochaineverificationltd" placeholder="repo">
+<button onclick="unlock()">UNLOCK WITH TOKEN</button>
+<p class="small">How to get token: GitHub > Settings > Developer settings > Tokens > Generate new token (classic) > tick 'repo' > copy</p>
+<p id="err" style="color:red;text-align:center"></p>
+</div>
+<div class="box" id="panel" style="display:none">
+<h2>✅ Admin Unlocked - Full Access</h2>
+<p><b>School (Locked to your company only):</b></p>
+<input id="sch" value="Arnaud Afrochaine Verification LTD" readonly style="background:#eee;font-weight:bold">
+<input id="cid" placeholder="Certificate ID e.g AA-2025-010">
+<input id="stu" placeholder="Student Full Name">
+<input id="course" placeholder="Course e.g Data Science">
+<button class="green" onclick="saveCert()">SAVE TO DATABASE.JSON (Live)</button>
+<p id="msg" style="color:green"></p><hr>
+<h3>Live Saved List (from database.json)</h3><div id="list">Loading...</div>
+<button onclick="location.reload()" style="background:#333;margin-top:15px">LOCK ADMIN</button>
+</div>
+<script>
+let TOKEN, REPO, SHA, DB={};
+async function unlock(){
+ TOKEN=document.getElementById('token').value.trim();
+ REPO=document.getElementById('repo').value.trim();
+ if(!TOKEN) return alert('Enter GitHub Token');
+ document.getElementById('err').innerText='Loading...';
+ try{
+   let res=await fetch(`https://api.github.com/repos/${REPO}/contents/database.json`,{headers:{Authorization:`token ${TOKEN}`}});
+   let data=await res.json();
+   SHA=data.sha;
+   DB=JSON.parse(atob(data.content));
+   document.getElementById('loginBox').style.display='none';
+   document.getElementById('panel').style.display='block';
+   show();
+ }catch(e){document.getElementById('err').innerText='❌ Token or Repo Wrong: '+e.message}
+}
+function show(){
+ let h=''; for(let k in DB){h+=`<div style="border:1px solid #ddd;padding:8px;margin:5px 0;border-radius:5px"><b>${k}</b><br>${DB[k].school} - ${DB[k].student} - ${DB[k].course||''}<br><small>${DB[k].date}</small> <button onclick="delCert('${k}')" style="width:auto;padding:4px 8px;background:red">Delete</button></div>`}
+ document.getElementById('list').innerHTML=h||'No certificate yet';
+}
+async function saveToGitHub(){
+ let content=btoa(JSON.stringify(DB,null,2));
+ await fetch(`https://api.github.com/repos/${REPO}/contents/database.json`,{
+  method:'PUT',
+  headers:{Authorization:`token ${TOKEN}`,'Content-Type':'application/json'},
+  body:JSON.stringify({message:`Update cert ${new Date().toISOString()}`,content,sha:SHA})
+ });
+ alert('✅ LIVE! Certificate now VALID for everybody for 2 minutes. Refresh your main site.');
+ location.reload();
+}
+function saveCert(){
+ let id=document.getElementById('cid').value.trim().toUpperCase();
+ let stu=document.getElementById('stu').value.trim();
+ let course=document.getElementById('course').value.trim();
+ if(!id||!stu) return alert('Enter ID and Student Name');
+ DB[id]={school:document.getElementById('sch').value,student:stu,course:course,date:new Date().toLocaleDateString('en-GB'),status:'VALID'};
+ document.getElementById('msg').innerText='Saving to live database...';
+ saveToGitHub();
+}
+async function delCert(k){
+ if(!confirm('Delete '+k+' permanently?')) return;
+ delete DB[k];
+ await saveToGitHub();
+}
+</script></body></html>
