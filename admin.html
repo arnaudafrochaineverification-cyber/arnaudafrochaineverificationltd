@@ -1,64 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ARNAUD AFROCHAINE VERIFICATION LTD</title>
-<style>
-body{margin:0;font-family:Arial;background:#0a3d0a;text-align:center}
-.header{background:linear-gradient(135deg,#0a3d0a,#1a6a1a);padding:20px}
-.logo{width:220px;height:220px;border-radius:50%;border:5px solid gold;background:white;object-fit:cover}
-h1{font-size:24px;margin:15px 0;color:gold;}
-.card{background:white;margin:15px;padding:20px;border-radius:15px;box-shadow:0 4px 10px rgba(0,0,0,0.3)}
-.btn{display:block;background:#25D366;color:white;padding:15px;margin:10px 0;border-radius:10px;text-decoration:none;font-weight:bold;font-size:18px}
-.btn2{background:#0a3d0a}
-input{width:92%;padding:15px;margin:10px 0;font-size:18px;border:2px solid #0a3d0a;border-radius:10px;text-align:center;text-transform:uppercase}
-.verify-btn{background:gold;color:black;padding:15px 30px;font-size:20px;font-weight:bold;border:none;border-radius:10px;cursor:pointer}
-#result{margin-top:15px;font-size:18px;font-weight:bold;min-height:30px}
-</style>
-</head>
-<body>
-<div class="header">
-<img src="IMG-20260917-WA1432.jpg" class="logo">
-<h1>ARNAUD AFROCHAINE VERIFICATION LTD</h1>
-<p style="color:white;">9 okesutedo Baba junction ota, Sango ota, ogun<br>RC: 8604820</p>
-</div>
-
-<div class="card">
-<p style="font-size:22px;">🔍 Verify Certificate</p>
-<input type="text" id="certId" placeholder="Enter Certificate ID">
-<br>
-<button class="verify-btn" onclick="verifyCertificate()">VERIFY NOW</button>
-<div id="result"></div>
-</div>
-
-<div class="card">
-<h2>Contact Us</h2>
-<a class="btn" href="https://wa.me/2349132851465">💬 WhatsApp: 09132851465</a>
-<a class="btn btn2" href="tel:09132851465">📞 Call: 09132851465</a>
-<a class="btn" style="background:#333;" href="mailto:arnaudafrochaine5@gmail.com">📧 Email</a>
-</div>
-
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin - Arnaud Afrochaine</title><style>body{font-family:Arial;padding:20px;background:#0a192f;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0}.box{max-width:400px;width:100%;background:white;padding:30px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.3)}input,button{width:100%;padding:13px;margin:8px 0;border-radius:8px;border:1px solid #ccc;box-sizing:border-box}button{background:#0a192f;color:white;font-weight:bold;border:none;cursor:pointer}#panel{display:none}.logo{text-align:center;font-weight:bold;color:#0a192f;margin-bottom:15px}</style></head><body>
+<div class="box" id="loginBox"><div class="logo">🔒 ARNAUD AFROCHAINE<br>PRIVATE ADMIN</div><p style="text-align:center;color:red;font-size:13px">Authorized Access Only!</p><input type="password" id="pwd" placeholder="Enter Admin Password"><button onclick="login()">UNLOCK ADMIN</button><p id="err" style="color:red;text-align:center"></p></div>
+<div class="box" id="panel"><h2>✅ Admin Unlocked</h2><p>Add Certificate</p><input id="cid" placeholder="Certificate ID e.g GML-2024-001"><input id="sch" placeholder="School Name"><input id="stu" placeholder="Student Name"><button onclick="saveCert()" style="background:green">SAVE CERTIFICATE</button><p id="msg" style="color:green"></p><hr><h3>Saved List</h3><div id="list"></div><button onclick="logout()" style="background:#333;margin-top:15px">LOCK ADMIN</button></div>
 <script>
-function verifyCertificate() {
-  let id = document.getElementById('certId').value.trim().toUpperCase();
-  let resultDiv = document.getElementById('result');
-  
-  if(id === "") {
-    resultDiv.innerHTML = "⚠️ Please enter Certificate ID";
-    resultDiv.style.color = "orange";
-    return;
-  }
-
-  const realCertificates = ["TEST123", "TESTING 123", "ARNAUD-001", "ARNAUD-002"];
-
-  if(realCertificates.includes(id)) {
-    resultDiv.innerHTML = "✅ VALID CERTIFICATE<br>" + id + " verified by ARNAUD AFROCHAINE";
-    resultDiv.style.color = "green";
-  } else {
-    resultDiv.innerHTML = "❌ INVALID / FAKE CERTIFICATE<br>" + id + " not found";
-    resultDiv.style.color = "red";
-  }
-}
-</script>
-</body>
-</html>
+const ADMIN_PASSWORD = "Arnaud2024@Admin";
+function login(){if(document.getElementById('pwd').value===ADMIN_PASSWORD){document.getElementById('loginBox').style.display='none';document.getElementById('panel').style.display='block';show();}else{document.getElementById('err').innerText='❌ Wrong Code! Access Denied!';}}
+function saveCert(){let id=document.getElementById('cid').value.trim().toUpperCase();if(!id)return alert('Enter ID');let s=document.getElementById('sch').value;let n=document.getElementById('stu').value;let all=JSON.parse(localStorage.getItem('arnaud_certs')||'{}');all[id]={school:s,name:n,date:new Date().toLocaleDateString()};localStorage.setItem('arnaud_certs',JSON.stringify(all));localStorage.setItem('certs',JSON.stringify(all));document.getElementById('msg').innerText='✅ Saved: '+id;document.getElementById('cid').value='';show();}
+function show(){let all=JSON.parse(localStorage.getItem('arnaud_certs')||'{}');let h='';for(let k in all){h+=`<div style="border:1px solid #ddd;padding:8px;margin:5px 0;border-radius:5px"><b>${k}</b><br>${all[k].school} - ${all[k].name}<br><small>${all[k].date}</small> <button onclick="delCert('${k}')" style="width:auto;padding:4px 8px;background:red;margin-left:5px">Delete</button></div>`}document.getElementById('list').innerHTML=h||'No certificate yet';}
+function delCert(k){if(!confirm('Delete '+k+'?'))return;let all=JSON.parse(localStorage.getItem('arnaud_certs')||'{}');delete all[k];localStorage.setItem('arnaud_certs',JSON.stringify(all));localStorage.setItem('certs',JSON.stringify(all));show();}
+function logout(){document.getElementById('panel').style.display='none';document.getElementById('loginBox').style.display='block';document.getElementById('pwd').value='';}
+document.getElementById('pwd').addEventListener('keypress',function(e){if(e.key==='Enter')login();});
+</script></body></html>
