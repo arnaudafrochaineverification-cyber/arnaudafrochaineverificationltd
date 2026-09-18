@@ -1,144 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arnaud Admin - SECRET</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arnaud Legit Admin - 12 Fields</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-.card{background:#1e293b;padding:30px;border-radius:16px;width:100%;max-width:500px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-h2{text-align:center;margin-bottom:20px;color:#38bdf8}
-input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;box-sizing:border-box}
-button{width:100%;padding:12px;margin-top:12px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
-.btn-blue{background:#0ea5e9;color:#fff}
-.btn-green{background:#22c55e;color:#fff}
-.btn-dark{background:#334155;color:#fff}
-#adminPanel{display:none}
-#qrcode{display:flex;justify-content:center;margin:20px 0;background:#fff;padding:15px;border-radius:10px}
-.hidden{display:none}
-.success{background:#14532d;color:#bbf7d0;padding:10px;border-radius:8px;text-align:center;margin-top:15px}
-</style>
-</head>
-<body>
+body{background:#0f172a;color:#fff;font-family:Arial;display:flex;justify-content:center;padding:12px}
+.card{background:#1e293b;padding:20px;border-radius:14px;width:100%;max-width:560px}
+input,select{width:100%;padding:11px;margin:5px 0;border-radius:7px;border:1px solid #334155;background:#0f172a;color:#fff;box-sizing:border-box}
+label{font-size:11px;color:#94a3b8;margin-top:8px;display:block;text-transform:uppercase}
+button{width:100%;padding:12px;margin-top:8px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+.blue{background:#0ea5e9;color:#fff}.green{background:#22c55e;color:#fff}.dark{background:#334155;color:#fff}
+#admin{display:none}#qrBox{background:#fff;padding:12px;border-radius:10px;display:flex;justify-content:center;margin:12px 0}
+.hide{display:none}#photoPreview{width:80px;height:80px;border-radius:50%;background:#0f172a;border:2px solid #334155;object-fit:cover;display:none;margin:5px auto}
+</style></head><body>
 
-<!-- LOGIN - SECRET, NO PIN SHOWN -->
-<div class="card" id="loginPanel">
-<h2>🔐 Admin Access</h2>
-<p style="text-align:center;color:#94a3b8;font-size:14px">Enter your secret password to access database</p>
-<input type="password" id="pinInput" placeholder="Enter secret password">
-<button class="btn-blue" onclick="unlock()">Unlock Admin</button>
-<p id="errorMsg" style="color:#f87171;text-align:center;margin-top:10px;display:none">❌ Wrong password</p>
+<div class="card" id="login">
+<h2 style="text-align:center;color:#38bdf8">🔐 ARNAUD SECRET</h2>
+<p style="text-align:center;color:#94a3b8;font-size:12px">Enter PIN to unlock database - PIN hidden</p>
+<input type="password" id="pin" placeholder="Enter Secret PIN">
+<button class="blue" onclick="openDB()">Unlock Database</button>
+<p id="err" style="color:#f87171;text-align:center;display:none">❌ Wrong PIN</p>
 </div>
 
-<!-- ADMIN - ONLY SHOWS AFTER CORRECT PIN -->
-<div class="card" id="adminPanel">
-<h2>✅ Arnaud Verification LTD<br><small style="font-size:12px;color:#94a3b8">Secret Database Office</small></h2>
+<div class="card" id="admin">
+<h2 style="text-align:center">📋 12-FIELD LEGIT REGISTRATION</h2>
 
-<input type="text" id="certCode" placeholder="Certificate Code e.g. ARNAUD333649" value="ARNAUD333649">
-<input type="text" id="fullName" placeholder="Full Name e.g. John Doe">
-<input type="text" id="course" placeholder="Course Title e.g. Safety & Security">
-<input type="date" id="issueDate">
+<label>1. Full Name (Legal Name)</label><input id="f1" placeholder="e.g. IDOWU Kudus">
+<label>2. Certificate Code (NOT YOUR PIN!)</label><input id="f2" placeholder="e.g. AAV-SEC-2026-001">
+<label>3. Title / Program Name</label><input id="f3" placeholder="e.g. SECURITY TRAINING">
+<label>4. Passport Photo (Very Important for Legit)</label><input type="file" id="f4" accept="image/*" onchange="previewPhoto(this)">
+<img id="photoPreview">
+<label>5. Date of Birth</label><input id="f5" type="date">
+<label>6. Issue Date</label><input id="f6" type="date">
+<label>7. Expiry Date</label><input id="f7" type="date">
+<label>8. Training Center / Location</label><input id="f8" placeholder="e.g. Lagos Training Centre">
+<label>9. Grade / Score</label><select id="f9"><option>Pass</option><option>Distinction</option><option>Merit</option><option>85%</option><option>90%</option><option>95%</option></select>
+<label>10. ID / Passport Number</label><input id="f10" placeholder="e.g. A12345678">
+<label>11. Verification Status</label><select id="f11"><option>VALID</option><option>EXPIRED</option><option>REVOKED</option></select>
+<label>12. Issuer / Authorization</label><input id="f12" value="Arnaud Afro Chaine Verification Ltd">
 
-<button class="btn-blue" onclick="generateCert()">Generate Certificate + QR</button>
+<button class="blue" onclick="saveGen()">💾 SAVE & GENERATE QR</button>
 
-<div id="qrSection" class="hidden">
-<h3 style="text-align:center">QR Code for Certificate</h3>
-<div id="qrcode"></div>
-<p style="text-align:center;font-size:12px;color:#94a3b8">Scan this QR to verify</p>
-<p id="verifyLink" style="text-align:center;font-size:11px;word-break:break-all;color:#38bdf8"></p>
-<button class="btn-dark" onclick="downloadQR()">Download QR Image</button>
+<div id="res" class="hide">
+<h3 style="text-align:center;color:#22c55e">✅ LEGIT CERT SAVED!</h3>
+<div id="qrBox"><div id="qrcode"></div></div>
+<p id="link" style="text-align:center;font-size:9px;color:#38bdf8;word-break:break-all"></p>
+<button class="green" onclick="downQR()">📥 Download QR Code</button>
+<button class="dark" onclick="newE()">+ Register Another Person</button>
 </div>
 
-<div id="successMsg" class="hidden success">✅ Added to database! Now download database.json below</div>
-
-<hr style="margin:20px 0;border:0;border-top:1px solid #334155">
-
-<button class="btn-green" onclick="downloadDB()">📥 Download database.json (UPLOAD TO GITHUB)</button>
-<button class="btn-dark" onclick="logout()">🔒 Lock Admin</button>
-
-<h4 style="margin-top:20px">Current Database (<span id="count">0</span>)</h4>
-<div id="dbList" style="font-size:12px;max-height:150px;overflow-y:auto;background:#0f172a;padding:10px;border-radius:8px"></div>
+<button class="dark" onclick="closeDB()" style="margin-top:12px">🔒 Lock Database</button>
+<div style="font-size:11px;color:#64748b;margin-top:8px">Total Registered: <span id="tot">0</span></div>
 </div>
 
 <script>
-const SECRET_PIN = "ARNAUD333649";
-let database = JSON.parse(localStorage.getItem('arnaud_db') || '{}');
-let currentQR = null;
-
-function unlock(){
-  const entered = document.getElementById('pinInput').value.trim();
-  if(entered === SECRET_PIN){
-    document.getElementById('loginPanel').style.display='none';
-    document.getElementById('adminPanel').style.display='block';
-    loadDB();
-  } else {
-    document.getElementById('errorMsg').style.display='block';
-  }
+const MY_PIN="ARNAUD333649";
+let db=JSON.parse(localStorage.getItem('arnaud_12field_db')||'{}');
+let photoBase64="";
+function openDB(){if(document.getElementById('pin').value.trim()===MY_PIN){document.getElementById('login').style.display='none';document.getElementById('admin').style.display='block';document.getElementById('f6').valueAsDate=new Date();let d=new Date();d.setFullYear(d.getFullYear()+2);document.getElementById('f7').valueAsDate=d;upd()}else{document.getElementById('err').style.display='block'}}
+function closeDB(){document.getElementById('admin').style.display='none';document.getElementById('login').style.display='block';document.getElementById('pin').value='';document.getElementById('res').classList.add('hide')}
+function previewPhoto(input){if(input.files&&input.files[0]){let r=new FileReader();r.onload=function(e){photoBase64=e.target.result;document.getElementById('photoPreview').src=photoBase64;document.getElementById('photoPreview').style.display='block'};r.readAsDataURL(input.files[0])}}
+function saveGen(){
+ const data={code:document.getElementById('f2').value.trim()||'AAV-'+Date.now().toString().slice(-6), fullName:document.getElementById('f1').value.trim(), program:document.getElementById('f3').value.trim(), photo:photoBase64, dob:document.getElementById('f5').value, issueDate:document.getElementById('f6').value, expiryDate:document.getElementById('f7').value, center:document.getElementById('f8').value.trim(), grade:document.getElementById('f9').value, idNo:document.getElementById('f10').value.trim(), status:document.getElementById('f11').value, issuer:document.getElementById('f12').value};
+ if(!data.fullName||!data.program||!data.code){alert('Boss fill Full Name, Program and Code');return;}
+ db[data.code]=data; localStorage.setItem('arnaud_12field_db',JSON.stringify(db));
+ const qrData={code:data.code,name:data.fullName,program:data.program,issue:data.issueDate,expiry:data.expiryDate,status:data.status,center:data.center,grade:data.grade,issuer:data.issuer};
+ const b64=btoa(JSON.stringify(qrData));
+ const url=`https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?d=${b64}`;
+ document.getElementById('qrcode').innerHTML=''; new QRCode(document.getElementById('qrcode'),{text:url,width:220,height:220}); document.getElementById('link').innerText=url; document.getElementById('f2').value=data.code; document.getElementById('res').classList.remove('hide'); upd();
 }
-
-function logout(){
-  document.getElementById('adminPanel').style.display='none';
-  document.getElementById('loginPanel').style.display='block';
-  document.getElementById('pinInput').value='';
-}
-
-function generateCert(){
-  const code = document.getElementById('certCode').value.trim();
-  const name = document.getElementById('fullName').value.trim();
-  const course = document.getElementById('course').value.trim();
-  const date = document.getElementById('issueDate').value || new Date().toISOString().split('T')[0];
-
-  if(!code ||!name ||!course){ alert('Fill all fields boss!'); return; }
-
-  database[code] = { fullName: name, course: course, issueDate: date, status: "VALID" };
-  localStorage.setItem('arnaud_db', JSON.stringify(database));
-
-  // Generate QR
-  document.getElementById('qrSection').classList.remove('hidden');
-  document.getElementById('qrcode').innerHTML='';
-  const verifyUrl = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?code=${code}`;
-  document.getElementById('verifyLink').innerText = verifyUrl;
-
-  new QRCode(document.getElementById('qrcode'), {
-    text: verifyUrl,
-    width: 200,
-    height: 200
-  });
-
-  document.getElementById('successMsg').classList.remove('hidden');
-  loadDB();
-}
-
-function loadDB(){
-  document.getElementById('count').innerText = Object.keys(database).length;
-  let html = '';
-  for(let code in database){
-    html += `<div>✅ <b>${code}</b> - ${database[code].fullName}</div>`;
-  }
-  document.getElementById('dbList').innerHTML = html || 'No certificates yet';
-}
-
-function downloadDB(){
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(database, null, 2));
-  const a = document.createElement('a');
-  a.href = dataStr;
-  a.download = "database.json";
-  a.click();
-  alert('Now go to GitHub > Upload this database.json > Commit changes. After 2 mins, your certificates will be LIVE!');
-}
-
-function downloadQR(){
-  const canvas = document.querySelector('#qrcode canvas');
-  if(!canvas) return alert('Generate QR first');
-  const a = document.createElement('a');
-  a.href = canvas.toDataURL();
-  a.download = document.getElementById('certCode').value + "_QR.png";
-  a.click();
-}
-
-// auto set today
-document.getElementById('issueDate').valueAsDate = new Date();
-</script>
-</body>
-</html>
+function downQR(){const c=document.querySelector('#qrcode canvas');if(!c)return;let a=document.createElement('a');a.href=c.toDataURL();a.download=document.getElementById('f2').value+'_QR.png';a.click()}
+function newE(){document.getElementById('f1').value='';document.getElementById('f2').value='';document.getElementById('f3').value='';document.getElementById('f4').value='';document.getElementById('f8').value='';document.getElementById('f10').value='';document.getElementById('photoPreview').style.display='none';photoBase64="";document.getElementById('res').classList.add('hide')}
+function upd(){document.getElementById('tot').innerText=Object.keys(db).length}
+</script></body></html>
