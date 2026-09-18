@@ -1,74 +1,38 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Arnaud Legit Admin - 12 Fields</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>
-body{background:#0f172a;color:#fff;font-family:Arial;display:flex;justify-content:center;padding:12px}
-.card{background:#1e293b;padding:20px;border-radius:14px;width:100%;max-width:560px}
-input,select{width:100%;padding:11px;margin:5px 0;border-radius:7px;border:1px solid #334155;background:#0f172a;color:#fff;box-sizing:border-box}
-label{font-size:11px;color:#94a3b8;margin-top:8px;display:block;text-transform:uppercase}
-button{width:100%;padding:12px;margin-top:8px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
-.blue{background:#0ea5e9;color:#fff}.green{background:#22c55e;color:#fff}.dark{background:#334155;color:#fff}
-#admin{display:none}#qrBox{background:#fff;padding:12px;border-radius:10px;display:flex;justify-content:center;margin:12px 0}
-.hide{display:none}#photoPreview{width:80px;height:80px;border-radius:50%;background:#0f172a;border:2px solid #334155;object-fit:cover;display:none;margin:5px auto}
-</style></head><body>
-
-<div class="card" id="login">
-<h2 style="text-align:center;color:#38bdf8">🔐 ARNAUD SECRET</h2>
-<p style="text-align:center;color:#94a3b8;font-size:12px">Enter PIN to unlock database - PIN hidden</p>
-<input type="password" id="pin" placeholder="Enter Secret PIN">
-<button class="blue" onclick="openDB()">Unlock Database</button>
-<p id="err" style="color:#f87171;text-align:center;display:none">❌ Wrong PIN</p>
-</div>
-
-<div class="card" id="admin">
-<h2 style="text-align:center">📋 12-FIELD LEGIT REGISTRATION</h2>
-
-<label>1. Full Name (Legal Name)</label><input id="f1" placeholder="e.g. IDOWU Kudus">
-<label>2. Certificate Code (NOT YOUR PIN!)</label><input id="f2" placeholder="e.g. AAV-SEC-2026-001">
-<label>3. Title / Program Name</label><input id="f3" placeholder="e.g. SECURITY TRAINING">
-<label>4. Passport Photo (Very Important for Legit)</label><input type="file" id="f4" accept="image/*" onchange="previewPhoto(this)">
-<img id="photoPreview">
-<label>5. Date of Birth</label><input id="f5" type="date">
-<label>6. Issue Date</label><input id="f6" type="date">
-<label>7. Expiry Date</label><input id="f7" type="date">
-<label>8. Training Center / Location</label><input id="f8" placeholder="e.g. Lagos Training Centre">
-<label>9. Grade / Score</label><select id="f9"><option>Pass</option><option>Distinction</option><option>Merit</option><option>85%</option><option>90%</option><option>95%</option></select>
-<label>10. ID / Passport Number</label><input id="f10" placeholder="e.g. A12345678">
-<label>11. Verification Status</label><select id="f11"><option>VALID</option><option>EXPIRED</option><option>REVOKED</option></select>
-<label>12. Issuer / Authorization</label><input id="f12" value="Arnaud Afro Chaine Verification Ltd">
-
-<button class="blue" onclick="saveGen()">💾 SAVE & GENERATE QR</button>
-
-<div id="res" class="hide">
-<h3 style="text-align:center;color:#22c55e">✅ LEGIT CERT SAVED!</h3>
-<div id="qrBox"><div id="qrcode"></div></div>
-<p id="link" style="text-align:center;font-size:9px;color:#38bdf8;word-break:break-all"></p>
-<button class="green" onclick="downQR()">📥 Download QR Code</button>
-<button class="dark" onclick="newE()">+ Register Another Person</button>
-</div>
-
-<button class="dark" onclick="closeDB()" style="margin-top:12px">🔒 Lock Database</button>
-<div style="font-size:11px;color:#64748b;margin-top:8px">Total Registered: <span id="tot">0</span></div>
-</div>
-
-<script>
-const MY_PIN="ARNAUD333649";
-let db=JSON.parse(localStorage.getItem('arnaud_12field_db')||'{}');
-let photoBase64="";
-function openDB(){if(document.getElementById('pin').value.trim()===MY_PIN){document.getElementById('login').style.display='none';document.getElementById('admin').style.display='block';document.getElementById('f6').valueAsDate=new Date();let d=new Date();d.setFullYear(d.getFullYear()+2);document.getElementById('f7').valueAsDate=d;upd()}else{document.getElementById('err').style.display='block'}}
-function closeDB(){document.getElementById('admin').style.display='none';document.getElementById('login').style.display='block';document.getElementById('pin').value='';document.getElementById('res').classList.add('hide')}
-function previewPhoto(input){if(input.files&&input.files[0]){let r=new FileReader();r.onload=function(e){photoBase64=e.target.result;document.getElementById('photoPreview').src=photoBase64;document.getElementById('photoPreview').style.display='block'};r.readAsDataURL(input.files[0])}}
-function saveGen(){
- const data={code:document.getElementById('f2').value.trim()||'AAV-'+Date.now().toString().slice(-6), fullName:document.getElementById('f1').value.trim(), program:document.getElementById('f3').value.trim(), photo:photoBase64, dob:document.getElementById('f5').value, issueDate:document.getElementById('f6').value, expiryDate:document.getElementById('f7').value, center:document.getElementById('f8').value.trim(), grade:document.getElementById('f9').value, idNo:document.getElementById('f10').value.trim(), status:document.getElementById('f11').value, issuer:document.getElementById('f12').value};
- if(!data.fullName||!data.program||!data.code){alert('Boss fill Full Name, Program and Code');return;}
- db[data.code]=data; localStorage.setItem('arnaud_12field_db',JSON.stringify(db));
- const qrData={code:data.code,name:data.fullName,program:data.program,issue:data.issueDate,expiry:data.expiryDate,status:data.status,center:data.center,grade:data.grade,issuer:data.issuer};
- const b64=btoa(JSON.stringify(qrData));
- const url=`https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?d=${b64}`;
- document.getElementById('qrcode').innerHTML=''; new QRCode(document.getElementById('qrcode'),{text:url,width:220,height:220}); document.getElementById('link').innerText=url; document.getElementById('f2').value=data.code; document.getElementById('res').classList.remove('hide'); upd();
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arnaud Admin - 12 Field + Photo QR</title><script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script><style>body{background:#0f172a;color:#fff;font-family:Arial;padding:15px}.box{max-width:650px;margin:auto;background:#1e293b;padding:20px;border-radius:16px} input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:none} label{font-size:11px;color:#94a3b8;margin-top:8px;display:block} button{background:#16a34a;color:#fff;padding:12px;width:100%;border:none;border-radius:10px;font-weight:bold;margin-top:10px;cursor:pointer} #qr{background:#fff;padding:10px;border-radius:10px;margin-top:15px;text-align:center} a{color:#38bdf8;word-break:break-all}</style></head><body><div class="box"><h2>🔐 ARNAUD ADMIN - 12 FIELD + PHOTO</h2><p style="font-size:11px;color:#94a3b8">PIN: ARNAUD333649 | Photo go enter inside QR</p><div id="lock"><input id="pin" type="password" placeholder="Enter PIN"><button onclick="unlock()">Unlock</button></div><div id="form" style="display:none"><label>1. Passport Photo (Very Important)</label><input type="file" id="photo" accept="image/*"><img id="preview" style="width:80px;height:80px;border-radius:8px;display:none;object-fit:cover"><label>2. Full Name</label><input id="name" placeholder="IDOHOU DESIRE"><label>3. Certificate No</label><input id="code" placeholder="AA1234"><label>4. Title/Program</label><input id="program" placeholder="PERSONAL"><label>5. DOB</label><input id="dob" type="date"><label>6. ID Number</label><input id="idNo" placeholder="ID123456"><label>7. Issue Date</label><input id="issue" type="date" value="2026-09-18"><label>8. Expiry Date</label><input id="expiry" type="date" value="2028-09-18"><label>9. Training Center</label><input id="center" placeholder="Apapa"><label>10. Grade</label><select id="grade"><option>Pass</option><option>Merit</option><option>Distinction</option></select><label>11. Status</label><select id="status"><option>VALID</option><option>EXPIRED</option></select><button onclick="generate()">SAVE & GENERATE QR WITH PHOTO</button><div id="qr"></div><div id="link" style="margin-top:10px;font-size:12px"></div></div></div><script>
+let photoData='';
+document.getElementById('photo').addEventListener('change',function(e){
+  let file=e.target.files[0]; if(!file) return;
+  let reader=new FileReader();
+  reader.onload=function(ev){
+    let img=new Image(); img.onload=function(){
+      let canvas=document.createElement('canvas'); canvas.width=100; canvas.height=100;
+      let ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,100,100);
+      photoData=canvas.toDataURL('image/jpeg',0.4);
+      let p=document.getElementById('preview'); p.src=photoData; p.style.display='block';
+    }; img.src=ev.target.result;
+  }; reader.readAsDataURL(file);
+});
+function unlock(){if(document.getElementById('pin').value==='ARNAUD333649'){document.getElementById('lock').style.display='none';document.getElementById('form').style.display='block';}else alert('Wrong PIN');}
+function generate(){
+  let payload={
+    code:document.getElementById('code').value,
+    name:document.getElementById('name').value,
+    program:document.getElementById('program').value,
+    dob:document.getElementById('dob').value,
+    idNo:document.getElementById('idNo').value,
+    issue:document.getElementById('issue').value,
+    expiry:document.getElementById('expiry').value,
+    center:document.getElementById('center').value,
+    grade:document.getElementById('grade').value,
+    status:document.getElementById('status').value,
+    issuer:'Arnaud Afro Chaine Verification Ltd',
+    photo:photoData
+  };
+  let b64=btoa(JSON.stringify(payload));
+  let url=location.origin+location.pathname.replace('admin.html','verify.html')+'?d='+b64;
+  if(!url.includes('verify.html')) url='https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?d='+b64;
+  document.getElementById('qr').innerHTML=''; new QRCode(document.getElementById('qr'),{text:url,width:200,height:200});
+  document.getElementById('link').innerHTML=`<p>✅ QR Generated WITH PHOTO!</p><a href="${url}" target="_blank">${url}</a><p style="font-size:10px">Copy this link, scan am now - photo go show!</p>`;
+  let all=JSON.parse(localStorage.getItem('arnaud_certs')||'[]'); all.push(payload); localStorage.setItem('arnaud_certs',JSON.stringify(all));
 }
-function downQR(){const c=document.querySelector('#qrcode canvas');if(!c)return;let a=document.createElement('a');a.href=c.toDataURL();a.download=document.getElementById('f2').value+'_QR.png';a.click()}
-function newE(){document.getElementById('f1').value='';document.getElementById('f2').value='';document.getElementById('f3').value='';document.getElementById('f4').value='';document.getElementById('f8').value='';document.getElementById('f10').value='';document.getElementById('photoPreview').style.display='none';photoBase64="";document.getElementById('res').classList.add('hide')}
-function upd(){document.getElementById('tot').innerText=Object.keys(db).length}
 </script></body></html>
