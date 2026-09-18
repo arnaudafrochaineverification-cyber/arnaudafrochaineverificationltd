@@ -1,37 +1,48 @@
+
 <!DOCTYPE html>
-<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arnaud Afrochaine Verification</title>
-<style>body{font-family:Arial;background:#0a192f;color:white;padding:15px;margin:0;min-height:100vh;display:flex;justify-content:center;align-items:center}.box{max-width:450px;width:100%;background:white;color:#333;padding:25px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}h2{text-align:center;color:#0a192f}input{width:100%;padding:14px;margin:10px 0;border-radius:8px;border:2px solid #ddd;box-sizing:border-box;font-size:16px}button{width:100%;padding:14px;background:#0a192f;color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px}.valid{background:#d4edda;color:#155724;padding:15px;border-radius:8px;margin-top:15px;text-align:center;font-weight:bold}.invalid{background:#f8d7da;color:#721c24;padding:15px;border-radius:8px;margin-top:15px;text-align:center;font-weight:bold}</style>
-</head><body>
+<style>
+body{font-family:Arial;text-align:center;padding:20px;background:#f0f4f8}
+.box{background:white;max-width:400px;margin:40px auto;padding:25px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+input{width:90%;padding:12px;margin:10px 0;border:2px solid #ddd;border-radius:8px;font-size:16px}
+button{width:95%;padding:12px;background:#0a8a43;color:white;border:none;border-radius:8px;font-size:18px;font-weight:bold}
+#result{margin-top:20px;padding:15px;border-radius:8px;display:none}
+.valid{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
+.invalid{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb}
+</style>
+</head>
+<body>
 <div class="box">
-<h2>🎓 ARNAUD AFROCHAINE<br>Certificate Verification</h2>
-<p style="text-align:center;font-size:13px;color:#666">Enter Certificate ID to verify</p>
-<input id="certId" placeholder="e.g GML-2024-001">
-<button onclick="verify()">VERIFY CERTIFICATE</button>
+<h2>🎓 Certificate Verification</h2>
+<p>Arnaud Afrochaine Verification LTD</p>
+<input type="text" id="certId" placeholder="Enter Certificate ID e.g. DEMO-001">
+<button onclick="verify()">Verify Now</button>
 <div id="result"></div>
-<p style="text-align:center;margin-top:20px;font-size:11px;color:#999">© 2024 Arnaud Afrochaine Verification Ltd</p>
 </div>
 <script>
-// --- YOUR CERTIFICATES DATABASE ---
-// Add all your valid IDs here
-const VALID_CERTS = {
-"GML-2024-001": {school:"Grace Model School", student:"John Doe", year:"2024"},
-"GML-2024-002": {school:"Grace Model School", student:"Mary James", year:"2024"},
-"DEMO-001": {school:"Demo School", student:"Test Student", year:"2024"}
-};
-
-function verify(){
-let id = document.getElementById('certId').value.trim().toUpperCase();
-if(!id){document.getElementById('result').innerHTML='<div class="invalid">Please enter Certificate ID</div>';return;}
-// Check 1: from hard-coded list
-let found = VALID_CERTS[id];
-// Check 2: from your admin (same phone)
-let saved = JSON.parse(localStorage.getItem('arnaud_certs')||'{}');
-if(saved[id]) found = saved[id];
-if(found){
-document.getElementById('result').innerHTML = `<div class="valid">✅ VALID CERTIFICATE<br><br><b>ID:</b> ${id}<br><b>School:</b> ${found.school}<br><b>Name:</b> ${found.name||found.student}<br><br>✔️ Verified by Arnaud Afrochaine</div>`;
-}else{
-document.getElementById('result').innerHTML = `<div class="invalid">❌ INVALID CERTIFICATE<br><br>ID <b>${id}</b> not found in our database.<br><br>Please contact school.</div>`;
+async function verify(){
+  const id = document.getElementById('certId').value.trim();
+  const resDiv = document.getElementById('result');
+  if(!id){resDiv.style.display='block';resDiv.className='invalid';resDiv.innerHTML='❌ Please enter ID';return;}
+  resDiv.style.display='block';resDiv.innerHTML='⏳ Checking...';
+  try{
+    const response = await fetch('./database.json?v='+Date.now());
+    const db = await response.json();
+    if(db[id]){
+      resDiv.className='valid';
+      resDiv.innerHTML=`✅ <b>VALID CERTIFICATE</b><br><br><b>School:</b> ${db[id].school}<br><b>Student:</b> ${db[id].student}<br><b>Year:</b> ${db[id].year}<br><br>✔️ Verified by Arnaud Afrochaine`;
+    }else{
+      resDiv.className='invalid';
+      resDiv.innerHTML='❌ <b>INVALID ID</b><br>Certificate not found';
+    }
+  }catch(e){
+    resDiv.className='invalid';
+    resDiv.innerHTML='⚠️ Error loading database. Try again.';
+  }
 }
-}
-</script></body></html>
+</script>
+</body>
+</html>
