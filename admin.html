@@ -1,68 +1,125 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Secure Admin - Arnaud</title><style>body{font-family:Arial;padding:20px;background:#0a192f;display:flex;justify-content:center;min-height:100vh;margin:0}.box{max-width:450px;width:100%;background:white;padding:30px;border-radius:12px}input,button,select{width:100%;padding:13px;margin:8px 0;border-radius:8px;border:1px solid #ccc;box-sizing:border-box}button{background:#0a192f;color:white;font-weight:bold;border:none;cursor:pointer}.green{background:green}.small{font-size:12px;color:#666;text-align:center}</style></head><body>
-<div class="box" id="loginBox">
-<h3>🔒 SECURE ADMIN LOGIN</h3>
-<p class="small">Use your GitHub Personal Access Token (not public password). This token never saved.</p>
-<input type="password" id="token" placeholder="Paste GitHub Token (ghp_xxx)">
-<input id="repo" value="arnaudafrochaineverification-cyber/arnaudafrochaineverificationltd" placeholder="repo">
-<button onclick="unlock()">UNLOCK WITH TOKEN</button>
-<p class="small">How to get token: GitHub > Settings > Developer settings > Tokens > Generate new token (classic) > tick 'repo' > copy</p>
-<p id="err" style="color:red;text-align:center"></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arnaud Admin - PIN Access</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#0f172a;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:15px}
+.card{background:#1e293b;padding:25px;border-radius:16px;width:100%;max-width:480px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+h2{text-align:center;margin-bottom:20px;color:#38bdf8}
+input,select{width:100%;padding:12px;margin:8px 0 14px;border-radius:8px;border:none;outline:none;background:#0f172a;color:#fff;border:1px solid #334155}
+label{font-size:13px;color:#94a3b8}
+button{width:100%;padding:13px;border:none;border-radius:8px;background:#38bdf8;color:#0f172a;font-weight:bold;font-size:15px;cursor:pointer;margin-top:10px}
+button:hover{background:#0ea5e9}
+.hidden{display:none}
+.note{background:#0f172a;padding:12px;border-radius:8px;font-size:12px;color:#94a3b8;margin-top:15px;line-height:1.5;border:1px dashed #334155}
+.success{background:#16a34a;padding:12px;border-radius:8px;text-align:center;margin:10px 0;display:none}
+code{word-break:break-all;background:#020617;padding:10px;display:block;border-radius:6px;margin-top:10px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="card" id="loginCard">
+<h2>🔐 Admin Login</h2>
+<label>Enter Admin PIN</label>
+<input type="password" id="pinInput" placeholder="Enter PIN e.g. ARNAUD333649">
+<button onclick="checkPin()">Unlock Admin</button>
+<div class="note">PIN: <b>ARNAUD333649</b><br>Direct link: .../admin.html</div>
+<p id="loginError" style="color:#f87171;text-align:center;margin-top:10px;display:none">Wrong PIN!</p>
 </div>
-<div class="box" id="panel" style="display:none">
-<h2>✅ Admin Unlocked - Full Access</h2>
-<p><b>School (Locked to your company only):</b></p>
-<input id="sch" value="Arnaud Afrochaine Verification LTD" readonly style="background:#eee;font-weight:bold">
-<input id="cid" placeholder="Certificate ID e.g AA-2025-010">
-<input id="stu" placeholder="Student Full Name">
-<input id="course" placeholder="Course e.g Data Science">
-<button class="green" onclick="saveCert()">SAVE TO DATABASE.JSON (Live)</button>
-<p id="msg" style="color:green"></p><hr>
-<h3>Live Saved List (from database.json)</h3><div id="list">Loading...</div>
-<button onclick="location.reload()" style="background:#333;margin-top:15px">LOCK ADMIN</button>
+
+<div class="card hidden" id="adminCard">
+<h2>✅ Add Certificate</h2>
+<div class="success" id="successMsg">Certificate ready! Download below</div>
+
+<label>Certificate Code</label>
+<input type="text" id="certCode" value="ARNAUD333649">
+
+<label>Full Name</label>
+<input type="text" id="fullName" placeholder="e.g. John Okafor">
+
+<label>Course / Training Title</label>
+<input type="text" id="course" placeholder="e.g. Safety Training">
+
+<label>Date Issued</label>
+<input type="date" id="dateIssued" value="2026-09-18">
+
+<label>Status</label>
+<select id="status">
+<option value="Valid">Valid</option>
+<option value="Expired">Expired</option>
+<option value="Pending">Pending</option>
+</select>
+
+<button onclick="generateCert()">Generate Certificate File</button>
+<button onclick="downloadDB()" style="background:#22c55e">⬇️ Download database.json</button>
+<button onclick="logout()" style="background:#334155;color:#fff">Logout</button>
+
+<div id="outputArea" class="hidden">
+<code id="jsonOutput"></code>
+<div class="note">
+<strong>HOW TO MAKE IT LIVE:</strong><br>
+1. Click Download database.json<br>
+2. Go to GitHub repo > Add file > Upload files<br>
+3. Upload the database.json<br>
+4. Commit changes<br>
+5. Test: verify.html?code=ARNAUD333649
 </div>
+</div>
+</div>
+
 <script>
-let TOKEN, REPO, SHA, DB={};
-async function unlock(){
- TOKEN=document.getElementById('token').value.trim();
- REPO=document.getElementById('repo').value.trim();
- if(!TOKEN) return alert('Enter GitHub Token');
- document.getElementById('err').innerText='Loading...';
+const CORRECT_PIN = "ARNAUD333649";
+let certificates = [];
+function checkPin(){
+ const pin = document.getElementById('pinInput').value.trim();
+ if(pin === CORRECT_PIN){
+   document.getElementById('loginCard').classList.add('hidden');
+   document.getElementById('adminCard').classList.remove('hidden');
+   loadExisting();
+ } else {
+   document.getElementById('loginError').style.display='block';
+ }
+}
+function logout(){
+ document.getElementById('adminCard').classList.add('hidden');
+ document.getElementById('loginCard').classList.remove('hidden');
+ document.getElementById('pinInput').value='';
+}
+async function loadExisting(){
  try{
-   let res=await fetch(`https://api.github.com/repos/${REPO}/contents/database.json`,{headers:{Authorization:`token ${TOKEN}`}});
-   let data=await res.json();
-   SHA=data.sha;
-   DB=JSON.parse(atob(data.content));
-   document.getElementById('loginBox').style.display='none';
-   document.getElementById('panel').style.display='block';
-   show();
- }catch(e){document.getElementById('err').innerText='❌ Token or Repo Wrong: '+e.message}
+   const res = await fetch('database.json?t='+Date.now());
+   if(res.ok){
+     const data = await res.json();
+     certificates = Array.isArray(data) ? data : (data.certificates || []);
+   }
+ }catch(e){ certificates = []; }
 }
-function show(){
- let h=''; for(let k in DB){h+=`<div style="border:1px solid #ddd;padding:8px;margin:5px 0;border-radius:5px"><b>${k}</b><br>${DB[k].school} - ${DB[k].student} - ${DB[k].course||''}<br><small>${DB[k].date}</small> <button onclick="delCert('${k}')" style="width:auto;padding:4px 8px;background:red">Delete</button></div>`}
- document.getElementById('list').innerHTML=h||'No certificate yet';
+function generateCert(){
+ const code = document.getElementById('certCode').value.trim() || 'ARNAUD333649';
+ const name = document.getElementById('fullName').value.trim();
+ const course = document.getElementById('course').value.trim();
+ const date = document.getElementById('dateIssued').value;
+ const status = document.getElementById('status').value;
+ if(!name || !course){ alert('Please fill Name and Course!'); return; }
+ const newCert = { code: code, name: name, course: course, date: date, status: status, verification_link: `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?code=${code}` };
+ certificates = certificates.filter(c => c.code !== code);
+ certificates.push(newCert);
+ document.getElementById('jsonOutput').textContent = JSON.stringify(certificates, null, 2);
+ document.getElementById('outputArea').classList.remove('hidden');
+ document.getElementById('successMsg').style.display='block';
+ setTimeout(()=>{ document.getElementById('successMsg').style.display='none'; }, 4000);
 }
-async function saveToGitHub(){
- let content=btoa(JSON.stringify(DB,null,2));
- await fetch(`https://api.github.com/repos/${REPO}/contents/database.json`,{
-  method:'PUT',
-  headers:{Authorization:`token ${TOKEN}`,'Content-Type':'application/json'},
-  body:JSON.stringify({message:`Update cert ${new Date().toISOString()}`,content,sha:SHA})
- });
- alert('✅ LIVE! Certificate now VALID for everybody for 2 minutes. Refresh your main site.');
- location.reload();
+function downloadDB(){
+ if(certificates.length===0){ alert('First click Generate!'); return; }
+ const blob = new Blob([JSON.stringify(certificates, null, 2)], {type:'application/json'});
+ const url = URL.createObjectURL(blob);
+ const a = document.createElement('a');
+ a.href=url; a.download='database.json'; a.click();
+ URL.revokeObjectURL(url);
+ alert('Downloaded! Now upload to GitHub!');
 }
-function saveCert(){
- let id=document.getElementById('cid').value.trim().toUpperCase();
- let stu=document.getElementById('stu').value.trim();
- let course=document.getElementById('course').value.trim();
- if(!id||!stu) return alert('Enter ID and Student Name');
- DB[id]={school:document.getElementById('sch').value,student:stu,course:course,date:new Date().toLocaleDateString('en-GB'),status:'VALID'};
- document.getElementById('msg').innerText='Saving to live database...';
- saveToGitHub();
-}
-async function delCert(k){
- if(!confirm('Delete '+k+' permanently?')) return;
- delete DB[k];
- await saveToGitHub();
-}
-</script></body></html>
+</script>
+</body>
+</html>
