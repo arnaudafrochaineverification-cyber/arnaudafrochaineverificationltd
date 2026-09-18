@@ -1,6 +1,8 @@
-{
-  "id": "AA-2025-001",
-  "name": "Alex Morgan",
-  "course": "Advanced Data Science & Machine Learning",
-  "date": "15 Oct 2025"
-}
+[
+  {
+    "id": "AA-2025-001",
+    "name": "Alex Morgan",
+    "course": "Advanced Data Science & Machine Learning",
+    "date": "15 Oct 2025"
+  }
+]
