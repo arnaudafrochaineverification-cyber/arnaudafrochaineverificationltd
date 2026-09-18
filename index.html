@@ -5,48 +5,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ARNAUD AFROCHAINE VERIFICATION LTD</title>
 <style>
-body{margin:0;font-family:Arial;background:#f5f5f5;text-align:center}
-.header{background:linear-gradient(135deg,#0a3d0a,#1a7a1a);padding:30px 15px;color:white}
-.logo{width:220px;height:220px;border-radius:50%;border:6px solid gold;object-fit:cover;background:white;box-shadow:0 4px 15px black}
-h1{font-size:26px;margin:15px 0;color:gold;text-shadow:2px 2px 4px black;line-height:1.3}
-.card{background:white;margin:15px;padding:20px;border-radius:15px;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
-.btn{display:block;background:#25D366;color:white;padding:18px;margin:12px 0;border-radius:10px;text-decoration:none;font-size:19px;font-weight:bold}
+body{margin:0;font-family:Arial;background:#0a3d0a;text-align:center}
+.header{background:linear-gradient(135deg,#0a3d0a,#1a6a1a);padding:20px}
+.logo{width:220px;height:220px;border-radius:50%;border:5px solid gold;background:white}
+h1{font-size:26px;margin:15px 0;color:gold;}
+.card{background:white;margin:15px;padding:20px;border-radius:15px;box-shadow:0 4px 10px rgba(0,0,0,0.3)}
+.btn{display:block;background:#25D366;color:white;padding:15px;margin:10px 0;border-radius:10px;text-decoration:none;font-weight:bold;font-size:18px}
 .btn2{background:#0a3d0a}
-input{width:92%;padding:15px;margin:10px;font-size:18px;border:2px solid #0a3d0a;border-radius:8px}
-.verify-btn{background:gold;color:black;padding:15px 35px;font-size:20px;font-weight:bold;border:none;border-radius:10px}
+input{width:92%;padding:15px;margin:10px 0;font-size:18px;border:2px solid #0a3d0a;border-radius:10px;text-align:center;text-transform:uppercase}
+.verify-btn{background:gold;color:black;padding:15px 30px;font-size:20px;font-weight:bold;border:none;border-radius:10px;cursor:pointer}
+#result{margin-top:15px;font-size:18px;font-weight:bold;min-height:30px}
 </style>
 </head>
 <body>
 <div class="header">
-<img src="IMG-20260917-WA1432.jpg" class="logo" onerror="this.src='IMG-20260917-WA0000.jpg';this.onerror=null">
+<img src="logo.png" class="logo">
 <h1>ARNAUD AFROCHAINE VERIFICATION LTD</h1>
-<p>We help schools verify certificate is real or fake in 2 seconds</p>
-<p>📍 2B Akin Ogunmade Davies Close, Gbagada, Lagos<br>📞 09132851465 | ✉️ arnaudafrochaine5@gmail.com</p>
+<p style="color:white;">9 okesutedo Baba junction ota, Sango ota, ogun<br>RC: 8604820</p>
 </div>
+
 <div class="card">
-<h2>🔍 Verify Certificate</h2>
+<p style="font-size:22px;">🔍 Verify Certificate</p>
 <input type="text" id="certId" placeholder="Enter Certificate ID">
-<br><br>
-<button class="verify-btn" onclick="verify()">VERIFY NOW</button>
-<p id="result" style="font-size:20px;margin-top:15px;font-weight:bold"></p>
+<br>
+<button class="verify-btn" onclick="verifyCertificate()">VERIFY NOW</button>
+<div id="result"></div>
 </div>
+
 <div class="card">
 <h2>Contact Us</h2>
-<a class="btn" href="https://wa.me/2349132851465?text=Hello%20ARNAUD%20AFROCHAINE">💬 WhatsApp: 09132851465</a>
-<a class="btn btn2" href="tel:+2349132851465">📞 Call: 09132851465</a>
-<a class="btn btn2" href="mailto:arnaudafrochaine5@gmail.com">✉️ Email Us</a>
+<a class="btn" href="https://wa.me/2349132851465">💬 WhatsApp: 09132851465</a>
+<a class="btn btn2" href="tel:09132851465">📞 Call: 09132851465</a>
+<a class="btn" style="background:#333;" href="mailto:arnaudafrochaine5@gmail.com">📧 Email: arnaudafrochaine5@gmail.com</a>
 </div>
+
 <script>
-function verify(){
-let id=document.getElementById('certId').value.trim();
-let res=document.getElementById('result');
-if(!id){res.innerHTML='⚠️ Enter Certificate ID';return}
-if(id.length>3){
-res.innerHTML='✅ VALID CERTIFICATE<br><small>'+id+' verified by ARNAUD AFROCHAINE</small>';
-res.style.color='green';
-}else{
-res.innerHTML='❌ INVALID';res.style.color='red';
-}
+function verifyCertificate() {
+  let id = document.getElementById('certId').value.trim().toUpperCase();
+  let resultDiv = document.getElementById('result');
+  
+  if(id === "") {
+    resultDiv.innerHTML = "⚠️ Please enter Certificate ID";
+    resultDiv.style.color = "orange";
+    return;
+  }
+
+  // ONLY THESE ARE REAL - all others will show FAKE
+  const realCertificates = ["TEST123", "ARNAUD-001", "ARNAUD-002", "ARNAUD-2024-001"];
+
+  if(realCertificates.includes(id)) {
+    resultDiv.innerHTML = "✅ VALID CERTIFICATE<br>" + id + " verified by ARNAUD AFROCHAINE";
+    resultDiv.style.color = "green";
+  } else {
+    resultDiv.innerHTML = "❌ INVALID / FAKE CERTIFICATE<br>" + id + " not found in our database";
+    resultDiv.style.color = "red";
+  }
 }
 </script>
 </body>
