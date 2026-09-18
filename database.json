@@ -1,12 +1,6 @@
 {
-  "DEMO-001": {
-    "school": "Grace Model School",
-    "student": "Test Student",
-    "year": "2024"
-  },
-  "GML-2024-001": {
-    "school": "Grace Model School",
-    "student": "John Doe",
-    "year": "2024"
-  }
+  "id": "AA-2025-001",
+  "name": "Alex Morgan",
+  "course": "Advanced Data Science & Machine Learning",
+  "date": "15 Oct 2025"
 }
