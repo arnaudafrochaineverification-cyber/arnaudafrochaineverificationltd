@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR Generator</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+body{font-family:Poppins,sans-serif;text-align:center;padding:15px;background:#f0f7f0}
+.box{background:white;max-width:450px;margin:20px auto;padding:25px;border-radius:20px;box-shadow:0 12px 40px rgba(10,92,44,0.15)}
+input{width:90%;padding:14px;margin:12px 0;border:2px solid #e0e8e0;border-radius:12px;font-size:16px;text-transform:uppercase}
+button{width:94%;padding:14px;background:#0a5c2c;color:white;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin:6px 0}
+#qrcode{margin:20px auto;display:flex;justify-content:center;padding:15px;border:2px dashed #81c784;border-radius:12px;min-height:50px}
+</style>
+</head>
+<body>
+<div class="box">
+<img src="./IMG-20260917-WA1432.jpg" style="width:100px;height:100px;object-fit:contain">
+<h2 style="color:#0a5c2c">QR Generator</h2>
+<input type="text" id="certId" placeholder="E.G. AA-2025-001">
+<button onclick="generateQR()">⚡ GENERATE QR CODE</button>
+<div id="qrcode"></div>
+<p id="qrText" style="color:#0a5c2c;font-weight:700"></p>
+<button style="background:#d4af37;color:#0a3d1f" onclick="downloadQR()">📥 DOWNLOAD QR</button>
+</div>
+<script>
+function generateQR(){
+let id=document.getElementById('certId').value.trim().toUpperCase().replace(/\s+/g,'-');
+if(!id){alert('Enter ID');return;}
+document.getElementById('qrcode').innerHTML='';
+new QRCode(document.getElementById('qrcode'),{text:id,width:200,height:200,colorDark:"#0a5c2c",correctLevel:QRCode.CorrectLevel.H});
+document.getElementById('qrText').innerText='ID: '+id;
+}
+function downloadQR(){
+let c=document.querySelector('#qrcode canvas');
+if(!c){alert('Generate first');return;}
+let id=document.getElementById('certId').value.trim().toUpperCase();
+let a=document.createElement('a');a.download='QR-'+id+'.png';a.href=c.toDataURL();a.click();
+}
+</script>
+</body>
+</html>
