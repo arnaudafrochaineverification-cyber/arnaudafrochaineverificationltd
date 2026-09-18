@@ -1,48 +1,69 @@
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Arnaud Afrochaine Verification</title>
+<title>Arnaud Afrochaine Verification LTD - Official Verification</title>
+<link rel="icon" href="./logo.png">
 <style>
-body{font-family:Arial;text-align:center;padding:20px;background:#f0f4f8}
-.box{background:white;max-width:400px;margin:40px auto;padding:25px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
-input{width:90%;padding:12px;margin:10px 0;border:2px solid #ddd;border-radius:8px;font-size:16px}
-button{width:95%;padding:12px;background:#0a8a43;color:white;border:none;border-radius:8px;font-size:18px;font-weight:bold}
-#result{margin-top:20px;padding:15px;border-radius:8px;display:none}
-.valid{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
-.invalid{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+body{font-family:'Poppins',Arial,sans-serif;text-align:center;padding:12px;background:linear-gradient(135deg,#f0f7f0 0%,#e8f5e8 100%);margin:0;min-height:100vh}
+.box{background:white;max-width:440px;margin:20px auto;padding:30px 25px;border-radius:20px;box-shadow:0 12px 40px rgba(10,92,44,0.15);border:1px solid rgba(212,175,55,0.2)}
+.logo{width:220px;height:220px;object-fit:contain;margin:0 auto 15px;display:block;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.1))}
+h2{color:#0a5c2c;margin:8px 0 4px;font-size:24px;font-weight:700;letter-spacing:-0.5px}
+.tagline{color:#8a6d00;font-size:11px;letter-spacing:2.5px;font-weight:600;margin-bottom:5px;text-transform:uppercase}
+.slogan{color:#0a5c2c;font-size:12px;font-style:italic;opacity:0.8;margin-bottom:22px}
+input{width:92%;padding:15px 14px;margin:12px 0;border:2px solid #e0e8e0;border-radius:12px;font-size:16px;font-family:inherit;text-transform:uppercase;transition:all 0.3s;outline:none}
+input:focus{border-color:#0a8a43;box-shadow:0 0 0 4px rgba(10,138,67,0.1)}
+button{width:96%;padding:15px;background:linear-gradient(135deg,#0a5c2c,#0a8a43);color:white;border:none;border-radius:12px;font-size:17px;font-weight:700;cursor:pointer;letter-spacing:0.5px;box-shadow:0 6px 18px rgba(10,92,44,0.3);transition:all 0.2s}
+button:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(10,92,44,0.4)}
+button:active{transform:translateY(0)}
+#result{margin-top:22px;padding:20px;border-radius:12px;display:none;text-align:left;font-size:14px;line-height:1.6;animation:slideIn 0.4s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.valid{background:linear-gradient(135deg,#e8f5e9,#d4edda);color:#0a3d1f;border:2px solid #81c784}
+.invalid{background:linear-gradient(135deg,#ffebee,#ffcdd2);color:#6a1b1b;border:2px solid #e57373}
+.badge{display:inline-block;background:#0a5c2c;color:#d4af37;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px}
+.footer{margin-top:28px;padding-top:18px;border-top:1px solid #eee;font-size:10px;color:#999;line-height:1.5}
+.gold{color:#b8941f;font-weight:700}
 </style>
 </head>
 <body>
 <div class="box">
-<h2>🎓 Certificate Verification</h2>
-<p>Arnaud Afrochaine Verification LTD</p>
-<input type="text" id="certId" placeholder="Enter Certificate ID e.g. DEMO-001">
-<button onclick="verify()">Verify Now</button>
+<img src="./logo.png" class="logo" alt="Arnaud Afrochaine Verification LTD">
+<h2>Certificate Verification</h2>
+<div class="tagline">Arnaud Afrochaine Verification LTD</div>
+<div class="slogan">African Roots, Global Vision</div>
+<input type="text" id="certId" placeholder="ENTER CERTIFICATE ID">
+<button onclick="verify()">🔍 VERIFY CERTIFICATE</button>
 <div id="result"></div>
+<div class="footer">
+<span class="gold">Secure • Trusted • Global</span><br>
+Official Verification Portal<br>
+© 2025 Arnaud Afrochaine Verification LTD. All Rights Reserved.
+</div>
 </div>
 <script>
 async function verify(){
-  const id = document.getElementById('certId').value.trim();
+  let raw = document.getElementById('certId').value.trim();
+  let id = raw.toUpperCase().replace(/\s+/g,'-').replace(/--+/g,'-');
   const resDiv = document.getElementById('result');
-  if(!id){resDiv.style.display='block';resDiv.className='invalid';resDiv.innerHTML='❌ Please enter ID';return;}
-  resDiv.style.display='block';resDiv.innerHTML='⏳ Checking...';
+  if(!id){resDiv.style.display='block';resDiv.className='invalid';resDiv.innerHTML='❌ Please enter a valid Certificate ID';return;}
+  resDiv.style.display='block';resDiv.innerHTML='⏳ Verifying from secure global database...';
   try{
     const response = await fetch('./database.json?v='+Date.now());
     const db = await response.json();
     if(db[id]){
       resDiv.className='valid';
-      resDiv.innerHTML=`✅ <b>VALID CERTIFICATE</b><br><br><b>School:</b> ${db[id].school}<br><b>Student:</b> ${db[id].student}<br><b>Year:</b> ${db[id].year}<br><br>✔️ Verified by Arnaud Afrochaine`;
+      resDiv.innerHTML=`<div class="badge">✓ VERIFIED</div><br><b style="font-size:17px;color:#0a5c2c">VALID CERTIFICATE</b><br><br><b>🏫 School / Institution:</b> ${db[id].school}<br><b>👤 Student Name:</b> ${db[id].student}<br><b>📅 Year:</b> ${db[id].year}<br><b>🆔 ID:</b> ${id}<br><br><div style="text-align:center;margin-top:12px;padding:14px;background:rgba(255,255,255,0.7);border-radius:8px;border:1px dashed #81c784"><span style="font-size:20px">✅</span><br><b style="color:#0a5c2c">Authenticated by</b><br><b>Arnaud Afrochaine Verification LTD</b><br><small style="color:#666">African Roots, Global Vision<br>${new Date().toLocaleString()}</small></div>`;
     }else{
       resDiv.className='invalid';
-      resDiv.innerHTML='❌ <b>INVALID ID</b><br>Certificate not found';
+      resDiv.innerHTML=`<b style="font-size:16px">❌ INVALID CERTIFICATE</b><br><br>ID <b>${id}</b> not found in our official database.<br><br><small>Possible reasons:<br>• ID typed incorrectly<br>• Certificate not yet uploaded<br>• Expired record<br><br>Contact: support@arnaudafrochaine.com</small>`;
     }
   }catch(e){
     resDiv.className='invalid';
-    resDiv.innerHTML='⚠️ Error loading database. Try again.';
+    resDiv.innerHTML='⚠️ Network error. Please check internet connection and try again.';
   }
 }
+document.getElementById('certId').addEventListener('keypress',function(e){if(e.key==='Enter'){verify()}});
 </script>
 </body>
 </html>
