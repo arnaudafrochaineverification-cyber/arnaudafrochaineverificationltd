@@ -1,55 +1,45 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Arnaud Admin - With DATABASE LIST</title>
+<title>Arnaud Admin - FIXED DOWNLOAD</title>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<style>body{background:#0f172a;color:#fff;font-family:Arial;padding:12px}.box{max-width:650px;margin:auto;background:#1e293b;padding:18px;border-radius:16px}input,select{width:100%;padding:10px;margin:4px 0;border-radius:8px;border:none;box-sizing:border-box}label{font-size:11px;color:#94a3b8;margin-top:6px;display:block}button{background:#16a34a;color:#fff;padding:11px;width:100%;border:none;border-radius:10px;font-weight:bold;margin-top:10px;cursor:pointer}.btn2{background:#0ea5e9}.btn3{background:#334155;font-size:11px}#qr{background:#fff;padding:12px;border-radius:10px;margin-top:12px;text-align:center;min-height:200px;display:flex;align-items:center;justify-content:center}.list{background:#0f172a;border-radius:10px;padding:10px;margin-top:15px;max-height:300px;overflow:auto}.item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1e293b;font-size:11px}.count{color:#4ade80;font-weight:bold;text-align:center;margin:8px 0}</style>
+<style>body{background:#0f172a;color:#fff;font-family:Arial;padding:12px}.box{max-width:650px;margin:auto;background:#1e293b;padding:18px;border-radius:16px}input,select{width:100%;padding:10px;margin:4px 0;border-radius:8px;border:none;box-sizing:border-box}label{font-size:11px;color:#94a3b8;margin-top:6px;display:block}button{background:#16a34a;color:#fff;padding:12px;width:100%;border:none;border-radius:10px;font-weight:bold;margin-top:10px}.btn2{background:#0ea5e9}#qr{background:#fff;padding:15px;border-radius:10px;margin-top:12px;text-align:center;min-height:230px}.list{background:#0f172a;border-radius:10px;padding:10px;margin-top:12px}.item{font-size:11px;padding:6px 0;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between}</style>
 </head><body>
-<div class="box"><h3>ARNAUD ADMIN - 12 FIELDS + DATABASE</h3>
-<div id="lock"><input id="pin" type="password" placeholder="PIN = ARNAUD333649"><button onclick="unlock()">Unlock</button></div>
+<div class="box"><h3>ARNAUD ADMIN - FIXED</h3>
+<div id="lock"><input id="pin" type="password" placeholder="ARNAUD333649"><button onclick="unlock()">Unlock</button></div>
 <div id="form" style="display:none">
-<label>1 Full Name</label><input id="name">
-<label>2 Certificate No</label><input id="code" placeholder="AA1234">
-<label>3 Program</label><input id="program" value="PERSONAL">
-<label>4 DOB</label><input id="dob" type="date">
-<label>5 ID Number</label><input id="idNo">
-<label>6 Issue Date</label><input id="issue" type="date" value="2026-09-18">
-<label>7 Expiry Date</label><input id="expiry" type="date" value="2030-09-18">
-<label>8 Center</label><input id="center" value="Apapa">
-<label>9 Grade</label><select id="grade"><option>Pass</option><option>Merit</option><option>Distinction</option></select>
-<label>10 Status</label><select id="status"><option>VALID</option><option>EXPIRED</option></select>
-<label>11 Issuer</label><input id="issuer" value="Arnaud Afro Chaine Verification Ltd" readonly>
-<label>12 V-Code</label><input id="vcode">
+<label>1 Name</label><input id="name"><label>2 Cert No</label><input id="code"><label>3 Program</label><input id="program" value="PERSONAL"><label>4 DOB</label><input id="dob" type="date"><label>5 ID No</label><input id="idNo"><label>6 Issue</label><input id="issue" type="date" value="2026-09-18"><label>7 Expiry</label><input id="expiry" type="date" value="2030-09-18"><label>8 Center</label><input id="center" value="Apapa"><label>9 Grade</label><select id="grade"><option>Pass</option><option>Merit</option><option>Distinction</option></select><label>10 Status</label><select id="status"><option>VALID</option><option>EXPIRED</option></select><label>11 Issuer</label><input id="issuer" value="Arnaud Afro Chaine Verification Ltd" readonly><label>12 V-Code</label><input id="vcode">
 <button onclick="gen()">SAVE & GENERATE QR</button>
-<div id="qr">QR will appear here</div>
-<button id="dlBtn" class="btn2" style="display:none" onclick="downloadQR()">📥 DOWNLOAD QR</button>
-<div id="link" style="word-break:break-all;font-size:11px;margin-top:8px"></div>
-
-<div class="count" id="count">You don register 0 person</div>
+<div id="qr">QR will appear here - wait 2 sec</div>
+<button id="dlBtn" class="btn2" style="display:none" onclick="downloadQR()">📥 DOWNLOAD QR - CLICK HERE</button>
+<div id="link" style="font-size:11px;word-break:break-all;margin-top:8px"></div>
+<div id="count" style="color:#4ade80;text-align:center;margin-top:10px"></div>
 <div class="list" id="dblist"></div>
-<button class="btn3" onclick="exportCSV()">📤 Export List (CSV)</button>
-<button class="btn3" onclick="clearDB()" style="background:#7f1d1d">Clear Database</button>
 </div></div>
 <script>
-let db=JSON.parse(localStorage.getItem('arnaud_db')||'[]');
-function unlock(){if(document.getElementById('pin').value==='ARNAUD333649'){document.getElementById('lock').style.display='none';document.getElementById('form').style.display='block';renderDB();}else alert('Wrong PIN');}
-function renderDB(){
- document.getElementById('count').innerText='You don register '+db.length+' person(s)';
- let h=''; db.slice().reverse().forEach((p,i)=>{
-   h+=`<div class="item"><span>${db.length-i}. ${p.name} - ${p.code}</span><span style="color:#38bdf8;cursor:pointer" onclick="loadPerson('${p.code}')">View</span></div>`;
- }); document.getElementById('dblist').innerHTML=h||'<p style="font-size:11px;color:#64748b;text-align:center">No person yet</p>';
-}
-function loadPerson(code){let p=db.find(x=>x.code===code);if(!p)return;document.getElementById('name').value=p.name;document.getElementById('code').value=p.code;document.getElementById('program').value=p.program;document.getElementById('dob').value=p.dob;document.getElementById('idNo').value=p.idNo;document.getElementById('issue').value=p.issue;document.getElementById('expiry').value=p.expiry;document.getElementById('center').value=p.center;document.getElementById('grade').value=p.grade;document.getElementById('status').value=p.status;document.getElementById('vcode').value=p.vcode;gen();window.scrollTo(0,0);}
-let lastCode='';let lastUrl='';
+let db=JSON.parse(localStorage.getItem('arnaud_db')||'[]');let lastDataUrl='';let lastCode='';
+function unlock(){if(document.getElementById('pin').value==='ARNAUD333649'){document.getElementById('lock').style.display='none';document.getElementById('form').style.display='block';render();}else alert('Wrong');}
+function render(){document.getElementById('count').innerText='You don register '+db.length+' person(s)';let h='';db.slice().reverse().forEach((p,i)=>{h+=`<div class="item"><span>${db.length-i}. ${p.name}-${p.code}</span><span style="color:#38bdf8" onclick="loadP('${p.code}')">View</span></div>`});document.getElementById('dblist').innerHTML=h;}
+function loadP(c){let p=db.find(x=>x.code===c);if(!p)return;Object.keys(p).forEach(k=>{let el=document.getElementById(k);if(el)el.value=p[k];});gen();}
 function gen(){
  let p={name:document.getElementById('name').value.trim(),code:document.getElementById('code').value.trim(),program:document.getElementById('program').value,dob:document.getElementById('dob').value,idNo:document.getElementById('idNo').value,issue:document.getElementById('issue').value,expiry:document.getElementById('expiry').value,center:document.getElementById('center').value,grade:document.getElementById('grade').value,status:document.getElementById('status').value,issuer:document.getElementById('issuer').value,vcode:document.getElementById('vcode').value||document.getElementById('code').value};
- if(!p.name||!p.code){alert('Fill Name and Cert No');return;}
- lastCode=p.code; let existing=db.findIndex(x=>x.code===p.code); if(existing>=0) db[existing]=p; else db.push(p);
- localStorage.setItem('arnaud_db',JSON.stringify(db)); renderDB();
- let b64=btoa(JSON.stringify(p)); let url='https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?d='+b64; lastUrl=url;
- document.getElementById('qr').innerHTML=''; new QRCode(document.getElementById('qr'),{text:url,width:220,height:220,correctLevel:QRCode.CorrectLevel.L});
- document.getElementById('link').innerHTML='<p style="color:#4ade80">✅ SAVED TO DATABASE + QR READY!</p><a href="'+url+'" target="_blank" style="color:#38bdf8">Open Verify</a>';
+ if(!p.name||!p.code){alert('Fill Name and Code');return;}
+ lastCode=p.code;let idx=db.findIndex(x=>x.code===p.code);if(idx>=0)db[idx]=p;else db.push(p);localStorage.setItem('arnaud_db',JSON.stringify(db));render();
+ let b64=btoa(JSON.stringify(p));let url='https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?d='+b64;
+ let qrDiv=document.getElementById('qr');qrDiv.innerHTML='';
+ new QRCode(qrDiv,{text:url,width:250,height:250,correctLevel:QRCode.CorrectLevel.H});
+ document.getElementById('link').innerHTML='<p style="color:#4ade80">✅ SAVED + QR READY</p><a href="'+url+'" target="_blank" style="color:#38bdf8">Open Verify</a>';
  document.getElementById('dlBtn').style.display='block';
+ setTimeout(()=>{
+   let c=qrDiv.querySelector('canvas');let im=qrDiv.querySelector('img');
+   if(c) lastDataUrl=c.toDataURL('image/png');
+   else if(im) lastDataUrl=im.src;
+ },800);
 }
-function downloadQR(){let img=document.querySelector('#qr img');let canvas=document.querySelector('#qr canvas');let u='';if(img)u=img.src;else if(canvas)u=canvas.toDataURL('image/png');if(!u){alert('Generate first');return;}let a=document.createElement('a');a.href=u;a.download='QR_'+lastCode+'.png';a.click();}
-function exportCSV(){if(!db.length){alert('No data');return;}let csv='Name,Code,Program,DOB,ID,Issue,Expiry,Center,Grade,Status,VCode\n'+db.map(p=>`"${p.name}","${p.code}","${p.program}","${p.dob}","${p.idNo}","${p.issue}","${p.expiry}","${p.center}","${p.grade}","${p.status}","${p.vcode}"`).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='Arnaud_Database.csv';a.click();}
-function clearDB(){if(confirm('Clear all?')){db=[];localStorage.removeItem('arnaud_db');renderDB();}}
+function downloadQR(){
+ if(!lastDataUrl){
+   let c=document.querySelector('#qr canvas');let im=document.querySelector('#qr img');
+   if(c) lastDataUrl=c.toDataURL('image/png'); else if(im) lastDataUrl=im.src;
+ }
+ if(!lastDataUrl){alert('Wait 2 seconds after generating, then click again. Or PRESS AND HOLD the QR to save.');return;}
+ let a=document.createElement('a');a.href=lastDataUrl;a.download='QR_'+lastCode+'.png';document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
 </script></body></html>
