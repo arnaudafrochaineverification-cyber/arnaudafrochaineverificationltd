@@ -1,38 +1,33 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arnaud Admin - 12 Field + Photo QR</title><script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script><style>body{background:#0f172a;color:#fff;font-family:Arial;padding:15px}.box{max-width:650px;margin:auto;background:#1e293b;padding:20px;border-radius:16px} input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:none} label{font-size:11px;color:#94a3b8;margin-top:8px;display:block} button{background:#16a34a;color:#fff;padding:12px;width:100%;border:none;border-radius:10px;font-weight:bold;margin-top:10px;cursor:pointer} #qr{background:#fff;padding:10px;border-radius:10px;margin-top:15px;text-align:center} a{color:#38bdf8;word-break:break-all}</style></head><body><div class="box"><h2>🔐 ARNAUD ADMIN - 12 FIELD + PHOTO</h2><p style="font-size:11px;color:#94a3b8">PIN: ARNAUD333649 | Photo go enter inside QR</p><div id="lock"><input id="pin" type="password" placeholder="Enter PIN"><button onclick="unlock()">Unlock</button></div><div id="form" style="display:none"><label>1. Passport Photo (Very Important)</label><input type="file" id="photo" accept="image/*"><img id="preview" style="width:80px;height:80px;border-radius:8px;display:none;object-fit:cover"><label>2. Full Name</label><input id="name" placeholder="IDOHOU DESIRE"><label>3. Certificate No</label><input id="code" placeholder="AA1234"><label>4. Title/Program</label><input id="program" placeholder="PERSONAL"><label>5. DOB</label><input id="dob" type="date"><label>6. ID Number</label><input id="idNo" placeholder="ID123456"><label>7. Issue Date</label><input id="issue" type="date" value="2026-09-18"><label>8. Expiry Date</label><input id="expiry" type="date" value="2028-09-18"><label>9. Training Center</label><input id="center" placeholder="Apapa"><label>10. Grade</label><select id="grade"><option>Pass</option><option>Merit</option><option>Distinction</option></select><label>11. Status</label><select id="status"><option>VALID</option><option>EXPIRED</option></select><button onclick="generate()">SAVE & GENERATE QR WITH PHOTO</button><div id="qr"></div><div id="link" style="margin-top:10px;font-size:12px"></div></div></div><script>
-let photoData='';
-document.getElementById('photo').addEventListener('change',function(e){
-  let file=e.target.files[0]; if(!file) return;
-  let reader=new FileReader();
-  reader.onload=function(ev){
-    let img=new Image(); img.onload=function(){
-      let canvas=document.createElement('canvas'); canvas.width=100; canvas.height=100;
-      let ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,100,100);
-      photoData=canvas.toDataURL('image/jpeg',0.4);
-      let p=document.getElementById('preview'); p.src=photoData; p.style.display='block';
-    }; img.src=ev.target.result;
-  }; reader.readAsDataURL(file);
-});
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arnaud Admin - 12 Fields FINAL</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>body{background:#0f172a;color:#fff;font-family:Arial;padding:15px}.box{max-width:600px;margin:auto;background:#1e293b;padding:20px;border-radius:16px}input,select{width:100%;padding:11px;margin:5px 0;border-radius:8px;border:none;box-sizing:border-box}label{font-size:11px;color:#94a3b8;margin-top:8px;display:block}button{background:#16a34a;color:#fff;padding:13px;width:100%;border:none;border-radius:10px;font-weight:bold;margin-top:12px}#qr{background:#fff;padding:15px;border-radius:10px;margin-top:15px;text-align:center;min-height:220px;display:flex;align-items:center;justify-content:center}</style>
+</head><body>
+<div class="box"><h3>ARNAUD ADMIN - 12 FIELDS FINAL</h3>
+<div id="lock"><input id="pin" type="password" placeholder="PIN = ARNAUD333649"><button onclick="unlock()">Unlock</button></div>
+<div id="form" style="display:none">
+<label>1 Full Name</label><input id="name" placeholder="IDOHOU DESIRE">
+<label>2 Certificate No</label><input id="code" placeholder="AA1235">
+<label>3 Program</label><input id="program" value="PERSONAL">
+<label>4 DOB</label><input id="dob" type="date">
+<label>5 ID Number</label><input id="idNo" placeholder="ID123">
+<label>6 Issue Date</label><input id="issue" type="date" value="2026-09-18">
+<label>7 Expiry Date</label><input id="expiry" type="date" value="2030-09-18">
+<label>8 Training Center</label><input id="center" value="Apapa">
+<label>9 Grade</label><select id="grade"><option>Pass</option><option>Merit</option><option>Distinction</option></select>
+<label>10 Status</label><select id="status"><option>VALID</option><option>EXPIRED</option></select>
+<label>11 Issuer</label><input id="issuer" value="Arnaud Afro Chaine Verification Ltd" readonly>
+<label>12 V-Code</label><input id="vcode" placeholder="Same as Cert No">
+<button onclick="gen()">SAVE & GENERATE QR</button>
+<div id="qr">QR will appear here</div><div id="link" style="margin-top:10px;word-break:break-all;font-size:11px"></div>
+</div></div>
+<script>
 function unlock(){if(document.getElementById('pin').value==='ARNAUD333649'){document.getElementById('lock').style.display='none';document.getElementById('form').style.display='block';}else alert('Wrong PIN');}
-function generate(){
-  let payload={
-    code:document.getElementById('code').value,
-    name:document.getElementById('name').value,
-    program:document.getElementById('program').value,
-    dob:document.getElementById('dob').value,
-    idNo:document.getElementById('idNo').value,
-    issue:document.getElementById('issue').value,
-    expiry:document.getElementById('expiry').value,
-    center:document.getElementById('center').value,
-    grade:document.getElementById('grade').value,
-    status:document.getElementById('status').value,
-    issuer:'Arnaud Afro Chaine Verification Ltd',
-    photo:photoData
-  };
-  let b64=btoa(JSON.stringify(payload));
-  let url=location.origin+location.pathname.replace('admin.html','verify.html')+'?d='+b64;
-  if(!url.includes('verify.html')) url='https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?d='+b64;
-  document.getElementById('qr').innerHTML=''; new QRCode(document.getElementById('qr'),{text:url,width:200,height:200});
-  document.getElementById('link').innerHTML=`<p>✅ QR Generated WITH PHOTO!</p><a href="${url}" target="_blank">${url}</a><p style="font-size:10px">Copy this link, scan am now - photo go show!</p>`;
-  let all=JSON.parse(localStorage.getItem('arnaud_certs')||'[]'); all.push(payload); localStorage.setItem('arnaud_certs',JSON.stringify(all));
+function gen(){
+ let p={name:document.getElementById('name').value,code:document.getElementById('code').value,program:document.getElementById('program').value,dob:document.getElementById('dob').value,idNo:document.getElementById('idNo').value,issue:document.getElementById('issue').value,expiry:document.getElementById('expiry').value,center:document.getElementById('center').value,grade:document.getElementById('grade').value,status:document.getElementById('status').value,issuer:document.getElementById('issuer').value,vcode:document.getElementById('vcode').value||document.getElementById('code').value};
+ if(!p.name||!p.code){alert('Fill Name and Cert No');return;}
+ let b64=btoa(JSON.stringify(p)); let url='https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?d='+b64;
+ document.getElementById('qr').innerHTML=''; new QRCode(document.getElementById('qr'),{text:url,width:200,height:200,correctLevel:QRCode.CorrectLevel.L});
+ document.getElementById('link').innerHTML='<p style="color:#4ade80">✅ QR READY - Scan with phone camera!</p><a href="'+url+'" target="_blank" style="color:#38bdf8">'+url+'</a>';
 }
 </script></body></html>
