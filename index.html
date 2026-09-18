@@ -1,57 +1,37 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ARNAUD AFROCHAINE VERIFICATION LTD</title>
-<style>
-body{margin:0;font-family:Arial;background:#0a3d0a;text-align:center}
-.header{background:linear-gradient(135deg,#0a3d0a,#1a6a1a);padding:20px}
-.logo{width:220px;height:220px;border-radius:50%;border:5px solid gold;background:white;object-fit:cover}
-h1{font-size:22px;margin:15px 0;color:gold}
-.card{background:white;margin:15px;padding:20px;border-radius:15px}
-.btn{display:block;background:#25D366;color:white;padding:15px;margin:10px 0;border-radius:10px;text-decoration:none;font-weight:bold;font-size:18px}
-.btn2{background:#0a3d0a}
-input{width:92%;padding:15px;margin:10px 0;font-size:18px;border:2px solid #0a3d0a;border-radius:10px;text-align:center;text-transform:uppercase}
-.verify-btn{background:gold;color:black;padding:15px 30px;font-size:20px;font-weight:bold;border:none;border-radius:10px}
-#result{margin-top:15px;font-size:18px;font-weight:bold;min-height:30px}
-</style>
-</head>
-<body>
-<div class="header">
-<img src="IMG-20260917-WA1432.jpg" class="logo" onerror="this.src='IMG-20260917-WA0032.jpg'">
-<h1>ARNAUD AFROCHAINE VERIFICATION LTD</h1>
-<p style="color:white;">9 okesutedo Baba junction ota, Sango ota, ogun<br>RC: 8604820</p>
-</div>
-<div class="card">
-<p style="font-size:22px;">🔍 Verify Certificate</p>
-<input type="text" id="certId" placeholder="Enter Certificate ID">
-<br><br>
-<button class="verify-btn" onclick="verifyCertificate()">VERIFY NOW</button>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arnaud Afrochaine Verification</title>
+<style>body{font-family:Arial;background:#0a192f;color:white;padding:15px;margin:0;min-height:100vh;display:flex;justify-content:center;align-items:center}.box{max-width:450px;width:100%;background:white;color:#333;padding:25px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}h2{text-align:center;color:#0a192f}input{width:100%;padding:14px;margin:10px 0;border-radius:8px;border:2px solid #ddd;box-sizing:border-box;font-size:16px}button{width:100%;padding:14px;background:#0a192f;color:white;border:none;border-radius:8px;font-weight:bold;font-size:16px}.valid{background:#d4edda;color:#155724;padding:15px;border-radius:8px;margin-top:15px;text-align:center;font-weight:bold}.invalid{background:#f8d7da;color:#721c24;padding:15px;border-radius:8px;margin-top:15px;text-align:center;font-weight:bold}</style>
+</head><body>
+<div class="box">
+<h2>🎓 ARNAUD AFROCHAINE<br>Certificate Verification</h2>
+<p style="text-align:center;font-size:13px;color:#666">Enter Certificate ID to verify</p>
+<input id="certId" placeholder="e.g GML-2024-001">
+<button onclick="verify()">VERIFY CERTIFICATE</button>
 <div id="result"></div>
-</div>
-<div class="card">
-<h2>Contact Us</h2>
-<a class="btn" href="https://wa.me/2349132851465">💬 WhatsApp: 09132851465</a>
-<a class="btn btn2" href="tel:09132851465">📞 Call: 09132851465</a>
+<p style="text-align:center;margin-top:20px;font-size:11px;color:#999">© 2024 Arnaud Afrochaine Verification Ltd</p>
 </div>
 <script>
-function verifyCertificate(){
-let id=document.getElementById('certId').value.trim().toUpperCase();
-let r=document.getElementById('result');
-if(id===""){r.innerHTML="⚠️ Enter ID";r.style.color="orange";return;}
-let defaults=["TEST123","TESTING 123","ARNAUD-001","ARNAUD-002"];
-let saved=JSON.parse(localStorage.getItem('arnaud_certs')||'null');
-let certs=saved||defaults;
-let schools=JSON.parse(localStorage.getItem('arnaud_schools')||'{}');
-if(certs.includes(id)){
-let sn=schools[id]?"<br><small>"+schools[id]+"</small>":"";
-r.innerHTML="✅ VALID CERTIFICATE<br>"+id+sn+"<br>verified by ARNAUD AFROCHAINE";
-r.style.color="green";
+// --- YOUR CERTIFICATES DATABASE ---
+// Add all your valid IDs here
+const VALID_CERTS = {
+"GML-2024-001": {school:"Grace Model School", student:"John Doe", year:"2024"},
+"GML-2024-002": {school:"Grace Model School", student:"Mary James", year:"2024"},
+"DEMO-001": {school:"Demo School", student:"Test Student", year:"2024"}
+};
+
+function verify(){
+let id = document.getElementById('certId').value.trim().toUpperCase();
+if(!id){document.getElementById('result').innerHTML='<div class="invalid">Please enter Certificate ID</div>';return;}
+// Check 1: from hard-coded list
+let found = VALID_CERTS[id];
+// Check 2: from your admin (same phone)
+let saved = JSON.parse(localStorage.getItem('arnaud_certs')||'{}');
+if(saved[id]) found = saved[id];
+if(found){
+document.getElementById('result').innerHTML = `<div class="valid">✅ VALID CERTIFICATE<br><br><b>ID:</b> ${id}<br><b>School:</b> ${found.school}<br><b>Name:</b> ${found.name||found.student}<br><br>✔️ Verified by Arnaud Afrochaine</div>`;
 }else{
-r.innerHTML="❌ INVALID / FAKE<br>"+id+" not found";
-r.style.color="red";
+document.getElementById('result').innerHTML = `<div class="invalid">❌ INVALID CERTIFICATE<br><br>ID <b>${id}</b> not found in our database.<br><br>Please contact school.</div>`;
 }
 }
-</script>
-</body>
-</html>
+</script></body></html>
