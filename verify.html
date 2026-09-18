@@ -1,31 +1,40 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Verify Certificate - Arnaud Afro Chaine</title>
-<style>body{font-family:Arial;background:#f1f5f9;padding:15px}.card{max-width:550px;margin:40px auto;background:#fff;border-radius:16px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,.1);border-top:6px solid #16a34a}.ok{background:#16a34a;color:#fff;padding:12px;border-radius:8px;text-align:center;font-weight:bold;font-size:16px}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee;font-size:13px}.row b{color:#334155;width:40%}.row span{width:60%;text-align:right;word-break:break-all}h2{text-align:center;color:#0f172a;line-height:1.2}</style>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arnaud Verification - Fixed</title>
+<style>body{background:#eef2f7;margin:0;font-family:Arial;display:flex;justify-content:center;padding:16px}.card{max-width:500px;width:100%;background:#fff;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden}.top{height:6px;background:#16a34a}.pad{padding:20px}h2{text-align:center;margin:0;font-size:20px}.sub{text-align:center;color:#64748b;font-size:11px;margin:6px 0 14px}.ok{background:#dcfce7;color:#14532d;padding:12px;border-radius:10px;text-align:center;font-weight:bold}.bad{background:#fee2e2;color:#7f1d1d;padding:12px;border-radius:10px;text-align:center;font-weight:bold}.row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f1f5f9;font-size:13px}.lbl{color:#64748b}.val{font-weight:700;text-align:right;max-width:62%;word-break:break-word}</style>
 </head><body>
-<div class="card"><h2>Arnaud Afro Chaine<br>Verification Ltd</h2><div id="out">Loading...</div></div>
+<div class="card"><div class="top"></div><div class="pad">
+<h2>Arnaud Afro Chaine Verification Ltd</h2>
+<div class="sub">Official Certificate Verification System - Apapa Lagos</div>
+<div id="out">Loading...</div>
+</div></div>
 <script>
-let d=new URLSearchParams(location.search).get('d');
-if(!d){document.getElementById('out').innerHTML='<p style="color:red;text-align:center">Invalid Link</p>';}
+function getParam(){let p=new URLSearchParams(location.search);return p.get('d')||p.get('data');}
+function safeDecode(b64){
+ try{return JSON.parse(atob(b64));}catch(e){
+  try{return JSON.parse(decodeURIComponent(escape(atob(b64))));}catch(e2){return null;}
+ }
+}
+let d=getParam();let out=document.getElementById('out');
+if(!d){out.innerHTML='<div class="bad">⚠️ No QR Code Scanned</div><p style="font-size:12px;color:#64748b;text-align:center;line-height:1.5">This page only works when you scan the QR code on a certificate.<br><br>1. Open your phone camera<br>2. Scan the QR on the certificate<br>3. Click the link that appears<br><br>If you are the admin, go to admin.html, generate QR, then click Open Verify to test.</p>';}
 else{
- try{
-  let j=JSON.parse(atob(d));
-  document.getElementById('out').innerHTML=`
-  <div class="ok">✅ CERTIFICATE VALIDATED - ${j.status||'VALID'}</div>
-  <div style="margin-top:15px">
-  <div class="row"><b>1. Full Name:</b><span>${j.name||''}</span></div>
-  <div class="row"><b>2. Cert No:</b><span>${j.code||''}</span></div>
-  <div class="row"><b>3. Program:</b><span>${j.program||''}</span></div>
-  <div class="row"><b>4. DOB:</b><span>${j.dob||''}</span></div>
-  <div class="row"><b>5. ID Number:</b><span>${j.idNo||''}</span></div>
-  <div class="row"><b>6. Issue Date:</b><span>${j.issue||''}</span></div>
-  <div class="row"><b>7. Expiry Date:</b><span>${j.expiry||''}</span></div>
-  <div class="row"><b>8. Center:</b><span>${j.center||''}</span></div>
-  <div class="row"><b>9. Grade:</b><span>${j.grade||''}</span></div>
-  <div class="row"><b>10. Status:</b><span>${j.status||''}</span></div>
-  <div class="row"><b>11. Issuer:</b><span>${j.issuer||''}</span></div>
-  <div class="row"><b>12. V-Code:</b><span>${j.vcode||j.code||''}</span></div>
-  </div><p style="text-align:center;font-size:10px;color:#94a3b8;margin-top:20px">Verified via arnaudafrochaineverificationltd.github.io<br>Official Document</p>`;
- }catch(e){document.getElementById('out').innerHTML='<p style="color:red;text-align:center">❌ Invalid QR Code</p>';}
+ let data=safeDecode(d);
+ if(!data){out.innerHTML='<div class="bad">Invalid Link - Data corrupted</div><p style="font-size:11px;color:#64748b;text-align:center">Try scanning again. If problem continues, regenerate QR from admin.</p>';}
+ else{
+  let valid=(data.status||'VALID')==='VALID';
+  out.innerHTML=`<div class="${valid?'ok':'bad'}">${valid?'✅ CERTIFICATE VALID - AUTHENTIC':'❌ INVALID'}</div>
+  <div class="row"><span class="lbl">1 Full Name</span><span class="val">${data.name||''}</span></div>
+  <div class="row"><span class="lbl">2 Cert No</span><span class="val">${data.code||''}</span></div>
+  <div class="row"><span class="lbl">3 Program</span><span class="val">${data.program||''}</span></div>
+  <div class="row"><span class="lbl">4 DOB</span><span class="val">${data.dob||''}</span></div>
+  <div class="row"><span class="lbl">5 ID No</span><span class="val">${data.idNo||''}</span></div>
+  <div class="row"><span class="lbl">6 Issue Date</span><span class="val">${data.issue||''}</span></div>
+  <div class="row"><span class="lbl">7 Expiry</span><span class="val">${data.expiry||''}</span></div>
+  <div class="row"><span class="lbl">8 Center</span><span class="val">${data.center||''}</span></div>
+  <div class="row"><span class="lbl">9 Grade</span><span class="val">${data.grade||''}</span></div>
+  <div class="row"><span class="lbl">10 Status</span><span class="val" style="color:${valid?'green':'red'}">${data.status||'VALID'}</span></div>
+  <div class="row"><span class="lbl">11 Issuer</span><span class="val">${data.issuer||''}</span></div>
+  <div class="row"><span class="lbl">12 V-Code</span><span class="val">${data.vcode||''}</span></div>
+  <p style="font-size:10px;color:#94a3b8;text-align:center;margin-top:14px">Verified by Arnaud Afro Chaine Verification Ltd<br>© 2026 - Apapa, Lagos, Nigeria</p>`;
+ }
 }
 </script></body></html>
