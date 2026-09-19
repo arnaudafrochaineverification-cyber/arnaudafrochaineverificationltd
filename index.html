@@ -1,48 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARNAUD AFROCHAINE VERIFICATION LTD</title>
+<title>Arnaud Afrochaine Verification LTD</title>
 <style>
-body{font-family:Arial, sans-serif;margin:0;background:#f8fafc}
-.header{background:#fff;padding:15px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);position:sticky;top:0}
-.logo{width:50px;height:50px;background:linear-gradient(135deg,#0b1f4b,#0b7a3e);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}
-.header h1{margin:0;font-size:16px;color:#0b1f4b;line-height:1.2}
-.header p{margin:0;font-size:11px;color:#666;letter-spacing:1px}
-.nav{display:flex;gap:20px;justify-content:center;padding:15px;background:#fff;border-bottom:1px solid #eee}
-.nav a{text-decoration:none;color:#0b1f4b;font-weight:bold;font-size:14px}
-.nav a.active{border-bottom:2px solid #0b7a3e;padding-bottom:3px}
-.container{max-width:500px;margin:30px auto;padding:20px}
-.subtext{color:#666;font-size:14px;margin-bottom:15px}
-.inputBox{width:100%;padding:16px;border:2px solid #ddd;border-radius:12px;font-size:16px;box-sizing:border-box;outline:none}
-.inputBox:focus{border-color:#0b7a3e}
-.btn{width:100%;padding:16px;background:linear-gradient(135deg,#0b7a3e,#0b4d2e);color:#fff;border:none;border-radius:12px;font-weight:bold;font-size:16px;margin-top:15px;cursor:pointer;box-shadow:0 4px 15px rgba(11,122,62,0.3)}
-.resultBox{margin-top:20px;border-radius:15px;padding:20px;display:none}
-.invalid{border:2px solid #c62828;background:#ffebee}
-.valid{border:2px solid #0b7a3e;background:#e8f5e9}
-.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.05);font-size:14px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+.top-bar{background:#0a2e1d;color:white;padding:8px 10px;font-size:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px}
+.top-bar a{color:#a5d6a7;text-decoration:none}
+.header{background:white;padding:10px 15px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.1);position:sticky;top:0;z-index:20}
+.logo-box{display:flex;align-items:center;gap:10px}
+.logo-box img{height:50px;width:auto;object-fit:contain;background:white;padding:2px;border-radius:8px;border:1px solid #eee}
+.logo-text h3{font-size:13px;color:#0a4d2e;line-height:1.1}
+.logo-text p{font-size:9px;color:#666;letter-spacing:1px}
+.nav a{text-decoration:none;color:#0a4d2e;font-weight:bold;font-size:12px;margin-left:10px}
+.hero{background:linear-gradient(135deg,#0a4d2e 0%,#126d42 100%);color:white;text-align:center;padding:50px 20px 90px 20px}
+.hero h1{font-size:27px}
+.hero p{font-size:13px;margin-top:12px;opacity:0.9;max-width:550px;margin:auto}
+.verify-card{background:white;max-width:550px;margin:-60px auto 20px auto;border-radius:16px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,0.25)}
+.badge{background:#e8f5e9;color:#0a4d2e;border:1px solid #c8e6c9;border-radius:20px;padding:7px 12px;font-size:9px;font-weight:bold;display:inline-block;margin-bottom:12px}
+.verify-card h2{color:#0a2e1d;font-size:21px;margin-bottom:12px}
+.verify-card input{width:100%;padding:14px;border:1px solid #ddd;border-radius:10px;margin:8px 0;font-size:15px}
+.verify-card button{width:100%;padding:14px;background:#0a4d2e;color:white;border:none;border-radius:10px;font-weight:bold;cursor:pointer;font-size:16px}
+#result{margin-top:15px;padding:15px;border-radius:10px;display:none;font-size:14px;line-height:1.6}
+.success{background:#e8f5e9;border:1px solid #2e7d32;color:#0a4d2e}
+.error{background:#ffebee;border:1px solid #c62828;color:#c62828}
+/* HEAD OFFICE GALLERY - ALL PICTURES */
+.gallery-section{max-width:800px;margin:30px auto;padding:20px;background:white;border-radius:16px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
+.gallery-section h2{text-align:center;color:#0a4d2e;margin-bottom:15px;font-size:20px}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gallery-grid img{width:100%;height:180px;object-fit:cover;border-radius:10px;border:2px solid #e8f5e9}
+.gallery-grid img:first-child{grid-column:span 2;height:220px;object-fit:contain;background:#f5f5f5}
+footer{background:#0a2e1d;color:white;text-align:center;padding:20px 10px;font-size:10px;margin-top:30px;line-height:1.8}
+.whatsapp-float{position:fixed;bottom:20px;right:20px;background:#25D366;color:white;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:100}
 </style>
-</head>
-<body>
-<div class="header">
-<div class="logo">🌍</div>
-<div><h1>ARNAUD AFROCHAINE<br>VERIFICATION LTD</h1><p>OFFICIAL VERIFICATION PORTAL</p></div>
-</div>
-<div class="nav"><a class="active" href="#">Verify</a><a href="#">About Us</a><a href="#">Contact</a></div>
-<div class="container">
-<p class="subtext">Enter Certificate ID or scan QR code from your certificate</p>
-<input id="certInput" class="inputBox" placeholder="e.g. MM1234">
-<button class="btn" onclick="verify()">🔍 VERIFY CERTIFICATE NOW</button>
-<div id="loading" style="display:none;text-align:center;margin-top:20px">⏳ Checking official records...</div>
-<div id="validBox" class="resultBox valid"></div>
-<div id="invalidBox" class="resultBox invalid">
-<div style="font-size:24px">❌ <b>INVALID CERTIFICATE</b></div>
-<p style="margin-top:10px;line-height:1.5">Certificate ID <b id="badId"></b> not found in our official records. This certificate may be fake or not issued by Arnaud Afrochaine Verification LTD.<br><br>If you believe this is an error, contact:<br>support@arnaudafrochaineverificationltd.com</p>
-</div>
-</div>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+
+<div class="top-bar">
+<span>📧 arnaudafrochainverification@gmail.com</span>
+<span>📞 <a href="https://wa.me/2349132851465">+2349132851465 WhatsApp</a></span>
+</div>
+
+<div class="header">
+<div class="logo-box">
+<img src="IMG-20260919-WA0127(1).jpg" alt="Logo">
+<div class="logo-text">
+<h3>ARNAUD AFROCHAINE<br>VERIFICATION LTD</h3>
+<p>OFFICIAL VERIFICATION PORTAL</p>
+</div>
+</div>
+<div class="nav">
+<a href="admin.html">Admin</a>
+<a href="#gallery">Head Office</a>
+</div>
+</div>
+
+<div class="hero">
+<h1>Official Certificate<br>Verification</h1>
+<p>Official portal - All pictures and certificates authenticated here. Head Office Lagos.</p>
+</div>
+
+<div class="verify-card" id="verify">
+<div class="badge">🔒 OFFICIAL • arnaudafrochainverification@gmail.com • +2349132851465</div>
+<h2>Verify Certificate</h2>
+<input type="text" id="certInput" placeholder="Enter Certificate ID e.g. AAV-2025-001">
+<button onclick="verifyCert()">Verify Now</button>
+<div id="result"></div>
+</div>
+
+<!-- HEAD OFFICE - ALL YOUR PICTURES GO SHOW HERE -->
+<div class="gallery-section" id="gallery">
+<h2>🏢 HEAD OFFICE - Arnaud Afrochaine Verification LTD</h2>
+<div class="gallery-grid">
+<img src="IMG-20260919-WA0127(1).jpg" alt="Main Logo - Globe Africa">
+<img src="IMG-20260917-WA1432.jpg" alt="Office Image 2">
+<img src="IMG-20260919-WA9711.jpg" alt="HR Office">
+<img src="IMG-20260919-WA7762.jpg" alt="HR Verification">
+<img src="IMG-20260919-WA8605.jpg" alt="Anti-Fake">
+<img src="IMG-20260919-WA3116.jpg" alt="Certificate Sample">
+</div>
+<p style="text-align:center;margin-top:12px;font-size:12px;color:#666">📍 Lagos Head Office | All Official Images Displayed</p>
+</div>
+
+<footer>
+© 2025 Arnaud Afrochaine Verification LTD<br>
+📍 Lagos | 📞 +2349132851465 | 📧 arnaudafrochainverification@gmail.com<br>
+African Roots, Global Vision
+</footer>
+
+<a href="https://wa.me/2349132851465?text=Hello%20Arnaud%20Verification%20Head%20Office" class="whatsapp-float" target="_blank">💬</a>
+
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
@@ -50,36 +100,30 @@ const firebaseConfig = {
   projectId: "arnaudafrochaineverification",
   storageBucket: "arnaudafrochaineverification.firebasestorage.app",
   messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+  measurementId: "G-Y52LEBJM7Q"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-async function verify(){
- let id = document.getElementById('certInput').value.trim() || new URLSearchParams(window.location.search).get('id');
- if(!id){alert('Enter Certificate ID');return;}
- document.getElementById('loading').style.display='block';
- document.getElementById('validBox').style.display='none';
- document.getElementById('invalidBox').style.display='none';
- try{
-  let doc = await db.collection('certificates').doc(id).get();
-  document.getElementById('loading').style.display='none';
-  if(!doc.exists){
-    document.getElementById('badId').innerText=id;
-    document.getElementById('invalidBox').style.display='block';return;
-  }
-  let d=doc.data();
-  let box=document.getElementById('validBox');
-  box.style.display='block';
-  box.innerHTML = `<div style="text-align:center"><span style="background:#0b7a3e;color:#fff;padding:6px 14px;border-radius:20px;font-weight:bold;font-size:13px">✅ VALID CERTIFICATE</span>
-    <h2 style="margin:12px 0 0;color:#0b1f4b">${d.fullName||''}</h2><p style="margin:0;color:#666">${d.course||''}</p></div>
-    <div style="margin-top:15px"><div class="row"><span>Certificate ID</span><b>${id}</b></div>
-    <div class="row"><span>Institution</span><b>${d.institution||''}</b></div><div class="row"><span>Type</span><b>${d.certificateType||''}</b></div>
-    <div class="row"><span>Issue Date</span><b>${d.issueDate||''}</b></div><div class="row"><span>Expiry</span><b>${d.expiryDate||''}</b></div>
-    <div class="row"><span>Grade</span><b>${d.grade||''}</b></div><div class="row"><span>Duration</span><b>${d.duration||''}</b></div>
-    <div class="row"><span>Issued By</span><b>${d.issuedBy||''}</b></div></div>`;
- }catch(e){document.getElementById('loading').style.display='none';alert(e.message);}
+function verifyCert(){
+  const id=document.getElementById('certInput').value.trim();
+  const resDiv=document.getElementById('result');
+  if(!id){resDiv.style.display='block';resDiv.className='error';resDiv.innerHTML='❌ Enter ID';return;}
+  resDiv.style.display='block';resDiv.className='success';resDiv.innerHTML='⏳ Checking...';
+  db.collection("certificates").doc(id).get().then(doc=>{
+    if(doc.exists){
+      const d=doc.data();
+      resDiv.className='success';
+      resDiv.innerHTML=`✅ <b>VERIFIED</b><br>Name: ${d.studentName}<br>Cert: ${d.certNumber}`;
+    }else{
+      resDiv.className='error';resDiv.innerHTML='❌ NOT FOUND';
+    }
+  });
 }
-window.onload=()=>{let idFromUrl=new URLSearchParams(window.location.search).get('id');if(idFromUrl){document.getElementById('certInput').value=idFromUrl;verify();}}
+window.onload=()=>{
+  const p=new URLSearchParams(window.location.search);
+  const c=p.get('cert');if(c){document.getElementById('certInput').value=c;verifyCert();}
+}
 </script>
 </body>
 </html>
