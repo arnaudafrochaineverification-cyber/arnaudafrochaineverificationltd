@@ -4,67 +4,55 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin - Arnaud Afrochaine</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 body{font-family:Arial;background:#f0f2f5;padding:15px}
 .card{max-width:550px;margin:auto;background:#fff;padding:20px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.1)}
 input,select,textarea{width:100%;padding:12px;margin:8px 0;border:2px solid #ddd;border-radius:10px;box-sizing:border-box}
-label{font-weight:bold;font-size:14px;margin-top:10px;display:block}
+label{font-weight:bold;font-size:13px;margin-top:10px;display:block;color:#0b1f4b}
 button{width:100%;padding:15px;background:#0b1f4b;color:#fff;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:15px;font-size:16px}
-#qrArea{display:none;text-align:center;margin-top:20px;padding:20px;background:#f9fff9;border:2px solid #0b7a3e;border-radius:15px}
-#qrcode{display:flex;justify-content:center;margin:15px 0}
+#qrArea{display:none;text-align:center;margin-top:20px;padding:20px;background:#e8f5e9;border:3px solid #0b7a3e;border-radius:15px}
+#qrImg{width:220px;height:220px;border:5px solid #fff;box-shadow:0 3px 15px rgba(0,0,0,0.2);margin:15px auto;display:block}
 </style>
 </head>
 <body>
 <div class="card">
 <h2 style="text-align:center;color:#0b4d2e">🔐 Admin - Generate Certificate</h2>
 
-<label>Certificate ID</label>
-<input id="certId" placeholder="e.g. ZZ123">
-
-<label>Full Name</label>
-<input id="fullName" placeholder="Student full name">
-
-<label>Course</label>
-<input id="course" placeholder="e.g. Safety Course">
-
+<label>Certificate ID *</label>
+<input id="certId" placeholder="e.g. AA1001">
+<label>Full Name *</label>
+<input id="fullName" placeholder="John Doe">
+<label>Course *</label>
+<input id="course" placeholder="e.g. Cyber Security">
 <label>Institution</label>
 <input id="institution" value="Arnaud Afrochaine Verification Ltd">
-
 <label>Certificate Type</label>
-<select id="certType"><option>Certificate</option><option>Diploma</option><option>Degree</option></select>
-
+<select id="certType"><option>Certificate</option><option>Diploma</option><option>Degree</option><option>Attestation</option></select>
 <label>Issue Date</label>
 <input id="issueDate" type="date">
-
-<label>Expiry Date (optional)</label>
+<label>Expiry Date</label>
 <input id="expiryDate" type="date" value="2030-09-19">
-
 <label>Grade / Score</label>
-<input id="grade" placeholder="e.g. 20">
-
+<input id="grade" placeholder="e.g. 20 / Excellent">
 <label>Duration</label>
 <input id="duration" placeholder="e.g. 6 months">
-
 <label>Status</label>
 <select id="status"><option>Completed</option><option>Valid</option><option>Expired</option></select>
-
 <label>Issued By</label>
 <input id="issuedBy" value="Registrar ARNAUDAFROCHAINVERIFICATION">
+<label>Note</label>
+<textarea id="note" placeholder="Additional note"></textarea>
 
-<label>Additional Note</label>
-<textarea id="note"></textarea>
-
-<button onclick="saveCert()">SAVE CERTIFICATE & GENERATE QR</button>
+<button onclick="saveCert()">💾 SAVE & GENERATE QR</button>
 
 <div id="qrArea">
-<h3 style="color:green">✅ Saved! Certificate ZZ123 Live!</h3>
-<p id="linkText" style="word-break:break-all;font-size:13px;background:#eee;padding:10px;border-radius:8px"></p>
-<div id="qrcode"></div>
+<h3 style="color:green;margin:0">✅ SAVED LIVE!</h3>
+<p style="font-size:12px;color:#333">Certificate don enter Firebase!</p>
+<p id="linkText" style="word-break:break-all;font-size:11px;background:#fff;padding:10px;border-radius:8px;border:1px solid #ddd"></p>
+<img id="qrImg" src="" alt="QR Code">
 <button onclick="downloadQR()" style="background:#0b7a3e">📥 DOWNLOAD QR CODE</button>
-<a id="verifyBtn" target="_blank" style="display:block;margin-top:10px;padding:12px;background:#fff;color:#0b7a3e;border:2px solid #0b7a3e;border-radius:10px;text-decoration:none;font-weight:bold">🔍 VERIFY NOW</a>
+<a id="verifyBtn" target="_blank" style="display:block;margin-top:12px;padding:12px;background:#fff;color:#0b7a3e;border:2px solid #0b7a3e;border-radius:10px;text-decoration:none;font-weight:bold">🔍 VERIFY NOW</a>
 </div>
-
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -83,7 +71,7 @@ const db = firebase.firestore();
 
 async function saveCert(){
  let id = document.getElementById('certId').value.trim();
- if(!id){alert('Enter Certificate ID');return;}
+ if(!id){alert('Please enter Certificate ID');return;}
  let data = {
    fullName: document.getElementById('fullName').value,
    course: document.getElementById('course').value,
@@ -103,18 +91,20 @@ async function saveCert(){
   let verifyLink = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/?id=${id}`;
   document.getElementById('linkText').innerText = verifyLink;
   document.getElementById('verifyBtn').href = verifyLink;
-  document.getElementById('qrcode').innerHTML = "";
-  new QRCode(document.getElementById('qrcode'), {text: verifyLink, width: 200, height: 200});
+  // THIS IS THE NEW QR - USES GOOGLE API - MUST SHOW!
+  document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(verifyLink)}`;
   document.getElementById('qrArea').style.display = 'block';
   document.getElementById('qrArea').scrollIntoView({behavior:'smooth'});
  }catch(e){alert('Error: '+e.message);}
 }
-
 function downloadQR(){
- let img = document.querySelector('#qrcode img');
- if(img){ let a=document.createElement('a'); a.href=img.src; a.download=document.getElementById('certId').value+'_QR.png'; a.click(); }
- else{ alert('Generate QR first'); }
+ let src = document.getElementById('qrImg').src;
+ if(!src){alert('Generate first');return;}
+ fetch(src).then(r=>r.blob()).then(b=>{
+   let a=document.createElement('a'); a.href=URL.createObjectURL(b);
+   a.download=document.getElementById('certId').value+'_QR.png'; a.click();
+ });
 }
 </script>
 </body>
-  </html>
+</html>
