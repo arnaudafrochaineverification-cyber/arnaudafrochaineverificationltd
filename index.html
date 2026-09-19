@@ -1,30 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arnaud Afrochaine Verification - Verify Certificate</title>
+<title>ARNAUD AFROCHAINE VERIFICATION LTD</title>
 <style>
-body{font-family:Arial,sans-serif;background:#f0f2f5;margin:0;padding:20px}
-.container{max-width:600px;margin:auto;background:#fff;padding:25px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.1);text-align:center}
-h1{color:#0b4d2e}
-input{width:90%;padding:15px;border:2px solid #ddd;border-radius:10px;font-size:16px;margin:15px 0}
-button{padding:14px 25px;background:#0b7a3e;color:#fff;border:none;border-radius:10px;font-weight:bold;cursor:pointer;font-size:16px}
-.result{margin-top:20px;padding:20px;border-radius:10px;display:none;text-align:left}
-.valid{background:#e6f7e6;border:2px solid #0b7a3e}
-.invalid{background:#ffe6e6;border:2px solid #c62828}
+body{font-family:Arial, sans-serif;margin:0;background:#f8fafc}
+.header{background:#fff;padding:15px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 10px rgba(0,0,0,0.05);position:sticky;top:0}
+.logo{width:50px;height:50px;background:linear-gradient(135deg,#0b1f4b,#0b7a3e);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}
+.header h1{margin:0;font-size:16px;color:#0b1f4b;line-height:1.2}
+.header p{margin:0;font-size:11px;color:#666;letter-spacing:1px}
+.nav{display:flex;gap:20px;justify-content:center;padding:15px;background:#fff;border-bottom:1px solid #eee}
+.nav a{text-decoration:none;color:#0b1f4b;font-weight:bold;font-size:14px}
+.nav a.active{border-bottom:2px solid #0b7a3e;padding-bottom:3px}
+.container{max-width:500px;margin:30px auto;padding:20px}
+.subtext{color:#666;font-size:14px;margin-bottom:15px}
+.inputBox{width:100%;padding:16px;border:2px solid #ddd;border-radius:12px;font-size:16px;box-sizing:border-box;outline:none}
+.inputBox:focus{border-color:#0b7a3e}
+.btn{width:100%;padding:16px;background:linear-gradient(135deg,#0b7a3e,#0b4d2e);color:#fff;border:none;border-radius:12px;font-weight:bold;font-size:16px;margin-top:15px;cursor:pointer;box-shadow:0 4px 15px rgba(11,122,62,0.3)}
+.resultBox{margin-top:20px;border-radius:15px;padding:20px;display:none}
+.invalid{border:2px solid #c62828;background:#ffebee}
+.valid{border:2px solid #0b7a3e;background:#e8f5e9}
+.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.05);font-size:14px}
 </style>
 </head>
 <body>
-<div class="container">
-<h1>🔐 Arnaud Afrochaine Verification Ltd</h1>
-<p>Enter Certificate ID to Verify</p>
-<input id="certId" placeholder="e.g. MM1234">
-<br>
-<button onclick="verifyCert()">✅ VERIFY NOW</button>
-<div id="result" class="result"></div>
+<div class="header">
+<div class="logo">🌍</div>
+<div><h1>ARNAUD AFROCHAINE<br>VERIFICATION LTD</h1><p>OFFICIAL VERIFICATION PORTAL</p></div>
 </div>
-
+<div class="nav"><a class="active" href="#">Verify</a><a href="#">About Us</a><a href="#">Contact</a></div>
+<div class="container">
+<p class="subtext">Enter Certificate ID or scan QR code from your certificate</p>
+<input id="certInput" class="inputBox" placeholder="e.g. MM1234">
+<button class="btn" onclick="verify()">🔍 VERIFY CERTIFICATE NOW</button>
+<div id="loading" style="display:none;text-align:center;margin-top:20px">⏳ Checking official records...</div>
+<div id="validBox" class="resultBox valid"></div>
+<div id="invalidBox" class="resultBox invalid">
+<div style="font-size:24px">❌ <b>INVALID CERTIFICATE</b></div>
+<p style="margin-top:10px;line-height:1.5">Certificate ID <b id="badId"></b> not found in our official records. This certificate may be fake or not issued by Arnaud Afrochaine Verification LTD.<br><br>If you believe this is an error, contact:<br>support@arnaudafrochaineverificationltd.com</p>
+</div>
+</div>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script>
@@ -38,38 +54,32 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-
-async function verifyCert(){
- let id = document.getElementById('certId').value.trim();
- if(!id){alert('Enter ID');return;}
- let resDiv = document.getElementById('result');
- resDiv.style.display='block';
- resDiv.innerHTML='⏳ Verifying...';
+async function verify(){
+ let id = document.getElementById('certInput').value.trim() || new URLSearchParams(window.location.search).get('id');
+ if(!id){alert('Enter Certificate ID');return;}
+ document.getElementById('loading').style.display='block';
+ document.getElementById('validBox').style.display='none';
+ document.getElementById('invalidBox').style.display='none';
  try{
   let doc = await db.collection('certificates').doc(id).get();
-  if(doc.exists){
-   let d = doc.data();
-   resDiv.className='result valid';
-   resDiv.innerHTML = `<h3>✅ VALID CERTIFICATE</h3><p><b>ID:</b> ${id}</p><p><b>Name:</b> ${d.fullName}</p><p><b>Course:</b> ${d.course}</p><p><b>Institution:</b> ${d.institution}</p><p><b>Type:</b> ${d.certificateType}</p><p><b>Issue Date:</b> ${d.issueDate}</p><p><b>Status:</b> ${d.status}</p>`;
-  }else{
-   resDiv.className='result invalid';
-   resDiv.innerHTML=`<h3>❌ INVALID CERTIFICATE</h3><p>Certificate ID <b>${id}</b> not found in database.</p>`;
+  document.getElementById('loading').style.display='none';
+  if(!doc.exists){
+    document.getElementById('badId').innerText=id;
+    document.getElementById('invalidBox').style.display='block';return;
   }
- }catch(e){
-  resDiv.className='result invalid';
-  resDiv.innerHTML='Error: '+e.message;
- }
+  let d=doc.data();
+  let box=document.getElementById('validBox');
+  box.style.display='block';
+  box.innerHTML = `<div style="text-align:center"><span style="background:#0b7a3e;color:#fff;padding:6px 14px;border-radius:20px;font-weight:bold;font-size:13px">✅ VALID CERTIFICATE</span>
+    <h2 style="margin:12px 0 0;color:#0b1f4b">${d.fullName||''}</h2><p style="margin:0;color:#666">${d.course||''}</p></div>
+    <div style="margin-top:15px"><div class="row"><span>Certificate ID</span><b>${id}</b></div>
+    <div class="row"><span>Institution</span><b>${d.institution||''}</b></div><div class="row"><span>Type</span><b>${d.certificateType||''}</b></div>
+    <div class="row"><span>Issue Date</span><b>${d.issueDate||''}</b></div><div class="row"><span>Expiry</span><b>${d.expiryDate||''}</b></div>
+    <div class="row"><span>Grade</span><b>${d.grade||''}</b></div><div class="row"><span>Duration</span><b>${d.duration||''}</b></div>
+    <div class="row"><span>Issued By</span><b>${d.issuedBy||''}</b></div></div>`;
+ }catch(e){document.getElementById('loading').style.display='none';alert(e.message);}
 }
-
-// Auto verify from QR link ?id=MM1234
-window.onload = function(){
-  const urlParams = new URLSearchParams(window.location.search);
-  const idFromUrl = urlParams.get('id');
-  if(idFromUrl){
-    document.getElementById('certId').value = idFromUrl;
-    verifyCert();
-  }
-}
+window.onload=()=>{let idFromUrl=new URLSearchParams(window.location.search).get('id');if(idFromUrl){document.getElementById('certInput').value=idFromUrl;verify();}}
 </script>
 </body>
 </html>
