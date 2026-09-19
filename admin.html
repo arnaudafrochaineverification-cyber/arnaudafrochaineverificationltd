@@ -1,35 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin - Arnaud AfroChaine</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Arnaud Afrochaine</title>
 <style>
-body{font-family:Arial;padding:20px;background:#f5f5f5}
-.box{background:white;padding:20px;border-radius:15px;max-width:500px;margin:auto}
-input{width:95%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc}
-button{width:100%;padding:12px;background:black;color:white;border:none;border-radius:8px;margin-top:10px;font-weight:bold}
-#loginBox{display:block} #adminBox{display:none}
+body{font-family:Arial;background:#f0f4f8;padding:15px}
+.container{max-width:700px;margin:20px auto;background:#fff;padding:25px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
+h2{text-align:center;color:#1a3a5f}
+label{font-weight:bold;margin-top:12px;display:block;color:#333;font-size:14px}
+input,select,textarea{width:100%;padding:12px;margin:5px 0 10px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box}
+button{width:100%;padding:14px;background:#1a3a5f;color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px}
+button:hover{background:#0f2540}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+#msg{margin-top:15px;padding:12px;border-radius:6px;display:none;text-align:center}
+.success{background:#e6f7e6;color:#2e7d32} .error{background:#fdecea;color:#b71c1c}
 </style>
 </head>
 <body>
-<div class="box">
-<div id="loginBox">
-<h2>Admin Login</h2>
-<input type="password" id="pass" placeholder="Enter Password">
-<button onclick="login()">LOGIN</button>
+<div class="container">
+<h2>ADMIN PANEL - Add 12-Fields Certificate</h2>
+<label>Certificate ID *</label><input id="certId" placeholder="e.g. BB1234 or AAC/2026/005">
+<div class="grid">
+<div><label>Full Name *</label><input id="fullName"></div>
+<div><label>Course / Program *</label><input id="course"></div>
 </div>
-<div id="adminBox">
-<h2>Add Certificate</h2>
-<input type="text" id="cid" placeholder="Certificate ID e.g AAC/2026/005">
-<input type="text" id="cname" placeholder="Student Full Name">
-<input type="text" id="ccourse" placeholder="Course e.g Afro Dance">
-<button onclick="saveCert()">SAVE CERTIFICATE ONLINE</button>
-<div id="msg" style="margin-top:15px;font-weight:bold"></div>
+<div class="grid">
+<div><label>Institution</label><input id="institution" value="Arnaud Afrochaine Verification Ltd"></div>
+<div><label>Certificate Type</label><select id="certificateType"><option>Certificate of Completion</option><option>Diploma</option><option>Degree</option><option>Training Certificate</option><option>Professional Certificate</option></select></div>
 </div>
+<div class="grid">
+<div><label>Issue Date *</label><input id="issueDate" type="date"></div>
+<div><label>Expiry Date (optional)</label><input id="expiryDate" type="date"></div>
+</div>
+<div class="grid">
+<div><label>Grade / Score</label><input id="grade" placeholder="e.g. Distinction, 85%"></div>
+<div><label>Duration</label><input id="duration" placeholder="e.g. 6 Months"></div>
+</div>
+<div class="grid">
+<div><label>Status</label><select id="status"><option>Verified</option><option>Active</option><option>Completed</option></select></div>
+<div><label>Issued By</label><input id="issuedBy" value="Registrar"></div>
+</div>
+<label>Additional Note / Description</label><textarea id="note" rows="2"></textarea>
+<button onclick="saveCert()">SAVE CERTIFICATE</button>
+<div id="msg"></div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
@@ -43,32 +62,30 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-function login(){
-  if(document.getElementById('pass').value === "ARNAUD333649"){
-    document.getElementById('loginBox').style.display="none";
-    document.getElementById('adminBox').style.display="block";
-  }else{ alert("Wrong password!"); }
-}
-
 async function saveCert(){
-  const id = document.getElementById('cid').value.trim();
-  const name = document.getElementById('cname').value.trim();
-  const course = document.getElementById('ccourse').value.trim();
-  const m = document.getElementById('msg');
-  if(!id || !name){ m.innerHTML="❌ Fill ID and Name"; return; }
-  m.innerHTML="⏳ Saving...";
+  const id = document.getElementById('certId').value.trim();
+  const data = {
+    fullName: document.getElementById('fullName').value.trim(),
+    course: document.getElementById('course').value.trim(),
+    institution: document.getElementById('institution').value.trim(),
+    certificateType: document.getElementById('certificateType').value,
+    issueDate: document.getElementById('issueDate').value,
+    expiryDate: document.getElementById('expiryDate').value,
+    grade: document.getElementById('grade').value.trim(),
+    duration: document.getElementById('duration').value.trim(),
+    status: document.getElementById('status').value,
+    issuedBy: document.getElementById('issuedBy').value.trim(),
+    note: document.getElementById('note').value.trim(),
+    createdAt: new Date().toISOString()
+  };
+  const msg = document.getElementById('msg');
+  if(!id||!data.fullName||!data.course||!data.issueDate){ alert('Fill required fields *'); return; }
+  msg.style.display='block'; msg.className=''; msg.innerHTML='⏳ Saving...';
   try{
-    await db.collection("certificates").doc(id).set({
-      name: name,
-      course: course,
-      date: new Date().toLocaleDateString()
-    });
-    m.innerHTML = `✅ SAVED ONLINE! Certificate ${id} is now LIVE!`;
-    m.style.color="green";
-  }catch(e){
-    m.innerHTML="❌ Error: "+e.message;
-  }
+    await db.collection('certificates').doc(id).set(data);
+    msg.className='success'; msg.innerHTML='✅ Saved! Now verify '+id+' on verify page';
+  }catch(e){ msg.className='error'; msg.innerHTML='❌ '+e.message; }
 }
 </script>
 </body>
-</html>
+  </html>
