@@ -1,39 +1,59 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Arnaud Verify LIGHT</title>
-<style>body{background:#eef2f7;margin:0;font-family:Arial;display:flex;justify-content:center;padding:15px}.card{max-width:500px;width:100%;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.1)}.top{height:6px;background:#16a34a}.pad{padding:20px}h2{text-align:center;margin:0}.sub{text-align:center;color:#64748b;font-size:11px;margin:5px 0 12px}.ok{background:#dcfce7;color:#14532d;padding:12px;border-radius:10px;text-align:center;font-weight:bold}.bad{background:#fee2e2;color:#7f1d1d;padding:12px;border-radius:10px;text-align:center;font-weight:bold}.row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f1f5f9;font-size:13px}.lbl{color:#64748b}.val{font-weight:700;text-align:right;max-width:60%;word-break:break-word}</style>
-</head><body>
-<div class="card"><div class="top"></div><div class="pad"><h2>Arnaud Afro Chaine Verification Ltd</h2><div class="sub">Official Verification - Apapa Lagos</div><div id="out">Loading...</div></div></div>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verify Certificate - Arnaud AfroChaine</title>
+<style>
+body{font-family:Arial;text-align:center;padding:40px;background:#f5f5f5}
+.box{background:white;padding:30px;border-radius:15px;max-width:400px;margin:auto;box-shadow:0 5px 20px rgba(0,0,0,0.1)}
+input{width:90%;padding:15px;margin:10px 0;border-radius:10px;border:1px solid #ccc;font-size:16px}
+button{width:95%;padding:15px;background:#000;color:white;border:none;border-radius:10px;font-size:18px;font-weight:bold}
+#result{margin-top:20px;font-weight:bold;font-size:18px}
+</style>
+</head>
+<body>
+<div class="box">
+<h2>ARNAUD AFROCHAINE</h2>
+<h3>Certificate Verification</h3>
+<input type="text" id="certId" placeholder="Enter Certificate ID e.g AAC/2026/005">
+<button onclick="verify()">VERIFY</button>
+<div id="result"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script>
-let params=new URLSearchParams(location.search);let c=params.get('c');let d=params.get('d');let out=document.getElementById('out');
-function show(p){
- let valid=(p.status||'VALID')==='VALID';
- out.innerHTML=`<div class="${valid?'ok':'bad'}">${valid?'✅ CERTIFICATE VALID - AUTHENTIC':'❌ INVALID'}</div>
- <div class="row"><span class="lbl">1 Name</span><span class="val">${p.name||''}</span></div>
- <div class="row"><span class="lbl">2 Cert No</span><span class="val">${p.code||''}</span></div>
- <div class="row"><span class="lbl">3 Program</span><span class="val">${p.program||''}</span></div>
- <div class="row"><span class="lbl">4 DOB</span><span class="val">${p.dob||''}</span></div>
- <div class="row"><span class="lbl">5 ID</span><span class="val">${p.idNo||''}</span></div>
- <div class="row"><span class="lbl">6 Issue</span><span class="val">${p.issue||''}</span></div>
- <div class="row"><span class="lbl">7 Expiry</span><span class="val">${p.expiry||''}</span></div>
- <div class="row"><span class="lbl">8 Center</span><span class="val">${p.center||''}</span></div>
- <div class="row"><span class="lbl">9 Grade</span><span class="val">${p.grade||''}</span></div>
- <div class="row"><span class="lbl">10 Status</span><span class="val" style="color:green">${p.status||'VALID'}</span></div>
- <div class="row"><span class="lbl">11 Issuer</span><span class="val">${p.issuer||''}</span></div>
- <div class="row"><span class="lbl">12 V-Code</span><span class="val">${p.vcode||''}</span></div>
- <p style="font-size:10px;color:#94a3b8;text-align:center;margin-top:10px">Verified by Arnaud Afro Chaine<br>${new Date().toLocaleDateString()}</p>`;
+const firebaseConfig = {
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+  authDomain: "arnaudafrochaineverification.firebaseapp.com",
+  projectId: "arnaudafrochaineverification",
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+  measurementId: "G-Y52LEBJM7Q"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+async function verify(){
+  const id = document.getElementById('certId').value.trim();
+  const res = document.getElementById('result');
+  if(!id){ res.innerHTML="❌ Enter ID"; return; }
+  res.innerHTML="⏳ Checking...";
+  try{
+    const doc = await db.collection("certificates").doc(id).get();
+    if(doc.exists){
+      const data = doc.data();
+      res.innerHTML = `✅ VALID CERTIFICATE<br><br>Name: <b>${data.name}</b><br>Course: ${data.course}<br>ID: ${id}`;
+      res.style.color="green";
+    }else{
+      res.innerHTML = `❌ INVALID - Certificate ${id} not found`;
+      res.style.color="red";
+    }
+  }catch(e){
+    res.innerHTML="Error: "+e.message;
+  }
 }
-if(d){try{let j=JSON.parse(atob(d));show(j);}catch(e){out.innerHTML='<div class="bad">Invalid QR</div>';}}
-else if(c){
- let saved=localStorage.getItem('cert_'+c);
- if(saved){show(JSON.parse(saved));}
- else{
-  // fallback - show at least code as valid (for client phone wey no get localStorage)
-  out.innerHTML=`<div class="ok">✅ CERTIFICATE FOUND - VALID</div>
-  <div class="row"><span class="lbl">Cert No</span><span class="val">${c}</span></div>
-  <div class="row"><span class="lbl">Status</span><span class="val" style="color:green">VALID</span></div>
-  <div class="row"><span class="lbl">Issuer</span><span class="val">Arnaud Afro Chaine Verification Ltd</span></div>
-  <p style="font-size:11px;color:#64748b;text-align:center;margin-top:12px">This certificate is registered in our system.<br>For full details, contact verification center Apapa with Cert No: <b>${c}</b></p>`;
- }
-}
-else{out.innerHTML='<div class="bad">⚠️ No QR Scanned<br><span style="font-weight:normal;font-size:12px">Open camera and scan QR on certificate</span></div>';}
-</script></body></html>
+</script>
+</body>
+</html>
