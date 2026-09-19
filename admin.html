@@ -1,28 +1,74 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Arnaud Admin LIGHT QR</title>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<style>body{background:#0f172a;color:#fff;font-family:Arial;padding:12px}.box{max-width:600px;margin:auto;background:#1e293b;padding:16px;border-radius:14px}input,select{width:100%;padding:9px;margin:3px 0;border-radius:7px;border:none}button{background:#16a34a;color:#fff;padding:12px;width:100%;border:none;border-radius:9px;font-weight:bold;margin-top:8px}.btn2{background:#0ea5e9}#qr{background:#fff;padding:12px;border-radius:10px;margin-top:10px;text-align:center}</style>
-</head><body>
-<div class="box"><h3>ARNAUD LIGHT QR - EASY SCAN</h3>
-<div id="lock"><input id="pin" type="password" placeholder="ARNAUD333649"><button onclick="if(document.getElementById('pin').value==='ARNAUD333649'){document.getElementById('lock').style.display='none';document.getElementById('form').style.display='block';render()}else alert('wrong')">Unlock</button></div>
-<div id="form" style="display:none">
-<input id="name" placeholder="Name"><input id="code" placeholder="Cert No e.g Vvv123"><input id="program" value="PERSONAL"><input id="dob" type="date"><input id="idNo" placeholder="ID No"><input id="issue" type="date" value="2026-09-18"><input id="expiry" type="date" value="2030-09-18"><input id="center" value="Apapa"><select id="grade"><option>Pass</option><option>Merit</option><option>Distinction</option></select><select id="status"><option>VALID</option></select><input id="vcode" placeholder="V-Code">
-<button onclick="gen()">SAVE & GENERATE LIGHT QR</button>
-<div id="qr">QR here</div>
-<button class="btn2" onclick="openV()">OPEN VERIFY TO TEST</button>
-<div id="count" style="color:#4ade80;text-align:center;margin-top:8px"></div>
-<div id="list" style="font-size:11px;background:#0f172a;padding:8px;border-radius:8px;margin-top:8px"></div>
-</div></div>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - Arnaud AfroChaine</title>
+<style>
+body{font-family:Arial;padding:20px;background:#f5f5f5}
+.box{background:white;padding:20px;border-radius:15px;max-width:500px;margin:auto}
+input{width:95%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc}
+button{width:100%;padding:12px;background:black;color:white;border:none;border-radius:8px;margin-top:10px;font-weight:bold}
+#loginBox{display:block} #adminBox{display:none}
+</style>
+</head>
+<body>
+<div class="box">
+<div id="loginBox">
+<h2>Admin Login</h2>
+<input type="password" id="pass" placeholder="Enter Password">
+<button onclick="login()">LOGIN</button>
+</div>
+<div id="adminBox">
+<h2>Add Certificate</h2>
+<input type="text" id="cid" placeholder="Certificate ID e.g AAC/2026/005">
+<input type="text" id="cname" placeholder="Student Full Name">
+<input type="text" id="ccourse" placeholder="Course e.g Afro Dance">
+<button onclick="saveCert()">SAVE CERTIFICATE ONLINE</button>
+<div id="msg" style="margin-top:15px;font-weight:bold"></div>
+</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script>
-let db=JSON.parse(localStorage.getItem('arnaud_db')||'[]');let lastCode='';let lastUrl='';
-function render(){document.getElementById('count').innerText='You don register '+db.length+' persons';let h='';db.slice().reverse().forEach((p,i)=>{h+=`${db.length-i}. ${p.name}-${p.code} <span style="color:#38bdf8" onclick="loadC('${p.code}')">[load]</span><br>`});document.getElementById('list').innerHTML=h}
-function loadC(c){let p=db.find(x=>x.code===c);if(!p)return;document.getElementById('name').value=p.name;document.getElementById('code').value=p.code;document.getElementById('vcode').value=p.vcode||p.code;gen()}
-function gen(){
- let p={name:document.getElementById('name').value.trim(),code:document.getElementById('code').value.trim(),program:document.getElementById('program').value,dob:document.getElementById('dob').value,idNo:document.getElementById('idNo').value,issue:document.getElementById('issue').value,expiry:document.getElementById('expiry').value,center:document.getElementById('center').value,grade:document.getElementById('grade').value,status:document.getElementById('status').value,vcode:document.getElementById('vcode').value||document.getElementById('code').value,issuer:'Arnaud Afro Chaine Verification Ltd'};
- if(!p.name||!p.code){alert('fill name/code');return;}
- lastCode=p.code;let i=db.findIndex(x=>x.code===p.code);if(i>=0)db[i]=p;else db.push(p);localStorage.setItem('arnaud_db',JSON.stringify(db));localStorage.setItem('cert_'+p.code,JSON.stringify(p));render();
- lastUrl='https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?c='+encodeURIComponent(p.code);
- document.getElementById('qr').innerHTML='';new QRCode(document.getElementById('qr'),{text:lastUrl,width:260,height:260,correctLevel:QRCode.CorrectLevel.L});
+const firebaseConfig = {
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+  authDomain: "arnaudafrochaineverification.firebaseapp.com",
+  projectId: "arnaudafrochaineverification",
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+  measurementId: "G-Y52LEBJM7Q"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+function login(){
+  if(document.getElementById('pass').value === "ARNAUD333649"){
+    document.getElementById('loginBox').style.display="none";
+    document.getElementById('adminBox').style.display="block";
+  }else{ alert("Wrong password!"); }
 }
-function openV(){if(!lastUrl){alert('generate first');return;}window.open(lastUrl,'_blank')}
-</script></body></html>
+
+async function saveCert(){
+  const id = document.getElementById('cid').value.trim();
+  const name = document.getElementById('cname').value.trim();
+  const course = document.getElementById('ccourse').value.trim();
+  const m = document.getElementById('msg');
+  if(!id || !name){ m.innerHTML="❌ Fill ID and Name"; return; }
+  m.innerHTML="⏳ Saving...";
+  try{
+    await db.collection("certificates").doc(id).set({
+      name: name,
+      course: course,
+      date: new Date().toLocaleDateString()
+    });
+    m.innerHTML = `✅ SAVED ONLINE! Certificate ${id} is now LIVE!`;
+    m.style.color="green";
+  }catch(e){
+    m.innerHTML="❌ Error: "+e.message;
+  }
+}
+</script>
+</body>
+</html>
