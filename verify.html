@@ -1,57 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Verify Certificate - Arnaud AfroChaine</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify Certificate - Arnaud Afro Chaine</title>
 <style>
-body{font-family:Arial;text-align:center;padding:40px;background:#f5f5f5}
-.box{background:white;padding:30px;border-radius:15px;max-width:400px;margin:auto;box-shadow:0 5px 20px rgba(0,0,0,0.1)}
-input{width:90%;padding:15px;margin:10px 0;border-radius:10px;border:1px solid #ccc;font-size:16px}
-button{width:95%;padding:15px;background:#000;color:white;border:none;border-radius:10px;font-size:18px;font-weight:bold}
-#result{margin-top:20px;font-weight:bold;font-size:18px}
+body{font-family:Arial;background:#f0f0f0;padding:15px}
+.box{max-width:600px;margin:auto;background:white;padding:25px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.1);margin-top:30px}
+h1{text-align:center;margin-bottom:5px}
+.sub{text-align:center;color:#666;font-size:14px;margin-bottom:20px}
+input{width:100%;padding:14px;border:1px solid #ccc;border-radius:8px;margin:10px 0;box-sizing:border-box;font-size:15px}
+button{width:100%;padding:14px;background:black;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;font-size:16px}
+button:hover{background:#222}
+.result{margin-top:25px;padding:20px;border-radius:10px;display:none}
+.valid{background:#d4edda;border:2px solid #28a745}
+.invalid{background:#f8d7da;border:2px solid #dc3545}
+.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee;font-size:14px}
+.label{font-weight:bold;color:#555;width:40%}
+.value{color:#000;width:60%;text-align:right;font-weight:600}
+.badge{text-align:center;padding:10px;background:gold;border-radius:20px;font-weight:bold;margin-bottom:15px}
 </style>
 </head>
 <body>
 <div class="box">
-<h2>ARNAUD AFROCHAINE</h2>
-<h3>Certificate Verification</h3>
-<input type="text" id="certId" placeholder="Enter Certificate ID e.g AAC/2026/005">
-<button onclick="verify()">VERIFY</button>
-<div id="result"></div>
+<h1>🔍 Verify Certificate</h1>
+<p class="sub">Arnaud Afro Chaine Ltd - Official Verification Portal</p>
+<input id="certId" placeholder="Enter Certificate ID e.g. AAC/2026/005">
+<button onclick="verify()">VERIFY NOW</button>
+<div id="result" class="result"></div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-  authDomain: "arnaudafrochaineverification.firebaseapp.com",
-  projectId: "arnaudafrochaineverification",
-  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
-  messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
-  measurementId: "G-Y52LEBJM7Q"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-async function verify(){
+// !!! REPLACE THIS WITH YOUR REAL CONFIG FROM OLD FILE !!!
+const firebaseConfig = {
+  apiKey: "PASTE_YOUR_REAL_API_KEY_HERE",
+  authDomain: "PASTE_YOUR_REAL_AUTH_DOMAIN",
+  projectId: "PASTE_YOUR_REAL_PROJECT_ID",
+  storageBucket: "PASTE_YOUR_REAL_STORAGE_BUCKET",
+  messagingSenderId: "PASTE_YOUR_REAL_SENDER_ID",
+  appId: "PASTE_YOUR_REAL_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.verify = async () => {
   const id = document.getElementById('certId').value.trim();
-  const res = document.getElementById('result');
-  if(!id){ res.innerHTML="❌ Enter ID"; return; }
-  res.innerHTML="⏳ Checking...";
+  if(!id){alert("Enter Certificate ID");return;}
+  const resDiv = document.getElementById('result');
+  resDiv.style.display='block';
+  resDiv.innerHTML='⏳ Checking official database...';
   try{
-    const doc = await db.collection("certificates").doc(id).get();
-    if(doc.exists){
-      const data = doc.data();
-      res.innerHTML = `✅ VALID CERTIFICATE<br><br>Name: <b>${data.name}</b><br>Course: ${data.course}<br>ID: ${id}`;
-      res.style.color="green";
+    const snap = await getDoc(doc(db, "certificates", id));
+    if(snap.exists()){
+      const d = snap.data();
+      resDiv.className='result valid';
+      resDiv.innerHTML = `
+        <div class="badge">✅ AUTHENTIC & VERIFIED</div>
+        <h2 style="text-align:center;margin:10px 0">${d.studentName || ''}</h2>
+        <p style="text-align:center;color:#555">${d.course || ''}</p>
+        <hr>
+        <div class="row"><span class="label">1. Certificate ID:</span><span class="value">${d.certId || id}</span></div>
+        <div class="row"><span class="label">2. Student Name:</span><span class="value">${d.studentName || 'N/A'}</span></div>
+        <div class="row"><span class="label">3. Course Title:</span><span class="value">${d.course || 'N/A'}</span></div>
+        <div class="row"><span class="label">4. Date of Issue:</span><span class="value">${d.issueDate || 'N/A'}</span></div>
+        <div class="row"><span class="label">5. Duration:</span><span class="value">${d.duration || 'N/A'}</span></div>
+        <div class="row"><span class="label">6. Grade:</span><span class="value">${d.grade || 'N/A'}</span></div>
+        <div class="row"><span class="label">7. Instructor:</span><span class="value">${d.instructor || 'N/A'}</span></div>
+        <div class="row"><span class="label">8. Center:</span><span class="value">${d.center || 'N/A'}</span></div>
+        <div class="row"><span class="label">9. Location:</span><span class="value">${d.location || 'N/A'}</span></div>
+        <div class="row"><span class="label">10. Type:</span><span class="value">${d.certType || 'N/A'}</span></div>
+        <div class="row"><span class="label">11. Valid Until:</span><span class="value">${d.validUntil || 'Lifetime'}</span></div>
+        <div class="row"><span class="label">12. Remarks:</span><span class="value">${d.remarks || 'N/A'}</span></div>
+        <p style="text-align:center;margin-top:15px;font-size:12px;color:green;font-weight:bold">This certificate is 100% genuine and registered in Arnaud Afro Chaine official database.</p>
+      `;
     }else{
-      res.innerHTML = `❌ INVALID - Certificate ${id} not found`;
-      res.style.color="red";
+      resDiv.className='result invalid';
+      resDiv.innerHTML=`<h3 style="color:red;text-align:center">❌ NOT FOUND</h3><p style="text-align:center">Certificate ID <b>${id}</b> does not exist in our official database.<br>Please contact administration.</p>`;
     }
   }catch(e){
-    res.innerHTML="Error: "+e.message;
+    resDiv.className='result invalid';
+    resDiv.innerHTML='Error: '+e.message+'<br>Check your Firebase config!';
   }
 }
 </script>
