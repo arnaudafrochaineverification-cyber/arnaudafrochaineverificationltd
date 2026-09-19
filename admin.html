@@ -4,47 +4,67 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin - Arnaud Afrochaine</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-body{font-family:Arial;background:#f0f4f8;padding:15px}
-.container{max-width:700px;margin:20px auto;background:#fff;padding:25px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
-h2{text-align:center;color:#1a3a5f}
-label{font-weight:bold;margin-top:12px;display:block;color:#333;font-size:14px}
-input,select,textarea{width:100%;padding:12px;margin:5px 0 10px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box}
-button{width:100%;padding:14px;background:#1a3a5f;color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px}
-button:hover{background:#0f2540}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:600px){.grid{grid-template-columns:1fr}}
-#msg{margin-top:15px;padding:12px;border-radius:6px;display:none;text-align:center}
-.success{background:#e6f7e6;color:#2e7d32} .error{background:#fdecea;color:#b71c1c}
+body{font-family:Arial;background:#f0f2f5;padding:15px}
+.card{max-width:550px;margin:auto;background:#fff;padding:20px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.1)}
+input,select,textarea{width:100%;padding:12px;margin:8px 0;border:2px solid #ddd;border-radius:10px;box-sizing:border-box}
+label{font-weight:bold;font-size:14px;margin-top:10px;display:block}
+button{width:100%;padding:15px;background:#0b1f4b;color:#fff;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:15px;font-size:16px}
+#qrArea{display:none;text-align:center;margin-top:20px;padding:20px;background:#f9fff9;border:2px solid #0b7a3e;border-radius:15px}
+#qrcode{display:flex;justify-content:center;margin:15px 0}
 </style>
 </head>
 <body>
-<div class="container">
-<h2>ADMIN PANEL - Add 12-Fields Certificate</h2>
-<label>Certificate ID *</label><input id="certId" placeholder="e.g. BB1234 or AAC/2026/005">
-<div class="grid">
-<div><label>Full Name *</label><input id="fullName"></div>
-<div><label>Course / Program *</label><input id="course"></div>
+<div class="card">
+<h2 style="text-align:center;color:#0b4d2e">🔐 Admin - Generate Certificate</h2>
+
+<label>Certificate ID</label>
+<input id="certId" placeholder="e.g. ZZ123">
+
+<label>Full Name</label>
+<input id="fullName" placeholder="Student full name">
+
+<label>Course</label>
+<input id="course" placeholder="e.g. Safety Course">
+
+<label>Institution</label>
+<input id="institution" value="Arnaud Afrochaine Verification Ltd">
+
+<label>Certificate Type</label>
+<select id="certType"><option>Certificate</option><option>Diploma</option><option>Degree</option></select>
+
+<label>Issue Date</label>
+<input id="issueDate" type="date">
+
+<label>Expiry Date (optional)</label>
+<input id="expiryDate" type="date" value="2030-09-19">
+
+<label>Grade / Score</label>
+<input id="grade" placeholder="e.g. 20">
+
+<label>Duration</label>
+<input id="duration" placeholder="e.g. 6 months">
+
+<label>Status</label>
+<select id="status"><option>Completed</option><option>Valid</option><option>Expired</option></select>
+
+<label>Issued By</label>
+<input id="issuedBy" value="Registrar ARNAUDAFROCHAINVERIFICATION">
+
+<label>Additional Note</label>
+<textarea id="note"></textarea>
+
+<button onclick="saveCert()">SAVE CERTIFICATE & GENERATE QR</button>
+
+<div id="qrArea">
+<h3 style="color:green">✅ Saved! Certificate ZZ123 Live!</h3>
+<p id="linkText" style="word-break:break-all;font-size:13px;background:#eee;padding:10px;border-radius:8px"></p>
+<div id="qrcode"></div>
+<button onclick="downloadQR()" style="background:#0b7a3e">📥 DOWNLOAD QR CODE</button>
+<a id="verifyBtn" target="_blank" style="display:block;margin-top:10px;padding:12px;background:#fff;color:#0b7a3e;border:2px solid #0b7a3e;border-radius:10px;text-decoration:none;font-weight:bold">🔍 VERIFY NOW</a>
 </div>
-<div class="grid">
-<div><label>Institution</label><input id="institution" value="Arnaud Afrochaine Verification Ltd"></div>
-<div><label>Certificate Type</label><select id="certificateType"><option>Certificate of Completion</option><option>Diploma</option><option>Degree</option><option>Training Certificate</option><option>Professional Certificate</option></select></div>
-</div>
-<div class="grid">
-<div><label>Issue Date *</label><input id="issueDate" type="date"></div>
-<div><label>Expiry Date (optional)</label><input id="expiryDate" type="date"></div>
-</div>
-<div class="grid">
-<div><label>Grade / Score</label><input id="grade" placeholder="e.g. Distinction, 85%"></div>
-<div><label>Duration</label><input id="duration" placeholder="e.g. 6 Months"></div>
-</div>
-<div class="grid">
-<div><label>Status</label><select id="status"><option>Verified</option><option>Active</option><option>Completed</option></select></div>
-<div><label>Issued By</label><input id="issuedBy" value="Registrar"></div>
-</div>
-<label>Additional Note / Description</label><textarea id="note" rows="2"></textarea>
-<button onclick="saveCert()">SAVE CERTIFICATE</button>
-<div id="msg"></div>
+
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -56,35 +76,44 @@ const firebaseConfig = {
   projectId: "arnaudafrochaineverification",
   storageBucket: "arnaudafrochaineverification.firebasestorage.app",
   messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
-  measurementId: "G-Y52LEBJM7Q"
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 async function saveCert(){
-  const id = document.getElementById('certId').value.trim();
-  const data = {
-    fullName: document.getElementById('fullName').value.trim(),
-    course: document.getElementById('course').value.trim(),
-    institution: document.getElementById('institution').value.trim(),
-    certificateType: document.getElementById('certificateType').value,
-    issueDate: document.getElementById('issueDate').value,
-    expiryDate: document.getElementById('expiryDate').value,
-    grade: document.getElementById('grade').value.trim(),
-    duration: document.getElementById('duration').value.trim(),
-    status: document.getElementById('status').value,
-    issuedBy: document.getElementById('issuedBy').value.trim(),
-    note: document.getElementById('note').value.trim(),
-    createdAt: new Date().toISOString()
-  };
-  const msg = document.getElementById('msg');
-  if(!id||!data.fullName||!data.course||!data.issueDate){ alert('Fill required fields *'); return; }
-  msg.style.display='block'; msg.className=''; msg.innerHTML='⏳ Saving...';
-  try{
-    await db.collection('certificates').doc(id).set(data);
-    msg.className='success'; msg.innerHTML='✅ Saved! Now verify '+id+' on verify page';
-  }catch(e){ msg.className='error'; msg.innerHTML='❌ '+e.message; }
+ let id = document.getElementById('certId').value.trim();
+ if(!id){alert('Enter Certificate ID');return;}
+ let data = {
+   fullName: document.getElementById('fullName').value,
+   course: document.getElementById('course').value,
+   institution: document.getElementById('institution').value,
+   certificateType: document.getElementById('certType').value,
+   issueDate: document.getElementById('issueDate').value,
+   expiryDate: document.getElementById('expiryDate').value,
+   grade: document.getElementById('grade').value,
+   duration: document.getElementById('duration').value,
+   status: document.getElementById('status').value,
+   issuedBy: document.getElementById('issuedBy').value,
+   note: document.getElementById('note').value,
+   createdAt: new Date().toISOString()
+ };
+ try{
+  await db.collection('certificates').doc(id).set(data);
+  let verifyLink = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/?id=${id}`;
+  document.getElementById('linkText').innerText = verifyLink;
+  document.getElementById('verifyBtn').href = verifyLink;
+  document.getElementById('qrcode').innerHTML = "";
+  new QRCode(document.getElementById('qrcode'), {text: verifyLink, width: 200, height: 200});
+  document.getElementById('qrArea').style.display = 'block';
+  document.getElementById('qrArea').scrollIntoView({behavior:'smooth'});
+ }catch(e){alert('Error: '+e.message);}
+}
+
+function downloadQR(){
+ let img = document.querySelector('#qrcode img');
+ if(img){ let a=document.createElement('a'); a.href=img.src; a.download=document.getElementById('certId').value+'_QR.png'; a.click(); }
+ else{ alert('Generate QR first'); }
 }
 </script>
 </body>
