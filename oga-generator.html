@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AFRO CHAINE - OGA GENERATOR</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<style>
+body{font-family:Arial;background:#111;color:white;padding:15px;margin:0}
+.box{background:#222;padding:20px;border-radius:10px;max-width:600px;margin:20px auto}
+input{width:100%;padding:14px;margin:8px 0;border-radius:6px;border:none;box-sizing:border-box;font-size:16px}
+button{background:#f9a826;color:black;padding:16px;width:100%;border:none;border-radius:6px;font-weight:bold;font-size:18px;margin-top:10px}
+#certificate{background:white;color:black;padding:25px;margin-top:20px;text-align:center;display:none;border-radius:10px}
+</style>
+</head>
+<body>
+
+<div class="box" id="loginBox">
+<h2>🔒 OGA LOGIN</h2>
+<input id="email" type="email" placeholder="Admin Email">
+<input id="password" type="password" placeholder="Admin Password">
+<button onclick="login()">LOGIN</button>
+</div>
+
+<div class="box" id="genBox" style="display:none">
+<h2>AFRO CHAINE - ONE CLICK GENERATOR</h2>
+<input id="sName" placeholder="Student Name">
+<input id="sCertNo" placeholder="Certificate Number e.g AAC/2026-001">
+<input id="sCourse" placeholder="Course Name">
+<input id="sDate" type="date">
+<button onclick="generateAndSave()">GENERATE & SAVE AS ORIGINAL ✅</button>
+
+<div id="certificate">
+<h1 id="certName" style="margin:5px"></h1>
+<p id="certCourse"></p>
+<p id="certNo" style="font-weight:bold"></p>
+<p id="certDate"></p>
+<div id="qrcode" style="display:flex;justify-content:center;margin:20px 0"></div>
+<p>Scan to Verify Original</p>
+<button onclick="window.print()" style="background:#111;color:white">PRINT CERTIFICATE</button>
+</div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+  authDomain: "arnaudafrochaineverification.firebaseapp.com",
+  projectId: "arnaudafrochaineverification",
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+  measurementId: "G-Y52LEBJM7Q"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+function login(){
+  const e = document.getElementById('email').value;
+  const p = document.getElementById('password').value;
+  auth.signInWithEmailAndPassword(e,p).then(()=>{
+    alert("Welcome OGA ✅");
+    document.getElementById('loginBox').style.display='none';
+    document.getElementById('genBox').style.display='block';
+  }).catch(err=>alert(err.message));
+}
+
+function generateAndSave(){
+  const name = document.getElementById('sName').value.trim();
+  const certNo = document.getElementById('sCertNo').value.trim();
+  const course = document.getElementById('sCourse').value.trim();
+  const date = document.getElementById('sDate').value;
+  if(!name||!certNo||!course||!date){alert("Fill all fields Boss!");return;}
+
+  db.collection("certificates").doc(certNo).set({
+    studentName:name,
+    certificateNumber:certNo,
+    course:course,
+    date:date,
+    status:"ORIGINAL",
+    createdAt:new Date()
+  }).then(()=>{
+    document.getElementById('certName').innerText=name;
+    document.getElementById('certCourse').innerText=course;
+    document.getElementById('certNo').innerText="Cert No: "+certNo;
+    document.getElementById('certDate').innerText="Date: "+date;
+    document.getElementById('certificate').style.display='block';
+    document.getElementById('qrcode').innerHTML="";
+    new QRCode(document.getElementById("qrcode"),{
+      text:"https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?cert="+certNo,
+      width:160,height:160
+    });
+    alert("SAVED AS ORIGINAL! No double work again! ✅");
+  }).catch(err=>alert(err.message));
+}
+</script>
+</body>
+</html>
