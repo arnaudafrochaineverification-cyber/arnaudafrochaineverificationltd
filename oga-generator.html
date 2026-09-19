@@ -2,98 +2,109 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AFRO CHAINE - OGA GENERATOR</title>
+<title>ARNAUDAFROCHAINEVERIFICATION LTD - Tonight</title>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <style>
-body{font-family:Arial;background:#111;color:white;padding:15px;margin:0}
-.box{background:#222;padding:20px;border-radius:10px;max-width:600px;margin:20px auto}
-input{width:100%;padding:14px;margin:8px 0;border-radius:6px;border:none;box-sizing:border-box;font-size:16px}
-button{background:#f9a826;color:black;padding:16px;width:100%;border:none;border-radius:6px;font-weight:bold;font-size:18px;margin-top:10px}
-#certificate{background:white;color:black;padding:25px;margin-top:20px;text-align:center;display:none;border-radius:10px}
+body{font-family:Arial;background:#0a2a5e;padding:10px;margin:0}
+.box{background:white;max-width:650px;margin:20px auto;padding:25px;border-radius:15px}
+h2{text-align:center;color:#0a2a5e}
+label{font-weight:bold;color:#0a2a5e;font-size:13px;display:block;margin-top:14px}
+input,select,textarea{width:100%;padding:12px;margin-top:5px;border-radius:8px;border:1.5px solid #ccc;box-sizing:border-box;font-size:14px}
+.row{display:flex;gap:8px}
+.row button{width:140px;background:#d35400;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+.saveBtn{background:#0a2a5e;color:white;padding:16px;width:100%;border:none;border-radius:10px;font-weight:bold;font-size:18px;margin-top:25px;cursor:pointer}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#result{display:none;text-align:center;background:#f0fff4;border:2px solid green;padding:20px;border-radius:12px;margin-top:20px}
 </style>
 </head>
 <body>
+<div class="box">
+<h2>ARNAUDAFROCHAINEVERIFICATION LTD</h2>
+<p style="text-align:center;font-size:11px;color:red">TONIGHT ONLY - DELETE AFTER GENERATE</p>
 
-<div class="box" id="loginBox">
-<h2>🔒 OGA LOGIN</h2>
-<input id="email" type="email" placeholder="Admin Email">
-<input id="password" type="password" placeholder="Admin Password">
-<button onclick="login()">LOGIN</button>
+<label>1. Certificate ID (12 Letters - AUTO)</label>
+<div class="row">
+<input id="certId" readonly style="font-weight:bold;color:#d35400;background:#fff3e0;letter-spacing:1.5px;font-size:16px">
+<button onclick="gen12()">GEN 12</button>
 </div>
 
-<div class="box" id="genBox" style="display:none">
-<h2>AFRO CHAINE - ONE CLICK GENERATOR</h2>
-<input id="sName" placeholder="Student Name">
-<input id="sCertNo" placeholder="Certificate Number e.g AAC/2026-001">
-<input id="sCourse" placeholder="Course Name">
-<input id="sDate" type="date">
-<button onclick="generateAndSave()">GENERATE & SAVE AS ORIGINAL ✅</button>
+<label>2. Full Name *</label><input id="fullName" placeholder="Full Name">
+<label>3. Course *</label><input id="course" placeholder="Course / Program">
+<label>4. Institution</label><input id="institution" value="ARNAUDAFROCHAINEVERIFICATION LTD">
 
-<div id="certificate">
-<h1 id="certName" style="margin:5px"></h1>
-<p id="certCourse"></p>
-<p id="certNo" style="font-weight:bold"></p>
-<p id="certDate"></p>
-<div id="qrcode" style="display:flex;justify-content:center;margin:20px 0"></div>
-<p>Scan to Verify Original</p>
-<button onclick="window.print()" style="background:#111;color:white">PRINT CERTIFICATE</button>
+<div class="grid">
+<div><label>5. Certificate Type</label><select id="certType"><option>Certificate</option><option>Diploma</option><option>Attestation</option><option>Professional Certificate</option></select></div>
+<div><label>6. Status</label><select id="status"><option>Completed</option><option>Original</option><option>Verified</option><option>Valid</option></select></div>
+<div><label>7. Issue Date</label><input id="issueDate" type="date"></div>
+<div><label>8. Expiry Date</label><input id="expiryDate" type="date" value="2030-09-19"></div>
+<div><label>9. Grade / Score</label><input id="grade" placeholder="e.g. 85% - Excellent"></div>
+<div><label>10. Duration</label><input id="duration" placeholder="e.g. 6 Months"></div>
+</div>
+
+<label>11. Issued By</label><input id="issuedBy" value="ARNAUDAFROCHAINEVERIFICATION LTD - arnaudafrochain@gmail.com">
+<label>12. Note</label><textarea id="note" rows="2" placeholder="Description"></textarea>
+
+<button class="saveBtn" onclick="save()">💾 GENERATE THIS NIGHT</button>
+
+<div id="result">
+<h3 id="rName"></h3>
+<p id="rCert" style="color:#d35400;font-weight:bold;font-size:18px;letter-spacing:1px"></p>
+<div id="qrcode" style="display:flex;justify-content:center;margin:15px 0"></div>
+<p style="color:green;font-weight:bold">✅ SAVED + QR DONE</p>
 </div>
 </div>
 
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-  authDomain: "arnaudafrochaineverification.firebaseapp.com",
-  projectId: "arnaudafrochaineverification",
-  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
-  messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
-  measurementId: "G-Y52LEBJM7Q"
+// YOUR ORIGINAL FIREBASE KEY - 100% INSIDE - NO HIDING
+const firebaseConfig={
+apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+authDomain:"arnaudafrochaineverification.firebaseapp.com",
+projectId:"arnaudafrochaineverification",
+storageBucket:"arnaudafrochaineverification.firebasestorage.app",
+messagingSenderId:"268502946630",
+appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"
 };
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+const db=firebase.firestore();
 
-function login(){
-  const e = document.getElementById('email').value;
-  const p = document.getElementById('password').value;
-  auth.signInWithEmailAndPassword(e,p).then(()=>{
-    alert("Welcome OGA ✅");
-    document.getElementById('loginBox').style.display='none';
-    document.getElementById('genBox').style.display='block';
-  }).catch(err=>alert(err.message));
+document.getElementById('issueDate').valueAsDate=new Date();
+
+function gen12(){
+const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+let code="AAC-";
+for(let i=0;i<9;i++) code+=c[Math.floor(Math.random()*c.length)];
+document.getElementById('certId').value=code;
 }
+gen12();
 
-function generateAndSave(){
-  const name = document.getElementById('sName').value.trim();
-  const certNo = document.getElementById('sCertNo').value.trim();
-  const course = document.getElementById('sCourse').value.trim();
-  const date = document.getElementById('sDate').value;
-  if(!name||!certNo||!course||!date){alert("Fill all fields Boss!");return;}
-
-  db.collection("certificates").doc(certNo).set({
-    studentName:name,
-    certificateNumber:certNo,
-    course:course,
-    date:date,
-    status:"ORIGINAL",
-    createdAt:new Date()
-  }).then(()=>{
-    document.getElementById('certName').innerText=name;
-    document.getElementById('certCourse').innerText=course;
-    document.getElementById('certNo').innerText="Cert No: "+certNo;
-    document.getElementById('certDate').innerText="Date: "+date;
-    document.getElementById('certificate').style.display='block';
-    document.getElementById('qrcode').innerHTML="";
-    new QRCode(document.getElementById("qrcode"),{
-      text:"https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?cert="+certNo,
-      width:160,height:160
-    });
-    alert("SAVED AS ORIGINAL! No double work again! ✅");
-  }).catch(err=>alert(err.message));
+function save(){
+const data={
+certificateNumber:document.getElementById('certId').value.trim(),
+studentName:document.getElementById('fullName').value.trim(),
+course:document.getElementById('course').value.trim(),
+institution:document.getElementById('institution').value.trim(),
+certificateType:document.getElementById('certType').value,
+status:document.getElementById('status').value,
+issueDate:document.getElementById('issueDate').value,
+expiryDate:document.getElementById('expiryDate').value,
+grade:document.getElementById('grade').value.trim(),
+duration:document.getElementById('duration').value.trim(),
+issuedBy:document.getElementById('issuedBy').value.trim(),
+note:document.getElementById('note').value.trim(),
+contactEmail:"arnaudafrochain@gmail.com",
+createdAt:new Date()
+};
+if(!data.studentName||!data.course){alert("Fill Name & Course Boss!");return;}
+db.collection("certificates").doc(data.certificateNumber).set(data).then(()=>{
+document.getElementById('rName').innerText=data.studentName+" - "+data.course;
+document.getElementById('rCert').innerText=data.certificateNumber;
+document.getElementById('result').style.display='block';
+document.getElementById('qrcode').innerHTML="";
+new QRCode(document.getElementById("qrcode"),{text:"https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?cert="+data.certificateNumber,width:180,height:180});
+alert("✅ DONE Boss: "+data.certificateNumber+" - Now you fit delete file!");
+}).catch(e=>{alert("Go Firebase > Firestore > Rules > change to allow read, write: if true; > Publish. Error: "+e.message)});
 }
 </script>
 </body>
