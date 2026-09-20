@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Arnaud ADMIN ORIGINAL</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
 body{font-family:sans-serif;background:#e8f5e9;padding:10px}
@@ -14,80 +16,79 @@ button{width:100%;padding:15px;background:#0a4d2e;color:#fff;border:none;border-
 #lockBox{background:#fff;padding:25px;border-radius:12px;max-width:350px;width:90%;text-align:center}
 </style>
 </head><body>
-<div id="lock"><div id="lockBox"><h2 style="color:#0a4d2e">🔒 ARNAUD ADMIN</h2><p>Enter Admin Code</p><input id="adminCode" type="password" placeholder="Enter code"><button onclick="checkCode()" style="background:#0a4d2e">UNLOCK</button><p id="lockMsg" style="color:red;display:none;margin-top:10px">Wrong code!</p></div></div>
+<div id="lock"><div id="lockBox"><h2 style="color:#0a4d2e">🔒 ARNAUD ADMIN</h2><p>Enter Admin Code</p><input id="adminCode" type="password" placeholder="Enter code ARNAUD333649"><button onclick="checkCode()" style="background:#0a4d2e">UNLOCK</button><p id="lockMsg" style="color:red;display:none;margin-top:10px">Wrong code!</p></div></div>
 
 <div class="box">
 <h2 style="text-align:center;color:#0a4d2e">ARNAUD ORIGINAL ADMIN<br><small>12 FIELDS + QR CORNER</small></h2>
 <div id="msg"></div>
-<label>Full Name *</label><input id="fullName">
-<label>Full Address</label><input id="fullAddress">
-<label>Institution</label><input id="institution" value="Arnaud Afro Chain">
-<label>Course</label><input id="course">
+<label>Full Name *</label><input id="fullName" placeholder="Enter full name">
+<label>Full Address</label><input id="fullAddress" placeholder="Enter address">
+<label>Institution</label><input id="institution" value="Arnaud Afrochaine Verification Ltd">
+<label>Course</label><input id="course" placeholder="Course name">
 <label>Certificate Number *</label><input id="certNo" placeholder="AAV-2026-001">
-<label>Registration Number</label><input id="regNo">
+<label>Registration Number</label><input id="regNo" placeholder="Reg number">
 <label>Date of Birth</label><input id="dob" type="date">
 <label>Issue Date</label><input id="issueDate" type="date">
-<label>Grade</label><input id="grade">
-<label>Duration</label><input id="duration">
-<label>Gender</label><select id="gender"><option value="">Select</option><option>Male</option><option>Female</option></select>
+<label>Grade</label><input id="grade" placeholder="e.g. Distinction">
+<label>Duration</label><input id="duration" placeholder="e.g. 6 Months">
+<label>Gender</label><select id="gender"><option value="">Select Gender</option><option>Male</option><option>Female</option></select>
 <label>Status</label><select id="status"><option>Authentic</option><option>Pending</option></select>
 <button onclick="saveFinal()">💾 SAVE ORIGINAL + GENERATE QR</button>
-<button onclick="testFirebase()" style="background:#555">🔍 TEST FIREBASE CONNECTION</button>
 <div id="qr"></div>
 <div id="link" style="margin-top:10px;word-break:break-all;text-align:center;font-size:13px"></div>
 </div>
+
 <script>
 const ADMIN_PASSWORD="ARNAUD333649";
-const API_KEY="AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs";
-const PROJECT_ID="arnaudafrochaineverification";
+const firebaseConfig={
+ apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+ authDomain:"arnaudafrochaineverification.firebaseapp.com",
+ projectId:"arnaudafrochaineverification",
+ storageBucket:"arnaudafrochaineverification.appspot.com",
+ messagingSenderId:"123456789",
+ appId:"1:123456789:web:abcdef"
+};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+
 function checkCode(){
-const c=document.getElementById('adminCode').value;
-if(c===ADMIN_PASSWORD){document.getElementById('lock').style.display='none';}
-else{document.getElementById('lockMsg').style.display='block';}
+ const c=document.getElementById('adminCode').value;
+ if(c===ADMIN_PASSWORD){document.getElementById('lock').style.display='none';}
+ else{document.getElementById('lockMsg').style.display='block';}
 }
 function showMsg(txt,ok=true){
-const m=document.getElementById('msg');m.style.display='block';m.style.background=ok?'#d4edda':'#f8d7da';m.style.color=ok?'#155724':'#721c24';m.innerHTML=txt;
-}
-async function testFirebase(){
-showMsg('Testing...',true);
-try{
-const url=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/certificates?key=${API_KEY}&pageSize=1`;
-const r=await fetch(url);const j=await r.json();
-if(r.ok){showMsg('✅ CONNECTED! Firestore working! You can SAVE now!',true);}
-else{showMsg('❌ Error: '+(j.error?.message||JSON.stringify(j)),false);}
-}catch(e){showMsg('❌ Network Error: '+e.message,false);}
+ const m=document.getElementById('msg');m.style.display='block';m.style.background=ok?'#d4edda':'#f8d7da';m.style.color=ok?'#155724':'#721c24';m.innerHTML=txt;
 }
 async function saveFinal(){
-const idRaw=document.getElementById('certNo').value.trim();
-const id=idRaw||'AAV-'+Date.now();
-const payload={fields:{
-fullName:{stringValue:document.getElementById('fullName').value.trim()},
-fullAddress:{stringValue:document.getElementById('fullAddress').value.trim()},
-institution:{stringValue:document.getElementById('institution').value.trim()},
-course:{stringValue:document.getElementById('course').value.trim()},
-certificateNumber:{stringValue:id},
-registrationNumber:{stringValue:document.getElementById('regNo').value.trim()},
-dob:{stringValue:document.getElementById('dob').value},
-issueDate:{stringValue:document.getElementById('issueDate').value},
-grade:{stringValue:document.getElementById('grade').value.trim()},
-duration:{stringValue:document.getElementById('duration').value.trim()},
-gender:{stringValue:document.getElementById('gender').value},
-status:{stringValue:document.getElementById('status').value},
-createdAt:{stringValue:new Date().toISOString()}
-}};
-if(!payload.fields.fullName.stringValue){showMsg('❌ Full Name required',false);return;}
-showMsg('⏳ Saving ID: '+id+' ...',true);
-try{
-const url=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/certificates/${encodeURIComponent(id)}?key=${API_KEY}`;
-const res=await fetch(url,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-const data=await res.json();
-if(!res.ok){throw new Error(data.error?.message||JSON.stringify(data));}
-showMsg('✅ SAVED! ID: '+id,true);
-const verifyUrl='https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?id='+encodeURIComponent(id);
-document.getElementById('qr').innerHTML='';
-new QRCode(document.getElementById('qr'),{text:verifyUrl,width:200,height:200});
-document.getElementById('link').innerHTML=`<b>Verify:</b><br><a href="${verifyUrl}" target="_blank">${verifyUrl}</a><br><br>Put QR for CORNER!`;
-}catch(e){showMsg('❌ FAILED: '+e.message,false);}
+ const id=document.getElementById('certNo').value.trim();
+ if(!id){showMsg('❌ Certificate Number required!',false);return;}
+ const data={
+  fullName:document.getElementById('fullName').value.trim(),
+  fullAddress:document.getElementById('fullAddress').value.trim(),
+  institution:document.getElementById('institution').value.trim(),
+  course:document.getElementById('course').value.trim(),
+  certificateNumber:id,
+  registrationNumber:document.getElementById('regNo').value.trim(),
+  dob:document.getElementById('dob').value,
+  issueDate:document.getElementById('issueDate').value,
+  grade:document.getElementById('grade').value.trim(),
+  duration:document.getElementById('duration').value.trim(),
+  gender:document.getElementById('gender').value,
+  status:document.getElementById('status').value,
+  createdAt: new Date().toISOString()
+ };
+ if(!data.fullName){showMsg('❌ Full Name required',false);return;}
+ showMsg('⏳ Saving ID: '+id+' ...',true);
+ try{
+  await db.collection('certificates').doc(id).set(data);
+  showMsg('✅ SAVED SUCCESS! ID: '+id,true);
+  const verifyUrl='https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?id='+encodeURIComponent(id);
+  document.getElementById('qr').innerHTML='';
+  new QRCode(document.getElementById('qr'),{text:verifyUrl,width:200,height:200});
+  document.getElementById('link').innerHTML=`<b>Verify Link:</b><br><a href="${verifyUrl}" target="_blank">${verifyUrl}</a><br><br><b style="color:#0a4d2e">✅ Print this QR for CORNER of certificate!</b>`;
+ }catch(e){
+  showMsg('❌ FAILED: '+e.message,false);
+ }
 }
 </script>
 </body></html>
