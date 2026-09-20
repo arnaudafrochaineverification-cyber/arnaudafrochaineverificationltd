@@ -8,14 +8,14 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-// REPLACE WITH YOUR REAL CONFIG FROM FIREBASE SETTINGS
 const firebaseConfig = {
-  apiKey: "YOUR_REAL_API_KEY_HERE",
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
   authDomain: "arnaudafrochaineverification.firebaseapp.com",
   projectId: "arnaudafrochaineverification",
-  storageBucket: "arnaudafrochaineverification.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+  measurementId: "G-Y52LEBJM7Q"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -33,7 +33,7 @@ async function verifyCert(){
     if(snap.exists()){
       const d = snap.data();
       box.innerHTML=`
-        <div style="background:#e8f5e9;border:2px solid #2e7d32;border-radius:12px;padding:15px;line-height:1.6">
+        <div style="background:#e8f5e9;border:2px solid #2e7d32;border-radius:12px;padding:15px;line-height:1.7">
           <h3 style="color:#2e7d32;margin:0 0 12px;text-align:center">✅ VERIFIED AUTHENTIC</h3>
           <p><b>Full Name:</b> ${d.fullName || d.name || "N/A"}</p>
           <p><b>Cert No:</b> ${certId}</p>
