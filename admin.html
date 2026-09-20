@@ -1,51 +1,67 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin - Arnaud Full</title>
+<title>Admin - Arnaud 12 Fields</title>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
-<style>body{font-family:Arial;padding:12px;background:#f0f4f8}#login,.box{background:#fff;padding:18px;border-radius:14px;max-width:520px;margin:20px auto;box-shadow:0 4px 12px rgba(0,0,0,.1)}label{font-weight:bold;font-size:13px;color:#0a3d62;margin-top:10px;display:block}input,select,textarea{width:100%;padding:12px;margin:5px 0 10px 0;border:1px solid #ccc;border-radius:10px;box-sizing:border-box}button{width:100%;padding:14px;background:#0a4d2e;color:#fff;border:none;border-radius:12px;font-weight:bold;margin-top:12px;cursor:pointer}.idbox{background:#e8f5e9;border:2px dashed #0a4d2e;padding:10px;border-radius:10px;text-align:center;font-weight:900;color:#0a4d2e;margin-bottom:10px}</style>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>body{font-family:Arial;background:#f0f4f8;padding:10px}.card{background:#fff;padding:18px;border-radius:16px;max-width:600px;margin:20px auto}input,select{width:100%;padding:11px;margin:5px 0;border:1px solid #ccc;border-radius:10px;box-sizing:border-box}button{width:100%;padding:14px;background:#0a4d2e;color:#fff;border:none;border-radius:12px;font-weight:bold;margin-top:8px}#idBox{background:#e8f5e9;border:2px dashed #0a4d2e;padding:10px;border-radius:10px;text-align:center;font-weight:900;color:#0a4d2e}#qr{ display:flex;justify-content:center;margin:15px 0}</style>
 </head><body>
-<div id="login">
-<h2 style="color:#0a4d2e;text-align:center">🔐 Admin Login</h2>
-<input id="pass" type="password" placeholder="Enter Password">
-<button onclick="checkPass()">Unlock Admin</button>
-<div id="loginMsg" style="color:red;text-align:center;margin-top:10px"></div>
+<div id="login" class="card"><h2 style="text-align:center;color:#0a4d2e">🔐 Admin Login</h2><input id="pass" type="password" placeholder="Password"><button onclick="check()">Unlock</button></div>
+<div id="main" class="card" style="display:none">
+<h2 style="text-align:center;color:#0a4d2e">Arnaud Afrochaine - 12 Fields</h2>
+<div id="idBox">ID: <span id="autoID"></span></div>
+
+<!-- 12 FIELDS -->
+1. <input id="f1" placeholder="1. Full Name *">
+2. <input id="f2" placeholder="2. Full Address *">
+3. <input id="f3" placeholder="3. Institution / School *">
+4. <input id="f4" placeholder="4. Course Title *">
+5. <input id="f5" placeholder="5. Certificate Number (optional)">
+6. <input id="f6" placeholder="6. Registration / Matric Number">
+7. <input id="f7" type="date" placeholder="7. Date of Birth"><small>7. Date of Birth</small>
+8. <input id="f8" type="date"><small>8. Issue Date</small>
+9. <input id="f9" placeholder="9. Grade / Score e.g. Distinction, 85%">
+10. <input id="f10" placeholder="10. Duration e.g. 6 Months">
+11. <select id="f11"><option value="">11. Gender</option><option>Male</option><option>Female</option><option>Other</option></select>
+12. <select id="f12"><option>Authentic - Verified</option><option>In Progress</option><option>Expired</option></select><small>12. Status</small>
+
+<button onclick="save()">💾 SAVE + GENERATE QR</button>
+<button onclick="newID()" style="background:#555">🔄 New ID</button>
+<div id="msg"></div>
+<div id="qr"></div>
+<div id="link" style="text-align:center;font-size:11px;word-break:break-all"></div>
+<p style="text-align:center"><a href="index.html">Go to Verify Page</a></p>
 </div>
-
-<div id="mainBox" class="box" style="display:none">
-<h2 style="color:#0a4d2e;text-align:center">🔒 Admin - Generate Certificate</h2>
-<div class="idbox">AUTO ID: <span id="autoID">Loading...</span></div>
-
-<label>Certificate ID *</label><input id="certId" placeholder="e.g. AA1001">
-<label>Full Name *</label><input id="fullName" placeholder="John Doe">
-<label>Course *</label><input id="course" placeholder="e.g. Cyber Security">
-<label>Institution</label><input id="institution" value="Arnaud Afrochaine Verification Ltd">
-<label>Certificate Type</label><select id="certType"><option>Certificate</option><option>Diploma</option><option>Attestation</option></select>
-<label>Issue Date</label><input id="issueDate" type="date">
-<label>Expiry Date</label><input id="expiryDate" type="date" value="2030-09-19">
-<label>Grade / Score</label><input id="grade" placeholder="e.g. 20 / Excellent">
-<label>Duration</label><input id="duration" placeholder="e.g. 6 months">
-<label>Status</label><select id="status"><option>Completed</option><option>In Progress</option><option>Expired</option></select>
-<label>Issued By</label><input id="issuedBy" value="Registrar ARNAUDAFROCHAINVERIFICAT">
-<label>Note</label><textarea id="note" placeholder="Additional note"></textarea>
-
-<button onclick="addCert()">💾 SAVE & GENERATE QR</button>
-<button onclick="genNew()" style="background:#555">🔄 Generate New ID</button>
-<div id="msg" style="margin-top:12px"></div>
-<p style="text-align:center"><a href="index.html">← Back to Verify</a></p>
-</div>
-
 <script>
-const ADMIN_PASSWORD = "ARNAUD333649";
-function checkPass(){ if(document.getElementById('pass').value === ADMIN_PASSWORD){ document.getElementById('login').style.display='none'; document.getElementById('mainBox').style.display='block'; genNew(); } else { document.getElementById('loginMsg').innerText="❌ Wrong password!"; } }
+const ADMIN_PASSWORD="ARNAUD333649";
+function check(){if(document.getElementById('pass').value===ADMIN_PASSWORD){document.getElementById('login').style.display='none';document.getElementById('main').style.display='block';newID();}else{alert("Wrong password");}}
 const cfg={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification"};
 firebase.initializeApp(cfg);const db=firebase.firestore();
-let currentID=""; function genID(){const y=new Date().getFullYear();const r=Math.floor(100+Math.random()*900);return `AAV-${y}-${r}`;}
-function genNew(){currentID=genID();document.getElementById('autoID').innerText=currentID;document.getElementById('certId').value=currentID;}
-async function addCert(){
- const cid=document.getElementById('certId').value.trim()||currentID;
- const data={id:cid,certNo:cid,fullName:document.getElementById('fullName').value.trim(),course:document.getElementById('course').value.trim(),institution:document.getElementById('institution').value.trim(),certType:document.getElementById('certType').value,issueDate:document.getElementById('issueDate').value,expiryDate:document.getElementById('expiryDate').value,grade:document.getElementById('grade').value.trim(),duration:document.getElementById('duration').value.trim(),status:document.getElementById('status').value,issuedBy:document.getElementById('issuedBy').value.trim(),note:document.getElementById('note').value.trim(),createdAt:new Date().toISOString()};
- if(!data.fullName||!data.course){alert("Put Full Name and Course");return;}
- try{await db.collection("certificates").doc(cid).set(data);document.getElementById('msg').innerHTML=`<div style="background:#e8f5e9;padding:12px;border-radius:10px"><b>✅ SAVED!</b><br>ID: <b>${cid}</b><br>QR Link: arnaudafrochaineverification.com/verify?id=${cid}</div>`;genNew();}catch(e){document.getElementById('msg').innerText="Error: "+e.message;}
+let cur="";function gen(){return `AAV-${new Date().getFullYear()}-${Math.floor(100+Math.random()*900)}`;}
+function newID(){cur=gen();document.getElementById('autoID').innerText=cur;document.getElementById('qr').innerHTML="";document.getElementById('msg').innerHTML="";document.getElementById('link').innerHTML="";}
+async function save(){
+ const d={
+  id:cur,
+  fullName:document.getElementById('f1').value,
+  address:document.getElementById('f2').value,
+  institution:document.getElementById('f3').value,
+  course:document.getElementById('f4').value,
+  certNo:document.getElementById('f5').value||cur,
+  regNo:document.getElementById('f6').value,
+  dob:document.getElementById('f7').value,
+  issueDate:document.getElementById('f8').value,
+  grade:document.getElementById('f9').value,
+  duration:document.getElementById('f10').value,
+  gender:document.getElementById('f11').value,
+  status:document.getElementById('f12').value,
+  createdAt:new Date().toISOString()
+ };
+ if(!d.fullName||!d.institution){alert("Fill Full Name and School");return;}
+ await db.collection("certificates").doc(cur).set(d);
+ const verifyLink = `https://arnaudafrochaineverification.firebaseapp.com/verify.html?id=${cur}`;
+ document.getElementById('msg').innerHTML=`<div style="background:#d4edda;padding:10px;border-radius:10px">✅ SAVED: ${cur}<br>${d.fullName}</div>`;
+ document.getElementById('qr').innerHTML="";
+ new QRCode(document.getElementById('qr'),{text:verifyLink,width:220,height:220});
+ document.getElementById('link').innerHTML=`<b>SCAN THIS QR:</b><br>${verifyLink}`;
 }
 </script></body></html>
