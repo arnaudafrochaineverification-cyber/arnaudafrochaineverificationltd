@@ -1,50 +1,93 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Original 12 Fields + QR Corner</title>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arnaud ADMIN ORIGINAL</title>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
-body{font-family:Arial;background:#f0f4f8;padding:10px}
-.card{background:#fff;padding:20px;border-radius:16px;max-width:600px;margin:auto}
-input,select{width:100%;padding:11px;margin:5px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
-button{width:100%;padding:14px;background:#0a4d2e;color:#fff;border:none;border-radius:10px;font-weight:900;margin-top:10px}
-#ID{padding:12px;background:#0a4d2e;color:#fff;text-align:center;border-radius:8px;font-weight:900;font-size:16px}
+body{font-family:sans-serif;background:#e8f5e9;padding:10px}
+.box{background:#fff;padding:18px;border-radius:12px;max-width:520px;margin:auto;border-top:7px solid #0a4d2e}
+input,select{width:100%;padding:12px;margin:5px 0 10px 0;border:1px solid #bbb;border-radius:8px;box-sizing:border-box}
+label{font-weight:bold;font-size:13px;color:#0a4d2e}
+button{width:100%;padding:15px;background:#0a4d2e;color:#fff;border:none;border-radius:10px;font-weight:bold;font-size:16px;margin-top:10px}
+#msg{padding:12px;border-radius:8px;display:none;margin:10px 0}
+#qr{margin-top:15px;text-align:center}
+#lock{position:fixed;top:0;left:0;right:0;bottom:0;background:#0a4d2e;display:flex;align-items:center;justify-content:center;z-index:9999}
+#lockBox{background:#fff;padding:25px;border-radius:12px;max-width:350px;width:90%;text-align:center}
 </style>
 </head><body>
-<div class="card" id="L"><h3>🔐 Admin Login</h3><input id="pw" type="password" placeholder="Password"><button onclick="if(pw.value=='ARNAUD333649'){L.style.display='none';M.style.display='block';gen()}else alert('Wrong')">Unlock</button></div>
+<div id="lock"><div id="lockBox"><h2 style="color:#0a4d2e">🔒 ARNAUD ADMIN</h2><p>Enter Admin Code</p><input id="adminCode" type="password" placeholder="Enter code"><button onclick="checkCode()" style="background:#0a4d2e">UNLOCK</button><p id="lockMsg" style="color:red;display:none;margin-top:10px">Wrong code!</p></div></div>
 
-<div class="card" id="M" style="display:none">
-<h2 style="text-align:center;color:#0a4d2e;margin:0">ORIGINAL CERTIFICATE</h2>
-<p style="text-align:center;font-size:12px;margin-top:2px">12 Fields + QR Code for Corner</p>
-<div id="ID">ID: ...</div>
-
-<label>Full Name *</label><input id="f1" placeholder="Full Name">
-<label>Full Address *</label><input id="f2" placeholder="Full Address">
-<label>Institution *</label><input id="f3" placeholder="Institution">
-<label>Course *</label><input id="f4" placeholder="Course">
-<label>Certificate Number</label><input id="f5" placeholder="Auto = ID">
-<label>Registration Number</label><input id="f6" placeholder="Registration Number">
-<label>Date of Birth</label><input id="f7" type="date">
-<label>Issue Date</label><input id="f8" type="date">
-<label>Grade</label><input id="f9" placeholder="Grade e.g. Distinction">
-<label>Duration</label><input id="f10" placeholder="Duration e.g. 6 Months">
-<label>Gender</label><select id="f11"><option value="">Select Gender</option><option>Male</option><option>Female</option></select>
-<label>Status</label><select id="f12"><option>Authentic</option><option>In Progress</option><option>Expired</option></select>
-
-<button onclick="saveCert()">💾 SAVE ORIGINAL + GENERATE QR</button>
-<div id="out" style="margin-top:15px;text-align:center"></div>
+<div class="box">
+<h2 style="text-align:center;color:#0a4d2e">ARNAUD ORIGINAL ADMIN<br><small>12 FIELDS + QR CORNER</small></h2>
+<div id="msg"></div>
+<label>Full Name *</label><input id="fullName">
+<label>Full Address</label><input id="fullAddress">
+<label>Institution</label><input id="institution" value="Arnaud Afro Chain">
+<label>Course</label><input id="course">
+<label>Certificate Number *</label><input id="certNo" placeholder="AAV-2026-001">
+<label>Registration Number</label><input id="regNo">
+<label>Date of Birth</label><input id="dob" type="date">
+<label>Issue Date</label><input id="issueDate" type="date">
+<label>Grade</label><input id="grade">
+<label>Duration</label><input id="duration">
+<label>Gender</label><select id="gender"><option value="">Select</option><option>Male</option><option>Female</option></select>
+<label>Status</label><select id="status"><option>Authentic</option><option>Pending</option></select>
+<button onclick="saveFinal()">💾 SAVE ORIGINAL + GENERATE QR</button>
+<button onclick="testFirebase()" style="background:#555">🔍 TEST FIREBASE CONNECTION</button>
+<div id="qr"></div>
+<div id="link" style="margin-top:10px;word-break:break-all;text-align:center;font-size:13px"></div>
 </div>
-
 <script>
-// ORIGINAL FIREBASE KEYS - NO HIDE
-const firebaseConfig={
- apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
- authDomain:"arnaudafrochaineverification.firebaseapp.com",
- projectId:"arnaudafrochaineverification",
- storageBucket:"arnaudafrochaineverification.appspot.com"
-};
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
-let curID="";
-function gen(){curID=`AAV-${new Date().getFullYear()}-${Math.floor(100+Math.random()*900)}
+const ADMIN_PASSWORD="ARNAUD333649";
+const API_KEY="AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs";
+const PROJECT_ID="arnaudafrochaineverification";
+function checkCode(){
+const c=document.getElementById('adminCode').value;
+if(c===ADMIN_PASSWORD){document.getElementById('lock').style.display='none';}
+else{document.getElementById('lockMsg').style.display='block';}
+}
+function showMsg(txt,ok=true){
+const m=document.getElementById('msg');m.style.display='block';m.style.background=ok?'#d4edda':'#f8d7da';m.style.color=ok?'#155724':'#721c24';m.innerHTML=txt;
+}
+async function testFirebase(){
+showMsg('Testing...',true);
+try{
+const url=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/certificates?key=${API_KEY}&pageSize=1`;
+const r=await fetch(url);const j=await r.json();
+if(r.ok){showMsg('✅ CONNECTED! Firestore working! You can SAVE now!',true);}
+else{showMsg('❌ Error: '+(j.error?.message||JSON.stringify(j)),false);}
+}catch(e){showMsg('❌ Network Error: '+e.message,false);}
+}
+async function saveFinal(){
+const idRaw=document.getElementById('certNo').value.trim();
+const id=idRaw||'AAV-'+Date.now();
+const payload={fields:{
+fullName:{stringValue:document.getElementById('fullName').value.trim()},
+fullAddress:{stringValue:document.getElementById('fullAddress').value.trim()},
+institution:{stringValue:document.getElementById('institution').value.trim()},
+course:{stringValue:document.getElementById('course').value.trim()},
+certificateNumber:{stringValue:id},
+registrationNumber:{stringValue:document.getElementById('regNo').value.trim()},
+dob:{stringValue:document.getElementById('dob').value},
+issueDate:{stringValue:document.getElementById('issueDate').value},
+grade:{stringValue:document.getElementById('grade').value.trim()},
+duration:{stringValue:document.getElementById('duration').value.trim()},
+gender:{stringValue:document.getElementById('gender').value},
+status:{stringValue:document.getElementById('status').value},
+createdAt:{stringValue:new Date().toISOString()}
+}};
+if(!payload.fields.fullName.stringValue){showMsg('❌ Full Name required',false);return;}
+showMsg('⏳ Saving ID: '+id+' ...',true);
+try{
+const url=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/certificates/${encodeURIComponent(id)}?key=${API_KEY}`;
+const res=await fetch(url,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+const data=await res.json();
+if(!res.ok){throw new Error(data.error?.message||JSON.stringify(data));}
+showMsg('✅ SAVED! ID: '+id,true);
+const verifyUrl='https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?id='+encodeURIComponent(id);
+document.getElementById('qr').innerHTML='';
+new QRCode(document.getElementById('qr'),{text:verifyUrl,width:200,height:200});
+document.getElementById('link').innerHTML=`<b>Verify:</b><br><a href="${verifyUrl}" target="_blank">${verifyUrl}</a><br><br>Put QR for CORNER!`;
+}catch(e){showMsg('❌ FAILED: '+e.message,false);}
+}
+</script>
+</body></html>
