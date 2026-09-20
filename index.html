@@ -1,47 +1,78 @@
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-  authDomain: "arnaudafrochaineverification.firebaseapp.com",
-  projectId: "arnaudafrochaineverification",
-  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
-  messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arnaud Afrochaine Verification LTD - No.1 Anti-Fake</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+.top-bar{background:#0a2e1d;color:white;padding:8px 10px;font-size:10px;display:flex;justify-content:space-between}
+.header{background:white;padding:10px 15px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.1);position:sticky;top:0;z-index:20}
+.logo-box{display:flex;align-items:center;gap:10px}
+.logo-box img{height:52px;width:auto;border:1px solid #eee;border-radius:8px}
+.logo-text h3{font-size:13px;color:#0a4d2e}.logo-text p{font-size:9px;color:#d32f2f;font-weight:bold}
+.hero{background:linear-gradient(135deg,#0a2e1d 0%,#0a4d2e 100%);color:white;text-align:center;padding:60px 20px 90px 20px}
+.hero h1{font-size:29px}.tagline{background:#d32f2f;display:inline-block;padding:6px 14px;border-radius:20px;font-size:12px;margin-top:10px;font-weight:bold}
+.verify-card{background:white;max-width:570px;margin:-65px auto 20px auto;border-radius:16px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,0.3);border-top:4px solid #d32f2f}
+.verify-card input{width:100%;padding:14px;border:2px solid #ddd;border-radius:10px;margin:8px 0}
+.verify-card button{width:100%;padding:14px;background:#0a4d2e;color:white;border:none;border-radius:10px;font-weight:bold;font-size:16px}
+#result{margin-top:15px;padding:15px;border-radius:10px;display:none;line-height:1.8;font-size:14px}
+.success{background:#e8f5e9;border:2px solid #2e7d32;color:#0a2e1d}.error{background:#ffebee;border:2px solid #c62828;color:#c62828}
+.section{max-width:820px;margin:25px auto;padding:24px;background:white;border-radius:16px;box-shadow:0 4px 15px rgba(0,0,0,0.08)}
+.section h2{color:#0a4d2e;text-align:center;margin-bottom:14px}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
+.gallery-grid img{width:100%;height:170px;object-fit:cover;border-radius:10px;border:2px solid #e8f5e9}
+.gallery-grid img:first-child{grid-column:span 2;height:250px;object-fit:contain;background:#f9f9f9}
+footer{background:#0a2e1d;color:white;text-align:center;padding:22px 10px;font-size:10px}
+</style>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+<div class="top-bar"><span>📧 arnaudafrochainverification@gmail.com</span><span>📞 +2349132851465</span></div>
+<div class="header"><div class="logo-box"><img src="IMG-20260919-WA0127.jpg" alt="Logo"><div class="logo-text"><h3>ARNAUD AFROCHAINE<br>VERIFICATION LTD</h3><p>🚫 NO.1 ANTI-FAKE WORLDWIDE</p></div></div><div class="nav"><a href="admin.html">Admin</a></div></div>
+<div class="hero"><h1>STOP FAKE CERTIFICATES</h1><div class="tagline">NUMBER ONE ANTI-FAKE VERIFICATION IN THE WORLD</div><p style="margin-top:12px;font-size:13px;max-width:650px;margin:auto">We deal with fake certificates. Our goal is to stop fake certificates for all the global. We start from Nigeria first to deal with all hackers and forgers.</p></div>
+<div class="verify-card"><h2 style="color:#0a4d2e;text-align:center">Verify Certificate Authenticity</h2><input type="text" id="certInput" placeholder="Enter Certificate ID e.g. 2026"><button onclick="verifyCert()">Verify Now - Stop Fake</button><div id="result"></div></div>
 
+<div class="section" id="mission"><h2>🎯 OUR MISSION - NUMBER ONE IN THE WORLD</h2><p style="font-size:13px;line-height:1.8;text-align:center">We deal with fake certificates. Our goal is to stop the fake certificates for all the global. Starting from Nigeria, we will be NUMBER ONE for whole world.<br><br><b>Arnaud Afrochaine Verification LTD - Number One Anti-Fake Verification Company in the World.</b></p></div>
+
+<div class="section" id="gallery">
+<h2>🖼️ Head Office Gallery - Anti-Fake Command Center</h2>
+<div class="gallery-grid">
+<img src="logo.png" alt="Official Logo">
+<img src="IMG-20260917-WA1432.jpg" alt="Office">
+<img src="IMG-20260919-WA0127.jpg" alt="Logo">
+<img src="IMG-20260919-WA9711.jpg" alt="HR Office">
+<img src="IMG-20260919-WA7762.jpg" alt="HR">
+<img src="IMG-20260919-WA8605.jpg" alt="Anti-Fake">
+<img src="IMG-20260919-WA3116.jpg" alt="Certificate">
+<img src="IMG-20260919-WA4522.jpg" alt="Office 2">
+<img src="hr-office.jpg" alt="HR Office Main">
+</div>
+</div>
+
+<footer>© 2026 Arnaud Afrochaine Verification LTD - No.1 Anti-Fake Verification Company in the World<br>📍 Lagos / Ogun State, Nigeria | Hotline: +2349132851465<br>📧 arnaudafrochainverification@gmail.com</footer>
+
+<script>
+const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification"};
+firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
 function verifyCert(){
-  const id=document.getElementById('certInput').value.trim();
-  const resDiv=document.getElementById('result');
-  if(!id){resDiv.style.display='block';resDiv.className='error';resDiv.innerHTML='❌ Enter Certificate ID';return;}
-  resDiv.style.display='block';resDiv.className='success';resDiv.innerHTML='⏳ Checking Anti-Fake Database for '+id+'...';
-  db.collection("certificates").doc(id).get().then(doc=>{
-    if(doc.exists){
-      const d=doc.data();
-      resDiv.className='success';
-      resDiv.innerHTML=`
-        <h3 style="text-align:center;color:#0a4d2e">✅ VERIFIED AUTHENTIC - NOT FAKE</h3>
-        <p style="text-align:center;color:green"><b>100% ORIGINAL!</b></p>
-        <div style="text-align:left;line-height:2">
-        <b>Full Name:</b> ${d.fullName||d.name||d.studentName||'N/A'}<br>
-        <b>Certificate No:</b> ${d.certificateNumber||d.certNo||d.certNumber||id}<br>
-        <b>Registration No:</b> ${d.registrationNumber||d.regNo||id}<br>
-        <b>Institution:</b> ${d.institution||d.schoolName||'N/A'}<br>
-        <b>Course:</b> ${d.course||'N/A'}<br>
-        <b>Address:</b> ${d.fullAddress||d.address||'N/A'}<br>
-        <b>Gender:</b> ${d.gender||'N/A'}<br>
-        <b>DOB:</b> ${d.dob||'N/A'}<br>
-        <b>Issue Date:</b> ${d.issueDate||'N/A'}<br>
-        <b>Grade:</b> ${d.grade||'N/A'}<br>
-        <b>Duration:</b> ${d.duration||'N/A'}<br>
-        <b>Status:</b> <span style="color:green;font-weight:bold">${d.status||'Authentic'}</span><br>
-        <br><small>QR Verified: https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?id=${id}</small>
-        </div>`;
-    }else{resDiv.className='error';resDiv.innerHTML='❌ FAKE DETECTED - Certificate '+id+' NOT FOUND in Official Database<br>This certificate is FAKE. Report to +2349132851465';}
-  }).catch(e=>{resDiv.className='error';resDiv.innerHTML='❌ Error: '+e.message;});
+ const id=document.getElementById('certInput').value.trim();
+ const resDiv=document.getElementById('result');
+ if(!id){resDiv.style.display='block';resDiv.className='error';resDiv.innerHTML='❌ Enter Certificate ID';return;}
+ resDiv.style.display='block';resDiv.className='success';resDiv.innerHTML='⏳ Checking Anti-Fake Database...';
+ db.collection("certificates").doc(id).get().then(doc=>{
+  if(doc.exists){
+   const d=doc.data();
+   resDiv.className='success';
+   resDiv.innerHTML=`✅ <b>VERIFIED AUTHENTIC - NOT FAKE</b><br><br><b>Full Name:</b> ${d.fullName||d.studentName||'N/A'}<br><b>Cert No:</b> ${d.certificateNumber||d.certNumber||id}<br><b>Reg No:</b> ${d.registrationNumber||d.regNo||id}<br><b>Institution:</b> ${d.institution||d.schoolName||'N/A'}<br><b>Course:</b> ${d.course||'N/A'}<br><b>Address:</b> ${d.fullAddress||d.address||'N/A'}<br><b>Gender:</b> ${d.gender||'N/A'}<br><b>DOB:</b> ${d.dob||'N/A'}<br><b>Issue Date:</b> ${d.issueDate||'N/A'}<br><b>Grade:</b> ${d.grade||'N/A'}<br><b>Duration:</b> ${d.duration||'N/A'}<br><b>Status:</b> ${d.status||'Authentic'}`;
+  }else{resDiv.className='error';resDiv.innerHTML=`❌ FAKE DETECTED - Certificate ${id} NOT FOUND`;}
+ }).catch(e=>{resDiv.className='error';resDiv.innerHTML='❌ Error: '+e.message;});
 }
 window.onload=()=>{
-  const p=new URLSearchParams(window.location.search);
-  const c=p.get('cert')||p.get('id');if(c){document.getElementById('certInput').value=c;verifyCert();}
+ const p=new URLSearchParams(window.location.search);
+ const c=p.get('cert')||p.get('id');if(c){document.getElementById('certInput').value=c;verifyCert();}
 }
-           </script>
+</script>
+</body>
+  </html>
