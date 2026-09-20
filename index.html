@@ -6,6 +6,7 @@
 <title>Arnaud Afrochaine Verification LTD - No.1 Anti-Fake Worldwide</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f4f6f4}
 .top-bar{background:#0a2e1d;color:white;padding:8px 10px;font-size:10px;display:flex;justify-content:space-between;flex-wrap:wrap}
 .header{background:white;padding:10px 15px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.1);position:sticky;top:0;z-index:20}
 .logo-box{display:flex;align-items:center;gap:10px}
@@ -43,8 +44,77 @@ footer{background:#0a2e1d;color:white;text-align:center;padding:25px 10px;font-s
 <div class="hero">
 <h1>STOP FAKE CERTIFICATES</h1>
 <div class="tag">NUMBER ONE ANTI-FAKE VERIFICATION IN THE WORLD</div>
-<p style="margin-top:14px;font-size:13px;max-width:680px;margin-left:auto;margin-right:auto;line-height:1.7">We deal with fake certificates. Our goal is to stop fake certificates for all the global. We start from Nigeria first to deal with all hackers and forgers. Arnaud Afrochaine Verification LTD - We are Number One.</p>
+<p style="margin-top:14px;font-size:13px;max-width:680px;margin:auto;line-height:1.7">We deal with fake certificates. Our goal is to stop fake certificates for all the global. We start from Nigeria first to deal with all hackers and forgers. Arnaud Afrochaine Verification LTD - We are Number One.</p>
 </div>
 <div class="verify-card">
 <h2 style="color:#0a4d2e;text-align:center">Verify Certificate Authenticity</h2>
-<p style="
+<p style="text-align:center;font-size:12px;color:#555;margin-bottom:10px">Enter your Certificate ID / Registration Number to verify</p>
+<input type="text" id="certInput" placeholder="Enter Certificate ID e.g. 2026">
+<button onclick="verifyCert()">🔍 Verify Now - Stop Fake</button>
+<div id="result"></div>
+</div>
+<div class="section">
+<h2>👤 About Us</h2>
+<p style="font-size:13px;line-height:1.9;text-align:justify"><b>Arnaud Afrochaine Verification LTD</b> is a professional certificate verification company registered in Nigeria. We are the <b>Number One Anti-Fake Verification Company in the World.</b><br><br>We were established to fight the growing menace of fake certificates and forged documents. Our platform provides instant, secure and reliable verification of academic certificates, professional certificates and other credentials.<br><br>Our Head Office is located in Lagos / Ogun State, Nigeria, but our vision is global - to stop fake certificates all over the world.</p>
+</div>
+<div class="section">
+<h2>🎯 Our Mission</h2>
+<p style="font-size:13px;line-height:1.9;text-align:center">To be the <b>NUMBER ONE ANTI-FAKE VERIFICATION COMPANY IN THE WORLD.</b><br><br>We deal with fake certificates. Our goal is to stop fake certificates for all the global. Starting from Nigeria, we will fight against all hackers, forgers and those producing fake certificates.</p>
+</div>
+<div class="section">
+<h2>🛡️ Our Services</h2>
+<div class="services">
+<div class="service-box"><b>✅ Certificate Verification</b><br>Instant verification of academic certificates</div>
+<div class="service-box"><b>✅ Anti-Fake Detection</b><br>We detect and flag fake / forged certificates</div>
+<div class="service-box"><b>✅ QR Code Verification</b><br>Scan QR code on certificate to verify instantly</div>
+<div class="service-box"><b>✅ Institution Database</b><br>Secure database for schools and organizations</div>
+</div>
+</div>
+<div class="section">
+<h2>📍 Our Office Address & Contact</h2>
+<div class="contact-grid">
+<div><b>Head Office:</b><br>Arnaud Afrochaine Verification LTD<br>Lagos / Ogun State, Nigeria<br><br><b>Branch:</b><br>Available Nationwide</div>
+<div><b>Contact Us:</b><br>📞 Phone: +2349132851465<br>📧 Email: arnaudafrochainverification@gmail.com<br>🌐 Website: arnaudafrochaineverification-cyber.github.io<br><br><b>Working Hours:</b><br>Mon - Fri: 8am - 6pm<br>Sat: 9am - 4pm</div>
+</div>
+</div>
+<div class="section">
+<h2>🖼️ Head Office Gallery</h2>
+<p style="text-align:center;font-size:12px;color:#666">Our professional office environment</p>
+<div class="gallery-grid">
+<img src="logo.png" alt="Official Logo">
+<img src="hr-office.jpg" alt="HR Office Main">
+<img src="IMG-20260917-WA1432.jpg" alt="Office 1">
+<img src="IMG-20260919-WA0127.jpg" alt="Main Logo">
+<img src="IMG-20260919-WA9711.jpg" alt="Office">
+<img src="IMG-20260919-WA7762.jpg" alt="HR Office">
+<img src="IMG-20260919-WA8605.jpg" alt="Anti-Fake Unit">
+<img src="IMG-20260919-WA3116.jpg" alt="Certificate Sample">
+<img src="IMG-20260919-WA4522.jpg" alt="Office 2">
+</div>
+</div>
+<footer>
+<b>© 2026 Arnaud Afrochaine Verification LTD</b><br>No.1 Anti-Fake Verification Company in the World<br>📍 Lagos / Ogun State, Nigeria | 📞 +2349132851465 | 📧 arnaudafrochainverification@gmail.com
+</footer>
+<script>
+const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification"};
+firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
+function verifyCert(){
+ const id=document.getElementById('certInput').value.trim();
+ const resDiv=document.getElementById('result');
+ if(!id){resDiv.style.display='block';resDiv.className='error';resDiv.innerHTML='❌ Please Enter Certificate ID';return;}
+ resDiv.style.display='block';resDiv.className='success';resDiv.innerHTML='⏳ Checking Anti-Fake Database...';
+ db.collection("certificates").doc(id).get().then(doc=>{
+  if(doc.exists){
+   const d=doc.data();
+   resDiv.className='success';
+   resDiv.innerHTML=`✅ <b>VERIFIED AUTHENTIC - NOT FAKE</b><br><br><b>Full Name:</b> ${d.fullName||d.studentName||'N/A'}<br><b>Certificate No:</b> ${d.certificateNumber||d.certNumber||id}<br><b>Registration No:</b> ${d.registrationNumber||d.regNo||id}<br><b>Institution:</b> ${d.institution||d.schoolName||'N/A'}<br><b>Course:</b> ${d.course||'N/A'}<br><b>Full Address:</b> ${d.fullAddress||d.address||'N/A'}<br><b>Gender:</b> ${d.gender||'N/A'}<br><b>Date of Birth:</b> ${d.dob||'N/A'}<br><b>Issue Date:</b> ${d.issueDate||'N/A'}<br><b>Grade:</b> ${d.grade||'N/A'}<br><b>Duration:</b> ${d.duration||'N/A'}<br><b>Status:</b> <span style="color:green;font-weight:bold">${d.status||'Authentic - Verified'}</span>`;
+  }else{resDiv.className='error';resDiv.innerHTML=`❌ <b>FAKE DETECTED!</b><br>Certificate ID <b>${id}</b> NOT FOUND.`;}
+ }).catch(e=>{resDiv.className='error';resDiv.innerHTML='❌ Error: '+e.message;});
+}
+window.onload=()=>{
+ const p=new URLSearchParams(window.location.search);
+ const c=p.get('cert')||p.get('id');if(c){document.getElementById('certInput').value=c;verifyCert();}
+}
+</script>
+</body>
+                                                    </html>
