@@ -1,67 +1,50 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin - Arnaud 12 Fields</title>
+<title>Original 12 Fields + QR Corner</title>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<style>body{font-family:Arial;background:#f0f4f8;padding:10px}.card{background:#fff;padding:18px;border-radius:16px;max-width:600px;margin:20px auto}input,select{width:100%;padding:11px;margin:5px 0;border:1px solid #ccc;border-radius:10px;box-sizing:border-box}button{width:100%;padding:14px;background:#0a4d2e;color:#fff;border:none;border-radius:12px;font-weight:bold;margin-top:8px}#idBox{background:#e8f5e9;border:2px dashed #0a4d2e;padding:10px;border-radius:10px;text-align:center;font-weight:900;color:#0a4d2e}#qr{ display:flex;justify-content:center;margin:15px 0}</style>
+<style>
+body{font-family:Arial;background:#f0f4f8;padding:10px}
+.card{background:#fff;padding:20px;border-radius:16px;max-width:600px;margin:auto}
+input,select{width:100%;padding:11px;margin:5px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
+button{width:100%;padding:14px;background:#0a4d2e;color:#fff;border:none;border-radius:10px;font-weight:900;margin-top:10px}
+#ID{padding:12px;background:#0a4d2e;color:#fff;text-align:center;border-radius:8px;font-weight:900;font-size:16px}
+</style>
 </head><body>
-<div id="login" class="card"><h2 style="text-align:center;color:#0a4d2e">🔐 Admin Login</h2><input id="pass" type="password" placeholder="Password"><button onclick="check()">Unlock</button></div>
-<div id="main" class="card" style="display:none">
-<h2 style="text-align:center;color:#0a4d2e">Arnaud Afrochaine - 12 Fields</h2>
-<div id="idBox">ID: <span id="autoID"></span></div>
+<div class="card" id="L"><h3>🔐 Admin Login</h3><input id="pw" type="password" placeholder="Password"><button onclick="if(pw.value=='ARNAUD333649'){L.style.display='none';M.style.display='block';gen()}else alert('Wrong')">Unlock</button></div>
 
-<!-- 12 FIELDS -->
-1. <input id="f1" placeholder="1. Full Name *">
-2. <input id="f2" placeholder="2. Full Address *">
-3. <input id="f3" placeholder="3. Institution / School *">
-4. <input id="f4" placeholder="4. Course Title *">
-5. <input id="f5" placeholder="5. Certificate Number (optional)">
-6. <input id="f6" placeholder="6. Registration / Matric Number">
-7. <input id="f7" type="date" placeholder="7. Date of Birth"><small>7. Date of Birth</small>
-8. <input id="f8" type="date"><small>8. Issue Date</small>
-9. <input id="f9" placeholder="9. Grade / Score e.g. Distinction, 85%">
-10. <input id="f10" placeholder="10. Duration e.g. 6 Months">
-11. <select id="f11"><option value="">11. Gender</option><option>Male</option><option>Female</option><option>Other</option></select>
-12. <select id="f12"><option>Authentic - Verified</option><option>In Progress</option><option>Expired</option></select><small>12. Status</small>
+<div class="card" id="M" style="display:none">
+<h2 style="text-align:center;color:#0a4d2e;margin:0">ORIGINAL CERTIFICATE</h2>
+<p style="text-align:center;font-size:12px;margin-top:2px">12 Fields + QR Code for Corner</p>
+<div id="ID">ID: ...</div>
 
-<button onclick="save()">💾 SAVE + GENERATE QR</button>
-<button onclick="newID()" style="background:#555">🔄 New ID</button>
-<div id="msg"></div>
-<div id="qr"></div>
-<div id="link" style="text-align:center;font-size:11px;word-break:break-all"></div>
-<p style="text-align:center"><a href="index.html">Go to Verify Page</a></p>
+<label>Full Name *</label><input id="f1" placeholder="Full Name">
+<label>Full Address *</label><input id="f2" placeholder="Full Address">
+<label>Institution *</label><input id="f3" placeholder="Institution">
+<label>Course *</label><input id="f4" placeholder="Course">
+<label>Certificate Number</label><input id="f5" placeholder="Auto = ID">
+<label>Registration Number</label><input id="f6" placeholder="Registration Number">
+<label>Date of Birth</label><input id="f7" type="date">
+<label>Issue Date</label><input id="f8" type="date">
+<label>Grade</label><input id="f9" placeholder="Grade e.g. Distinction">
+<label>Duration</label><input id="f10" placeholder="Duration e.g. 6 Months">
+<label>Gender</label><select id="f11"><option value="">Select Gender</option><option>Male</option><option>Female</option></select>
+<label>Status</label><select id="f12"><option>Authentic</option><option>In Progress</option><option>Expired</option></select>
+
+<button onclick="saveCert()">💾 SAVE ORIGINAL + GENERATE QR</button>
+<div id="out" style="margin-top:15px;text-align:center"></div>
 </div>
+
 <script>
-const ADMIN_PASSWORD="ARNAUD333649";
-function check(){if(document.getElementById('pass').value===ADMIN_PASSWORD){document.getElementById('login').style.display='none';document.getElementById('main').style.display='block';newID();}else{alert("Wrong password");}}
-const cfg={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification"};
-firebase.initializeApp(cfg);const db=firebase.firestore();
-let cur="";function gen(){return `AAV-${new Date().getFullYear()}-${Math.floor(100+Math.random()*900)}`;}
-function newID(){cur=gen();document.getElementById('autoID').innerText=cur;document.getElementById('qr').innerHTML="";document.getElementById('msg').innerHTML="";document.getElementById('link').innerHTML="";}
-async function save(){
- const d={
-  id:cur,
-  fullName:document.getElementById('f1').value,
-  address:document.getElementById('f2').value,
-  institution:document.getElementById('f3').value,
-  course:document.getElementById('f4').value,
-  certNo:document.getElementById('f5').value||cur,
-  regNo:document.getElementById('f6').value,
-  dob:document.getElementById('f7').value,
-  issueDate:document.getElementById('f8').value,
-  grade:document.getElementById('f9').value,
-  duration:document.getElementById('f10').value,
-  gender:document.getElementById('f11').value,
-  status:document.getElementById('f12').value,
-  createdAt:new Date().toISOString()
- };
- if(!d.fullName||!d.institution){alert("Fill Full Name and School");return;}
- await db.collection("certificates").doc(cur).set(d);
- const verifyLink = `https://arnaudafrochaineverification.firebaseapp.com/verify.html?id=${cur}`;
- document.getElementById('msg').innerHTML=`<div style="background:#d4edda;padding:10px;border-radius:10px">✅ SAVED: ${cur}<br>${d.fullName}</div>`;
- document.getElementById('qr').innerHTML="";
- new QRCode(document.getElementById('qr'),{text:verifyLink,width:220,height:220});
- document.getElementById('link').innerHTML=`<b>SCAN THIS QR:</b><br>${verifyLink}`;
-}
-</script></body></html>
+// ORIGINAL FIREBASE KEYS - NO HIDE
+const firebaseConfig={
+ apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+ authDomain:"arnaudafrochaineverification.firebaseapp.com",
+ projectId:"arnaudafrochaineverification",
+ storageBucket:"arnaudafrochaineverification.appspot.com"
+};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+let curID="";
+function gen(){curID=`AAV-${new Date().getFullYear()}-${Math.floor(100+Math.random()*900)}
