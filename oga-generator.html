@@ -8,6 +8,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyC3HaW1Xh7pAOnS0Gb0jZ-dO0W1M7c2A9E",
   authDomain: "arnaudafrochaineverification.firebaseapp.com",
@@ -16,78 +17,79 @@ const firebaseConfig = {
   messagingSenderId: "123456789",
   appId: "1:123456789:web:abcdef"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
 window.autoGenID = function(){
   const year = new Date().getFullYear();
   const rand = Math.floor(100000 + Math.random()*900000);
   document.getElementById('certId').value = `AAC/${year}/${rand}`;
 }
+
 window.saveCert = async function(){
   const certId = document.getElementById('certId').value.trim();
   const fullName = document.getElementById('fullName').value.trim();
   const course = document.getElementById('course').value.trim();
-  if(!fullName){ alert("Fill Name"); return; }
+  
+  if(!fullName){ alert("Abeg Fill Full Name"); return; }
+  if(!course){ alert("Abeg Fill Course"); return; }
+  
   const verifyLink = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?cert=${certId}`;
-  document.getElementById('saveBtn').innerText = "Saving...";
+  
+  document.getElementById('saveBtn').innerText = "Saving... ⏳";
+  document.getElementById('saveBtn').disabled = true;
+
   try{
     await setDoc(doc(db, "certificates", certId), {
-      certificateNumber: certId, fullName: fullName, course: course,
+      certificateNumber: certId,
+      certNo: certId,
+      certId: certId,
+      id: certId,
+      certificateId: certId,
+      name: fullName,
+      fullName: fullName,
+      studentName: fullName,
+      course: course,
+      courseName: course,
+      school: document.getElementById('institution').value,
       institution: document.getElementById('institution').value,
       certificateType: document.getElementById('certType').value,
+      type: document.getElementById('certType').value,
       issueDate: document.getElementById('issueDate').value,
       expiryDate: document.getElementById('expiryDate').value,
       grade: document.getElementById('grade').value,
+      score: document.getElementById('grade').value,
       duration: document.getElementById('duration').value,
       status: document.getElementById('status').value,
       issuedBy: document.getElementById('issuedBy').value,
       note: document.getElementById('note').value,
-      verifyLink: verifyLink, timestamp: new Date()
+      verifyLink: verifyLink,
+      timestamp: new Date()
     });
+
     document.getElementById('formBox').style.display="none";
     document.getElementById('successBox').style.display="block";
     document.getElementById('savedId').innerText = certId;
     document.getElementById('qrcode').innerHTML="";
-    new QRCode(document.getElementById("qrcode"), {text: verifyLink, width:220, height:220});
+    new QRCode(document.getElementById("qrcode"), {
+        text: verifyLink,
+        width: 220,
+        height: 220,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
     document.getElementById('qrLink').innerText = verifyLink;
-  }catch(e){ alert(e.message); }
+
+  }catch(e){
+    alert("Error: " + e.message);
+    document.getElementById('saveBtn').innerText = "💾 SAVE & GENERATE QR";
+    document.getElementById('saveBtn').disabled = false;
+  }
 }
 </script>
+
 <style>
-body{font-family:Arial;background:#f4f6f9;padding:12px}
-.box{max-width:500px;margin:auto;background:white;padding:18px;border-radius:12px}
-label{font-size:13px;font-weight:bold;margin-top:10px;display:block}
-input, select, textarea{width:100%;padding:12px;margin:6px 0 10px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
-button{width:100%;padding:14px;background:#0b3a5f;color:white;border:none;border-radius:10px;font-weight:bold}
-#certId{background:#e8f5e9;font-weight:bold;color:#0b7a3e;border:2px solid #0b7a3e}
-#qrcode{display:flex;justify-content:center;margin:15px 0;padding:15px;background:white;border:2px dashed #0b7a3e;border-radius:10px}
-</style>
-</head>
-<body>
-<script>
-if(prompt("ENTER OGA CODE:")!=="ARNAUD333649"){ alert("WRONG CODE"); location.href="https://google.com"; }
-</script>
-<div class="box" id="formBox">
-<h2 style="text-align:center">Admin - Generate Certificate</h2>
-<label>Certificate ID * (Auto)</label><input id="certId" readonly>
-<label>Full Name *</label><input id="fullName" placeholder="John Doe">
-<label>Course *</label><input id="course" placeholder="Cyber Security">
-<label>Institution</label><input id="institution" value="Arnaud Afrochaine Verification Ltd">
-<label>Certificate Type</label><select id="certType"><option>Certificate</option><option>Diploma</option></select>
-<label>Issue Date</label><input id="issueDate" type="date">
-<label>Expiry Date</label><input id="expiryDate" type="date" value="2030-09-19">
-<label>Grade / Score</label><input id="grade" placeholder="20 / Excellent">
-<label>Duration</label><input id="duration" placeholder="6 months">
-<label>Status</label><select id="status"><option>Completed</option><option>In Progress</option></select>
-<label>Issued By</label><input id="issuedBy" value="Registrar ARNAUDAFROCHAINVERIFICATIONLTD">
-<label>Note</label><textarea id="note"></textarea>
-<button id="saveBtn" onclick="saveCert()">💾 SAVE & GENERATE QR</button>
-</div>
-<div class="box" id="successBox" style="display:none;text-align:center">
-<h2 style="color:green">✅ SAVED!</h2><p><b>ID:</b> <span id="savedId"></span></p>
-<div id="qrcode"></div><div id="qrLink" style="font-size:11px;word-break:break-all"></div>
-<button onclick="location.reload()" style="background:#555;margin-top:10px">Generate Another</button>
-</div>
-<script>window.onload=function(){ autoGenID(); document.getElementById('issueDate').valueAsDate = new Date(); }</script>
-</body>
-</html>
+body{font-family:Arial,sans-serif;background:#f4f6f9;padding:12px;margin:0}
+.box{max-width:500px;margin:20px auto;background:white;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,
