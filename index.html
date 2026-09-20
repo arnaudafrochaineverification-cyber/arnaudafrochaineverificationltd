@@ -1,82 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arnaud - 11 Fill Generate</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-  authDomain: "arnaudafrochaineverification.firebaseapp.com",
-  projectId: "arnaudafrochaineverification",
-  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
-  messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-function makeId(){ return "AAC-" + new Date().getFullYear() + "-" + Math.floor(100000 + Math.random()*900000); }
-window.generate = async function(){
-  const fullName = document.getElementById('f1').value.trim();
-  if(!fullName){ alert("Put Full Name!"); return; }
-  const id = makeId();
-  document.getElementById('show').innerHTML = "⏳ Saving " + id + "...";
-  const data = {
-    fullName: fullName,
-    course: document.getElementById('f2').value || "N/A",
-    institution: document.getElementById('f3').value || "Arnaud Afrochaine Verification Ltd",
-    duration: document.getElementById('f4').value || "N/A",
-    grade: document.getElementById('f5').value || "Excellent",
-    certificateType: document.getElementById('f6').value || "Training Certificate",
-    issueDate: document.getElementById('f7').value || new Date().toLocaleDateString(),
-    email: document.getElementById('f8').value || "N/A",
-    phone: document.getElementById('f9').value || "N/A",
-    location: document.getElementById('f10').value || "Port Harcourt",
-    issuedBy: document.getElementById('f11').value || "Arnaud Afrochaine - No.1 Anti-Fake",
-    expiryDate: "No Expiry",
-    status: "Verified",
-    createdAt: new Date().toISOString()
-  };
-  try{
-    await setDoc(doc(db, "certificates", id), data);
-    const link = "https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?cert=" + encodeURIComponent(id);
-    document.getElementById('show').innerHTML = `<div style="background:#e8f5e9;border:2px solid green;padding:15px;border-radius:10px;text-align:center"><h3 style="color:green">✅ SAVED! 11 FILL DONE!</h3><p><b>ID:</b> ${id}<br><b>Name:</b> ${fullName}<br><b>Email:</b> ${data.email}<br><b>Phone:</b> ${data.phone}</p><div id="qr" style="display:flex;justify-content:center;margin:12px 0"></div><p style="font-size:10px;word-break:break-all">${link}</p><a href="${link}" target="_blank"><button style="background:#0b3a5f">TEST VERIFY - FULL NAME GO SHOW</button></a><button onclick="downQR()" style="background:#ff6b00;margin-top:8px">DOWNLOAD QR</button><button onclick="location.reload()" style="background:#666;margin-top:8px">NEXT CERTIFICATE</button></div>`;
-    new QRCode(document.getElementById("qr"), {text: link, width: 210, height: 210, correctLevel: QRCode.CorrectLevel.H});
-    window.myId = id;
-  }catch(e){ document.getElementById('show').innerHTML = "<p style=color:red>"+e.message+"</p>"; }
-}
-window.downQR = function(){ const c=document.querySelector("#qr canvas"); const a=document.createElement("a"); a.download="QR-"+window.myId+".png"; a.href=c.toDataURL(); a.click(); }
-</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ARNAUD AFROCHAINE VERIFICATION LTD</title>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 <style>
-body{font-family:Arial;background:#f5f5f5;margin:0}
-.top{background:#0b3a5f;color:#fff;padding:12px;text-align:center}
-.box{max-width:520px;margin:12px auto;background:#fff;padding:16px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-input{width:100%;padding:11px;margin:5px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
-label{font-size:11px;font-weight:bold;color:#0b3a5f;margin-top:6px;display:block}
-button{width:100%;padding:13px;background:#0b4d2e;color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:12px;font-size:15px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial;background:#f5f7fa}
+.top{font-size:11px;background:#000;color:#fff;text-align:center;padding:5px}
+.head{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:10px 12px;position:sticky;top:0;box-shadow:0 2px 5px rgba(0,0,0,.1)}
+.head b{color:#0b4d2e;font-size:13px}
+.head span{color:#c00;font-size:9px;display:block}
+.head a{color:#0b4d2e;font-weight:bold;text-decoration:none;margin-left:10px;font-size:13px}
+.hero{background:linear-gradient(180deg,#0b3a2a,#0d5a3a);color:#fff;text-align:center;padding:35px 18px 45px;border-radius:0 0 18px 18px}
+.hero h1{font-size:28px;font-weight:900}
+.pill{background:#d32f2f;color:#fff;padding:7px 15px;border-radius:20px;font-size:11px;display:inline-block;margin:12px 0;font-weight:bold}
+.card{max-width:600px;margin:-25px auto 15px;background:#fff;border-radius:18px;padding:18px;box-shadow:0 8px 20px rgba(0,0,0,.15)}
+.badge{background:#fde8e8;color:#c00;font-size:10px;padding:7px;border-radius:20px;text-align:center;display:block;border:1px solid #f5c2c2}
+.card h2{font-size:18px;margin:12px 0}
+.input{width:100%;padding:14px;border:2px solid #ddd;border-radius:10px;font-size:15px}
+.btn{width:100%;padding:14px;background:#0b4d2e;color:#fff;border:none;border-radius:10px;font-weight:900;margin-top:10px}
+.ok{background:#e8f5e9;border:2px solid #2e7d32;border-radius:12px;padding:14px;margin-top:12px}
+.bad{background:#ffebee;border:2px solid #c00;border-radius:12px;padding:14px;margin-top:12px;text-align:center}
+.mission{max-width:600px;margin:15px auto;background:linear-gradient(135deg,#0a2f1f,#8b1a1a);color:#fff;border-radius:16px;padding:20px;text-align:center}
+.sec{max-width:600px;margin:15px auto;background:#fff;border-radius:16px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.sec h3{color:#0b4d2e;text-align:center;margin-bottom:10px}
 </style>
 </head>
 <body>
-<div class="top"><b>ARNAUD AFROCHAINE</b><br><span style="font-size:11px;color:#ff9">11-FILL AUTO ID + QR - NO.1 ANTI-FAKE</span></div>
-<div class="box">
-<h3 style="text-align:center;margin:0 0 10px 0">Generate Certificate (11 Fill)</h3>
-<label>1. Full Name *</label><input id="f1" placeholder="e.g John Doe">
-<label>2. Course</label><input id="f2" placeholder="e.g Cyber Security">
-<label>3. Institution</label><input id="f3" placeholder="e.g Arnaud Afrochaine Ltd">
-<label>4. Duration</label><input id="f4" placeholder="e.g 3 Months">
-<label>5. Grade</label><input id="f5" placeholder="e.g Excellent">
-<label>6. Certificate Type</label><input id="f6" placeholder="e.g Training Certificate">
-<label>7. Issue Date</label><input id="f7" type="date">
-<label>8. Student Email</label><input id="f8" placeholder="e.g john@gmail.com">
-<label>9. Phone Number</label><input id="f9" placeholder="e.g 08012345678">
-<label>10. Location / Center</label><input id="f10" placeholder="e.g Port Harcourt">
-<label>11. Issued By</label><input id="f11" placeholder="e.g Arnaud Afrochaine">
-<button onclick="generate()">GENERATE 11-FILL + AUTO ID + QR</button>
-<div id="show" style="margin-top:15px"></div>
-<p style="font-size:10px;text-align:center;color:green;margin-top:10px">🔒 Auto ID like AAC-2026-847392 | Full Name + 11 fill go show when scan QR!</p>
+<div class="top">📧 arnaudafrochainverification@gmail.com | +2349132851465 WhatsApp</div>
+<div class="head"><div><b>ARNAUD AFROCHAINE<br>VERIFICATION LTD</b><span>🚫 NO.1 ANTI-FAKE WORLDWIDE</span></div><div><a href="admin.html">Admin</a><a href="#mission">Mission</a></div></div>
+
+<div class="hero">
+<h1>STOP FAKE<br>CERTIFICATES</h1>
+<div class="pill">NUMBER ONE ANTI-FAKE VERIFICATION IN THE WORLD</div>
+<p style="font-size:13px;opacity:.9">We deal with fake certificates. Our goal is to stop fake certificates for all the global. We start from Nigeria first to deal with all the hackers and forgers that forge fake certificates. We need to stop all this things.</p>
 </div>
-</body>
-</html>
+
+<div class="card">
+<span class="badge">🛡️ SECURE • OFFICIAL • FIREBASE • ANTI-FAKE SYSTEM • +2349132851465</span>
+<h2>Verify Certificate Authenticity</h2>
+<input id="cid" class="input" placeholder="Enter Certificate ID e.g. AAV-2025-001">
+<button class="btn" onclick="verifyNow()">Verify Now - Stop Fake</button>
+<div id="out"></div>
+<p style="font-size:11px;text-align:center;margin-top:10px">Report Fake? <a href="https://wa.me/2349132851465" style="color:#25d366;font-weight:bold;text-decoration:none">WhatsApp: +2349132851465</a></p>
+</div>
+
+<div class="mission" id="mission">
+<h2>🎯 OUR MISSION - NUMBER ONE IN THE WORLD</h2>
+<p><b>We deal with fake certificates.</b></p>
+<p style="font-size:13px;margin-top:8px;line-height:1.6">Our goal is to stop the fake, the fake certificates for all the global. We start from Nigeria first to deal with all the hackers and forgers that forge fake certificates. We need to stop all this things.<br><br>Our name will be NUMBER ONE for the whole world.<br><br>Arnaud Afrochaine Verification LTD - Number One Anti-Fake Verification Company in the World.</p>
+</div>
+
+<div class="sec">
+<h3>🏢 About Us</h3>
+<p style="font-size:13px;line-height:1.7">Arnaud Afrochaine Verification LTD is a duly registered verification and authentication company in Nigeria with African Roots and Global Vision. We are the leading force in the fight against fake certificates and fraudulent documents.<br><br>We are building the world's most trusted verification platform. Starting from Nigeria, we are expanding globally to eliminate certificate forgery. Every certificate verified through our official portal is secured by Firebase and real-time QR authentication - impossible to hack or forge.</p>
+</div>
+
+<div class="sec">
+<h3>📍 Head Office - Lagos / Ogun State, Nigeria</h3>
+<p style="font-size:13px;line-height:1.7;text-align:center">Primary: arnaudafrochainverification@gmail.com<br>Official: verify@arnaudafrochaineverificationltd.com<br>Phone/WhatsApp: +2349132851465<br>Mission: Stop Fake Certificates - Number One in the World<br>African Roots, Global Vision</p>
+</div>
+
+<script>
+const cfg={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification"};
+firebase.initializeApp(cfg);const db=firebase.firestore();
+async function verifyNow(){
+ let id=document.getElementById('cid').value.trim();
+ if(!id)return alert("Enter ID");
+ id=decodeURIComponent(id);
+ out.innerHTML="⏳ Checking "+id+"...";
+ try{
+  const s=await db.collection("certificates").doc(id).get();
+  if(s.exists){
+   const d=s.data();
+   const name=d.fullName||d.Name||d.name||d.studentName||"N/A";
+   const cert=d.certNo||d.CertNo||id;
+   const school=d.institution||d.School||d.school||d.course||"N/A";
+   const course=d.course||"";
+   const grade=d.grade||"";
+   const date=d.issue
