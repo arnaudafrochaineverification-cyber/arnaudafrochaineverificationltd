@@ -1,38 +1,24 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arnaud Verify - Anti-Fake</title>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<style>body{font-family:sans-serif;background:#e8f5e9;padding:10px}.box{background:#fff;padding:20px;border-radius:12px;max-width:550px;margin:auto;border-top:8px solid #0a4d2e}input{width:100%;padding:14px;border:2px solid #0a4d2e;border-radius:10px}button{width:100%;padding:14px;background:#0a4d2e;color:#fff;border:none;border-radius:10px;font-weight:bold;margin-top:12px}#result{margin-top:20px;padding:15px;border-radius:10px;display:none}.ok{background:#d4edda;border:2px solid #0a4d2e}.fail{background:#f8d7da}.row{padding:8px 0;border-bottom:1px solid #eee;display:flex;justify-content:space-between}.row b{color:#0a4d2e}</style>
-</head><body>
-<div class="box">
-<h2 style="text-align:center;color:#0a4d2e">🌍 ARNAUD VERIFICATION<br><small>ANTI-FAKE PORTAL</small></h2>
-<input id="certInput" placeholder="Enter Certificate Number e.g. 2026">
-<button onclick="verifyNow()">🔍 VERIFY NOW</button>
-<div id="result"></div>
-</div>
-<script>
-const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification"};
-firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
-const qp=new URLSearchParams(window.location.search).get('id')||new URLSearchParams(window.location.search).get('cert')||'';
-if(qp){document.getElementById('certInput').value=qp;setTimeout(verifyNow,500);}
-async function verifyNow(){
- const id=document.getElementById('certInput').value.trim();const r=document.getElementById('result');
- if(!id){alert('Enter number');return;}r.style.display='block';r.innerHTML='⏳ Checking '+id+'...';r.className='';
- try{const doc=await db.collection('certificates').doc(id).get();
- if(!doc.exists){r.className='fail';r.innerHTML=`<h2 style="color:red;text-align:center">❌ NOT FOUND</h2><p style="text-align:center">ID <b>${id}</b> na FAKE - e no dey for database</p>`;return;}
- const d=doc.data();r.className='ok';r.innerHTML=`<h2 style="color:#0a4d2e;text-align:center">✅ VERIFIED AUTHENTIC</h2>
- <div class="row"><b>Full Name:</b><span>${d.fullName||d.name||'N/A'}</span></div>
- <div class="row"><b>Cert No:</b><span>${d.certificateNumber||d.certNo||id}</span></div>
- <div class="row"><b>Reg No:</b><span>${d.registrationNumber||d.regNo||'N/A'}</span></div>
- <div class="row"><b>Institution:</b><span>${d.institution||'N/A'}</span></div>
- <div class="row"><b>Course:</b><span>${d.course||'N/A'}</span></div>
- <div class="row"><b>Address:</b><span>${d.fullAddress||d.address||'N/A'}</span></div>
- <div class="row"><b>Gender:</b><span>${d.gender||'N/A'}</span></div>
- <div class="row"><b>DOB:</b><span>${d.dob||'N/A'}</span></div>
- <div class="row"><b>Issue Date:</b><span>${d.issueDate||'N/A'}</span></div>
- <div class="row"><b>Grade:</b><span>${d.grade||'N/A'}</span></div>
- <div class="row"><b>Duration:</b><span>${d.duration||'N/A'}</span></div>
- <div class="row"><b>Status:</b><span style="color:green;font-weight:bold">${d.status||'Authentic'}</span></div>`;}catch(e){r.className='fail';r.innerHTML='❌ '+e.message;}
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Verify Certificate - ARNAUD</title>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<style>body{font-family:Arial;background:#e8f5e9;padding:15px} .box{background:white;max-width:500px;margin:30px auto;padding:25px;border-radius:15px;text-align:center} .auth{color:green;font-size:24px;font-weight:bold} .fake{color:red;font-size:24px;font-weight:bold}</style>
+</head><body><div class="box">
+<h2 style="color:#0a3d1a">ARNAUD AFROCHAINE VERIFICATION LTD</h2><p id="loading">Checking certificate...</p>
+<div id="result" style="display:none">
+<h3>Certificate Found:</h3>
+<p><b>Full Name:</b> <span id="r1"></span></p><p><b>Institution:</b> <span id="r2"></span></p><p><b>Course:</b> <span id="r3"></span></p><p><b>Cert No:</b> <span id="r4"></span></p><p><b>Date:</b> <span id="r5"></span></p><p><b>Grade:</b> <span id="r6"></span></p>
+<h2 id="status" class="auth"></h2>
+<p style="font-size:12px">We VERIFY, we don't ISSUE certificates. Sango Ota, Ogun State</p>
+</div><div id="notfound" style="display:none"><h2 class="fake">❌ NOT FOUND / FAKE</h2><p>This certificate number no dey for our database.</p></div>
+</div><script>
+const firebaseConfig = { apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs", authDomain: "arnaudafrochaineverification.firebaseapp.com", projectId: "arnaudafrochaineverification", storageBucket: "arnaudafrochaineverification.firebasestorage.app", messagingSenderId: "268502946630", appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47" };
+firebase.initializeApp(firebaseConfig); const db=firebase.firestore();
+let id=new URLSearchParams(window.location.search).get('id');
+if(!id){document.getElementById('loading').innerText="No certificate ID in link";} else {
+ db.collection("verifications").doc(id).get().then(doc=>{
+   if(doc.exists){ let d=doc.data(); r1.innerText=d.fullName; r2.innerText=d.institution; r3.innerText=d.course; r4.innerText=d.certNum; r5.innerText=d.issueDate; r6.innerText=d.grade; status.innerText="✅ "+d.status; result.style.display='block'; loading.style.display='none'; } else { notfound.style.display='block'; loading.style.display='none'; }
+ });
 }
 </script></body></html>
