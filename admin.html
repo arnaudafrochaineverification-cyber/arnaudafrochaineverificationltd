@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin - ARNAUD OLD LINK RESTORED</title>
+<title>Admin - ARNAUD AFROCHAINE BLACK QR</title>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
@@ -14,15 +14,15 @@ h2{text-align:center;color:#0a4d2e}
 .sub{text-align:center;color:#d4af37;font-weight:bold;font-size:11px;margin-bottom:15px}
 label{font-weight:bold;color:#0a4d2e;display:block;margin-top:12px;font-size:13px}
 input,select{width:100%;padding:13px;border:2px solid #c8e6c9;border-radius:10px;margin-top:5px;font-size:14px;background:#f1f8e9;box-sizing:border-box}
-button{width:100%;padding:15px;background:#0a4d2e;color:gold;border:none;border-radius:12px;font-weight:bold;margin-top:18px;font-size:16px;cursor:pointer}
-.out{margin-top:20px;border:2px solid #0a4d2e;padding:15px;border-radius:12px;display:none;text-align:center;background:#f9fbe7}
+button{width:100%;padding:15px;background:#0a4d2e;color:white;border:none;border-radius:12px;font-weight:bold;margin-top:18px;font-size:16px;cursor:pointer}
+.out{margin-top:20px;border:2px solid #000;padding:15px;border-radius:12px;display:none;text-align:center;background:#fff}
 #msg{text-align:center;font-weight:bold;margin-top:12px;padding:10px;border-radius:8px}
 </style>
 </head>
 <body>
 <div class="card">
-<h2>Admin - OLD LINK BACK</h2>
-<div class="sub">ARNAUD AFROCHAINE VERIFICATION LTD - OLD ?cert= LINK RESTORED</div>
+<h2>Admin - BLACK QR</h2>
+<div class="sub">ARNAUD AFROCHAINE VERIFICATION LTD - PURE BLACK QR</div>
 <label>1. Full Name *</label><input id="f1" placeholder="SAGBOHAN OBINNA">
 <label>2. Institution *</label><input id="f2" value="Glory of God">
 <label>3. Course *</label><input id="f3" placeholder="Security Training">
@@ -30,13 +30,13 @@ button{width:100%;padding:15px;background:#0a4d2e;color:gold;border:none;border-
 <label>5. Issue Date *</label><input id="f5" type="date">
 <label>6. Grade</label><input id="f6" placeholder="Distinction">
 <label>7. Status *</label><select id="f7"><option value="AUTHENTIC">AUTHENTIC</option><option value="FAKE">FAKE</option></select>
-<button onclick="save()">SAVE + GENERATE QR - OLD LINK</button>
+<button onclick="save()">SAVE + GENERATE BLACK QR</button>
 <div id="out" class="out">
-<h3 id="o_name" style="color:#0a4d2e"></h3>
-<p>Cert: <b id="o_cert" style="color:#b8960c"></b></p>
+<h3 id="o_name" style="color:#000"></h3>
+<p>Cert: <b id="o_cert"></b></p>
 <div id="qrcode" style="display:flex;justify-content:center;margin:15px"></div>
-<p id="link" style="font-size:10px;color:blue;word-break:break-all;background:white;padding:8px"></p>
-<button onclick="window.print()" style="background:#c62828;margin-top:10px">PRINT QR</button>
+<p id="link" style="font-size:10px;color:blue;word-break:break-all;background:#eee;padding:8px"></p>
+<button onclick="window.print()" style="background:#000;color:white;margin-top:10px">PRINT BLACK QR</button>
 </div>
 <p id="msg"></p>
 </div>
@@ -55,11 +55,11 @@ let status=document.getElementById('f7').value;
 if(!n||!cert||!inst||!course||!date){alert('Fill all *');return;}
 let msgBox=document.getElementById('msg');msgBox.innerText='Saving...';msgBox.style.color='orange';
 db.collection("certificates").doc(cert).set({studentName:n,fullname:n,certNumber:cert,certnum:cert,id:cert,schoolName:inst,institution:inst,course:course,issueDate:date,issuedate:date,grade:grade,status:status,createdAt:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
-msgBox.innerText='✅ SAVED! OLD LINK RESTORED! QR go work now!';msgBox.style.color='green';msgBox.style.background='#e8f5e9';
+msgBox.innerText='✅ SAVED! BLACK QR GENERATED!';msgBox.style.color='green';msgBox.style.background='#e8f5e9';
 document.getElementById('out').style.display='block';document.getElementById('o_name').innerText=n;document.getElementById('o_cert').innerText=cert;document.getElementById('qrcode').innerHTML='';
-// OLD LINK BACK - AS YOU REQUEST
-let link="https://arnaudafrochaineverification-cyber.github.io/?cert="+encodeURIComponent(cert);
-new QRCode(document.getElementById('qrcode'),{text:link,width:200,height:200,colorDark:"#0a4d2e",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});
+let link="https://arnaudafrochaineverification-cyber.github.io/?id="+encodeURIComponent(cert);
+// PURE BLACK QR - NO GREEN
+new QRCode(document.getElementById('qrcode'),{text:link,width:200,height:200,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});
 document.getElementById('link').innerText=link;
 }).catch(e=>{msgBox.innerText='Error: '+e.message;msgBox.style.color='red';});
 }
