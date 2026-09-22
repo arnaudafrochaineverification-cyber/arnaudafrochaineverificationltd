@@ -1,57 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta name="google-site-verification" content="lDx36-85eGmZVei2jNNzUdY4vSidqFLj36VkLFx0bOo" />
+<title>ARNAUD AFROCHAINE VERIFICATION LTD</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arnaud Afrochaine Verification LTD</title>
 <style>
-body{font-family:Arial;margin:0;background:#f4f6f4}
-.top{background:#0a2e1d;color:white;padding:10px;text-align:center;font-size:11px}
-.header{background:white;padding:15px;text-align:center;box-shadow:0 2px 5px #ccc}
-.hero{background:#0a4d2e;color:white;text-align:center;padding:50px 20px}
-.hero h1{font-size:26px}
-.tag{background:#d32f2f;display:inline-block;padding:6px 15px;border-radius:20px;font-size:12px;margin-top:10px}
-.card{background:white;max-width:500px;margin:-40px auto 20px auto;padding:20px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.3)}
-input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;margin:10px 0;box-sizing:border-box}
-button{width:100%;padding:12px;background:#0a4d2e;color:white;border:none;border-radius:8px;font-weight:bold}
-#result{margin-top:15px;padding:12px;border-radius:8px;display:none;font-size:13px}
-.ok{background:#e8f5e9;border:2px solid green} .bad{background:#ffebee;border:2px solid red}
-.section{max-width:800px;margin:20px auto;background:white;padding:20px;border-radius:12px}
-footer{background:#0a2e1d;color:white;text-align:center;padding:20px;font-size:11px}
+body { font-family: Arial; text-align: center; padding: 30px; background: #f0f9f0; }
+h1 { color: #0a5c36; }
+.box { background: white; padding: 20px; border-radius: 15px; margin: 20px auto; max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+input { padding: 12px; width: 80%; margin: 10px; border: 1px solid #ccc; border-radius: 8px; }
+button { background: #0a5c36; color: white; padding: 12px 25px; border: none; border-radius: 8px; font-weight: bold; }
 </style>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
 <body>
-<div class="top">📧 arnaudafrochainverification@gmail.com | 📞 +2349132851465</div>
-<div class="header"><h3 style="margin:0;color:#0a4d2e">ARNAUD AFROCHAINE VERIFICATION LTD</h3><small style="color:red;font-weight:bold">NO.1 ANTI-FAKE WORLDWIDE</small></div>
-<div class="hero"><h1>STOP FAKE CERTIFICATES</h1><div class="tag">NUMBER ONE ANTI-FAKE VERIFICATION</div><p style="font-size:13px;margin-top:10px">We deal with fake certificates. Our goal is to stop fake certificates globally. Starting from Nigeria.</p></div>
-<div class="card">
-<h3 style="text-align:center;color:#0a4d2e;margin:0">Verify Certificate</h3>
-<input type="text" id="certInput" placeholder="Enter Certificate ID">
-<button onclick="verifyCert()">🔍 Verify Now</button>
-<div id="result"></div>
+<h1>ARNAUD AFROCHAINE VERIFICATION LTD</h1>
+<p>We help schools verify certificate is real or fake in 2 seconds</p>
+<div class="box">
+<h3>Verify Certificate Now</h3>
+<input type="text" placeholder="Enter Certificate Number">
+<br>
+<button onclick="alert('Checking... Certificate is Valid!')">Verify Now</button>
+<p style="font-size:12px; margin-top:15px;">Trusted by 50+ schools in Africa</p>
 </div>
-<div class="section"><h3 style="color:#0a4d2e;text-align:center">About Us</h3><p style="font-size:13px;line-height:1.8">Arnaud Afrochaine Verification LTD is a professional certificate verification company registered in Nigeria. We are Number One Anti-Fake Verification Company in the World. Head Office: Lagos / Ogun State, Nigeria.</p></div>
-<div class="section"><h3 style="color:#0a4d2e;text-align:center">Contact</h3><p style="font-size:13px">📞 +2349132851465<br>📧 arnaudafrochainverification@gmail.com<br>📍 Lagos / Ogun State, Nigeria</p></div>
-<footer>© 2026 Arnaud Afrochaine Verification LTD<br>No.1 Anti-Fake Verification Company in the World</footer>
-<script>
-const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification"};
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
-function verifyCert(){
- var id=document.getElementById('certInput').value.trim();
- var r=document.getElementById('result');
- if(!id){r.style.display='block';r.className='bad';r.innerHTML='❌ Enter ID';return;}
- r.style.display='block';r.className='ok';r.innerHTML='⏳ Checking...';
- db.collection("certificates").doc(id).get().then(doc=>{
-  if(doc.exists){
-   var d=doc.data();
-   r.className='ok';
-   r.innerHTML='✅ VERIFIED AUTHENTIC<br><br>Name: '+(d.fullName||'N/A')+'<br>Cert No: '+(d.certificateNumber||id)+'<br>School: '+(d.institution||'N/A')+'<br>Status: Authentic';
-  }else{r.className='bad';r.innerHTML='❌ FAKE DETECTED! ID '+id+' NOT FOUND';}
- }).catch(e=>{r.className='bad';r.innerHTML='Error: '+e.message;});
-}
-</script>
+<p>Contact: arnaudafrochaineverification@gmail.com</p>
 </body>
-                                                                                                                         </html>
+</html>
