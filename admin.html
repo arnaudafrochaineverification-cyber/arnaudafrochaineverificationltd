@@ -1,52 +1,68 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Admin - ARNAUD</title>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin - ARNAUD</title>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<style>body{font-family:Arial;background:#e8f5e9;padding:10px;margin:0}.login-box{background:white;max-width:400px;margin:80px auto;padding:30px;border-radius:20px;text-align:center}.card{background:white;border-radius:15px;padding:20px;max-width:550px;margin:auto;display:none}h1{color:#0a3d1a;text-align:center;font-size:22px}label{font-weight:bold;color:#0a3d1a;display:block;margin-top:14px;font-size:14px}input,select{width:100%;padding:13px;border:1.5px solid #ccc;border-radius:10px;margin-top:5px;box-sizing:border-box}.btn{background:#0a3d1a;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;margin-top:20px;cursor:pointer}.slip{margin-top:25px;border:3px solid #0a3d1a;padding:20px;border-radius:10px}</style>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>body{font-family:Arial;background:#e8f5e9;padding:15px}.card{background:white;max-width:520px;margin:10px auto;padding:20px;border-radius:16px;box-shadow:0 4px 10px rgba(0,0,0,.1)}label{font-weight:bold;color:#0a4d2e;display:block;margin-top:12px;font-size:13px}input,select{width:100%;padding:13px;border:2px solid #c8e6c9;border-radius:10px;margin-top:5px;font-size:14px;background:#f1f8e9}button{width:100%;padding:15px;background:#0a4d2e;color:white;border:none;border-radius:12px;font-weight:bold;margin-top:18px;font-size:16px;cursor:pointer}.out{margin-top:20px;border:2px solid #0a4d2e;padding:15px;border-radius:12px;display:none;text-align:center;background:#f9fbe7}#msg{text-align:center;font-weight:bold;margin-top:10px}</style>
 </head><body>
-<div id="login" class="login-box">
-<h2>ARNAUD AFROCHAINE VERIFICATION LTD</h2>
-<h3>🔒 Admin Login</h3>
-<input type="password" id="codeInput" placeholder="Enter secret code">
-<button class="btn" onclick="unlock()">UNLOCK</button>
-<p id="err" style="color:red;display:none">Wrong code! Use ARNAUD333649</p>
-</div>
-<div id="admin" class="card">
-<h1>ARNAUD AFROCHAINE VERIFICATION LTD</h1>
-<p style="text-align:center">Sango Ota - 7 FIELDS + QR</p>
-<label>1. Full Name</label><input id="fullname">
-<label>2. Institution</label><input id="institution">
-<label>3. Course</label><input id="course">
-<label>4. Certificate Number</label><input id="certnum" value="AAV-2026-">
-<label>5. Issue Date</label><input id="issuedate" type="date">
-<label>6. Grade</label><input id="grade">
-<label>7. Status</label><select id="status"><option>AUTHENTIC</option><option>FAKE - NOT FOUND</option></select>
-<button class="btn" style="background:#2e7d32" onclick="saveData()">💾 SAVE + GENERATE QR</button>
-<div id="output" class="slip" style="display:none">
-<h3 style="text-align:center;color:#0a3d1a">Verification Slip</h3>
-<p><b>Name:</b> <span id="o_name"></span></p><p><b>Institution:</b> <span id="o_inst"></span></p><p><b>Course:</b> <span id="o_course"></span></p><p><b>Cert No:</b> <span id="o_cert"></span></p><p><b>Date:</b> <span id="o_date"></span></p><p><b>Grade:</b> <span id="o_grade"></span></p><p><b>Status:</b> <b style="color:green"><span id="o_status"></span></b></p>
+<div class="card">
+<h2 style="text-align:center;color:#0a4d2e">Sango Ota - 7 FIELDS + QR</h2>
+<label>1. Full Name</label><input id="f1" value="IDOHOU ODJOUMICHI">
+<label>2. Institution</label><input id="f2" value="Glory of God">
+<label>3. Course</label><input id="f3" value="Security">
+<label>4. Certificate Number</label><input id="f4" value="AAV1234">
+<label>5. Issue Date</label><input id="f5" type="date" value="2026-09-10">
+<label>6. Grade</label><input id="f6" value="20">
+<label>7. Status</label><select id="f7"><option>AUTHENTIC</option><option>FAKE</option></select>
+<button onclick="save()">💾 SAVE + GENERATE QR</button>
+<div id="out" class="out">
+<h3 id="o_name" style="color:#0a4d2e"></h3>
+<p>Cert: <b id="o_cert"></b></p>
 <div id="qrcode" style="display:flex;justify-content:center;margin:15px"></div>
-<button class="btn" onclick="window.print()">🖨️ PRINT</button>
-<p id="link" style="font-size:10px;word-break:break-all"></p>
-</div></div>
+<p id="link" style="font-size:10px;color:blue;word-break:break-all"></p>
+<button onclick="window.print()" style="background:#c62828;margin-top:10px">🖨️ PRINT</button>
+</div>
+<p id="msg"></p>
+</div>
 <script>
-const firebaseConfig = { apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs", authDomain: "arnaudafrochaineverification.firebaseapp.com", projectId: "arnaudafrochaineverification", storageBucket: "arnaudafrochaineverification.firebasestorage.app", messagingSenderId: "268502946630", appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47" };
-firebase.initializeApp(firebaseConfig); const db=firebase.firestore();
-function unlock(){
-let c=document.getElementById('codeInput').value.trim();
-if(c.toUpperCase() === "ARNAUD333649"){login.style.display='none';admin.style.display='block';}else{err.style.display='block';}
-}
-function saveData(){
-if(!fullname.value){alert("Enter Full Name");return;}
-let data={fullName:fullname.value,institution:institution.value,course:course.value,certNum:certnum.value,issueDate:issuedate.value,grade:grade.value,status:status.value,createdAt:new Date()};
-db.collection("verifications").doc(certnum.value).set(data).then(()=>{
-o_name.innerText=fullname.value;o_inst.innerText=institution.value;o_course.innerText=course.value;o_cert.innerText=certnum.value;o_date.innerText=issuedate.value;o_grade.innerText=grade.value;o_status.innerText=status.value;
-output.style.display='block';qrcode.innerHTML='';
-let verifyLink="https://arnaudafrochaineverification-cyber.github.io/verify.html?id="+certnum.value;
-new QRCode(document.getElementById("qrcode"),{text:verifyLink,width:160,height:160});
-link.innerText=verifyLink;
-alert("Saved to Google! QR Ready!");
+const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"};
+firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
+function save(){
+let n=document.getElementById('f1').value.trim();
+let inst=document.getElementById('f2').value.trim();
+let course=document.getElementById('f3').value.trim();
+let cert=document.getElementById('f4').value.trim();
+let date=document.getElementById('f5').value;
+let grade=document.getElementById('f6').value.trim();
+let status=document.getElementById('f7').value;
+if(!n||!cert){alert('Fill Name and Cert No');return;}
+document.getElementById('msg').innerText='⏳ Saving...';document.getElementById('msg').style.color='orange';
+db.collection("certificates").doc(cert).set({
+studentName:n,
+fullname:n,
+certNumber:cert,
+certnum:cert,
+schoolName:inst,
+institution:inst,
+course:course,
+issueDate:date,
+issuedate:date,
+grade:grade,
+status:status,
+createdAt:new Date()
+}).then(()=>{
+document.getElementById('msg').innerText='✅ SAVED! Now test main site';
+document.getElementById('msg').style.color='green';
+document.getElementById('out').style.display='block';
+document.getElementById('o_name').innerText=n;
+document.getElementById('o_cert').innerText=cert;
+document.getElementById('qrcode').innerHTML='';
+let link="https://arnaudafrochaineverification-cyber.github.io/?cert="+encodeURIComponent(cert);
+new QRCode(document.getElementById('qrcode'),{text:link,width:190,height:190});
+document.getElementById('link').innerText=link;
+}).catch(e=>{
+document.getElementById('msg').innerText='❌ Error: '+e.message+' -> Go Publish Firebase Rules!';
+document.getElementById('msg').style.color='red';
 });
 }
 </script></body></html>
