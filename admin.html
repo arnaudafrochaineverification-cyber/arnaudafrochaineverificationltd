@@ -3,65 +3,94 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin - ARNAUD CLEAN BLACK QR ONLY</title>
+<title>Admin - REGISTRATION LETTER + QR</title>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
-body{font-family:Arial;background:#e8f5e9;padding:15px}
-.card{background:white;max-width:500px;margin:10px auto;padding:20px;border-radius:16px;box-shadow:0 4px 15px rgba(0,0,0,.15)}
-h2{text-align:center;color:#0a4d2e;margin-bottom:5px}
-.sub{text-align:center;color:#d4af37;font-weight:bold;font-size:11px;letter-spacing:1px;margin-bottom:15px}
-label{font-weight:bold;color:#0a4d2e;display:block;margin-top:12px;font-size:13px}
-input,select{width:100%;padding:13px;border:2px solid #c8e6c9;border-radius:10px;margin-top:5px;font-size:14px;background:#f1f8e9;box-sizing:border-box}
-button{width:100%;padding:15px;background:#0a4d2e;color:white;border:none;border-radius:12px;font-weight:bold;margin-top:18px;font-size:16px;cursor:pointer;letter-spacing:1px}
-.out{margin-top:20px;border:3px solid #000;padding:20px;border-radius:12px;display:none;text-align:center;background:#fff}
-#msg{text-align:center;font-weight:bold;margin-top:12px;padding:10px;border-radius:8px;word-break:break-word}
+body{font-family:Arial;background:#e8f5e9;padding:10px}
+.card{background:white;max-width:520px;margin:10px auto;padding:20px;border-radius:16px;box-shadow:0 4px 15px rgba(0,0,0,.15)}
+h2{text-align:center;color:#0a4d2e;margin:0}
+.sub{text-align:center;color:#d4af37;font-weight:bold;font-size:11px;margin-bottom:15px}
+label{font-weight:bold;color:#0a4d2e;display:block;margin-top:10px;font-size:13px}
+input,select{width:100%;padding:12px;border:2px solid #c8e6c9;border-radius:10px;margin-top:4px;font-size:14px;background:#f1f8e9;box-sizing:border-box}
+button{width:100%;padding:15px;background:#0a4d2e;color:white;border:none;border-radius:12px;font-weight:bold;margin-top:15px;font-size:16px;cursor:pointer}
+#out{display:none}
+.letter{border:3px solid #0a4d2e;padding:25px;border-radius:10px;background:white;color:#000;line-height:1.6}
+.letter-head{text-align:center;border-bottom:3px double #0a4d2e;padding-bottom:10px;margin-bottom:15px}
+.letter-head h1{color:#0a4d2e;margin:0;font-size:22px}
+.letter-head p{margin:2px 0;font-size:11px;color:#555}
+.qr-box{display:flex;justify-content:space-between;align-items:center;margin-top:20px;border-top:2px dashed #000;padding-top:15px}
+#msg{text-align:center;font-weight:bold;margin-top:12px;padding:10px;border-radius:8px}
 @media print{
   body *{visibility:hidden}
   #out, #out *{visibility:visible}
-  #out{position:absolute;left:0;top:0;width:100%;border:none}
-  #out button{display:none}
+  #out{position:absolute;left:0;top:0;width:100%;padding:10px}
+  .no-print{display:none!important}
 }
 </style>
 </head>
 <body>
-<div class="card">
-<h2>Sango Ota - CLEAN BLACK QR</h2>
-<div class="sub">ARNAUD AFROCHAINE VERIFICATION LTD • NO.1 ANTI-FAKE WORLDWIDE</div>
-
-<label>1. Full Name *</label><input id="f1" placeholder="e.g. SAGBOHAN OBINNA AMINO">
-<label>2. Institution *</label><input id="f2" value="Glory of God">
-<label>3. Course *</label><input id="f3" placeholder="e.g. Security Training">
-<label>4. Certificate Number *</label><input id="f4" placeholder="e.g. AA-2025-001">
-<label>5. Issue Date *</label><input id="f5" type="date">
-<label>6. Grade / Score</label><input id="f6" placeholder="e.g. Distinction / 85%">
-<label>7. Status *</label><select id="f7"><option value="AUTHENTIC">AUTHENTIC ✅</option><option value="FAKE">FAKE ❌</option></select>
-
-<button onclick="save()">💾 SAVE + GENERATE PURE BLACK QR</button>
-
-<div id="out" class="out">
-<h3 id="o_name" style="color:#000;margin:5px 0;font-size:18px"></h3>
-<p style="margin:5px 0">Cert No: <b id="o_cert" style="color:#000;font-size:16px"></b></p>
-<div id="qrcode" style="display:flex;justify-content:center;margin:20px 0"></div>
-<p style="font-size:11px;color:#000;font-weight:bold;">✅ Scan QR to verify - ARNAUD AFROCHAINE LTD</p>
-<button onclick="window.print()" style="background:#000;color:white;margin-top:10px">🖨️ PRINT THIS QR ONLY</button>
-</div>
+<div class="card no-print">
+<h2>Admin - Letter + QR</h2>
+<div class="sub">ARNAUD AFROCHAINE LTD - SANGO OTA</div>
+<label>Full Name *</label><input id="f1" placeholder="MESA">
+<label>Institution *</label><input id="f2" value="Glory of God">
+<label>Course *</label><input id="f3" placeholder="Tailoring / Security">
+<label>Certificate No *</label><input id="f4" placeholder="TT1">
+<label>Issue Date *</label><input id="f5" type="date">
+<label>Grade</label><input id="f6" placeholder="Distinction">
+<label>Status *</label><select id="f7"><option value="AUTHENTIC">AUTHENTIC</option><option value="FAKE">FAKE</option></select>
+<button onclick="save()">💾 SAVE + GENERATE LETTER WITH QR</button>
 <p id="msg"></p>
 </div>
 
+<div id="out">
+<div class="letter" id="printArea">
+<div class="letter-head">
+<h1>ARNAUD AFROCHAINE VERIFICATION LTD</h1>
+<p>Anti-Fake Certificate Verification Worldwide - Sango Ota</p>
+<p>Website: arnaudafrochaineverification-cyber.github.io | Email: arnaudafrochaine@gmail.com</p>
+</div>
+
+<h3 style="text-align:center;text-decoration:underline;margin:15px 0">CERTIFICATE REGISTRATION & VERIFICATION LETTER</h3>
+
+<p>This is to certify that:</p>
+
+<p><b>Full Name:</b> <span id="o_name" style="text-transform:uppercase;color:#0a4d2e"></span><br>
+<b>Institution:</b> <span id="o_inst"></span><br>
+<b>Course of Study:</b> <span id="o_course"></span><br>
+<b>Certificate Number:</b> <b id="o_cert" style="color:#000"></b><br>
+<b>Grade:</b> <span id="o_grade"></span><br>
+<b>Issue Date:</b> <span id="o_date"></span><br>
+<b>Status:</b> <b id="o_status" style="color:green"></b></p>
+
+<p style="margin-top:15px">The above certificate has been verified and registered in our official database. This letter confirms its authenticity. Any alteration makes it invalid.</p>
+
+<div class="qr-box">
+<div>
+<p style="font-size:11px;margin:0"><b>Scan QR to Verify Online:</b><br>Arnaud Afrochaine Portal<br>Cert No: <b id="o_cert2"></b></p>
+<p style="font-size:10px;color:#555;margin-top:8px">Date Printed: <span id="o_printdate"></span></p>
+</div>
+<div id="qrcode"></div>
+</div>
+
+<p style="text-align:center;margin-top:20px;font-size:10px;border-top:1px solid #ccc;padding-top:10px">
+This is a computer generated letter. No signature required. Verify at: arnaudafrochaineverification-cyber.github.io<br>
+<b>ARNAUD AFROCHAINE LTD - No.1 Anti-Fake Verification Worldwide</b>
+</p>
+</div>
+
+<div style="text-align:center;margin-top:15px" class="no-print">
+<button onclick="window.print()" style="background:#000;color:white;padding:15px;width:100%;max-width:500px;border-radius:12px;font-weight:bold">🖨️ PRINT / SAVE AS PDF FOR CYBER CAFE</button>
+<p style="font-size:12px;color:green;margin-top:10px">👆 Click this button, then choose <b>"Save as PDF"</b> to send to cyber cafe!</p>
+</div>
+</div>
+
 <script>
-const firebaseConfig={
-apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-authDomain:"arnaudafrochaineverification.firebaseapp.com",
-projectId:"arnaudafrochaineverification",
-storageBucket:"arnaudafrochaineverification.firebasestorage.app",
-messagingSenderId:"268502946630",
-appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"
-};
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
-document.getElementById('f5').valueAsDate = new Date();
+const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b47"};
+firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
+document.getElementById('f5').valueAsDate=new Date();
 
 function save(){
 let n=document.getElementById('f1').value.trim();
@@ -69,62 +98,30 @@ let inst=document.getElementById('f2').value.trim();
 let course=document.getElementById('f3').value.trim();
 let cert=document.getElementById('f4').value.trim().toUpperCase();
 let date=document.getElementById('f5').value;
-let grade=document.getElementById('f6').value.trim();
+let grade=document.getElementById('f6').value.trim()||'Pass';
 let status=document.getElementById('f7').value;
-
-if(!n||!cert||!inst||!course||!date){
-alert('Oga please fill all fields with *');return;
-}
-
-let msgBox=document.getElementById('msg');
-msgBox.innerText='⏳ Saving to Firebase...';
-msgBox.style.color='orange';
-msgBox.style.background='#fff3e0';
-
+if(!n||!cert||!inst||!course||!date){alert('Fill all *');return;}
+let msg=document.getElementById('msg');msg.innerText='Saving...';msg.style.color='orange';
 db.collection("certificates").doc(cert).set({
-studentName:n,
-fullname:n,
-name:n,
-certNumber:cert,
-certnum:cert,
-id:cert,
-schoolName:inst,
-institution:inst,
-course:course,
-issueDate:date,
-issuedate:date,
-grade:grade,
-status:status,
-createdAt: firebase.firestore.FieldValue.serverTimestamp()
+studentName:n,fullname:n,name:n,certNumber:cert,certnum:cert,id:cert,schoolName:inst,institution:inst,course:course,issueDate:date,issuedate:date,grade:grade,status:status,createdAt:firebase.firestore.FieldValue.serverTimestamp()
 }).then(()=>{
-msgBox.innerText='✅ SAVED! PURE BLACK QR READY! No link text - Clean for printing!';
-msgBox.style.color='green';
-msgBox.style.background='#e8f5e9';
-
+msg.innerText='✅ Saved! Letter + BLACK QR Ready! Scroll down!';msg.style.color='green';
 document.getElementById('out').style.display='block';
 document.getElementById('o_name').innerText=n;
+document.getElementById('o_inst').innerText=inst;
+document.getElementById('o_course').innerText=course;
 document.getElementById('o_cert').innerText=cert;
+document.getElementById('o_cert2').innerText=cert;
+document.getElementById('o_grade').innerText=grade;
+document.getElementById('o_date').innerText=date;
+document.getElementById('o_status').innerText=status;
+document.getElementById('o_printdate').innerText=new Date().toLocaleDateString();
 document.getElementById('qrcode').innerHTML='';
-
-// ROOT LINK - NO 404 EVER - LINK IS HIDDEN INSIDE QR
 let link="https://arnaudafrochaineverification-cyber.github.io/?id="+encodeURIComponent(cert);
-
-// PURE BLACK QR ONLY - #000000
-new QRCode(document.getElementById('qrcode'),{
-text:link,
-width:220,
-height:220,
-colorDark:"#000000",
-colorLight:"#ffffff",
-correctLevel: QRCode.CorrectLevel.H
-});
-
-}).catch(e=>{
-msgBox.innerText='❌ Error: '+e.message;
-msgBox.style.color='red';
-msgBox.style.background='#ffebee';
-});
+new QRCode(document.getElementById('qrcode'),{text:link,width:130,height:130,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});
+window.scrollTo(0,document.body.scrollHeight);
+}).catch(e=>{msg.innerText='Error: '+e.message;msg.style.color='red';});
 }
 </script>
 </body>
-</html>
+  </html>
