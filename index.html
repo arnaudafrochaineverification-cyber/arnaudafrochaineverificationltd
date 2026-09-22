@@ -1,62 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arnaud Afrochaine Verification LTD - No.1 Anti-Fake Worldwide</title>
+<title>Arnaud Afrochaine Verification LTD</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f4f6f4}
-.top-bar{background:#0a2e1d;color:white;padding:8px 10px;font-size:10px;display:flex;justify-content:space-between;flex-wrap:wrap}
-.header{background:white;padding:10px 15px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.1);position:sticky;top:0;z-index:20}
-.logo-box{display:flex;align-items:center;gap:10px}
-.logo-box img{height:55px;width:auto;border-radius:8px;border:1px solid #ddd}
-.logo-text h3{font-size:13px;color:#0a4d2e;line-height:1.2}.logo-text p{font-size:9px;color:#d32f2f;font-weight:bold}
-.hero{background:linear-gradient(135deg,#0a2e1d 0%,#0a4d2e 100%);color:white;text-align:center;padding:60px 20px 90px 20px}
-.hero h1{font-size:28px}.hero .tag{background:#d32f2f;display:inline-block;padding:6px 16px;border-radius:20px;font-size:12px;margin-top:12px;font-weight:bold}
-.verify-card{background:white;max-width:580px;margin:-65px auto 20px auto;border-radius:16px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,0.3);border-top:4px solid #d32f2f}
-.verify-card input{width:100%;padding:14px;border:2px solid #ddd;border-radius:10px;margin:8px 0}
-.verify-card button{width:100%;padding:14px;background:#0a4d2e;color:white;border:none;border-radius:10px;font-weight:bold;font-size:16px;cursor:pointer}
-#result{margin-top:15px;padding:15px;border-radius:10px;display:none;line-height:1.9;font-size:14px}
-.success{background:#e8f5e9;border:2px solid #2e7d32;color:#0a2e1d}.error{background:#ffebee;border:2px solid #c62828;color:#c62828}
-.section{max-width:860px;margin:25px auto;padding:25px;background:white;border-radius:16px;box-shadow:0 4px 15px rgba(0,0,0,0.08)}
-.section h2{color:#0a4d2e;text-align:center;margin-bottom:15px}
-.services{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
-.service-box{background:#f6fbf7;border-left:4px solid #0a4d2e;padding:14px;border-radius:8px;font-size:13px}
-.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
-.gallery-grid img{width:100%;height:175px;object-fit:cover;border-radius:10px;border:2px solid #e8f5e9}
-.gallery-grid img:first-child{grid-column:span 2;height:250px;object-fit:contain;background:#f9f9f9}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:15px;font-size:13px}
-footer{background:#0a2e1d;color:white;text-align:center;padding:25px 10px;font-size:11px;line-height:1.8}
-@media(max-width:600px){.services,.contact-grid,.gallery-grid{grid-template-columns:1fr}.gallery-grid img:first-child{grid-column:span 1}}
+body{font-family:Arial;margin:0;background:#f4f6f4}
+.top{background:#0a2e1d;color:white;padding:10px;text-align:center;font-size:11px}
+.header{background:white;padding:15px;text-align:center;box-shadow:0 2px 5px #ccc}
+.hero{background:#0a4d2e;color:white;text-align:center;padding:50px 20px}
+.hero h1{font-size:26px}
+.tag{background:#d32f2f;display:inline-block;padding:6px 15px;border-radius:20px;font-size:12px;margin-top:10px}
+.card{background:white;max-width:500px;margin:-40px auto 20px auto;padding:20px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.3)}
+input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;margin:10px 0;box-sizing:border-box}
+button{width:100%;padding:12px;background:#0a4d2e;color:white;border:none;border-radius:8px;font-weight:bold}
+#result{margin-top:15px;padding:12px;border-radius:8px;display:none;font-size:13px}
+.ok{background:#e8f5e9;border:2px solid green} .bad{background:#ffebee;border:2px solid red}
+.section{max-width:800px;margin:20px auto;background:white;padding:20px;border-radius:12px}
+footer{background:#0a2e1d;color:white;text-align:center;padding:20px;font-size:11px}
 </style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
 <body>
-<div class="top-bar"><span>📧 arnaudafrochainverification@gmail.com</span><span>📞 +2349132851465 | Lagos, Nigeria</span></div>
-<div class="header">
-<div class="logo-box">
-<img src="IMG-20260919-WA0127.jpg" alt="Logo">
-<div class="logo-text"><h3>ARNAUD AFROCHAINE<br>VERIFICATION LTD</h3><p>🚫 NO.1 ANTI-FAKE WORLDWIDE</p></div>
-</div>
-</div>
-<div class="hero">
-<h1>STOP FAKE CERTIFICATES</h1>
-<div class="tag">NUMBER ONE ANTI-FAKE VERIFICATION IN THE WORLD</div>
-<p style="margin-top:14px;font-size:13px;max-width:680px;margin:auto;line-height:1.7">We deal with fake certificates. Our goal is to stop fake certificates for all the global. We start from Nigeria first to deal with all hackers and forgers. Arnaud Afrochaine Verification LTD - We are Number One.</p>
-</div>
-<div class="verify-card">
-<h2 style="color:#0a4d2e;text-align:center">Verify Certificate Authenticity</h2>
-<p style="text-align:center;font-size:12px;color:#555;margin-bottom:10px">Enter your Certificate ID / Registration Number to verify</p>
-<input type="text" id="certInput" placeholder="Enter Certificate ID e.g. 2026">
-<button onclick="verifyCert()">🔍 Verify Now - Stop Fake</button>
+<div class="top">📧 arnaudafrochainverification@gmail.com | 📞 +2349132851465</div>
+<div class="header"><h3 style="margin:0;color:#0a4d2e">ARNAUD AFROCHAINE VERIFICATION LTD</h3><small style="color:red;font-weight:bold">NO.1 ANTI-FAKE WORLDWIDE</small></div>
+<div class="hero"><h1>STOP FAKE CERTIFICATES</h1><div class="tag">NUMBER ONE ANTI-FAKE VERIFICATION</div><p style="font-size:13px;margin-top:10px">We deal with fake certificates. Our goal is to stop fake certificates globally. Starting from Nigeria.</p></div>
+<div class="card">
+<h3 style="text-align:center;color:#0a4d2e;margin:0">Verify Certificate</h3>
+<input type="text" id="certInput" placeholder="Enter Certificate ID">
+<button onclick="verifyCert()">🔍 Verify Now</button>
 <div id="result"></div>
 </div>
-<div class="section">
-<h2>👤 About Us</h2>
-<p style="font-size:13px;line-height:1.9;text-align:justify"><b>Arnaud Afrochaine Verification LTD</b> is a professional certificate verification company registered in Nigeria. We are the <b>Number One Anti-Fake Verification Company in the World.</b><br><br>We were established to fight the growing menace of fake certificates and forged documents. Our platform provides instant, secure and reliable verification of academic certificates, professional certificates and other credentials.<br><br>Our Head Office is located in Lagos / Ogun State, Nigeria, but our vision is global - to stop fake certificates all over the world.</p>
-</div>
-<div class="section">
-<h2>🎯 Our Mission</h2>
-<p style="font-size:13px;line-height:1.9;text-align:cen
+<div class="section"><h3 style="color:#0a4d2e;text-align:center">About Us</h3><p style="font-size:13px;line-height:1.8">Arnaud Afrochaine Verification LTD is a professional certificate verification company registered in Nigeria. We are Number One Anti-Fake Verification Company in the World. Head Office: Lagos / Ogun State, Nigeria.</p></div>
+<div class="section"><h3 style="color:#0a4d2e;text-align:center">Contact</h3><p style="font-size:13px">📞 +2349132851465<br>📧 arnaudafrochainverification@gmail.com<br>📍 Lagos / Ogun State, Nigeria</p></div>
+<footer>© 2026 Arnaud Afrochaine Verification LTD<br>No.1 Anti-Fake Verification Company in the World</footer>
+<script>
+const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification"};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+function verifyCert(){
+ var id=document.getElementById('certInput').value.trim();
+ var r=document.getElementById('result');
+ if(!id){r.style.display='block';r.className='bad';r.innerHTML='❌ Enter ID';return;}
+ r.style.display='block';r.className='ok';r.innerHTML='⏳ Checking...';
+ db.collection("certificates").doc(id).get().then(doc=>{
+  if(doc.exists){
+   var d=doc.data();
+   r.className='ok';
+   r.innerHTML='✅ VERIFIED AUTHENTIC<br><br>Name: '+(d.fullName||'N/A')+'<br>Cert No: '+(d.certificateNumber||id)+'<br>School: '+(d.institution||'N/A')+'<br>Status: Authentic';
+  }else{r.className='bad';r.innerHTML='❌ FAKE DETECTED! ID '+id+' NOT FOUND';}
+ }).catch(e=>{r.className='bad';r.innerHTML='Error: '+e.message;});
+}
+</script>
+</body>
+                                                                                                                         </html>
