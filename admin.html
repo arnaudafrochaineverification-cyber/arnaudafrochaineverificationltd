@@ -1,57 +1,52 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ARNAUD AFROCHAINE - Firebase Admin</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Admin - ARNAUD</title>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<style>body{font-family:Arial;background:#e8f5e9;padding:10px} .box{background:white;max-width:500px;margin:30px auto;padding:25px;border-radius:15px} input,select{width:100%;padding:12px;margin-top:6px;border-radius:10px;border:1px solid #ccc} .btn{background:#0a3d1a;color:white;padding:14px;width:100%;border:none;border-radius:10px;margin-top:15px;font-weight:bold} h1{color:#0a3d1a;text-align:center;font-size:20px}</style>
-</head>
-<body>
-<div id="login" class="box" style="text-align:center">
-<h1>ARNAUD AFROCHAINE VERIFICATION LTD</h1><h3>🔒 Admin Login</h3>
-<input type="password" id="code" placeholder="••••••••"><button class="btn" onclick="unlock()">UNLOCK</button><p id="err" style="color:red;display:none">Wrong code</p>
+<style>body{font-family:Arial;background:#e8f5e9;padding:10px;margin:0}.login-box{background:white;max-width:400px;margin:80px auto;padding:30px;border-radius:20px;text-align:center}.card{background:white;border-radius:15px;padding:20px;max-width:550px;margin:auto;display:none}h1{color:#0a3d1a;text-align:center;font-size:22px}label{font-weight:bold;color:#0a3d1a;display:block;margin-top:14px;font-size:14px}input,select{width:100%;padding:13px;border:1.5px solid #ccc;border-radius:10px;margin-top:5px;box-sizing:border-box}.btn{background:#0a3d1a;color:white;width:100%;padding:16px;border:none;border-radius:12px;font-weight:bold;margin-top:20px;cursor:pointer}.slip{margin-top:25px;border:3px solid #0a3d1a;padding:20px;border-radius:10px}</style>
+</head><body>
+<div id="login" class="login-box">
+<h2>ARNAUD AFROCHAINE VERIFICATION LTD</h2>
+<h3>🔒 Admin Login</h3>
+<input type="password" id="codeInput" placeholder="Enter secret code">
+<button class="btn" onclick="unlock()">UNLOCK</button>
+<p id="err" style="color:red;display:none">Wrong code! Use ARNAUD333649</p>
 </div>
-
-<div id="admin" class="box" style="display:none">
-<h1>VERIFICATION SLIP - 7 FIELDS</h1>
+<div id="admin" class="card">
+<h1>ARNAUD AFROCHAINE VERIFICATION LTD</h1>
+<p style="text-align:center">Sango Ota - 7 FIELDS + QR</p>
 <label>1. Full Name</label><input id="fullname">
 <label>2. Institution</label><input id="institution">
 <label>3. Course</label><input id="course">
 <label>4. Certificate Number</label><input id="certnum" value="AAV-2026-">
 <label>5. Issue Date</label><input id="issuedate" type="date">
 <label>6. Grade</label><input id="grade">
-<label>7. Status</label><select id="status"><option>AUTHENTIC</option><option>FAKE</option></select>
-<button class="btn" onclick="saveToFirebase()">💾 SAVE TO FIREBASE + GENERATE QR</button>
-<div id="qr" style="margin-top:20px;text-align:center"></div>
-<div id="out" style="display:none;margin-top:20px;border:2px solid #0a3d1a;padding:15px">
-<p><b>Full Name:</b> <span id="o1"></span></p><p><b>Institution:</b> <span id="o2"></span></p><p><b>Course:</b> <span id="o3"></span></p><p><b>Cert No:</b> <span id="o4"></span></p><p><b>Date:</b> <span id="o5"></span></p><p><b>Grade:</b> <span id="o6"></span></p><p><b>Status:</b> <span id="o7" style="color:green;font-weight:bold"></span></p>
-<div id="qrcode"></div><p>QR CODE: [SCAN TO VERIFY]<br><small>We VERIFY, we don't ISSUE</small></p><p>Stamp: ___ Signature: ___</p>
-<button class="btn" onclick="window.print()">PRINT</button>
-</div>
-</div>
-
+<label>7. Status</label><select id="status"><option>AUTHENTIC</option><option>FAKE - NOT FOUND</option></select>
+<button class="btn" style="background:#2e7d32" onclick="saveData()">💾 SAVE + GENERATE QR</button>
+<div id="output" class="slip" style="display:none">
+<h3 style="text-align:center;color:#0a3d1a">Verification Slip</h3>
+<p><b>Name:</b> <span id="o_name"></span></p><p><b>Institution:</b> <span id="o_inst"></span></p><p><b>Course:</b> <span id="o_course"></span></p><p><b>Cert No:</b> <span id="o_cert"></span></p><p><b>Date:</b> <span id="o_date"></span></p><p><b>Grade:</b> <span id="o_grade"></span></p><p><b>Status:</b> <b style="color:green"><span id="o_status"></span></b></p>
+<div id="qrcode" style="display:flex;justify-content:center;margin:15px"></div>
+<button class="btn" onclick="window.print()">🖨️ PRINT</button>
+<p id="link" style="font-size:10px;word-break:break-all"></p>
+</div></div>
 <script>
-const firebaseConfig = { apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs", authDomain: "arnaudafrochaineverification.firebaseapp.com", projectId: "arnaudafrochaineverification", storageBucket: "arnaudafrochaineverification.firebasestorage.app", messagingSenderId: "268502946630", appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47", measurementId: "G-Y52LEBJM7Q" };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const _s="QVJOQVUzMzM2NDk=";
-function unlock(){ if(btoa(code.value)===_s){login.style.display='none';admin.style.display='block';} else err.style.display='block'; }
-function saveToFirebase(){
- if(!fullname.value)return alert("Fill name");
- db.collection("verifications").doc(certnum.value).set({
-   fullName: fullname.value, institution: institution.value, course: course.value,
-   certNum: certnum.value, issueDate: issuedate.value, grade: grade.value, status: status.value,
-   createdAt: new Date()
- }).then(()=>{
-   o1.innerText=fullname.value;o2.innerText=institution.value;o3.innerText=course.value;o4.innerText=certnum.value;o5.innerText=issuedate.value;o6.innerText=grade.value;o7.innerText=status.value;
-   out.style.display='block'; qrcode.innerHTML='';
-   let url="https://arnaudafrochaineverification-cyber.github.io/verify.html?id="+certnum.value;
-   new QRCode(qrcode,{text:url,width:150,height:150});
-   alert("Saved to Firebase! QR link: "+url);
- }).catch(e=>alert("Error: "+e));
+const firebaseConfig = { apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs", authDomain: "arnaudafrochaineverification.firebaseapp.com", projectId: "arnaudafrochaineverification", storageBucket: "arnaudafrochaineverification.firebasestorage.app", messagingSenderId: "268502946630", appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47" };
+firebase.initializeApp(firebaseConfig); const db=firebase.firestore();
+function unlock(){
+let c=document.getElementById('codeInput').value.trim();
+if(c.toUpperCase() === "ARNAUD333649"){login.style.display='none';admin.style.display='block';}else{err.style.display='block';}
 }
-</script>
-</body>
-</html>
+function saveData(){
+if(!fullname.value){alert("Enter Full Name");return;}
+let data={fullName:fullname.value,institution:institution.value,course:course.value,certNum:certnum.value,issueDate:issuedate.value,grade:grade.value,status:status.value,createdAt:new Date()};
+db.collection("verifications").doc(certnum.value).set(data).then(()=>{
+o_name.innerText=fullname.value;o_inst.innerText=institution.value;o_course.innerText=course.value;o_cert.innerText=certnum.value;o_date.innerText=issuedate.value;o_grade.innerText=grade.value;o_status.innerText=status.value;
+output.style.display='block';qrcode.innerHTML='';
+let verifyLink="https://arnaudafrochaineverification-cyber.github.io/verify.html?id="+certnum.value;
+new QRCode(document.getElementById("qrcode"),{text:verifyLink,width:160,height:160});
+link.innerText=verifyLink;
+alert("Saved to Google! QR Ready!");
+});
+}
+</script></body></html>
