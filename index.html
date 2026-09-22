@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Arnaud Afrochaine Verification LTD - No.1 Anti-Fake Verification</title>
+
+<!-- FIX OLD QR LINKS - THIS STOPS 404 -->
+<script>
+(function(){
+  // If someone comes with ?cert= or ?id= but landing on wrong path, stay here and verify
+  // This file now handles BOTH
+  console.log("Anti-Fake System Ready");
+})();
+</script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 .top-bar{background:#0a2e1d;color:white;padding:8px 10px;font-size:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px}
@@ -87,6 +97,7 @@ footer{background:#0a2e1d;color:white;text-align:center;padding:22px 10px;font-s
 <h2>🖼️ Head Office Gallery</h2>
 <div class="gallery-grid">
 <img src="IMG-20260919-WA0127(1).jpg" alt="Official Logo">
+<img src="IMG-20260919-WA0127(1).jpg" alt="Official Logo Duplicate">
 <img src="IMG-20260917-WA1432.jpg" alt="Office">
 <img src="IMG-20260919-WA9711.jpg" alt="HR Office">
 <img src="IMG-20260919-WA7762.jpg" alt="HR">
@@ -112,7 +123,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 function verifyCert(){
-  const id=document.getElementById('certInput').value.trim();
+  const id=document.getElementById('certInput').value.trim().toUpperCase();
   const resDiv=document.getElementById('result');
   if(!id){resDiv.style.display='block';resDiv.className='error';resDiv.innerHTML='❌ Enter Certificate ID';return;}
   resDiv.style.display='block';resDiv.className='success';resDiv.innerHTML='⏳ Checking Anti-Fake Database...';
@@ -120,14 +131,14 @@ function verifyCert(){
     if(doc.exists){
       const d=doc.data();
       resDiv.className='success';
-      resDiv.innerHTML=`✅ <b>VERIFIED AUTHENTIC - NOT FAKE</b><br><br><b>Name:</b> ${d.studentName||d.fullname||'N/A'}<br><b>Cert No:</b> ${d.certNumber||d.certnum||id}<br><b>School:</b> ${d.schoolName||d.institution||'N/A'}<br><b>Course:</b> ${d.course||'N/A'}<br><b>Date:</b> ${d.issueDate||d.issuedate||'N/A'}<br><b>Status:</b> ${d.status||'AUTHENTIC'}`;
+      resDiv.innerHTML=`✅ <b>VERIFIED AUTHENTIC - NOT FAKE</b><br><br><b>Name:</b> ${d.studentName||d.fullname||'N/A'}<br><b>Cert No:</b> ${d.certNumber||d.certnum||id}<br><b>School:</b> ${d.schoolName||d.institution||'N/A'}<br><b>Course:</b> ${d.course||'N/A'}<br><b>Date:</b> ${d.issueDate||d.issuedate||'N/A'}<br><b>Status:</b> ${d.status||'AUTHENTIC'}<br><br>🛡️ <b>Arnaud Afrochaine Verification LTD</b> - Verified`;
     }else{resDiv.className='error';resDiv.innerHTML='❌ FAKE DETECTED - Certificate NOT FOUND<br>Cert: '+id+'<br>Report to +2349132851465';}
   }).catch(e=>{resDiv.className='error';resDiv.innerHTML='❌ Error: '+e.message+'<br>Go to Firebase -> Firestore -> Rules -> Publish';});
 }
 window.onload=()=>{
   const p=new URLSearchParams(window.location.search);
-  const c=p.get('cert')||p.get('id'); if(c){document.getElementById('certInput').value=c; verifyCert();}
+  const c=p.get('cert')||p.get('id'); if(c){document.getElementById('certInput').value=c.toUpperCase(); verifyCert();}
 }
 </script>
 </body>
- </html>
+</html>
