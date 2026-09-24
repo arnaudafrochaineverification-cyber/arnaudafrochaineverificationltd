@@ -1,62 +1,74 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ADMIN - ARNAUDAFROCHAINEVERIFICATION LTD</title>
+<title>ADMIN - ARNAUDAFROCHAINEVERIFICATION</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>body{font-family:Arial;background:#f2f2f2;padding:10px;margin:0} .box{max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.1)} label{font-weight:bold;display:block;margin-top:10px;font-size:12px;text-transform:uppercase} input,select{width:100%;padding:9px;margin-top:3px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box} .row{display:grid;grid-template-columns:1fr 1fr;gap:8px} .btn{width:100%;padding:13px;background:#0d6e2f;color:#fff;border:0;border-radius:6px;font-weight:bold;margin-top:18px;cursor:pointer} .auto{display:flex;gap:5px} .genBtn{padding:9px;background:#ff9800;color:#fff;border:0;border-radius:4px;white-space:nowrap} .sub{background:#f0fff0;padding:10px;border:1px solid #c8e6c9;margin-top:10px;border-radius:5px}</style>
+<style>body{font-family:Arial;background:#f2f2f2;padding:10px;margin:0} .box{max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:10px} label{font-weight:bold;display:block;margin-top:10px;font-size:12px} input,select{width:100%;padding:9px;margin-top:3px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box} .row{display:grid;grid-template-columns:1fr 1fr;gap:8px} .btn{width:100%;padding:13px;background:#0d6e2f;color:#fff;border:0;border-radius:6px;font-weight:bold;margin-top:18px;cursor:pointer} .auto{display:flex;gap:5px} .genBtn{padding:9px;background:#ff9800;color:#fff;border:0;border-radius:4px;cursor:pointer} .sub{background:#f0fff0;padding:10px;border:1px solid #c8e6c9;margin-top:10px;border-radius:5px}</style>
 </head><body><div class="box">
-<h3 style="text-align:center;margin-top:0">ARNAUDAFROCHAINEVERIFICATION LTD</h3>
+<h3 style="text-align:center">ARNAUDAFROCHAINEVERIFICATION LTD<br><small style="color:green">✅ REAL CONFIG LOADED</small></h3>
 
-<label>Fullname: MESA</label><input id="fullName" placeholder="MESA JOHN">
+<label>Fullname: MESA</label><input id="fullName" placeholder="MESA JOHN DOE">
 
-<div class="row"><div><label>Student ID:</label><input id="studentId" placeholder="AFR/STU/001"></div><div><label>School:</label><input id="school" placeholder="School name"></div></div>
+<div class="row"><div><label>Student ID:</label><input id="studentId"></div><div><label>School:</label><input id="school"></div></div>
 
-<label>Certificate N° : (AUTO GENERATE)</label>
+<label>Certificate N° : (AUTO)</label>
 <div class="auto"><input id="certN" readonly style="background:#e8f5e9;font-weight:bold"><button class="genBtn" onclick="genCert()">🔄 New</button></div>
 
-<div class="row"><div><label>Examination:</label><input id="examination" placeholder="WASSCE"></div><div><label>Course:</label><input id="course" placeholder="Course"></div></div>
+<div class="row"><div><label>Examination:</label><input id="examination"></div><div><label>Course:</label><input id="course"></div></div>
 
 <div class="row"><div><label>Certificate No:</label><input id="certNo" readonly style="background:#e8f5e9"></div><div><label>Issue Date:</label><input id="issueDate" type="date"></div></div>
 
 <label>Grade:</label><select id="grade"><option>Distinction</option><option>Upper Credit</option><option>Credit</option><option>Pass</option></select>
 <label>Status:</label><select id="status"><option>AUTHENTIC</option><option>INVALID</option></select>
 
-<div class="sub"><b>--- ADD SUBJECTS ---</b>
-<label>Subject 1:</label><input id="s1"><label>Subject 2:</label><input id="s2"><label>Subject 3:</label><input id="s3"><label>Subject 4:</label><input id="s4">
+<div class="sub"><b>--- ADD SUBJECTS (Separate) ---</b>
+<label>Subject 1:</label><input id="s1" placeholder="Mathematics - A1"><label>Subject 2:</label><input id="s2" placeholder="English - B2"><label>Subject 3:</label><input id="s3" placeholder="Physics - A1"><label>Subject 4:</label><input id="s4" placeholder="Chemistry - B3">
 </div>
 
 <button class="btn" onclick="save()">[ SAVE + GENERATE QR ]</button>
 <div id="qrArea" style="display:none;text-align:center;margin-top:15px;border:2px dashed green;padding:10px"><div id="qrcode" style="display:flex;justify-content:center"></div><p id="qrText" style="font-weight:bold"></p><a id="vLink" target="_blank" style="word-break:break-all;font-size:12px"></a></div>
+<p id="log" style="font-size:11px;color:#666;margin-top:10px"></p>
 </div>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-  authDomain: "arnaudafrochaineverifica-4a2ec.firebaseapp.com",
-  projectId: "arnaudafrochaineverifica-4a2ec",
-  storageBucket: "arnaudafrochaineverifica-4a2ec.firebasestorage.app",
-  messagingSenderId: "104523123456",
-  appId: "1:104523123456:web:abcdef123456"
+  authDomain: "arnaudafrochaineverification.firebaseapp.com",
+  projectId: "arnaudafrochaineverification",
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+  measurementId: "G-Y52LEBJM7Q"
 };
 firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
+const db = firebase.firestore();
 function genCert(){
-  const y=new Date().getFullYear();
-  const r=Math.floor(1000+Math.random()*9000);
-  const c=`AFR-${y}-${r}`;
-  document.getElementById('certN').value=c;
-  document.getElementById('certNo').value=c;
+  const y = new Date().getFullYear();
+  const r = Math.floor(1000 + Math.random()*9000);
+  const c = `AFR-${y}-${r}`;
+  document.getElementById('certN').value = c;
+  document.getElementById('certNo').value = c;
   return c;
 }
-window.onload=()=>{ genCert(); document.getElementById('issueDate').valueAsDate=new Date(); };
+window.onload = () => { genCert(); document.getElementById('issueDate').valueAsDate = new Date(); document.getElementById('log').innerText = "✅ Connected to: " + firebaseConfig.projectId; };
+
 function save(){
- const d={ fullName:fullName.value.trim(), studentId:studentId.value.trim(), school:school.value.trim(), certificateNumber:certN.value.trim(), certificateNo:certNo.value.trim(), examination:examination.value.trim(), course:course.value.trim(), issueDate:issueDate.value, grade:grade.value, status:status.value, subjects:[s1.value.trim(),s2.value.trim(),s3.value.trim(),s4.value.trim()].filter(x=>x), verifiedOn:new Date().toLocaleString(), createdAt:new Date().toISOString() };
- if(!d.fullName){alert("Fullname required!");return;}
+ const d={
+   fullName:fullName.value.trim(), studentId:studentId.value.trim(), school:school.value.trim(),
+   certificateNumber:certN.value.trim(), certificateNo:certNo.value.trim(),
+   examination:examination.value.trim(), course:course.value.trim(),
+   issueDate:issueDate.value, grade:grade.value, status:status.value,
+   subjects:[s1.value.trim(),s2.value.trim(),s3.value.trim(),s4.value.trim()].filter(x=>x),
+   verifiedOn:new Date().toLocaleString(), createdAt:new Date().toISOString()
+ };
+ if(!d.fullName){alert("Fullname needed");return;}
+ log.innerText="Saving "+d.certificateNumber+"...";
  db.collection("certificates").doc(d.certificateNumber).set(d).then(()=>{
-   alert("✅ SAVED! "+d.certificateNumber);
+   log.innerText="✅ SAVED SUCCESS! "+d.certificateNumber;
+   alert("✅ SAVED! "+d.certificateNumber+"\nNow check Firebase!");
    const url="https://arnaudafrochaineverification-cyber.github.io/?id="+encodeURIComponent(d.certificateNumber);
    qrArea.style.display="block"; qrcode.innerHTML=""; new QRCode(qrcode,{text:url,width:180,height:180}); qrText.innerText=d.certificateNumber; vLink.href=url; vLink.innerText=url;
    genCert();
- }).catch(e=>alert("Error: "+e.message+"\nCheck Firebase Rules!"));
+ }).catch(e=>{ log.innerText="❌ Error: "+e.message; alert("❌ FAILED: "+e.message+"\nGo to Rules and allow read,write = true"); });
 }
 </script></body></html>
