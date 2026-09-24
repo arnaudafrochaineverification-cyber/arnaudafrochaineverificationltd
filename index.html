@@ -55,4 +55,47 @@ footer{background:#052e16;color:#a8d3b1;padding:26px 14px;text-align:center;font
 <div class="verify-box"><div class="card" id="verifyCard"><h3>🔍 Verify Certificate</h3><input id="certInput" placeholder="Enter ID e.g. TT1"><button onclick="verifyCert()">Verify Now</button><div id="result"></div></div></div>
 <div class="wrap">
 <div class="sec"><h2>About Us</h2><p style="line-height:1.9;font-size:14px">ARNAUD AFROCHAINE VERIFICATION LTD founded 2025. We restore trust in Nigerian certificates. 777 Triple Protection. Cannot be faked.</p><img src="IMG-20260922-WA0088.jpg"></div>
-<div class="sec"><h2>What We Do</h2><div class="grid3"><div class="box"><b>🎓 Verification</b><br>Verify in 5 sec</div><div class="box"><b>🔒 QR Security</b><br>Cannot be cloned</div><div cla
+<div class="sec"><h2>What We Do</h2><div class="grid3"><div class="box"><b>🎓 Verification</b><br>Verify in 5 sec</div><div class="box"><b>🔒 QR Security</b><br>Cannot be cloned</div><div class="box"><b>🏫 Schools</b><br>Partner with us</div><div class="box"><b>💼 Employers</b><br>Check before hire</div><div class="box"><b>🌍 Global</b><br>24/7 worldwide</div><div class="box"><b>📢 Campaign</b><br>End fake</div></div></div>
+<div class="sec"><h2>👤 Meet The Founder</h2><img src="IMG-20260922-WA0083.jpg"><p style="line-height:1.9;margin-top:10px">I am Arnaud, CEO. Started 2025 to stop fake certificates. Vision: Just truth.</p></div>
+<div class="sec"><h2>📸 Gallery - All Images</h2><div class="gallery"><img src="IMG-20260912-WA0000.jpg"><img src="IMG-20260912-WA0001.jpg"><img src="IMG-20260913-WA0000.jpg"><img src="IMG-20260913-WA0024.jpg"><img src="IMG-20260913-WA0025.jpg"><img src="IMG-20260915-WA0014.jpg"><img src="IMG-20260915-WA0015.jpg"><img src="IMG-20260920-WA0113.jpg"><img src="IMG-20260922-WA0083.jpg"><img src="IMG-20260922-WA0084.jpg"><img src="IMG-20260922-WA0085.jpg"><img src="IMG-20260922-WA0086.jpg"><img src="IMG-20260922-WA0087.jpg"><img src="IMG-20260922-WA0088.jpg"><img src="IMG-20260922-WA0089.jpg"><img src="IMG-20260922-WA0090.jpg"><img src="IMG-20260922-WA0091.jpg"><img src="IMG-20260922-WA0092.jpg"></div></div>
+<div class="sec"><h2>📞 Contact Us</h2><p style="line-height:2.5;font-size:15px">📍 Sango Ota, Ogun State<br>📧 arnaudafrochain@gmail.com<br>📞 +2349132851465<br>🌐 arnaudafrochaineverification-cyber.github.io</p><img src="IMG-20260922-WA0092.jpg"></div>
+</div>
+<footer>© 2026 ARNAUD AFROCHAINE VERIFICATION LTD<br>arnaudafrochain@gmail.com | +2349132851465</footer>
+<script>
+const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+function show(h,ok){const r=document.getElementById('result');r.style.display='block';r.className=ok?'ok':'bad';r.innerHTML=h;}
+function verifyCert(){const v=document.getElementById('certInput').value.toUpperCase().trim();if(!v)return alert('Enter ID');doVerify(v);}
+function doVerify(id){
+  const r=document.getElementById('result');r.style.display='block';r.style.background='#fff8e1';r.style.border='2px solid #ffb300';r.innerHTML='⏳ Verifying '+id+'...';
+  document.getElementById('verifyCard').scrollIntoView({behavior:'smooth'});
+  db.collection("certificates").doc(id).get().then(d=>{
+    if(d.exists){
+      const x=d.data();
+      show(`<b style="font-size:17px">✅ VERIFIED AUTHENTIC</b><br><br><b>Name:</b> ${x.fullname||x.name||'N/A'}<br><b>School:</b> ${x.institution||'N/A'}<br><b>Cert No:</b> ${x.certNumber||d.id}<br><b>Status:</b> <span style="color:green;font-weight:900">${x.status||'AUTHENTIC'}</span><br><br>✔ By ARNAUD AFROCHAINE<br>📧 arnaudafrochain@gmail.com<br><br><div style="text-align:center;margin-top:15px"><a href="https://wa.me/2349132851465?text=Hello%20ARNAUD%20AFROCHAINE%20LTD%2C%20I%20verified%20ID%3A%20${id}%20-%20It%20is%20VALID%20%E2%9C%85%20I%20want%20to%20register%20my%20school" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#25D366,#128C7E);color:white;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:14px;">📱 Register My School via WhatsApp</a></div>`,true);
+    }
+    else{
+      db.collection("certificates").where("certNumber","==",id).get().then(q=>{
+        if(!q.empty){
+          const x=q.docs[0].data();
+          show(`<b>✅ VERIFIED AUTHENTIC</b><br><b>Name:</b> ${x.fullname||x.name}<br><b>Cert No:</b> ${x.certNumber}<br><b>Status:</b> AUTHENTIC<br><br><div style="text-align:center;margin-top:15px"><a href="https://wa.me/2349132851465?text=Hello%20ARNAUD%20AFROCHAINE%20LTD%2C%20I%20verified%20ID%3A%20${id}%20-%20VALID%20%E2%9C%85%20I%20want%20to%20register%20my%20school" target="_blank" style="display:inline-block;background:#25D366;color:white;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:bold;">📱 Register My School via WhatsApp</a></div>`,true);
+        }else{
+          show(`❌ <b>NOT FOUND - ${id}</b><br>Not in database. May be FAKE.<br>Contact: arnaudafrochain@gmail.com<br><br><div style="text-align:center"><a href="https://wa.me/2349132851465?text=Hello%20ARNAUD%2C%20I%20checked%20ID%3A%20${id}%20and%20it%20is%20NOT%20FOUND%20-%20Please%20help" target="_blank" style="display:inline-block;background:#c62828;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:bold;">📱 Report Fake on WhatsApp</a></div>`,false);
+        }
+      });
+    }
+  }).catch(e=>{show(`❌ ERROR: ${e.message}<br><br>Go Firebase > Firestore > Rules > Set <b>allow read: if true;</b> > Publish`,false);});
+}
+window.onload=()=>{const p=new URLSearchParams(location.search);const q=p.get('id')||p.get('cert');if(q){document.getElementById('certInput').value=q.toUpperCase();doVerify(q.toUpperCase());}};
+</script>
+
+<!-- ARNAUD AFROCHAINE VERIFICATION LTD - WHATSAPP BOLT - 2349132851465 - BEFORE BODY -->
+<a href="https://wa.me/2349132851465?text=Hello%20ARNAUD%20AFROCHAINE%20VERIFICATION%20LTD%20%F0%9F%91%8B%0AI%20just%20visited%20your%20verification%20portal%20and%20I%20need%20help%20with%3A%0A" 
+   class="whatsapp-bolt" target="_blank">
+   <span style="font-size:22px;">💬</span> Chat on WhatsApp
+</a>
+<!-- END WHATSAPP BOLT -->
+
+</body>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </html>
