@@ -3,173 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin - ARNAUD AFROCHAINE VERIFICATION LTD</title>
+<title>Admin - ARNAUD AFROCHAINE - NO PASSWORD</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f5f7f5;padding:20px}
-.login-box{max-width:400px;margin:100px auto;background:#fff;padding:30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.2);text-align:center}
-.admin-box{max-width:700px;margin:0 auto;background:#fff;padding:25px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.2);display:none}
-h2{color:#08381d;text-align:center;margin-bottom:20px}
-input,select{width:100%;padding:12px;margin:6px 0;border:2px solid #ddd;border-radius:10px;font-size:14px}
+body{background:#f0f2f0;padding:15px}
+.box{background:#fff;width:100%;max-width:700px;margin:20px auto;padding:25px;border-radius:20px;box-shadow:0 15px 40px rgba(0,0,0,.2)}
+h2{text-align:center;color:#08381d;margin-bottom:20px}
+input,select{width:100%;padding:12px;margin:6px 0;border:2px solid #ddd;border-radius:10px}
 label{font-weight:bold;font-size:12px;color:#08381d;margin-top:10px;display:block}
-button{width:100%;padding:14px;margin:10px 0;background:#08381d;color:#fff;border:none;border-radius:10px;font-weight:900;cursor:pointer;font-size:15px}
-button:hover{background:#0f6b33}
+button{width:100%;padding:14px;margin:8px 0;border:none;border-radius:10px;font-weight:900;color:#fff;cursor:pointer;font-size:15px}
+.btn-green{background:#08381d}
+.btn-black{background:#000}
+.btn-grey{background:#666}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.qr-box{text-align:center;margin-top:20px;padding:15px;border:2px dashed #08381d;border-radius:12px;display:none}
-#qrcode img{margin:0 auto}
-.success{background:#e8f5e9;border:2px solid #2e7d32;padding:12px;border-radius:10px;margin:10px 0;display:none;color:#2e7d32;font-weight:bold;text-align:center}
+.success{background:#e8f5e9;border:2px solid #2e7d32;color:#2e7d32;padding:10px;border-radius:10px;text-align:center;margin:10px 0;font-weight:bold;display:none}
+.qr{text-align:center;border:2px dashed #08381d;padding:15px;border-radius:12px;margin-top:15px;display:none}
 </style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
-
-<div class="login-box" id="loginBox">
-<h2>🔒 ADMIN LOGIN</h2>
-<input type="password" id="adminPass" placeholder="Enter Admin Password">
-<button onclick="login()">Login</button>
-<p style="font-size:11px;margin-top:10px;color:#666">Default: Arnaud2025</p>
-</div>
-
-<div class="admin-box" id="adminBox">
-<h2>🎓 ARNAUD ADMIN - ADD CERTIFICATE<br><span style="font-size:11px;color:#e11d1d">NO.1 ANTI-FAKE WORLDWIDE - ONE WAY + RESULTS</span></h2>
-
-<div class="success" id="successMsg"></div>
+<div class="box">
+<h2>🎓 ARNAUD ADMIN - NO PASSWORD<br><span style="font-size:11px;color:green">DIRECT ACCESS - SUBJECTS + RESULTS + QR</span></h2>
+<div class="success" id="msg"></div>
 
 <label>Full Name</label>
-<input id="fullName" placeholder="e.g Musa Job">
+<input id="fullName" placeholder="Full Name">
 
 <div class="grid2">
-<div><label>Student ID</label><input id="studentId" placeholder="e.g 12345"></div>
-<div><label>Certificate No</label><input id="certNo" placeholder="AFR-2026-XXXXXX"></div>
+<div><label>Student ID</label><input id="studentId"></div>
+<div><label>Certificate No</label><input id="certNo"></div>
 </div>
 
-<label>School Name</label>
-<input id="school" placeholder="e.g Lagos School">
+<label>School</label>
+<input id="school">
 
 <div class="grid2">
-<div><label>Examination</label><input id="examination" placeholder="e.g WASSCE, NECO"></div>
-<div><label>Course</label><input id="course" placeholder="e.g Science"></div>
+<div><label>Examination</label><input id="examination" placeholder="WASSCE"></div>
+<div><label>Course</label><input id="course"></div>
 </div>
 
 <div class="grid2">
-<div><label>Overall Grade</label>
-<select id="grade">
-<option>Distinction</option>
-<option>Upper Credit</option>
-<option>Lower Credit</option>
-<option>Pass</option>
-<option>Excellent</option>
-</select></div>
-<div><label>Status</label>
-<select id="status">
-<option>AUTHENTIC</option>
-<option>PENDING</option>
-<option>REVOKED</option>
-</select></div>
+<div><label>Overall Grade</label><select id="grade"><option>Distinction</option><option>Upper Credit</option><option>Lower Credit</option><option>Pass</option></select></div>
+<div><label>Status</label><select id="status"><option>AUTHENTIC</option><option>PENDING</option></select></div>
 </div>
 
 <div class="grid2">
 <div><label>Issue Date</label><input id="issueDate" type="date"></div>
-<div><label>Verified On</label><input id="verifiedOn" type="text" placeholder="Auto" readonly></div>
+<div><label>Verified On</label><input id="verifiedOn"></div>
 </div>
 
-<h3 style="margin:15px 0 5px;color:#08381d">📚 Subjects + Results (NEW!)</h3>
+<label>📚 Subjects + Results</label>
 <div class="grid2">
-<input id="subject1" placeholder="Subject 1 e.g Mathematics">
-<input id="result1" placeholder="Result 1 e.g A1">
-<input id="subject2" placeholder="Subject 2 e.g English">
-<input id="result2" placeholder="Result 2 e.g B2">
-<input id="subject3" placeholder="Subject 3 e.g Physics">
-<input id="result3" placeholder="Result 3 e.g C4">
-<input id="subject4" placeholder="Subject 4 e.g Chemistry">
-<input id="result4" placeholder="Result 4 e.g B3">
-<input id="subject5" placeholder="Subject 5 e.g Biology">
-<input id="result5" placeholder="Result 5 e.g A1">
-<input id="subject6" placeholder="Subject 6 e.g Further Math">
-<input id="result6" placeholder="Result 6 e.g B2">
+<input id="subject1" placeholder="Subject 1"><input id="result1" placeholder="Result 1 e.g A1">
+<input id="subject2" placeholder="Subject 2"><input id="result2" placeholder="Result 2">
+<input id="subject3" placeholder="Subject 3"><input id="result3" placeholder="Result 3">
+<input id="subject4" placeholder="Subject 4"><input id="result4" placeholder="Result 4">
+<input id="subject5" placeholder="Subject 5"><input id="result5" placeholder="Result 5">
+<input id="subject6" placeholder="Subject 6"><input id="result6" placeholder="Result 6">
 </div>
 
-<button onclick="saveCert()" style="background:#0d6e2f">💾 SAVE CERTIFICATE TO FIREBASE - ONE WAY</button>
-<button onclick="generateQR()" style="background:#000">🔳 GENERATE BLACK QR CODE</button>
-<button onclick="clearForm()" style="background:#666">🧹 CLEAR FORM</button>
+<button class="btn-green" onclick="save()">💾 SAVE TO FIREBASE</button>
+<button class="btn-black" onclick="makeQR()">🔳 GENERATE BLACK QR</button>
+<button class="btn-grey" onclick="clearAll()">🧹 CLEAR</button>
 
-<div class="qr-box" id="qrBox">
-<h3>QR CODE - BLACK</h3>
+<div class="qr" id="qrBox">
 <div id="qrcode"></div>
-<p id="qrText" style="margin-top:10px;font-weight:bold;font-size:12px"></p>
-<p style="font-size:11px;margin-top:5px">Scan to verify: <span id="verifyLink"></span></p>
-<button onclick="downloadQR()" style="background:#25D366;width:auto;padding:10px 20px;margin-top:10px">📥 Download QR</button>
+<p id="qrText" style="font-weight:bold;margin-top:10px"></p>
+<p id="qrLink" style="font-size:11px;word-break:break-all"></p>
 </div>
-
 </div>
 
 <script>
-// FIREBASE CONFIG WITH KEY - ONE WAY
 const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"};
 firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
-function login(){
-  const p=document.getElementById('adminPass').value;
-  if(p==="Arnaud2025" || p==="arnaud2025"){
-    document.getElementById('loginBox').style.display='none';
-    document.getElementById('adminBox').style.display='block';
-    document.getElementById('verifiedOn').value=new Date().toLocaleString();
-    // Auto generate cert number if empty
-    if(!document.getElementById('certNo').value){
-      document.getElementById('certNo').value="AFR-2026-"+Math.floor(100000+Math.random()*900000);
-    }
-  } else { alert("❌ Wrong password! Use Arnaud2025"); }
-}
+window.onload=()=>{
+  document.getElementById('verifiedOn').value=new Date().toLocaleString();
+  document.getElementById('certNo').value="AFR-2026-"+Math.floor(100000+Math.random()*900000);
+};
 
-function saveCert(){
+function save(){
   const certNo=document.getElementById('certNo').value.toUpperCase().trim();
-  if(!certNo){alert("Enter Certificate No");return;}
-  if(!document.getElementById('fullName').value){alert("Enter Full Name");return;}
-
+  if(!certNo||!document.getElementById('fullName').value){alert("Fill FullName & Cert No");return;}
   const data={
-    fullName: document.getElementById('fullName').value,
-    studentId: document.getElementById('studentId').value,
-    school: document.getElementById('school').value,
-    certificateN: certNo,
-    certificateNo: certNo,
-    certificateNumber: certNo,
-    examination: document.getElementById('examination').value,
-    course: document.getElementById('course').value,
-    grade: document.getElementById('grade').value,
-    status: document.getElementById('status').value,
-    issueDate: document.getElementById('issueDate').value,
-    verifiedOn: new Date().toLocaleString(),
-    // SUBJECTS + RESULTS - ALL SAVED!
-    subject1: document.getElementById('subject1').value,
-    result1: document.getElementById('result1').value,
-    subject2: document.getElementById('subject2').value,
-    result2: document.getElementById('result2').value,
-    subject3: document.getElementById('subject3').value,
-    result3: document.getElementById('result3').value,
-    subject4: document.getElementById('subject4').value,
-    result4: document.getElementById('result4').value,
-    subject5: document.getElementById('subject5').value,
-    result5: document.getElementById('result5').value,
-    subject6: document.getElementById('subject6').value,
-    result6: document.getElementById('result6').value,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    fullName:document.getElementById('fullName').value,
+    studentId:document.getElementById('studentId').value,
+    school:document.getElementById('school').value,
+    certificateN:certNo,certificateNo:certNo,certificateNumber:certNo,
+    examination:document.getElementById('examination').value,
+    course:document.getElementById('course').value,
+    grade:document.getElementById('grade').value,
+    status:document.getElementById('status').value,
+    issueDate:document.getElementById('issueDate').value,
+    verifiedOn:new Date().toLocaleString(),
+    subject1:document.getElementById('subject1').value,result1:document.getElementById('result1').value,
+    subject2:document.getElementById('subject2').value,result2:document.getElementById('result2').value,
+    subject3:document.getElementById('subject3').value,result3:document.getElementById('result3').value,
+    subject4:document.getElementById('subject4').value,result4:document.getElementById('result4').value,
+    subject5:document.getElementById('subject5').value,result5:document.getElementById('result5').value,
+    subject6:document.getElementById('subject6').value,result6:document.getElementById('result6').value,
   };
-
-  // ONE WAY ONLY - FAST
   db.collection("certificates").doc(certNo).set(data).then(()=>{
-    const m=document.getElementById('successMsg');
-    m.style.display='block';
-    m.innerHTML="✅ SAVED! "+certNo+" - ONE WAY - Subjects + Results saved! You can now Generate QR";
-    setTimeout(()=>{m.style.display='none'},5000);
-  }).catch(e=>{alert("❌ ERROR: "+e.message+"\nGo Firebase Rules -> PUBLISH allow read,write:true");});
+    const m=document.getElementById('msg');m.style.display='block';m.innerHTML="✅ SAVED! "+certNo;setTimeout(()=>m.style.display='none',4000);
+  }).catch(e=>alert(e.message));
 }
-
-function generateQR(){
+function makeQR(){
   const certNo=document.getElementById('certNo').value.toUpperCase().trim();
-  if(!certNo){alert("Enter Certificate No first & SAVE");return;}
-  const verifyUrl="https://arnaudalafrochaine.github.io/arnaudafrochaineverification/?id="+certNo;
+  if(!certNo){alert("Save first");return;}
+  const url="https://arnaudalafrochaine.github.io/arnaudafrochaineverification/?id="+certNo;
   document.getElementById('qrcode').innerHTML="";
-  new QRCode(document.getElementById('
+  new QRCode(document.getElementById('qrcode'),{text:url,width:200,height:200,colorDark:"#000000",colorLight:"#ffffff"});
+  document.getElementById('qrText').innerText=certNo;
+  document.getElementById('qrLink').innerText=url;
+  document.getElementById('qrBox').style.display='block';
+}
+function clearAll(){
+  document.getElementById('fullName').value="";document.getElementById('studentId').value="";
+  document.getElementById('school').value="";document.getElementById('certNo').value="AFR-2026-"+Math.floor(100000+Math.random()*900000);
+  for(let i=1;i<=6;i++){document.getElementById('subject'+i).value="";document.getElementById('result'+i).value="";}
+}
+</script>
+</body>
+</html>
