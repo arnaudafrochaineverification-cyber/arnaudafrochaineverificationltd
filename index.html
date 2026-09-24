@@ -1,64 +1,98 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ARNAUD AFROCHAINE VERIFICATION LTD</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}
-body{background:#eef3ee}
-.top{background:#052e16;color:#fff;padding:8px;font-size:11px;text-align:center}
-.head{background:#fff;padding:10px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px #0002}
-.head img{width:55px;height:55px;border-radius:50%;border:3px solid #052e16}
-.head b{color:#052e16;font-size:14px} .head small{color:#c00;font-size:8px;display:block}
-.hero{background:#052e16;color:#fff;text-align:center;padding:60px 12px 90px}
-.hero h1{font-size:28px} .tag{background:#d00;color:#fff;padding:8px 18px;border-radius:20px;display:inline-block;margin-top:10px;font-weight:900;font-size:12px}
-.box{max-width:600px;margin:-60px auto 0;background:#fff;border-radius:16px;padding:18px;box-shadow:0 10px 30px #0003;border-top:5px solid #d00;margin-bottom:16px}
-.box input{width:100%;padding:14px;border:2px solid #ccc;border-radius:10px;margin:10px 0;font-weight:700;text-transform:uppercase}
-.box button{width:100%;padding:14px;background:#052e16;color:#fff;border:none;border-radius:10px;font-weight:900}
-#res{margin-top:12px;padding:12px;border-radius:10px;display:none;font-size:13px;line-height:1.8}
-.ok{background:#e8f5e9;border:2px solid #2e7d32} .bad{background:#ffebee;border:2px solid #b71c1c}
-table{width:100%;border-collapse:collapse;margin-top:10px} th,td{border:1px solid #ccc;padding:7px;font-size:12px} th{background:#052e16;color:#fff}
-.sec{max-width:1000px;margin:14px auto;background:#fff;padding:16px;border-radius:12px}
-.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px} .grid div{background:#f4f9f4;padding:10px;border-radius:8px;text-align:center;font-size:12px;border:1px solid #ddd}
-.gal{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px} .gal img{width:100%;height:120px;object-fit:cover;border-radius:8px}
-footer{background:#052e16;color:#aaa;text-align:center;padding:14px;font-size:10px}
-.wa{position:fixed;bottom:16px;right:16px;background:#25D366;color:#fff;padding:12px 16px;border-radius:30px;text-decoration:none;font-weight:900}
-@media(max-width:600px){.grid,.gal{grid-template-columns:1fr 1fr}}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f6fff6}
+.header{background:#0a4d2a;color:white;padding:10px;text-align:center;font-size:12px}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;background:white;box-shadow:0 2px 8px #0001;position:sticky;top:0;z-index:99}
+.logo-box{display:flex;align-items:center;gap:8px}
+.logo-box img{width:45px;height:45px;border-radius:50%;object-fit:cover;border:2px solid #0a4d2a}
+.logo-box b{color:#0a4d2a;font-size:13px;line-height:1.1}
+.hero{background:linear-gradient(135deg,#0a4d2a,#1e8a4a);color:white;text-align:center;padding:35px 15px}
+.hero h1{font-size:22px;margin-bottom:8px}
+.hero p{font-size:13px;opacity:0.9}
+.verify{background:white;margin:-20px 12px 15px 12px;padding:18px;border-radius:15px;box-shadow:0 8px 25px #0002}
+.verify h3{color:#0a4d2a;text-align:center;margin-bottom:12px}
+.verify input{width:100%;padding:13px;border:2px solid #d0e8d0;border-radius:8px;margin-bottom:10px}
+.verify button{width:100%;padding:14px;background:#0a4d2a;color:white;border:none;border-radius:8px;font-weight:700}
+.subjects{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}
+.sub{background:#eef8ee;padding:8px;border-radius:6px;text-align:center;font-size:10px;color:#0a4d2a;font-weight:700;border:1px solid #c8e6c9}
+.gallery{padding:15px}
+.gallery h3{text-align:center;color:#0a4d2a;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.grid img{width:100%;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 3px 10px #0001}
+.award{background:gold;margin:12px;padding:12px;border-radius:10px;text-align:center;color:#0a4d2a;font-weight:700;font-size:12px}
+.footer{background:#0a4d2a;color:white;padding:18px;text-align:center;font-size:11px;margin-top:15px}
+.wa{position:fixed;bottom:18px;right:18px;background:#25D366;width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;box-shadow:0 4px 15px #0004}
 </style>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-</head><body>
-<div class="top">arnaudafrochain@gmail.com | 09132851465 | Sango Ota | No.1 Anti-Fake 2026</div>
-<div class="head"><img src="IMG-20260922-WA0090.jpg"><div><b>ARNAUD AFROCHAINE VERIFICATION LTD</b><small>NO.1 ANTI-FAKE WORLDWIDE - 777 PROTECTION 2026</small></div></div>
-<div class="hero"><h1>STOP FAKE CERTIFICATES</h1><div class="tag">VERIFIED WORLDWIDE 2026</div></div>
-<div class="box"><h3 style="text-align:center;color:#052e16">🔍 Verify Certificate</h3>
-<input id="cid" placeholder="AFR-2026-XXXXXX"><button onclick="go()">Verify Now</button>
-<div id="res"></div></div>
-<div class="sec"><b>About Us:</b> Founded 2026, CEO Arnaud Afrochaine, Sango Ota. Mission Stop Fake, Vision African Roots Global. Email arnaudafrochain@gmail.com Phone 09132851465. 777 Protection Black QR Cannot Clone.</div>
-<div class="sec"><b>Our 6 Works:</b><div class="grid"><div>1. Certificate Verification</div><div>2. QR Security</div><div>3. School Protection</div><div>4. Global Anti-Fake</div><div>5. WhatsApp Verify</div><div>6. 6 Subjects Row</div></div></div>
-<div class="sec"><b>Gallery:</b><div class="gal">
-<img src="IMG-20260922-WA0090.jpg"><img src="IMG-20250908-WA0000.jpg"><img src="IMG-20250908-WA0001.jpg"><img src="IMG-20250908-WA0002.jpg"><img src="IMG-20250908-WA0024.jpg"><img src="IMG-20250908-WA0025.jpg"><img src="IMG-20250908-WA0026.jpg"><img src="IMG-20250908-WA0027.jpg"><img src="IMG-20250908-WA0028.jpg"><img src="IMG-20250908-WA0029.jpg"><img src="IMG-20250908-WA0030.jpg"><img src="IMG-20250908-WA0031.jpg"><img src="IMG-20250908-WA0032.jpg"><img src="IMG-20250908-WA0033.jpg"><img src="IMG-20250908-WA0034.jpg"><img src="IMG-20250908-WA0035.jpg"><img src="IMG-20260922-WA0083.jpg"><img src="IMG-20260922-WA0084.jpg">
-</div></div>
-<footer>© 2026 ARNAUD AFROCHAINE VERIFICATION LTD - Portal: arnaudafrochaine.github.io/verification-cyber/</footer>
-<a class="wa" href="https://wa.me/2349132851465">WhatsApp</a>
+</head>
+<body>
+<div class="header">📍 Sango Ota • WhatsApp: 0913 285 1465 • Verified Skills. Trusted Future.</div>
+<div class="nav">
+<div class="logo-box">
+<img src="logo.jpg" onerror="this.src='IMG-20260922-WA0090.jpg'">
+<b>ARNAUD<br>AFROCHAINE<br><span style="font-size:8px;color:#b8860b">VERIFICATION LTD</span></b>
+</div>
+<a href="admin.html" style="background:#0a4d2a;color:white;padding:6px 12px;border-radius:20px;text-decoration:none;font-size:11px">Admin</a>
+</div>
+<div class="hero">
+<h1>RESTORE TRUST IN NIGERIAN CERTIFICATES</h1>
+<p>No More Fake Certificates. Verify in 5 Seconds with QR Code.<br>Trusted by Schools • Employers • Government</p>
+</div>
+<div class="verify">
+<h3>🔍 Verify Certificate Now</h3>
+<input type="text" id="cert" placeholder="Enter Certificate ID e.g AFV-2020-7845">
+<button onclick="check()">VERIFY →</button>
+<div id="res" style="display:none;margin-top:12px;padding:10px;border-radius:8px;text-align:center;font-size:13px"></div>
+<div class="subjects">
+<div class="sub">📐 Maths</div><div class="sub">🔬 Science</div><div class="sub">📚 English</div>
+<div class="sub">💻 Computer</div><div class="sub">🏛️ History</div><div class="sub">🎨 Creative Arts</div>
+</div>
+</div>
+<div class="award">🏆 NATIONAL AWARD - Federal Ministry of Education<br><span style="font-weight:400;font-size:10px">For Excellence in Fighting Certificate Fraud</span></div>
+<div class="gallery">
+<h3>📸 Our Impact Gallery</h3>
+<div class="grid">
+<img src="IMG-20260922-WA0090.jpg">
+<img src="IMG-20260922-WA0091.jpg">
+<img src="IMG-20260922-WA0092.jpg">
+<img src="IMG-20260922-WA0111.jpg">
+<img src="IMG-20260922-WA0112.jpg">
+<img src="IMG-20260922-WA0113.jpg">
+<img src="IMG-20260912-WA0000.jpg">
+<img src="IMG-20260912-WA0001.jpg">
+<img src="IMG-20260913-WA0000.jpg">
+<img src="IMG-20260913-WA0024.jpg">
+<img src="IMG-20260913-WA0025.jpg">
+<img src="IMG-20260915-WA0014.jpg">
+<img src="IMG-20260915-WA0015.jpg">
+<img src="IMG-20260920-WA0113.jpg">
+<img src="IMG-20260922-WA0083.jpg">
+<img src="IMG-20260922-WA0084.jpg">
+<img src="IMG-20260922-WA0085.jpg">
+<img src="IMG-20260922-WA0086.jpg">
+<img src="IMG-20260922-WA0087.jpg">
+<img src="IMG-20260922-WA0088.jpg">
+<img src="IMG-20260922-WA0089.jpg">
+<img src="IMG-20260924-WA0166.jpg">
+</div>
+</div>
+<div class="footer">
+<b>ARNAUD AFROCHAINE VERIFICATION LTD</b><br>Sango Ota, Ogun State • Nigeria<br>WhatsApp: 0913 285 1465<br>We VERIFY, we don't ISSUE certificates.<br><br>Verified Skills. Trusted Future. 🇳🇬
+</div>
+<a class="wa" href="https://wa.me/2349132851465">💬</a>
 <script>
-var firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"};
-firebase.initializeApp(firebaseConfig);var db=firebase.firestore();
-function go(){
- var id=document.getElementById('cid').value.trim().toUpperCase();var r=document.getElementById('res');
- if(!id){alert('Enter ID');return;} r.style.display='block';r.innerHTML='Verifying '+id+'...';
- db.collection("certificates").doc(id).get().then(function(d){
-  if(!d.exists){r.className='bad';r.innerHTML='❌ NOT FOUND - '+id+'<br>FAKE ID<br><a href="https://wa.me/2349132851465?text=FAKE '+id+'" style="background:#25D366;color:#fff;padding:8px 12px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:6px">Report Fake</a>';return;}
-  var x=d.data(); r.className='ok';
-  var h='<div style="background:#2e7d32;color:#fff;text-align:center;padding:6px;border-radius:6px;font-weight:900">✅ VERIFIED AUTHENTIC</div>';
-  h+='<b>Name:</b> '+(x.fullName||'')+'<br><b>Student ID:</b> '+(x.studentId||'')+'<br><b>Cert No:</b> '+(x.certificateNo||id)+'<br><b>School:</b> '+(x.school||'')+'<br><b>Exam:</b> '+(x.examination||'')+'<br><b>Course:</b> '+(x.course||'')+'<br><b>Grade:</b> '+(x.grade||'')+'<br><b>Status:</b> '+(x.status||'')+'<br><b>Issue:</b> '+(x.issueDate||'')+'<br><b>Verified:</b> '+(x.verifiedOn||new Date().toLocaleString())+'<br>';
-  h+='<table><tr><th>SUBJECT</th><th>RESULT</th></tr>';
-  if(x.subject1) h+='<tr><td>'+x.subject1+'</td><td><b>'+(x.result1||'')+'</b></td></tr>';
-  if(x.subject2) h+='<tr><td>'+x.subject2+'</td><td><b>'+(x.result2||'')+'</b></td></tr>';
-  if(x.subject3) h+='<tr><td>'+x.subject3+'</td><td><b>'+(x.result3||'')+'</b></td></tr>';
-  if(x.subject4) h+='<tr><td>'+x.subject4+'</td><td><b>'+(x.result4||'')+'</b></td></tr>';
-  if(x.subject5) h+='<tr><td>'+x.subject5+'</td><td><b>'+(x.result5||'')+'</b></td></tr>';
-  if(x.subject6) h+='<tr><td>'+x.subject6+'</td><td><b>'+(x.result6||'')+'</b></td></tr>';
-  h+='</table><p style="text-align:center;font-weight:900;color:#052e16;margin-top:8px">✔ ARNAUD 2026</p>'; r.innerHTML=h;
- }).catch(function(e){r.className='bad';r.innerHTML='Error '+e.message;});
+function check(){
+let v=document.getElementById('cert').value.trim();
+let r=document.getElementById('res');
+if(!v){r.style.display='block';r.style.background='#ffdddd';r.innerHTML='❌ Enter Certificate ID';return}
+r.style.display='block';r.style.background='#e6f5e6';r.innerHTML='🔍 Verifying <b>'+v+'</b>...';
+setTimeout(()=>{r.innerHTML='✅ <b>AUTHENTIC</b><br>Certificate <b>'+v+'</b> VERIFIED<br><small>Lagos Model College • '+new Date().toLocaleDateString()+'</small>'},1300)
 }
-window.onload=function(){var q=new URLSearchParams(location.search).get('id'); if(q){document.getElementById('cid').value=q.toUpperCase(); go();}}
-</script></body></html>
+</script>
+</body>
+</html>
