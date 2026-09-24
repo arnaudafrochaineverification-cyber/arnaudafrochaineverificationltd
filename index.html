@@ -2,149 +2,78 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ARNAUD AFROCHAINE VERIFICATION LTD - NO.1 ANTI-FAKE WORLDWIDE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARNAUD AFROCHAINE VERIFICATION LTD - No.1 Anti-Fake Worldwide</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f5f5f5}
-.top{background:#08381d;color:#fff;padding:8px;text-align:center;font-size:12px}
-.header{background:#fff;padding:15px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
-.header img{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid #08381d}
-.header h1{font-size:16px;color:#08381d;line-height:1.1}
-.header h1 span{color:#d00;font-size:11px}
-.hero{background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),url('https://images.unsplash.com/photo-1523240795612-9a054b0db644');background-size:cover;padding:40px 20px;text-align:center;color:#fff}
-.hero h2{font-size:28px;margin-bottom:10px}
-.verify-box{background:#fff;max-width:500px;margin:-20px auto 20px;padding:20px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
-.verify-box input{width:100%;padding:14px;border:2px solid #08381d;border-radius:10px;margin:10px 0;font-weight:bold;text-transform:uppercase}
-.verify-box button{width:100%;padding:14px;background:#08381d;color:#fff;border:none;border-radius:10px;font-weight:900;cursor:pointer}
-.result{margin-top:15px;padding:15px;border:2px solid #08381d;border-radius:12px;background:#fffde7;display:none;text-align:left}
-.result p{margin:6px 0;font-size:14px}
+body{background:#f5f7f5}
+.top{background:#052e16;color:#c8e6d0;padding:7px 14px;font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap}
+.head{background:#fff;padding:12px 18px;display:flex;align-items:center;box-shadow:0 2px 15px rgba(0,0,0,.12);position:sticky;top:0;z-index:99}
+.logo{display:flex;align-items:center;gap:12px}
+.logo img{height:58px;border-radius:50%;border:2px solid #08381d;object-fit:cover}
+.logo h2{font-size:13px;color:#08381d}
+.logo p{font-size:9px;color:#d11f1f;font-weight:900}
+.hero{background:linear-gradient(135deg,#052e16 0%,#0f6b33 100%);color:#fff;text-align:center;padding:80px 18px 120px}
+.hero h1{font-size:35px;font-weight:900}
+.hero .badge{background:#e11d1d;color:#fff;display:inline-block;padding:9px 20px;border-radius:25px;font-size:12px;font-weight:900;margin:16px 0}
+.hero p{max-width:760px;margin:0 auto;font-size:14px;color:#d6f0db;line-height:1.7}
+.verify-box{max-width:650px;margin:-90px auto 0;padding:0 14px}
+.card{background:#fff;border-radius:20px;padding:28px;box-shadow:0 20px 50px rgba(0,0,0,.28);border-top:6px solid #e11d1d}
+.card h3{text-align:center;color:#08381d}
+.card input{width:100%;padding:15px;border:2px solid #ddd;border-radius:12px;margin:14px 0;font-size:15px;text-transform:uppercase;font-weight:bold}
+.card button{width:100%;padding:15px;background:#08381d;color:#fff;border:none;border-radius:12px;font-weight:900;font-size:16px;cursor:pointer}
+#result{margin-top:16px;padding:16px;border-radius:12px;display:none;line-height:1.9;font-size:13px}
+.ok{background:#e8f5e9;border:2px solid #2e7d32}
+.bad{background:#ffebee;border:2px solid #c62828}
 table{width:100%;border-collapse:collapse;margin-top:12px}
-th,td{border:1px solid #ddd;padding:8px;font-size:13px}
+th,td{border:1px solid #ccc;padding:8px;font-size:13px;text-align:left}
 th{background:#08381d;color:#fff}
 td:last-child{text-align:center;font-weight:900;color:#08381d}
-.section{max-width:900px;margin:20px auto;background:#fff;padding:20px;border-radius:12px}
-.gallery{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:15px}
-.gallery img{width:100%;height:120px;object-fit:cover;border-radius:10px;border:2px solid #eee}
-.founder{text-align:center}
-.founder img{width:150px;height:150px;border-radius:50%;border:4px solid #08381d;object-fit:cover}
-.footer{background:#08381d;color:#fff;text-align:center;padding:20px;font-size:12px}
-.whatsapp{position:fixed;bottom:20px;right:20px;background:#25D366;color:#fff;padding:12px 20px;border-radius:30px;text-decoration:none;font-weight:bold;box-shadow:0 5px 15px rgba(0,0,0,.3)}
+.wrap{max-width:1050px;margin:0 auto;padding:0 14px}
+.sec{background:#fff;margin:20px auto;border-radius:20px;padding:26px;box-shadow:0 5px 20px rgba(0,0,0,.06)}
+.sec h2{color:#08381d;text-align:center;font-size:23px;margin-bottom:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.box{background:#f7faf7;border:1px solid #e1efe1;border-radius:14px;padding:14px}
+.gallery{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.gallery img{height:190px;object-fit:cover;width:100%;border-radius:14px;border:2px solid #eee}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;text-align:center}
+.stat{background:#08381d;color:#fff;border-radius:14px;padding:16px}
+.stat b{font-size:24px;display:block}
+footer{background:#052e16;color:#a8d3b1;padding:26px 14px;text-align:center;font-size:12px;line-height:2}
+@media(max-width:800px){.grid3,.stats{grid-template-columns:1fr 1fr}.gallery{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.grid3,.stats,.gallery{grid-template-columns:1fr}}
+.whatsapp-bolt{position:fixed;bottom:25px;right:25px;background-color:#25D366;color:white;border-radius:50px;padding:14px 22px;font-family:Arial;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;text-decoration:none;box-shadow:0 5px 20px rgba(0,0,0,0.3);z-index:9999;animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,0.7)}70%{box-shadow:0 0 0 18px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
 </style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
 <body>
+<div class="top"><span>📧 arnaudafrochain@gmail.com</span><span>📞 +2349132851465 | Sango Ota, Ogun</span></div>
+<div class="head"><div class="logo"><img src="IMG-20260922-WA0090.jpg" onerror="this.src='https://ui-avatars.com/api/?name=ARNAUD'"><div><h2>ARNAUD AFROCHAINE<br>VERIFICATION LTD</h2><p>NO.1 ANTI-FAKE WORLDWIDE</p></div></div></div>
+<div class="hero"><h1>STOP FAKE CERTIFICATES</h1><div class="badge">NUMBER ONE ANTI-FAKE IN THE WORLD 🌍</div><p>African Roots, Global Vision. Secure QR verification in 5 seconds. Verified Skills. Trusted Future.</p></div>
+<div class="verify-box"><div class="card"><h3>🔍 Verify Certificate</h3><input id="certInput" placeholder="Enter ID e.g. AFR-2026-6600"><button onclick="verifyCert()">Verify Now</button><div id="result"></div></div></div>
 
-<div class="top">📧 arnaudafrochaine@gmail.com | 🌍 NO.1 ANTI-FAKE WORLDWIDE</div>
+<div class="wrap">
+<div class="sec"><h2>About Us</h2><p style="line-height:1.9;font-size:14px">ARNAUD AFROCHAINE VERIFICATION LTD founded 2025. We restore trust in Nigerian certificates. 777 Triple Protection. Cannot be faked.</p></div>
 
-<div class="header">
-<img src="images/IMG-20250908-WA0083.jpg" onerror="this.src='https://ui-avatars.com/api/?name=ARNAUD'">
-<h1>ARNAUD AFROCHAINE<br>VERIFICATION LTD<br><span>NO.1 ANTI-FAKE WORLDWIDE</span></h1>
-</div>
+<div class="sec"><h2>Our Stats</h2><div class="stats"><div class="stat"><b>10K+</b>Verified</div><div class="stat"><b>500+</b>Schools</div><div class="stat"><b>99.9%</b>Secure</div><div class="stat"><b>5 Sec</b>Fast</div></div></div>
 
-<div class="hero">
-<h2>STOP FAKE CERTIFICATES</h2>
-<p>ONE WAY VERIFICATION - FAST & SECURE - BLACK QR ONLY</p>
-</div>
+<div class="sec"><h2>What We Do</h2><div class="grid3"><div class="box"><b>🎓 Verification</b><br>Verify in 5 sec</div><div class="box"><b>🔒 QR Security</b><br>Cannot be cloned</div><div class="box"><b>🏫 School Protection</b><br>Stop fake</div></div></div>
 
-<div class="verify-box">
-<h3 style="text-align:center;color:#08381d">🔍 VERIFY CERTIFICATE</h3>
-<input type="text" id="certId" placeholder="Enter Certificate No e.g AFR-2026-618517">
-<button onclick="verify()">Verify Now</button>
-<div id="resultBox" class="result"></div>
-</div>
-
-<div class="section">
-<h3 style="color:#08381d;text-align:center">About Us</h3>
-<p style="text-align:center;line-height:1.6">Arnaud Afrochaine Verification Ltd is No.1 Anti-Fake Worldwide. We help schools, employers and governments stop fake certificates using One Way Black QR verification technology.</p>
-</div>
-
-<div class="section">
-<h3 style="color:#08381d;text-align:center">What We Do</h3>
-<p style="text-align:center">✅ Certificate Verification<br>🔳 QR Security System<br>🏫 Schools Protection<br>💼 Employers Check<br>🌍 Global Anti-Fake Campaign</p>
-</div>
-
-<div class="section">
-<div class="founder">
-<h3 style="color:#08381d;text-align:center">Founder</h3>
-<img src="images/IMG-20250908-WA0083.jpg">
-<p style="margin-top:10px"><b>Arnaud Afrochaine</b><br>Founder & CEO - Fighting fake certificates worldwide</p>
-</div>
-</div>
-
-<div class="section">
-<h3 style="color:#08381d;text-align:center">Our Gallery - 18 Pictures</h3>
-<div class="gallery">
-<img src="images/IMG-20250908-WA0000.jpg">
-<img src="images/IMG-20250908-WA0001.jpg">
-<img src="images/IMG-20250908-WA0002.jpg">
-<img src="images/IMG-20250908-WA0024.jpg">
-<img src="images/IMG-20250908-WA0025.jpg">
-<img src="images/IMG-20250908-WA0026.jpg">
-<img src="images/IMG-20250908-WA0027.jpg">
-<img src="images/IMG-20250908-WA0028.jpg">
-<img src="images/IMG-20250908-WA0029.jpg">
-<img src="images/IMG-20250908-WA0030.jpg">
-<img src="images/IMG-20250908-WA0031.jpg">
-<img src="images/IMG-20250908-WA0032.jpg">
-<img src="images/IMG-20250908-WA0033.jpg">
-<img src="images/IMG-20250908-WA0034.jpg">
-<img src="images/IMG-20250908-WA0035.jpg">
-<img src="images/IMG-20250908-WA0083.jpg">
-<img src="images/IMG-20250908-WA0084.jpg">
-<img src="images/IMG-20250908-WA0085.jpg">
-</div>
-</div>
-
-<div class="footer">© 2026 ARNAUD AFROCHAINE VERIFICATION LTD - NO.1 ANTI-FAKE WORLDWIDE<br>All Rights Reserved</div>
-
-<a class="whatsapp" href="https://wa.me/2349132851465?text=Hello%20Arnaud%20I%20want%20to%20verify%20my%20certificate">💬 Chat on WhatsApp</a>
-
-<script>
-const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"};
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
-
-function verify(){
-const id=document.getElementById('certId').value.trim().toUpperCase();
-if(!id){alert("Enter ID");return;}
-const box=document.getElementById('resultBox');
-box.style.display='block';
-box.innerHTML='⏳ Checking...';
-db.collection("certificates").doc(id).get().then(doc=>{
-if(!doc.exists){box.innerHTML=`❌ <b>NOT FOUND</b><br>ID ${id} no dey our database`;return;}
-const d=doc.data();
-box.innerHTML=`<div style="background:#e8f5e9;border-radius:10px;padding:10px;text-align:center;color:#2e7d32;font-weight:900">✅ VERIFIED AUTHENTIC - ONE WAY</div>
-<p><b>FullName:</b> ${d.fullName||''}</p>
-<p><b>Student ID:</b> ${d.studentId||''}</p>
-<p><b>School:</b> ${d.school||''}</p>
-<p><b>Certificate N°:</b> ${d.certificateNo||id}</p>
-<p><b>Examination:</b> ${d.examination||d.course||''}</p>
-<p><b>Course:</b> ${d.course||''}</p>
-<p><b>Issue Date:</b> ${d.issueDate||''}</p>
-<p><b>Grade:</b> ${d.grade||''}</p>
-<p><b>Status:</b> <span style="color:green;font-weight:900">${d.status||'AUTHENTIC'}</span></p>
-<p><b>Verified On:</b> ${new Date().toLocaleString()}</p>
-<div style="margin-top:15px;border-top:2px solid #08381d;padding-top:10px">
-<h4 style="text-align:center;color:#08381d">📚 SUBJECTS & RESULTS</h4>
-<table>
-<tr><th>SUBJECT</th><th>RESULT</th></tr>
-<tr><td>${d.subject1||'-'}</td><td>${d.result1||'-'}</td></tr>
-<tr><td>${d.subject2||'-'}</td><td>${d.result2||'-'}</td></tr>
-<tr><td>${d.subject3||'-'}</td><td>${d.result3||'-'}</td></tr>
-<tr><td>${d.subject4||'-'}</td><td>${d.result4||'-'}</td></tr>
-<tr><td>${d.subject5||'-'}</td><td>${d.result5||'-'}</td></tr>
-<tr><td>${d.subject6||'-'}</td><td>${d.result6||'-'}</td></tr>
-</table>
-</div>
-<p style="margin-top:15px;text-align:center;color:#08381d;font-weight:bold">✔ Verified by ARNAUD AFROCHAINE VERIFICATION LTD - NO.1 ANTI-FAKE WORLDWIDE 🌍</p>`;
-}).catch(e=>{box.innerHTML='Error: '+e.message});}
-
-window.onload=()=>{
-const urlId=new URLSearchParams(window.location.search).get('id');
-if(urlId){document.getElementById('certId').value=urlId.toUpperCase();verify();}
-}
-</script>
-</body>
- </html>
+<div class="sec"><h2>Gallery - 18 Pictures</h2><div class="gallery">
+<img src="IMG-20250908-WA0000.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0001.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0002.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0024.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0025.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0026.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0027.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0028.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0029.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0030.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0031.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0032.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0033.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0034.jpg" onerror="this.src='IMG-20260922-WA0083.jpg'">
+<img src="IMG-20250908-WA0035.jpg" onerror="this.src='IMG
