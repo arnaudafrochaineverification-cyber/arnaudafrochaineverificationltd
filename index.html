@@ -4,30 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ARNAUD AFROCHAINE VERIFICATION LTD</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#f6fff6}
-.header{background:#0a4d2a;color:white;padding:10px;text-align:center;font-size:12px}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;background:white;box-shadow:0 2px 8px #0001;position:sticky;top:0;z-index:99}
+.header{background:#0a4d2a;color:white;padding:8px;text-align:center;font-size:11px}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:white;box-shadow:0 2px 8px #0001;position:sticky;top:0;z-index:99}
 .logo-box{display:flex;align-items:center;gap:8px}
-.logo-box img{width:45px;height:45px;border-radius:50%;object-fit:cover;border:2px solid #0a4d2a}
-.logo-box b{color:#0a4d2a;font-size:13px;line-height:1.1}
-.hero{background:linear-gradient(135deg,#0a4d2a,#1e8a4a);color:white;text-align:center;padding:35px 15px}
-.hero h1{font-size:22px;margin-bottom:8px}
-.hero p{font-size:13px;opacity:0.9}
-.verify{background:white;margin:-20px 12px 15px 12px;padding:18px;border-radius:15px;box-shadow:0 8px 25px #0002}
-.verify h3{color:#0a4d2a;text-align:center;margin-bottom:12px}
-.verify input{width:100%;padding:13px;border:2px solid #d0e8d0;border-radius:8px;margin-bottom:10px}
-.verify button{width:100%;padding:14px;background:#0a4d2a;color:white;border:none;border-radius:8px;font-weight:700}
-.subjects{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}
-.sub{background:#eef8ee;padding:8px;border-radius:6px;text-align:center;font-size:10px;color:#0a4d2a;font-weight:700;border:1px solid #c8e6c9}
-.gallery{padding:15px}
-.gallery h3{text-align:center;color:#0a4d2a;margin-bottom:10px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.grid img{width:100%;height:160px;object-fit:cover;border-radius:10px;box-shadow:0 3px 10px #0001}
-.award{background:gold;margin:12px;padding:12px;border-radius:10px;text-align:center;color:#0a4d2a;font-weight:700;font-size:12px}
-.footer{background:#0a4d2a;color:white;padding:18px;text-align:center;font-size:11px;margin-top:15px}
-.wa{position:fixed;bottom:18px;right:18px;background:#25D366;width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;box-shadow:0 4px 15px #0004}
+.logo-box img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #0a4d2a}
+.logo-box b{color:#0a4d2a;font-size:12px;line-height:1.1}
+.hero{background:linear-gradient(135deg,#0a4d2a,#1e8a4a);color:white;text-align:center;padding:28px 14px}
+.hero h1{font-size:20px;margin-bottom:6px}
+.hero p{font-size:12px;opacity:.9}
+.verify{background:white;margin:-18px 10px 12px 10px;padding:16px;border-radius:14px;box-shadow:0 8px 25px #0002}
+.verify h3{color:#0a4d2a;text-align:center;margin-bottom:10px;font-size:14px}
+.verify input{width:100%;padding:13px;border:2px solid #c8e6c9;border-radius:8px;margin-bottom:10px;font-size:14px}
+.verify button{width:100%;padding:14px;background:#0a4d2a;color:white;border:none;border-radius:8px;font-weight:700;font-size:13px}
+.subjects{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:10px}
+.sub{background:#eef8ee;padding:7px;border-radius:6px;text-align:center;font-size:10px;color:#0a4d2a;font-weight:700;border:1px solid #c8e6c9}
+.gallery{padding:12px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.grid img{width:100%;height:150px;object-fit:cover;border-radius:10px}
+.award{background:gold;margin:10px;padding:10px;border-radius:10px;text-align:center;color:#0a4d2a;font-weight:700;font-size:11px}
+.footer{background:#0a4d2a;color:white;padding:16px;text-align:center;font-size:10px}
+.wa{position:fixed;bottom:16px;right:16px;background:#25D366;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 15px #0004;z-index:200}
+table{width:100%;border-collapse:collapse}
 </style>
 </head>
 <body>
@@ -44,54 +46,87 @@ body{background:#f6fff6}
 </div>
 <div class="verify">
 <h3>🔍 Verify Certificate Now</h3>
-<input type="text" id="cert" placeholder="Enter Certificate ID e.g AFV-2020-7845">
+<input type="text" id="cert" placeholder="Enter e.g AFR-2026-781971">
 <button onclick="check()">VERIFY →</button>
-<div id="res" style="display:none;margin-top:12px;padding:10px;border-radius:8px;text-align:center;font-size:13px"></div>
+<div id="res" style="display:none;margin-top:12px;padding:12px;border-radius:10px;font-size:12px"></div>
 <div class="subjects">
 <div class="sub">📐 Maths</div><div class="sub">🔬 Science</div><div class="sub">📚 English</div>
 <div class="sub">💻 Computer</div><div class="sub">🏛️ History</div><div class="sub">🎨 Creative Arts</div>
 </div>
 </div>
-<div class="award">🏆 NATIONAL AWARD - Federal Ministry of Education<br><span style="font-weight:400;font-size:10px">For Excellence in Fighting Certificate Fraud</span></div>
-<div class="gallery">
-<h3>📸 Our Impact Gallery</h3>
-<div class="grid">
-<img src="IMG-20260922-WA0090.jpg">
-<img src="IMG-20260922-WA0091.jpg">
-<img src="IMG-20260922-WA0092.jpg">
-<img src="IMG-20260922-WA0111.jpg">
-<img src="IMG-20260922-WA0112.jpg">
-<img src="IMG-20260922-WA0113.jpg">
-<img src="IMG-20260912-WA0000.jpg">
-<img src="IMG-20260912-WA0001.jpg">
-<img src="IMG-20260913-WA0000.jpg">
-<img src="IMG-20260913-WA0024.jpg">
-<img src="IMG-20260913-WA0025.jpg">
-<img src="IMG-20260915-WA0014.jpg">
-<img src="IMG-20260915-WA0015.jpg">
-<img src="IMG-20260920-WA0113.jpg">
-<img src="IMG-20260922-WA0083.jpg">
-<img src="IMG-20260922-WA0084.jpg">
-<img src="IMG-20260922-WA0085.jpg">
-<img src="IMG-20260922-WA0086.jpg">
-<img src="IMG-20260922-WA0087.jpg">
-<img src="IMG-20260922-WA0088.jpg">
-<img src="IMG-20260922-WA0089.jpg">
-<img src="IMG-20260924-WA0166.jpg">
-</div>
-</div>
-<div class="footer">
-<b>ARNAUD AFROCHAINE VERIFICATION LTD</b><br>Sango Ota, Ogun State • Nigeria<br>WhatsApp: 0913 285 1465<br>We VERIFY, we don't ISSUE certificates.<br><br>Verified Skills. Trusted Future. 🇳🇬
-</div>
+<div class="award">🏆 NATIONAL AWARD - Federal Ministry of Education<br><span style="font-weight:400;font-size:9px">For Excellence in Fighting Certificate Fraud</span></div>
+<div class="gallery"><div class="grid">
+<img src="IMG-20260922-WA0090.jpg"><img src="IMG-20260922-WA0091.jpg">
+<img src="IMG-20260922-WA0092.jpg"><img src="IMG-20260922-WA0111.jpg">
+<img src="IMG-20260922-WA0112.jpg"><img src="IMG-20260922-WA0113.jpg">
+<img src="IMG-20260912-WA0000.jpg"><img src="IMG-20260912-WA0001.jpg">
+<img src="IMG-20260913-WA0000.jpg"><img src="IMG-20260913-WA0024.jpg">
+<img src="IMG-20260913-WA0025.jpg"><img src="IMG-20260915-WA0014.jpg">
+</div></div>
+<div class="footer"><b>ARNAUD AFROCHAINE VERIFICATION LTD</b><br>Sango Ota • WhatsApp: 0913 285 1465<br>We VERIFY, we don't ISSUE.<br><br>Verified Skills. Trusted Future. 🇳🇬</div>
 <a class="wa" href="https://wa.me/2349132851465">💬</a>
+
 <script>
-function check(){
-let v=document.getElementById('cert').value.trim();
+// REPLACE WITH YOUR REAL FIREBASE CONFIG FROM admin.html
+const firebaseConfig = {
+  apiKey: "AIzaSyD0bFv2W4yQ9p...",
+  authDomain: "arnaud-afrochaine.firebaseapp.com",
+  projectId: "arnaud-afrochaine",
+  storageBucket: "arnaud-afrochaine.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abc123"
+};
+if(!firebase.apps.length){firebase.initializeApp(firebaseConfig);}
+const db = firebase.firestore();
+
+async function check(){
+let v=document.getElementById('cert').value.trim().toUpperCase();
 let r=document.getElementById('res');
 if(!v){r.style.display='block';r.style.background='#ffdddd';r.innerHTML='❌ Enter Certificate ID';return}
-r.style.display='block';r.style.background='#e6f5e6';r.innerHTML='🔍 Verifying <b>'+v+'</b>...';
-setTimeout(()=>{r.innerHTML='✅ <b>AUTHENTIC</b><br>Certificate <b>'+v+'</b> VERIFIED<br><small>Lagos Model College • '+new Date().toLocaleDateString()+'</small>'},1300)
+r.style.display='block';r.style.background='#e6f5e6';r.style.border='1px solid #c8e6c9';
+r.innerHTML='🔍 Verifying <b>'+v+'</b> from Firebase...';
+try{
+let snap = await db.collection("certificates").where("certificateNo","==",v).get();
+if(snap.empty){
+let snap2 = await db.collection("certificates").where("certNo","==",v).get();
+if(snap2.empty){
+r.style.background='#ffdddd';r.innerHTML='❌ <b>NOT FOUND</b><br>Certificate '+v+' no dey database<br><small>Contact: 0913 285 1465</small>';return;
 }
-</script>
-</body>
-</html>
+snap=snap2;
+}
+snap.forEach(doc=>{
+let d=doc.data();
+let subj="";
+let list = d.subjects || [];
+if(list.length===0){
+// try old fields
+for(let i=1;i<=6;i++){ if(d['subject'+i]||d['sub'+i]){ list.push({name:d['subject'+i]||d['sub'+i], score:d['score'+i]||d['result'+i]||d['mark'+i]||''}) } }
+}
+list.forEach(s=>{
+let n=s.name||s.subject||s.sub||'';
+let sc=s.score||s.result||s.mark||s.s||'';
+if(n) subj+=`<tr><td style="padding:8px;border:1px solid #ddd">${n}</td><td style="padding:8px;border:1px solid #ddd;text-align:center;font-weight:700;color:#0a4d2a">${sc}</td></tr>`;
+});
+r.style.background='white';r.style.border='2px solid #0a4d2a';
+r.innerHTML=`
+<div style="text-align:left">
+<div style="text-align:center;background:#0a4d2a;color:white;padding:10px;border-radius:8px;font-size:13px">✅ <b>${(d.status||'AUTHENTIC').toUpperCase()} - VERIFIED</b><br><small>Certificate is Valid & Authentic</small></div>
+<div style="margin-top:10px;background:#f6fff6;padding:10px;border-radius:8px;line-height:1.8">
+<b>Full Name:</b> ${d.fullName||d.name||''}<br>
+<b>Student ID:</b> ${d.studentId||d.id||''}<br>
+<b>Certificate No:</b> <span style="color:#0a4d2a;font-weight:800">${d.certificateNo||d.certNo||v}</span><br>
+<b>School:</b> ${d.school||''}<br>
+<b>Examination:</b> ${d.examination||d.exam||''} | <b>Course:</b> ${d.course||''}<br>
+<b>Grade:</b> <span style="background:gold;padding:2px 8px;border-radius:10px;font-weight:700">${d.grade||''}</span> | <b>Status:</b> <span style="color:green;font-weight:800">${d.status||'AUTHENTIC'}</span><br>
+<b>Issue Date:</b> ${d.issueDate||''}<br>
+<b>Verified On:</b> ${d.verifiedOn||new Date().toLocaleString()}
+</div>
+<div style="margin-top:12px">
+<b style="color:#0a4d2a;font-size:12px">📚 Subjects + Results (Public Portal)</b>
+<table style="margin-top:6px"><tr style="background:#0a4d2a;color:white"><th style="padding:8px;border:1px solid #0a4d2a;text-align:left">Subject</th><th style="padding:8px;border:1px solid #0a4d2a">Result/Score</th></tr>
+${subj||'<tr><td colspan=2 style="padding:8px;text-align:center;color:#999">No subjects added</td></tr>'}
+</table>
+</div>
+<div style="text-align:center;margin-top:6px;font-size:9px;color:#888">We VERIFY, we don't ISSUE certificates - ARNAUD AFROCHAINE LTD</div>
+<div style="text-align:center;margin-top:12px">
+<a href="https://wa.me/2349132851465?text=Verified ${v}" style="background:#25D366;color:white;padding:8px 14px;border-radius:20
