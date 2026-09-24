@@ -95,6 +95,47 @@ function displayData(x, docId){
   const status = x.status || 'AUTHENTIC';
   const issueDate = x.issueDate || 'N/A';
   const verifiedOn = x.verifiedOn || new Date().toLocaleString();
+  function displayData(x, docId){
+  const fullName = x.fullName || x.fullname || 'N/A';
+  const studentId = x.studentId || 'N/A';
+  const school = x.school || 'N/A';
+  const certNo = x.certificateNumber || x.certificateNo || x.certificateN || docId;
+  const exam = x.examination || 'N/A';
+  const course = x.course || 'N/A';
+  const grade = x.grade || 'N/A';
+  const status = x.status || 'AUTHENTIC';
+  const issueDate = x.issueDate || 'N/A';
+  const verifiedOn = x.verifiedOn || new Date().toLocaleString();
+  // SUBJECTS - NOW ADDED BACK!
+  const s1 = x.subject1 || x.sub1 || '';
+  const s2 = x.subject2 || x.sub2 || '';
+  const s3 = x.subject3 || x.sub3 || '';
+  const s4 = x.subject4 || x.sub4 || '';
+  let subjectsHtml = '';
+  if(s1 || s2 || s3 || s4){
+    subjectsHtml = `<div style="margin-top:12px;background:#f0f8f0;padding:12px;border-radius:8px;border:1px dashed #0d6e2f">
+    <b>📚 Subjects:</b><br>
+    ${s1?`1. ${s1}<br>`:''}
+    ${s2?`2. ${s2}<br>`:''}
+    ${s3?`3. ${s3}<br>`:''}
+    ${s4?`4. ${s4}<br>`:''}
+    </div>`;}show(`<b style="font-size:18px;color:#0d6e2f">✅ VERIFIED AUTHENTIC - ONE WAY</b><br>
+  <div style="background:#fff;padding:12px;border-radius:10px;margin-top:10px;border:1px solid #c8e6c9">
+  <b>FullName:</b> ${fullName}<br>
+  <b>Student ID:</b> ${studentId}<br>
+  <b>School:</b> ${school}<br>
+  <b>Certificate N':</b> ${certNo}<br>
+  <b>Examination:</b> ${exam}<br>
+  <b>Course:</b> ${course}<br>
+  <b>Issue Date:</b> ${issueDate}<br>
+  <b>Grade:</b> <b style="color:#0d6e2f">${grade}</b><br>
+  <b>Status:</b> <span style="color:green;font-weight:900">${status}</span><br>
+  <b>Verified On:</b> ${verifiedOn}<br>
+  ${subjectsHtml}
+  </div>
+  <br><div style="text-align:center;color:#0d6e2f;font-weight:bold">✔ Verified by ARNAUD AFROCHAINE VERIFICATION LTD - NO.1 ANTI-FAKE WORLDWIDE 🌍<br>ONE WAY VERIFICATION - FAST & SECURE</div>
+  <br><div style="text-align:center"><a href="https://wa.me/2349132851465?text=Verified%20${certNo}%20-%20${fullName}%20VALID" target="_blank" style="display:inline-block;background:#25D366;color:white;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:bold">📱 WhatsApp</a></div>`,true);
+}
 
   show(`<b style="font-size:18px;color:#0d6e2f">✅ VERIFIED AUTHENTIC - ONE WAY</b><br>
   <div style="background:#fff;padding:12px;border-radius:10px;margin-top:10px;border:1px solid #c8e6c9">
