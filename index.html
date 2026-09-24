@@ -37,6 +37,9 @@ footer{background:#052e16;color:#a8d3b1;padding:26px 14px;text-align:center;font
 @media(max-width:800px){.grid3{grid-template-columns:1fr 1fr}.gallery{grid-template-columns:1fr 1fr}}
 @media(max-width:500px){.grid3,.gallery{grid-template-columns:1fr}}
 .whatsapp-bolt{position:fixed;bottom:25px;right:25px;background:#25D366;color:white;border-radius:50px;padding:14px 22px;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;text-decoration:none;box-shadow:0 5px 20px rgba(0,0,0,0.3);z-index:9999}
+table{width:100%;border-collapse:collapse;margin-top:8px}
+th{background:#08381d;color:#fff;padding:8px;border:1px solid #ddd;text-align:left}
+td{padding:8px;border:1px solid #ddd}
 </style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -54,38 +57,25 @@ footer{background:#052e16;color:#a8d3b1;padding:26px 14px;text-align:center;font
 <div class="sec"><h2>📞 Contact Us</h2><p style="line-height:2.5;font-size:15px">📍 Sango Ota, Ogun State<br>📧 arnaudafrochain@gmail.com<br>📞 +2349132851465</p><img src="IMG-20260922-WA0092.jpg"></div>
 </div>
 <footer>© 2026 ARNAUD AFROCHAINE VERIFICATION LTD<br>arnaudafrochain@gmail.com | +2349132851465</footer>
-
 <script>
-// ===== FIREBASE KEY - ONE WAY ONLY =====
 const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"};
 firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
-
 function show(h,ok){const r=document.getElementById('result');r.style.display='block';r.className=ok?'ok':'bad';r.innerHTML=h;}
 function verifyCert(){const v=document.getElementById('certInput').value.toUpperCase().trim();if(!v)return alert('Enter ID');doVerify(v);}
-
-// ===== ONE WAY VERIFICATION - CLEAN & FAST =====
 function doVerify(id){
   id=id.toUpperCase().trim();
   const r=document.getElementById('result');
   r.style.display='block';r.className='';r.style.background='#fff8e1';r.style.border='2px solid #ffb300';
-  r.innerHTML='⏳ Verifying '+id+'... One way only - fast!';
+  r.innerHTML='⏳ Verifying '+id+'...';
   document.getElementById('verifyCard').scrollIntoView({behavior:'smooth'});
-
-  // ONE WAY ONLY - Direct document ID
   db.collection("certificates").doc(id).get().then(d=>{
-    if(d.exists){
-      displayData(d.data(), d.id);
-    } else {
-      show(`❌ <b>NOT FOUND - ${id}</b><br><br>This ID never saved for Firebase.<br><br>1. Go admin.html<br>2. Save certificate with ID: ${id}<br>3. Make sure Firestore Rules = allow read, write: if true`,false);
-    }
-  }).catch(e=>{
-    show(`❌ ERROR: ${e.message}<br><br>Go Firebase > Firestore Database > Rules > Paste:<br><b>rules_version='2'; service cloud.firestore { match /databases/{database}/documents { match /{document=**} { allow read, write: if true; } } }</b><br>Then PUBLISH`,false);
-  });
+    if(d.exists){displayData(d.data(), d.id);}
+    else{show(`❌ <b>NOT FOUND - ${id}</b><br>Go admin save am`,false);}
+  }).catch(e=>{show(`❌ ERROR: ${e.message}<br>Go Firebase Rules -> PUBLISH`,false);});
 }
-
 function displayData(x, docId){
-  const fullName = x.fullName || x.fullname || 'N/A';
+  const fullName = x.fullName || 'N/A';
   const studentId = x.studentId || 'N/A';
   const school = x.school || 'N/A';
   const certNo = x.certificateNumber || x.certificateNo || x.certificateN || docId;
@@ -95,63 +85,12 @@ function displayData(x, docId){
   const status = x.status || 'AUTHENTIC';
   const issueDate = x.issueDate || 'N/A';
   const verifiedOn = x.verifiedOn || new Date().toLocaleString();
-  function displayData(x, docId){
-  const fullName = x.fullName || x.fullname || 'N/A';
-  const studentId = x.studentId || 'N/A';
-  const school = x.school || 'N/A';
-  const certNo = x.certificateNumber || x.certificateNo || x.certificateN || docId;
-  const exam = x.examination || 'N/A';
-  const course = x.course || 'N/A';
-  const grade = x.grade || 'N/A';
-  const status = x.status || 'AUTHENTIC';
-  const issueDate = x.issueDate || 'N/A';
-  const verifiedOn = x.verifiedOn || new Date().toLocaleString();
-  // SUBJECTS - NOW ADDED BACK!
-  const s1 = x.subject1 || x.sub1 || '';
-  const s2 = x.subject2 || x.sub2 || '';
-  const s3 = x.subject3 || x.sub3 || '';
-  const s4 = x.subject4 || x.sub4 || '';
-  let subjectsHtml = '';
-  if(s1 || s2 || s3 || s4){
-    subjectsHtml = `<div style="margin-top:12px;background:#f0f8f0;padding:12px;border-radius:8px;border:1px dashed #0d6e2f">
-    <b>📚 Subjects:</b><br>
-    ${s1?`1. ${s1}<br>`:''}
-    ${s2?`2. ${s2}<br>`:''}
-    ${s3?`3. ${s3}<br>`:''}
-    ${s4?`4. ${s4}<br>`:''}
-    </div>`;}show(`<b style="font-size:18px;color:#0d6e2f">✅ VERIFIED AUTHENTIC - ONE WAY</b><br>
-  <div style="background:#fff;padding:12px;border-radius:10px;margin-top:10px;border:1px solid #c8e6c9">
-  <b>FullName:</b> ${fullName}<br>
-  <b>Student ID:</b> ${studentId}<br>
-  <b>School:</b> ${school}<br>
-  <b>Certificate N':</b> ${certNo}<br>
-  <b>Examination:</b> ${exam}<br>
-  <b>Course:</b> ${course}<br>
-  <b>Issue Date:</b> ${issueDate}<br>
-  <b>Grade:</b> <b style="color:#0d6e2f">${grade}</b><br>
-  <b>Status:</b> <span style="color:green;font-weight:900">${status}</span><br>
-  <b>Verified On:</b> ${verifiedOn}<br>
-  ${subjectsHtml}
-  </div>
-  <br><div style="text-align:center;color:#0d6e2f;font-weight:bold">✔ Verified by ARNAUD AFROCHAINE VERIFICATION LTD - NO.1 ANTI-FAKE WORLDWIDE 🌍<br>ONE WAY VERIFICATION - FAST & SECURE</div>
-  <br><div style="text-align:center"><a href="https://wa.me/2349132851465?text=Verified%20${certNo}%20-%20${fullName}%20VALID" target="_blank" style="display:inline-block;background:#25D366;color:white;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:bold">📱 WhatsApp</a></div>`,true);
-}
-
-  show(`<b style="font-size:18px;color:#0d6e2f">✅ VERIFIED AUTHENTIC - ONE WAY</b><br>
-  <div style="background:#fff;padding:12px;border-radius:10px;margin-top:10px;border:1px solid #c8e6c9">
-  <b>FullName:</b> ${fullName}<br>
-  <b>Student ID:</b> ${studentId}<br>
-  <b>School:</b> ${school}<br>
-  <b>Certificate N':</b> ${certNo}<br>
-  <b>Examination:</b> ${exam}<br>
-  <b>Course:</b> ${course}<br>
-  <b>Issue Date:</b> ${issueDate}<br>
-  <b>Grade:</b> <b style="color:#0d6e2f">${grade}</b><br>
-  <b>Status:</b> <span style="color:green;font-weight:900">${status}</span><br>
-  <b>Verified On:</b> ${verifiedOn}<br>
-  </div>
-  <br><div style="text-align:center;color:#0d6e2f;font-weight:bold">✔ Verified by ARNAUD AFROCHAINE VERIFICATION LTD - NO.1 ANTI-FAKE WORLDWIDE 🌍<br>ONE WAY VERIFICATION - FAST & SECURE</div>
-  <br><div style="text-align:center"><a href="https://wa.me/2349132851465?text=Verified%20${certNo}%20-%20${fullName}%20VALID" target="_blank" style="display:inline-block;background:#25D366;color:white;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:bold">📱 WhatsApp</a></div>`,true);
+  const s1=x.subject1||'',r1=x.result1||'';const s2=x.subject2||'',r2=x.result2||'';const s3=x.subject3||'',r3=x.result3||'';const s4=x.subject4||'',r4=x.result4||'';const s5=x.subject5||'',r5=x.result5||'';const s6=x.subject6||'',r6=x.result6||'';
+  let resultsHtml='';
+  if(s1||s2||s3||s4||s5||s6){
+    resultsHtml=`<div style="margin-top:14px"><b>📚 RESULTS:</b><table><tr><th>Subject</th><th style="text-align:center">Result</th></tr>${s1?`<tr><td>${s1}</td><td style="text-align:center;font-weight:bold;color:#0d6e2f">${r1}</td></tr>`:''}${s2?`<tr style="background:#f7faf7"><td>${s2}</td><td style="text-align:center;font-weight:bold;color:#0d6e2f">${r2}</td></tr>`:''}${s3?`<tr><td>${s3}</td><td style="text-align:center;font-weight:bold;color:#0d6e2f">${r3}</td></tr>`:''}${s4?`<tr style="background:#f7faf7"><td>${s4}</td><td style="text-align:center;font-weight:bold;color:#0d6e2f">${r4}</td></tr>`:''}${s5?`<tr><td>${s5}</td><td style="text-align:center;font-weight:bold;color:#0d6e2f">${r5}</td></tr>`:''}${s6?`<tr style="background:#f7faf7"><td>${s6}</td><td style="text-align:center;font-weight:bold;color:#0d6e2f">${r6}</td></tr>`:''}</table></div>`;
+  }
+  show(`<b style="font-size:18px;color:#0d6e2f">✅ VERIFIED AUTHENTIC</b><br><div style="background:#fff;padding:12px;border-radius:10px;margin-top:10px;border:1px solid #c8e6c9"><b>FullName:</b> ${fullName}<br><b>Student ID:</b> ${studentId}<br><b>School:</b> ${school}<br><b>Certificate N':</b> ${certNo}<br><b>Examination:</b> ${exam}<br><b>Course:</b> ${course}<br><b>Issue Date:</b> ${issueDate}<br><b>Overall Grade:</b> <b style="color:#0d6e2f">${grade}</b><br><b>Status:</b> <span style="color:green;font-weight:900">${status}</span><br><b>Verified On:</b> ${verifiedOn}<br>${resultsHtml}</div><br><div style="text-align:center;color:#0d6e2f;font-weight:bold">✔ Verified by ARNAUD AFROCHAINE VERIFICATION LTD - NO.1 ANTI-FAKE WORLDWIDE 🌍</div><br><div style="text-align:center"><a href="https://wa.me/2349132851465?text=Verified%20${certNo}%20-%20${fullName}%20VALID" target="_blank" style="display:inline-block;background:#25D366;color:white;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:bold">📱 WhatsApp</a></div>`,true);
 }
 window.onload=()=>{const p=new URLSearchParams(location.search);const q=p.get('id')||p.get('cert');if(q){document.getElementById('certInput').value=q.toUpperCase();doVerify(q.toUpperCase());}};
 </script>
