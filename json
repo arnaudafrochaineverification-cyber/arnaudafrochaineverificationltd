@@ -1,0 +1,13 @@
+{
+  "name": "africans-fabric-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": { "start": "node index.js" },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.0",
+    "firebase": "^10.7.1",
+    "qrcode-terminal": "^0.12.0",
+    "pino": "^8.0.0"
+  }
+}
