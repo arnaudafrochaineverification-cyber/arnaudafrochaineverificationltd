@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "@whiskeysockets/baileys": "^6.7.0",
-    "firebase": "^10.7.1",
     "qrcode-terminal": "^0.12.0",
     "pino": "^8.0.0",
     "express": "^4.18.2"
