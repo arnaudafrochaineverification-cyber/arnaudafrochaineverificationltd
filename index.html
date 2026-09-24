@@ -15,7 +15,7 @@ body{background:#f5f7f5}
 .logo p{font-size:9px;color:#d11f1f;font-weight:900}
 .hero{background:linear-gradient(135deg,#052e16 0%,#0f6b33 100%);color:#fff;text-align:center;padding:80px 18px 120px}
 .hero h1{font-size:35px;font-weight:900}
-.hero.badge{background:#e11d1d;color:#fff;display:inline-block;padding:9px 20px;border-radius:25px;font-size:12px;font-weight:900;margin:16px 0}
+.hero .badge{background:#e11d1d;color:#fff;display:inline-block;padding:9px 20px;border-radius:25px;font-size:12px;font-weight:900;margin:16px 0}
 .hero p{max-width:760px;margin:0 auto;font-size:14px;color:#d6f0db;line-height:1.7}
 .verify-box{max-width:650px;margin:-90px auto 0;padding:0 14px}
 .card{background:#fff;border-radius:20px;padding:28px;box-shadow:0 20px 50px rgba(0,0,0,.28);border-top:6px solid #e11d1d}
@@ -40,6 +40,10 @@ body{background:#f5f7f5}
 footer{background:#052e16;color:#a8d3b1;padding:26px 14px;text-align:center;font-size:12px;line-height:2}
 @media(max-width:800px){.grid3,.stats{grid-template-columns:1fr 1fr}.gallery{grid-template-columns:1fr 1fr}}
 @media(max-width:500px){.grid3,.grid2,.stats,.gallery{grid-template-columns:1fr}}
+/* WHATSAPP BOLT STYLE */
+.whatsapp-bolt{position:fixed;bottom:25px;right:25px;background-color:#25D366;color:white;border-radius:50px;padding:14px 22px;font-family:'Segoe UI',Arial,sans-serif;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;text-decoration:none;box-shadow:0 5px 20px rgba(0,0,0,0.3);z-index:9999;animation:pulse 2s infinite}
+.whatsapp-bolt:hover{background-color:#128C7E;transform:scale(1.05);color:white}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,0.7)}70%{box-shadow:0 0 0 18px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
 </style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -67,11 +71,31 @@ function doVerify(id){
   const r=document.getElementById('result');r.style.display='block';r.style.background='#fff8e1';r.style.border='2px solid #ffb300';r.innerHTML='⏳ Verifying '+id+'...';
   document.getElementById('verifyCard').scrollIntoView({behavior:'smooth'});
   db.collection("certificates").doc(id).get().then(d=>{
-    if(d.exists){const x=d.data();show(`<b style="font-size:17px">✅ VERIFIED AUTHENTIC</b><br><br><b>Name:</b> ${x.fullname||x.name||'N/A'}<br><b>School:</b> ${x.institution||'N/A'}<br><b>Cert No:</b> ${x.certNumber||d.id}<br><b>Status:</b> <span style="color:green;font-weight:900">${x.status||'AUTHENTIC'}</span><br><br>✔ By ARNAUD AFROCHAINE<br>📧 arnaudafrochain@gmail.com`,true);}
-    else{db.collection("certificates").where("certNumber","==",id).get().then(q=>{if(!q.empty){const x=q.docs[0].data();show(`<b>✅ VERIFIED AUTHENTIC</b><br><b>Name:</b> ${x.fullname||x.name}<br><b>Cert No:</b> ${x.certNumber}<br><b>Status:</b> AUTHENTIC`,true);}else{show(`❌ <b>NOT FOUND - ${id}</b><br>Not in database. May be FAKE.<br>Contact: arnaudafrochain@gmail.com`,false);}});}
+    if(d.exists){
+      const x=d.data();
+      show(`<b style="font-size:17px">✅ VERIFIED AUTHENTIC</b><br><br><b>Name:</b> ${x.fullname||x.name||'N/A'}<br><b>School:</b> ${x.institution||'N/A'}<br><b>Cert No:</b> ${x.certNumber||d.id}<br><b>Status:</b> <span style="color:green;font-weight:900">${x.status||'AUTHENTIC'}</span><br><br>✔ By ARNAUD AFROCHAINE<br>📧 arnaudafrochain@gmail.com<br><br><div style="text-align:center;margin-top:15px"><a href="https://wa.me/2349132851465?text=Hello%20ARNAUD%20AFROCHAINE%20LTD%2C%20I%20verified%20ID%3A%20${id}%20-%20It%20is%20VALID%20%E2%9C%85%20I%20want%20to%20register%20my%20school" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#25D366,#128C7E);color:white;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:14px;">📱 Register My School via WhatsApp</a></div>`,true);
+    }
+    else{
+      db.collection("certificates").where("certNumber","==",id).get().then(q=>{
+        if(!q.empty){
+          const x=q.docs[0].data();
+          show(`<b>✅ VERIFIED AUTHENTIC</b><br><b>Name:</b> ${x.fullname||x.name}<br><b>Cert No:</b> ${x.certNumber}<br><b>Status:</b> AUTHENTIC<br><br><div style="text-align:center;margin-top:15px"><a href="https://wa.me/2349132851465?text=Hello%20ARNAUD%20AFROCHAINE%20LTD%2C%20I%20verified%20ID%3A%20${id}%20-%20VALID%20%E2%9C%85%20I%20want%20to%20register%20my%20school" target="_blank" style="display:inline-block;background:#25D366;color:white;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:bold;">📱 Register My School via WhatsApp</a></div>`,true);
+        }else{
+          show(`❌ <b>NOT FOUND - ${id}</b><br>Not in database. May be FAKE.<br>Contact: arnaudafrochain@gmail.com<br><br><div style="text-align:center"><a href="https://wa.me/2349132851465?text=Hello%20ARNAUD%2C%20I%20checked%20ID%3A%20${id}%20and%20it%20is%20NOT%20FOUND%20-%20Please%20help" target="_blank" style="display:inline-block;background:#c62828;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:bold;">📱 Report Fake on WhatsApp</a></div>`,false);
+        }
+      });
+    }
   }).catch(e=>{show(`❌ ERROR: ${e.message}<br><br>Go Firebase > Firestore > Rules > Set <b>allow read: if true;</b> > Publish`,false);});
 }
 window.onload=()=>{const p=new URLSearchParams(location.search);const q=p.get('id')||p.get('cert');if(q){document.getElementById('certInput').value=q.toUpperCase();doVerify(q.toUpperCase());}};
 </script>
+
+<!-- ARNAUD AFROCHAINE VERIFICATION LTD - WHATSAPP BOLT - 2349132851465 - BEFORE BODY -->
+<a href="https://wa.me/2349132851465?text=Hello%20ARNAUD%20AFROCHAINE%20VERIFICATION%20LTD%20%F0%9F%91%8B%0AI%20just%20visited%20your%20verification%20portal%20and%20I%20need%20help%20with%3A%0A" 
+   class="whatsapp-bolt" target="_blank">
+   <span style="font-size:22px;">💬</span> Chat on WhatsApp
+</a>
+<!-- END WHATSAPP BOLT -->
+
 </body>
-</html>
+  </html>
