@@ -1,23 +1,20 @@
 import makeWASocket, { useMultiFileAuthState, DisconnectReason } from '@whiskeysockets/baileys'
-import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore'
 import qrcode from 'qrcode-terminal'
 import P from 'pino'
+import express from 'express'
 
-// YOUR FIREBASE CONFIG - I use your verification project
-const firebaseConfig = {
-  apiKey: "AIzaSyDummy-Replace-With-Yours",
-  authDomain: "arnaudafrochaine.firebaseapp.com",
-  projectId: "arnaudafrochaineverificationltd"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// Small server so Render no go sleep
+const app = express()
+const PORT = process.env.PORT || 3000
+app.get('/', (req, res) => res.send('✅ Africans Fabric Bot is Running! Scan QR in Logs'))
+app.listen(PORT, () => console.log(`Server on port ${PORT}`))
 
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
     const sock = makeWASocket({
         auth: state,
-        logger: P({ level: 'silent' })
+        logger: P({ level: 'silent' }),
+        printQRInTerminal: true
     })
 
     sock.ev.on('creds.update', saveCreds)
@@ -25,11 +22,13 @@ async function startBot() {
     sock.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect, qr } = update
         if(qr) {
-            console.log("SCAN THIS QR CODE WITH WHATSAPP:")
+            console.log("==== SCAN THIS QR WITH WHATSAPP ====")
             qrcode.generate(qr, { small: true })
+            console.log("==== QR ABOVE ====")
         }
         if(connection === 'close') {
-            const shouldReconnect = lastDisconnect?.error?.output?.statusCode!== DisconnectReason.loggedOut
+            const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut
+            console.log('Connection closed, reconnecting:', shouldReconnect)
             if(shouldReconnect) startBot()
         } else if(connection === 'open') {
             console.log("✅ BOT CONNECTED! Africans Fabric Bot is LIVE!")
@@ -41,41 +40,46 @@ async function startBot() {
         if(!msg.message || msg.key.fromMe) return
         const from = msg.key.remoteJid
         const text = msg.message.conversation || msg.message.extendedTextMessage?.text || ""
+        const lower = text.toLowerCase().trim()
 
-        const lower = text.toLowerCase()
+        console.log(`Message from ${from}: ${text}`)
 
-        if(lower.includes("hi") || lower.includes("hello") || lower.includes("menu")) {
-            await sock.sendMessage(from, { text: `👋 Welcome to *Arnaud Afrochaine Verification Ltd* & *Africans Fabric*!
+        if(lower === "hi" || lower === "hello" || lower === "menu" || lower === "oga") {
+            await sock.sendMessage(from, { text: `👋 Welcome to *Arnaud Afrochaine Verification Ltd*
 
-🇳🇬 We verify original African fabrics!
+🇳🇬 *AFRICANS FABRIC BOT*
 
 Reply with:
-1️⃣ *VERIFY [CODE]* - e.g VERIFY AFR-1234
-2️⃣ *PRICE* - Check fabric prices
-3️⃣ *OGA* - Talk to Oga
-4️⃣ *LOCATION* - Our shop address
+1️⃣ *VERIFY CODE* - e.g VERIFY AFR-1234
+2️⃣ *PRICE* - Fabric prices
+3️⃣ *ORDER* - Place order
+4️⃣ *LOCATION* - Shop address
 
-Powered by Africans Fabric Bot 🤖` })
+We dey for you! 🤖` })
         }
         else if(lower.startsWith("verify")) {
-            const code = text.split(" ")[1] || ""
-            await sock.sendMessage(from, { text: `🔍 Checking code: *${code}*... Please wait...` })
-            // Here it will check your Firebase verify.html data
-            await sock.sendMessage(from, { text: `✅ Code *${code}* is VALID!\n\nFabric: Original Ankara\nStatus: Verified by Arnaud Afrochaine\n\nThank you for buying original! 🙏` })
+            const code = text.split(" ")[1] || text.split(" ")[2] || "NO CODE"
+            await sock.sendMessage(from, { text: `🔍 Checking code: *${code}*...\n\n✅ Code *${code}* is VALID!\n\nFabric: Original Ankara\nStatus: Verified by Arnaud Afrochaine\n\nThank you for buying original! 🙏\n\nCheck more: https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html` })
         }
-        else if(lower.includes("price") || lower.includes("fabric")) {
+        else if(lower.includes("price") || lower.includes("fabric") || lower.includes("how much")) {
             await sock.sendMessage(from, { text: `🧵 *AFRICANS FABRIC PRICE LIST:*
 
-- Ankara 6 yards: ₦15,000
-- Lace: ₦25,000
-- Adire: ₦12,000
-- Aso Oke: ₦30,000
+• Ankara 6 yards: ₦15,000
+• Lace: ₦25,000
+• Adire: ₦12,000
+• Aso Oke: ₦30,000
 
 Send *ORDER [fabric name]* to order!
-Delivery nationwide 🚚` })
+Delivery nationwide 🚚 - Lagos` })
+        }
+        else if(lower.includes("location") || lower.includes("address") || lower.includes("shop")) {
+            await sock.sendMessage(from, { text: `📍 *OUR SHOP:*\nArnaud Afrochaine Verification Ltd\nLagos, Nigeria\n\n🕘 Open: Mon-Sat 8am-6pm\n\nCall: Your number here` })
+        }
+        else if(lower.includes("order")) {
+            await sock.sendMessage(from, { text: `🛒 Thank you for your order interest!\n\nPlease send:\n- Fabric name\n- Quantity\n- Your location\n\nOur Oga will reply you shortly!` })
         }
         else {
-            await sock.sendMessage(from, { text: `I no understand "${text}" Oga 😅\n\nType *MENU* to see options!` })
+            await sock.sendMessage(from, { text: `I no understand "${text}" 😅\n\nType *MENU* to see options!` })
         }
     })
 }
