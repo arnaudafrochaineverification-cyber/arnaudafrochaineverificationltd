@@ -25,8 +25,9 @@ button{padding:12px 15px;border:none;border-radius:8px;cursor:pointer;font-weigh
   <h2 style="color:#0a4a2a">🔒 ARNAUD ADMIN<br><small style="font-size:12px">SECURE LOGIN REQUIRED</small></h2>
   <input type="email" id="email" value="arnaudafrochain@gmail.com">
   <input type="password" id="password" placeholder="Password">
-  <button class="btn-green" onclick="login()">LOGIN</button>
+  <button class="btn-green" id="loginBtn" onclick="login()">LOGIN</button>
   <p id="loginMsg" style="color:red"></p>
+  <p id="debug" style="color:blue;font-size:11px"></p>
 </div>
 <div id="adminDiv" class="card" style="display:none">
   <div style="display:flex;justify-content:space-between;align-items:center">
@@ -68,7 +69,60 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 function generateCertNo(){ const year=new Date().getFullYear(); const rand=Math.floor(100000+Math.random()*900000); document.getElementById('certNo').value=`AFR-${year}-${rand}`; return document.getElementById('certNo').value; }
 function generateStudentId(){ const rand=Math.floor(1000+Math.random()*9000); document.getElementById('studentId').value=`${rand}`; return document.getElementById('studentId').value; }
-function login(){ const email=document.getElementById('email').value; const password=document.getElementById('password').value; auth.signInWithEmailAndPassword(email,password).then(()=>{}).catch(e=>{document.getElementById('loginMsg').innerText=e.message;}); }
+async function login(){
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value;
+  const msgEl=document.getElementById('loginMsg');
+  const debugEl=document.getElementById('debug');
+  const btn=document.getElementById('loginBtn');
+  if(!email || !password){ msgEl.innerText="Please enter email and password"; return; }
+  btn.innerText="LOGGING IN...";
+  btn.disabled=true;
+  msgEl.innerText="";
+  debugEl.innerText="Connecting to Firebase...";
+  try{
+    await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    debugEl.innerText="Authenticating...";
+    await auth.signInWithEmailAndPassword(email,password);
+    msgEl.style.color="green";
+    msgEl.innerText="Success! Loading dashboard...";
+  } catch(e){
+    msgEl.style.color="red";
+    msgEl.innerText=e.code + ": " + e.message;
+    debugEl.innerText="Failed: " + e.code;
+    btn.innerText="LOGIN";
+    btn.disabled=false;
+  }
+}
 function logout(){ auth.signOut(); }
-auth.onAuthStateChanged(user=>{ if(user && user.email==="arnaudafrochain@gmail.com"){ document.getElementById('loginDiv').style.display="none"; document.getElementById('adminDiv').style.display="block"; document.getElementById('userEmail').innerText=user.email; generateCertNo(); generateStudentId(); } else { document.getElementById('loginDiv').style.display="block"; document.getElementById('adminDiv').style.display="none"; if(user && user.email!=="arnaudafrochain@gmail.com"){ alert("Access Denied"); auth.signOut(); } } });
-async function saveCert(){ const certNo=document.getElementById('certNo').value.trim(); if(!certNo){alert("Cert No empty");return;} const subjects=[]; for(let i=1;i<=6;i++){ const s=document.getElementById('sub'+i).value.trim(); const r=document.getElementById('res'+i).value.trim().toUpperCase(); if(s&&r){subjects.push({subject:s,score:r});} } const data={ fullName:document.getElementById('fullName').value.trim(), certificateNo:certNo, studentId:document.getElementById('studentId').value.trim(), school:document.getElementById('school').value.trim(), examination:document.getElementById('exam').value.trim(), course:document.getElementById('course').value.trim(), grade:document.getElementById('grade').value, status:document.getElementById('status').value, subjects:subjects, issueDate:new Date().toISOString().split('T')[0], verifiedOn:new Date().toISOString(), verifiedBy:"ARNAUD AFROCHAINE - 12 Idiroko Road, Sango Ota" }; try{ await db.collection("certificates").doc(certNo).set(data); document.getElementById('msg').innerText="
+auth.onAuthStateChanged(user=>{
+  if(user && user.email.toLowerCase()==="arnaudafrochain@gmail.com"){
+    document.getElementById('loginDiv').style.display="none";
+    document.getElementById('adminDiv').style.display="block";
+    document.getElementById('userEmail').innerText=user.email;
+    generateCertNo(); generateStudentId();
+  } else {
+    document.getElementById('loginDiv').style.display="block";
+    document.getElementById('adminDiv').style.display="none";
+    if(user && user.email.toLowerCase()!=="arnaudafrochain@gmail.com"){ alert("Access Denied"); auth.signOut(); }
+  }
+});
+async function saveCert(){
+  const certNo=document.getElementById('certNo').value.trim();
+  if(!certNo){alert("Cert No empty");return;}
+  const subjects=[]; for(let i=1;i<=6;i++){ const s=document.getElementById('sub'+i).value.trim(); const r=document.getElementById('res'+i).value.trim().toUpperCase(); if(s&&r){subjects.push({subject:s,score:r});} }
+  const data={ fullName:document.getElementById('fullName').value.trim(), certificateNo:certNo, studentId:document.getElementById('studentId').value.trim(), school:document.getElementById('school').value.trim(), examination:document.getElementById('exam').value.trim(), course:document.getElementById('course').value.trim(), grade:document.getElementById('grade').value, status:document.getElementById('status').value, subjects:subjects, issueDate:new Date().toISOString().split('T')[0], verifiedOn:new Date().toISOString(), verifiedBy:"ARNAUD AFROCHAINE - 12 Idiroko Road, Sango Ota" };
+  try{ await db.collection("certificates").doc(certNo).set(data); document.getElementById('msg').style.color="green"; document.getElementById('msg').innerText="✅ SAVED! " + certNo; } catch(e){ document.getElementById('msg').style.color="red"; document.getElementById('msg').innerText="Error: " + e.message; }
+}
+function generateQR(){
+  const certNo=document.getElementById('certNo').value.trim();
+  if(!certNo){alert("Generate Cert No first");return;}
+  const qrDiv=document.getElementById('qrcode'); qrDiv.innerHTML="";
+  const verifyUrl = `https://${window.location.hostname}/arnaudafrochaineverificationltd/verify.html?cert=${certNo}`;
+  new QRCode(qrDiv, { text: verifyUrl, width: 200, height: 200, colorDark:"#000000", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.H });
+  document.getElementById('msg').innerHTML = `<br>QR for: <b>${certNo}</b><br><small>${verifyUrl}</small>`;
+}
+document.getElementById('debug').innerText="Ready - Domain: " + window.location.hostname;
+</script>
+</body>
+</html>
