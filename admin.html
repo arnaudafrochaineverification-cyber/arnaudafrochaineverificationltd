@@ -17,11 +17,58 @@ button{padding:12px 15px;border:none;border-radius:8px;cursor:pointer;font-weigh
 .btn-small{background:#0a4a2a;color:white;padding:8px 12px}
 .login-box{max-width:400px;margin:80px auto;background:white;padding:25px;border-radius:15px;text-align:center}
 .subject-row{display:flex;gap:5px}
-.auto-input{background:#e8f5e9 !important;font-weight:bold;color:#0a4a2a;border:2px solid #0a4a2a !important}
+.auto-input{background:#e8f5e9!important;font-weight:bold;color:#0a4a2a;border:2px solid #0a4a2a!important}
 </style>
 </head>
 <body>
-
-<!-- LOGIN BOX -->
 <div id="loginDiv" class="login-box">
-  <h2 style="color:#0a4a2a">🔒 ARNAUD ADMIN<br><small
+  <h2 style="color:#0a4a2a">🔒 ARNAUD ADMIN<br><small style="font-size:12px">SECURE LOGIN REQUIRED</small></h2>
+  <input type="email" id="email" value="arnaudafrochain@gmail.com">
+  <input type="password" id="password" placeholder="Password">
+  <button class="btn-green" onclick="login()">LOGIN</button>
+  <p id="loginMsg" style="color:red"></p>
+</div>
+<div id="adminDiv" class="card" style="display:none">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h3 style="color:#0a4a2a;margin:0">ARNAUD AFROCHAINE<br><small>VERIFICATION LTD</small></h3>
+    <button onclick="logout()" style="background:#d32f2f;color:white">Logout</button>
+  </div>
+  <p>Welcome <b id="userEmail"></b></p><hr>
+  <label>Full Name</label><input type="text" id="fullName" placeholder="e.g RAZAKI ADEBAYO">
+  <label>Certificate No (Auto)</label>
+  <div style="display:flex;gap:5px"><input type="text" id="certNo" class="auto-input" readonly><button type="button" class="btn-small" onclick="generateCertNo()">🔄 NEW</button></div>
+  <label>Student ID (Auto)</label>
+  <div style="display:flex;gap:5px"><input type="text" id="studentId" class="auto-input" readonly><button type="button" class="btn-small" onclick="generateStudentId()">🔄 NEW</button></div>
+  <label>School</label><input type="text" id="school" value="Government schools">
+  <label>Examination | Course</label><div style="display:flex;gap:5px"><input type="text" id="exam" value="WAEC"><input type="text" id="course" value="Engineering"></div>
+  <label>Grade | Status</label><div style="display:flex;gap:5px"><select id="grade"><option>Distinction</option><option>Upper Credit</option><option>Credit</option><option>Pass</option></select><select id="status"><option>AUTHENTIC</option><option>PENDING</option></select></div>
+  <h4>Subjects + Results (A1, B2, B3, C4, C5, C6, D7, E8, F9)</h4>
+  <div class="subject-row"><input type="text" id="sub1" placeholder="Mathematics"><input type="text" id="res1" placeholder="A1" style="max-width:100px"></div>
+  <div class="subject-row"><input type="text" id="sub2" placeholder="English"><input type="text" id="res2" placeholder="B2" style="max-width:100px"></div>
+  <div class="subject-row"><input type="text" id="sub3" placeholder="French"><input type="text" id="res3" placeholder="B3" style="max-width:100px"></div>
+  <div class="subject-row"><input type="text" id="sub4" placeholder="Physics"><input type="text" id="res4" placeholder="C4" style="max-width:100px"></div>
+  <div class="subject-row"><input type="text" id="sub5" placeholder="Chemistry"><input type="text" id="res5" placeholder="C5" style="max-width:100px"></div>
+  <div class="subject-row"><input type="text" id="sub6" placeholder="Biology"><input type="text" id="res6" placeholder="C6" style="max-width:100px"></div>
+  <button class="btn-green" onclick="saveCert()">💾 SAVE TO FIREBASE</button>
+  <button class="btn-green" style="background:#1565c0" onclick="generateQR()">GENERATE BLACK QR</button>
+  <div id="qrcode" style="text-align:center;margin-top:15px"></div><p id="msg" style="text-align:center;font-weight:bold"></p>
+</div>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+  authDomain: "arnaudafrochaineverification.firebaseapp.com",
+  projectId: "arnaudafrochaineverification",
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+  measurementId: "G-Y52LEBJM7Q"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+function generateCertNo(){ const year=new Date().getFullYear(); const rand=Math.floor(100000+Math.random()*900000); document.getElementById('certNo').value=`AFR-${year}-${rand}`; return document.getElementById('certNo').value; }
+function generateStudentId(){ const rand=Math.floor(1000+Math.random()*9000); document.getElementById('studentId').value=`${rand}`; return document.getElementById('studentId').value; }
+function login(){ const email=document.getElementById('email').value; const password=document.getElementById('password').value; auth.signInWithEmailAndPassword(email,password).then(()=>{}).catch(e=>{document.getElementById('loginMsg').innerText=e.message;}); }
+function logout(){ auth.signOut(); }
+auth.onAuthStateChanged(user=>{ if(user && user.email==="arnaudafrochain@gmail.com"){ document.getElementById('loginDiv').style.display="none"; document.getElementById('adminDiv').style.display="block"; document.getElementById('userEmail').innerText=user.email; generateCertNo(); generateStudentId(); } else { document.getElementById('loginDiv').style.display="block"; document.getElementById('adminDiv').style.display="none"; if(user && user.email!=="arnaudafrochain@gmail.com"){ alert("Access Denied"); auth.signOut(); } } });
+async function saveCert(){ const certNo=document.getElementById('certNo').value.trim(); if(!certNo){alert("Cert No empty");return;} const subjects=[]; for(let i=1;i<=6;i++){ const s=document.getElementById('sub'+i).value.trim(); const r=document.getElementById('res'+i).value.trim().toUpperCase(); if(s&&r){subjects.push({subject:s,score:r});} } const data={ fullName:document.getElementById('fullName').value.trim(), certificateNo:certNo, studentId:document.getElementById('studentId').value.trim(), school:document.getElementById('school').value.trim(), examination:document.getElementById('exam').value.trim(), course:document.getElementById('course').value.trim(), grade:document.getElementById('grade').value, status:document.getElementById('status').value, subjects:subjects, issueDate:new Date().toISOString().split('T')[0], verifiedOn:new Date().toISOString(), verifiedBy:"ARNAUD AFROCHAINE - 12 Idiroko Road, Sango Ota" }; try{ await db.collection("certificates").doc(certNo).set(data); document.getElementById('msg').innerText="
