@@ -42,4 +42,64 @@ body{background:#f6fff6}
 
 <div class="sec"><h2>🛠️ Our Services</h2><ul><li><b>Certificate Verification:</b> Verify WAEC, NECO, School Results, Degrees</li><li><b>School Result Management:</b> Upload student results to secure portal</li><li><b>Instant QR Generation:</b> Each certificate gets unique QR</li><li><b>Employer Verification:</b> Companies verify applicants instantly</li><li><b>Fake Certificate Detection:</b> Flags invalid certificates as NOT FOUND</li><li><b>Digital Archiving:</b> Secure cloud storage for records</li></ul><div class="addr"><b>🏢 Office Address:</b><br>12, Idiroko Road, Opposite GTBank,<br>Sango Ota, Ogun State, Nigeria.<br><b>Branch:</b> Agbara, Lagos-Badagry Expressway<br><b>Phone/WhatsApp:</b> 0913 285 1465<br><b>Email:</b> arnaudafrochaine@gmail.com<br><b>Hours:</b> Mon-Sat 8am-6pm</div></div>
 
-<div class="sec"><h2>📸 Our Wo
+<div class="sec"><h2>📸 Our Work Gallery - All 22 Pictures</h2><div class="gallery">
+<img src="IMG-20260912-WA0000.jpg"><img src="IMG-20260912-WA0001.jpg">
+<img src="IMG-20260913-WA0000.jpg"><img src="IMG-20260913-WA0024.jpg">
+<img src="IMG-20260913-WA0025.jpg"><img src="IMG-20260915-WA0014.jpg">
+<img src="IMG-20260915-WA0015.jpg"><img src="IMG-20260920-WA0113.jpg">
+<img src="IMG-20260922-WA0083.jpg"><img src="IMG-20260922-WA0084.jpg">
+<img src="IMG-20260922-WA0085.jpg"><img src="IMG-20260922-WA0086.jpg">
+<img src="IMG-20260922-WA0087.jpg"><img src="IMG-20260922-WA0088.jpg">
+<img src="IMG-20260922-WA0089.jpg"><img src="IMG-20260922-WA0090.jpg">
+<img src="IMG-20260922-WA0091.jpg"><img src="IMG-20260922-WA0092.jpg">
+<img src="IMG-20260922-WA0111.jpg"><img src="IMG-20260922-WA0112.jpg">
+<img src="IMG-20260922-WA0113.jpg"><img src="IMG-20260924-WA0166.jpg">
+</div><div style="background:gold;color:#0a4d2a;text-align:center;padding:8px;border-radius:8px;margin-top:10px;font-weight:700;font-size:11px">🏆 FEDERAL MINISTRY OF EDUCATION AWARD - For Fighting Fake Certificates</div></div>
+
+<div class="foot"><b>ARNAUD AFROCHAINE VERIFICATION LTD</b><br>12 Idiroko Road, Sango Ota • Agbara Branch<br>WhatsApp: 0913 285 1465 • We VERIFY, We Don't ISSUE<br><br>© 2026 Verified Skills. Trusted Future. 🇳🇬</div>
+<a class="wa" href="https://wa.me/2349132851465">💬</a>
+
+<script>
+// YOUR REAL FIREBASE CONFIG - OGA YOU GIVE ME!
+const firebaseConfig = {
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+  authDomain: "arnaudafrochaineverification.firebaseapp.com",
+  projectId: "arnaudafrochaineverification",
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+  measurementId: "G-Y52LEBJM7Q"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+async function check(){
+let v=document.getElementById('cert').value.trim().toUpperCase();
+let r=document.getElementById('res');
+if(!v){r.style.display='block';r.style.background='#ffdddd';r.innerHTML='❌ Enter Certificate ID';return;}
+r.style.display='block';r.style.background='#e8f5e9';r.innerHTML='🔍 Verifying <b>'+v+'</b> from Firebase...';
+try{
+let snap = await db.collection("certificates").where("certificateNo","==",v).get();
+if(snap.empty){snap = await db.collection("certificates").where("certNo","==",v).get();}
+if(snap.empty){snap = await db.collection("certificates").where("certificateNumber","==",v).get();}
+if(snap.empty){
+r.style.background='#ffdddd';
+r.innerHTML=`❌ <b>NOT FOUND</b><br>Certificate <b>${v}</b> no dey for database<br><small>Make sure you SAVE for admin.html to Firebase first!<br>Contact: 0913 285 1465</small>`;
+return;
+}
+snap.forEach(doc=>{
+let d=doc.data();
+let rows="";
+let list = d.subjects||[];
+if(list.length===0){for(let i=1;i<=10;i++){let n=d['subject'+i]||d['sub'+i];let s=d['score'+i]||d['result'+i]||d['mark'+i]; if(n){list.push({name:n,score:s})}}}
+list.forEach(s=>{rows+=`<tr><td style="padding:8px;border:1px solid #ddd">${s.name||s.subject||''}</td><td style="padding:8px;border:1px solid #ddd;text-align:center;font-weight:700;color:#0a4d2a">${s.score||s.result||''}</td></tr>`;});
+r.style.background='white';r.style.border='2px solid #0a4d2a';
+r.innerHTML=`<div style="text-align:left"><div style="text-align:center;background:#0a4d2a;color:white;padding:10px;border-radius:8px">✅ <b>${(d.status||'AUTHENTIC').toUpperCase()} - VERIFIED</b><br><small>Certificate is Authentic</small></div><div style="margin-top:10px;background:#f6fff6;padding:10px;border-radius:8px;line-height:1.8"><b>Full Name:</b> ${d.fullName||d.name||''}<br><b>Student ID:</b> ${d.studentId||''}<br><b>Certificate No:</b> <span style="color:#0a4d2a;font-weight:800">${d.certificateNo||d.certNo||v}</span><br><b>School:</b> ${d.school||''}<br><b>Examination:</b> ${d.examination||''} | <b>Course:</b> ${d.course||''}<br><b>Grade:</b> <span style="background:gold;padding:2px 8px;border-radius:10px">${d.grade||''}</span> | <b>Status:</b> <span style="color:green;font-weight:800">${d.status||'AUTHENTIC'}</span><br><b>Issue Date:</b> ${d.issueDate||''}<br><b>Verified On:</b> ${d.verifiedOn||new Date().toLocaleString()}</div><div style="margin-top:12px"><b style="color:#0a4d2a">📚 Subjects + Results (Public Portal)</b><table style="width:100%;margin-top:6px"><tr style="background:#0a4d2a;color:white"><th style="padding:8px;border:1px solid #0a4d2a;text-align:left">Subject</th><th style="padding:8px;border:1px solid #0a4d2a">Score</th></tr>${rows||'<tr><td colspan=2 style="padding:8px;text-align:center">No subjects</td></tr>'}</table></div><div style="text-align:center;margin-top:12px"><a href="https://wa.me/2349132851465" style="background:#25D366;color:white;padding:8px 14px;border-radius:20px;text-decoration:none;font-size:11px">📲 WhatsApp</a> <a onclick="window.print()" style="background:#0a4d2a;color:white;padding:8px 14px;border-radius:20px;text-decoration:none;font-size:11px;margin-left:5px">🖨️ Print</a></div><div style="text-align:center;margin-top:8px;font-size:9px;color:#888">Verified by ARNAUD AFROCHAINE - 12 Idiroko Road, Sango Ota</div></div>`;
+});
+}catch(e){
+r.style.background='#ffdddd';r.innerHTML='❌ Firebase Error: '+e.message+'<br><small>Check internet & Firebase rules</small>';
+}
+}
+</script>
+</body>
+</html>
