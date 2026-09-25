@@ -1,43 +1,26 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ARNAUD SECURE ADMIN</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><style>body{font-family:Arial;background:#f0fff0;padding:12px} .card{background:#fff;padding:16px;border-radius:14px;box-shadow:0 6px 20px #0002;max-width:520px;margin:auto} input,select{width:100%;padding:12px;margin:6px 0;border:2px solid #a5d6a7;border-radius:8px} button{width:100%;padding:13px;margin:6px 0;border:none;border-radius:9px;font-weight:700;cursor:pointer} .green{background:#0a4d2a;color:#fff} .black{background:#000;color:#fff} .grey{background:#666;color:#fff} #adminBox{display:none}</style></head><body>
-<div class="card">
-<h2 style="text-align:center;color:#0a4d2a;">🎓 ARNAUD ADMIN<br><small style="font-size:12px;color:green;">SECURE LOGIN REQUIRED</small></h2>
-<div id="loginBox">
-<input id="email" type="email" placeholder="Admin Email">
-<input id="password" type="password" placeholder="Admin Password">
-<button class="green" onclick="login()">LOGIN SECURELY →</button>
-<p id="loginMsg" style="color:red;text-align:center;font-size:12px;"></p>
-</div>
-<div id="adminBox">
-<p style="text-align:center;font-size:12px;">Welcome <span id="userEmail"></span> | <a onclick="logout()" style="color:red;cursor:pointer;">Logout</a></p>
-<input id="fullName" placeholder="Full Name e.g IDOHOU ODJOUMICHI ARNAUD">
-<div style="display:flex;gap:8px;"><input id="studentId" placeholder="Student ID"><input id="certNo" placeholder="Certificate No e.g AFR-2026-487365"></div>
-<input id="school" placeholder="School e.g God continue">
-<div style="display:flex;gap:8px;"><input id="examination" placeholder="Examination e.g WAEC"><input id="course" placeholder="Course e.g Engineering"></div>
-<div style="display:flex;gap:8px;"><select id="grade"><option>Distinction</option><option>Credit</option><option>Pass</option><option>Upper Credit</option></select><select id="status"><option>AUTHENTIC</option><option>PENDING</option><option>REVOKED</option></select></div>
-<div style="display:flex;gap:8px;"><input id="issueDate" type="date"><input id="verifiedOn" readonly></div>
-<h4>📚 Subjects + Results</h4>
-<div style="display:flex;gap:8px;"><input id="s1" placeholder="Subject 1"><input id="r1" placeholder="Result 1 e.g A1"></div>
-<div style="display:flex;gap:8px;"><input id="s2" placeholder="Subject 2"><input id="r2" placeholder="Result 2"></div>
-<div style="display:flex;gap:8px;"><input id="s3" placeholder="Subject 3"><input id="r3" placeholder="Result 3"></div>
-<div style="display:flex;gap:8px;"><input id="s4" placeholder="Subject 4"><input id="r4" placeholder="Result 4"></div>
-<div style="display:flex;gap:8px;"><input id="s5" placeholder="Subject 5"><input id="r5" placeholder="Result 5"></div>
-<div style="display:flex;gap:8px;"><input id="s6" placeholder="Subject 6"><input id="r6" placeholder="Result 6"></div>
-<button class="green" onclick="save()">💾 SAVE TO FIREBASE</button>
-<button class="black" onclick="genQR()">⬛ GENERATE BLACK QR</button>
-<button class="grey" onclick="clearForm()">🧹 CLEAR</button>
-<div id="msg" style="text-align:center;margin-top:10px;font-size:12px;"></div>
-<div id="qrBox" style="text-align:center;margin-top:12px;display:none;"><img id="qrImg" width="180"><p id="qrLink" style="font-size:10px;word-break:break-all;"></p></div>
-</div>
-</div>
+<!-- Add this inside your <script> part -->
 <script>
-const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"};
-firebase.initializeApp(firebaseConfig);const db=firebase.firestore();const auth=firebase.auth();
-document.getElementById('verifiedOn').value=new Date().toLocaleString();
-function login(){let e=document.getElementById('email').value;let p=document.getElementById('password').value;document.getElementById('loginMsg').innerText="Checking...";auth.signInWithEmailAndPassword(e,p).then(u=>{document.getElementById('loginMsg').innerText="";}).catch(err=>{document.getElementById('loginMsg').innerText=err.message;});}
-function logout(){auth.signOut();}
-auth.onAuthStateChanged(user=>{if(user){document.getElementById('loginBox').style.display='none';document.getElementById('adminBox').style.display='block';document.getElementById('userEmail').innerText=user.email;}else{document.getElementById('loginBox').style.display='block';document.getElementById('adminBox').style.display='none';}});
-async function save(){let certNo=document.getElementById('certNo').value.trim().toUpperCase();if(!certNo){alert("Enter Certificate No");return;}let data={certificateNo:certNo,certNumber:certNo,certNo:certNo,fullName:document.getElementById('fullName').value,studentId:document.getElementById('studentId').value,school:document.getElementById('school').value,examination:document.getElementById('examination').value,course:document.getElementById('course').value,grade:document.getElementById('grade').value,status:document.getElementById('status').value,issueDate:document.getElementById('issueDate').value,verifiedOn:new Date().toISOString(),createdAt:firebase.firestore.FieldValue.serverTimestamp(),companyName:"ARNAUD AFROCHAINE VERIFICATION LTD",subject1:document.getElementById('s1').value,result1:document.getElementById('r1').value,subject2:document.getElementById('s2').value,result2:document.getElementById('r2').value,subject3:document.getElementById('s3').value,result3:document.getElementById('r3').value,subject4:document.getElementById('s4').value,result4:document.getElementById('r4').value,subject5:document.getElementById('s5').value,result5:document.getElementById('r5').value,subject6:document.getElementById('s6').value,result6:document.getElementById('r6').value};document.getElementById('msg').innerText="Saving "+certNo+"...";try{await db.collection("certificates").doc(certNo).set(data);document.getElementById('msg').innerText="✅ SAVED: "+certNo;genQR();}catch(e){document.getElementById('msg').innerText="❌ Error: "+e.message;}}
-function genQR(){let certNo=document.getElementById('certNo').value.trim().toUpperCase();if(!certNo)return;let link="https://arnaudafrochaineverification-cyber.github.io/?id="+certNo;let qr="https://api.qrserver.com/v1/create-qr-code/?size=300x300&color=000000&data="+encodeURIComponent(link);document.getElementById('qrImg').src=qr;document.getElementById('qrLink').innerText=link;document.getElementById('qrBox').style.display='block';}
-function clearForm(){document.querySelectorAll('#adminBox input').forEach(i=>{if(i.id!='verifiedOn')i.value='';});document.getElementById('msg').innerText='';document.getElementById('qrBox').style.display='none';}
-</script></body></html>
+// AUTO CERTIFICATE NUMBER GENERATOR
+function generateAutoCertNo() {
+  const year = new Date().getFullYear();
+  const random = Math.floor(100000 + Math.random() * 900000); // 6 digits
+  return `AFR-${year}-${random}`;
+}
+
+// When you don login successfully, e go auto fill
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    document.getElementById('certNo').value = generateAutoCertNo();
+  }
+});
+
+function refreshCertNo() {
+  document.getElementById('certNo').value = generateAutoCertNo();
+}
+</script>
+
+<!-- For your HTML input, change to this: -->
+<div style="display:flex; gap:5px;">
+  <input type="text" id="certNo" placeholder="Auto Certificate No" readonly style="background:#e8f5e9; font-weight:bold;">
+  <button type="button" onclick="refreshCertNo()" style="background:#0a4a2a; color:white; padding:10px; border-radius:8px;">🔄 NEW</button>
+</div>
