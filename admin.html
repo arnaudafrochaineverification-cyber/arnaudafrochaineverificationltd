@@ -1,26 +1,27 @@
-<!-- Add this inside your <script> part -->
-<script>
-// AUTO CERTIFICATE NUMBER GENERATOR
-function generateAutoCertNo() {
-  const year = new Date().getFullYear();
-  const random = Math.floor(100000 + Math.random() * 900000); // 6 digits
-  return `AFR-${year}-${random}`;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARNAUD ADMIN - SECURE</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+body{font-family:Arial;background:#f0f7f0;padding:15px}
+.card{max-width:600px;margin:auto;background:white;padding:20px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.1)}
+input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
+button{padding:12px 15px;border:none;border-radius:8px;cursor:pointer;font-weight:bold}
+.btn-green{background:#0a4a2a;color:white;width:100%;margin-top:10px}
+.btn-small{background:#0a4a2a;color:white;padding:8px 12px}
+.login-box{max-width:400px;margin:80px auto;background:white;padding:25px;border-radius:15px;text-align:center}
+.subject-row{display:flex;gap:5px}
+.auto-input{background:#e8f5e9 !important;font-weight:bold;color:#0a4a2a;border:2px solid #0a4a2a !important}
+</style>
+</head>
+<body>
 
-// When you don login successfully, e go auto fill
-firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    document.getElementById('certNo').value = generateAutoCertNo();
-  }
-});
-
-function refreshCertNo() {
-  document.getElementById('certNo').value = generateAutoCertNo();
-}
-</script>
-
-<!-- For your HTML input, change to this: -->
-<div style="display:flex; gap:5px;">
-  <input type="text" id="certNo" placeholder="Auto Certificate No" readonly style="background:#e8f5e9; font-weight:bold;">
-  <button type="button" onclick="refreshCertNo()" style="background:#0a4a2a; color:white; padding:10px; border-radius:8px;">🔄 NEW</button>
-</div>
+<!-- LOGIN BOX -->
+<div id="loginDiv" class="login-box">
+  <h2 style="color:#0a4a2a">🔒 ARNAUD ADMIN<br><small
