@@ -6,6 +6,7 @@
 <title>ARNAUD AFROCHAINE VERIFICATION LTD</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:#f6fff6}
@@ -94,7 +95,21 @@ let list = d.subjects||[];
 if(list.length===0){for(let i=1;i<=10;i++){let n=d['subject'+i]||d['sub'+i];let s=d['score'+i]||d['result'+i]||d['mark'+i]; if(n){list.push({name:n,score:s})}}}
 list.forEach(s=>{rows+=`<tr><td style="padding:8px;border:1px solid #ddd">${s.name||s.subject||''}</td><td style="padding:8px;border:1px solid #ddd;text-align:center;font-weight:700;color:#0a4d2a">${s.score||s.result||''}</td></tr>`;});
 r.style.background='white';r.style.border='2px solid #0a4d2a';
-r.innerHTML=`<div style="text-align:left"><div style="text-align:center;background:#0a4d2a;color:white;padding:10px;border-radius:8px">✅ <b>${(d.status||'AUTHENTIC').toUpperCase()} - VERIFIED</b><br><small>Certificate is Authentic</small></div><div style="margin-top:10px;background:#f6fff6;padding:10px;border-radius:8px;line-height:1.8"><b>Full Name:</b> ${d.fullName||d.name||''}<br><b>Student ID:</b> ${d.studentId||''}<br><b>Certificate No:</b> <span style="color:#0a4d2a;font-weight:800">${d.certificateNo||d.certNo||v}</span><br><b>School:</b> ${d.school||''}<br><b>Examination:</b> ${d.examination||''} | <b>Course:</b> ${d.course||''}<br><b>Grade:</b> <span style="background:gold;padding:2px 8px;border-radius:10px">${d.grade||''}</span> | <b>Status:</b> <span style="color:green;font-weight:800">${d.status||'AUTHENTIC'}</span><br><b>Issue Date:</b> ${d.issueDate||''}<br><b>Verified On:</b> ${d.verifiedOn||new Date().toLocaleString()}</div><div style="margin-top:12px"><b style="color:#0a4d2a">📚 Subjects + Results (Public Portal)</b><table style="width:100%;margin-top:6px"><tr style="background:#0a4d2a;color:white"><th style="padding:8px;border:1px solid #0a4d2a;text-align:left">Subject</th><th style="padding:8px;border:1px solid #0a4d2a">Score</th></tr>${rows||'<tr><td colspan=2 style="padding:8px;text-align:center">No subjects</td></tr>'}</table></div><div style="text-align:center;margin-top:12px"><a href="https://wa.me/2349132851465" style="background:#25D366;color:white;padding:8px 14px;border-radius:20px;text-decoration:none;font-size:11px">📲 WhatsApp</a> <a onclick="window.print()" style="background:#0a4d2a;color:white;padding:8px 14px;border-radius:20px;text-decoration:none;font-size:11px;margin-left:5px">🖨️ Print</a></div><div style="text-align:center;margin-top:8px;font-size:9px;color:#888">Verified by ARNAUD AFROCHAINE - 12 Idiroko Road, Sango Ota</div></div>`;
+r.innerHTML=`<div style="text-align:left"><div style="text-align:center;background:#0a4d2a;color:white;padding:10px;border-radius:8px">✅ <b>${(d.status||'AUTHENTIC').toUpperCase()} - VERIFIED</b><br><small>Certificate is Authentic</small></div><div style="margin-top:10px;background:#f6fff6;padding:10px;border-radius:8px;line-height:1.8"><b>Full Name:</b> ${d.fullName||d.name||''}<br><b>Student ID:</b> ${d.studentId||''}<br><b>Certificate No:</b> <span style="color:#0a4d2a;font-weight:800">${d.certificateNo||d.certNo||v}</span><br><b>School:</b> ${d.school||''}<br><b>Examination:</b> ${d.examination||''} | <b>Course:</b> ${d.course||''}<br><b>Grade:</b> <span style="background:gold;padding:2px 8px;border-radius:10px">${d.grade||''}</span> | <b>Status:</b> <span style="color:green;font-weight:800">${d.status||'AUTHENTIC'}</span><br><b>Issue Date:</b> ${d.issueDate||''}<br><b>Verified On:</b> ${d.verifiedOn||new Date().toLocaleString()}</div><div style="margin-top:12px"><b style="color:#0a4d2a">📚 Subjects + Results (Public Portal)</b><table style="width:100%;margin-top:6px"><tr style="background:#0a4d2a;color:white"><th style="padding:8px;border:1px solid #0a4d2a;text-align:left">Subject</th><th style="padding:8px;border:1px solid #0a4d2a">Score</th></tr>${rows||'<tr><td colspan=2 style="padding:8px;text-align:center">No subjects</td></tr>'}</table></div>
+
+<div id="qrWrap" style="text-align:center;margin:15px 0;padding:12px;border:2px dashed #0a4d2a;border-radius:10px;background:#f6fff6">
+<p style="font-weight:700;color:#0a4d2a;margin-bottom:8px;font-size:12px">📱 SCAN QR CODE TO VERIFY</p>
+<div id="qrcode" style="display:flex;justify-content:center"></div>
+<p style="font-size:9px;color:#666;word-break:break-all;margin-top:8px" id="qrLinkTxt"></p>
+</div>
+
+<div style="text-align:center;margin-top:12px"><a href="https://wa.me/2349132851465" style="background:#25D366;color:white;padding:8px 14px;border-radius:20px;text-decoration:none;font-size:11px">📲 WhatsApp</a> <a onclick="window.print()" style="background:#0a4d2a;color:white;padding:8px 14px;border-radius:20px;text-decoration:none;font-size:11px;margin-left:5px">🖨️ Print</a></div><div style="text-align:center;margin-top:8px;font-size:9px;color:#888">Verified by ARNAUD AFROCHAINE - 12 Idiroko Road, Sango Ota</div></div>`;
+
+let qrUrl = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?id=${v}`;
+document.getElementById('qrcode').innerHTML = "";
+new QRCode(document.getElementById('qrcode'), {text: qrUrl, width: 160, height: 160, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H});
+document.getElementById('qrLinkTxt').innerText = qrUrl;
+
 });
 }catch(e){
 r.style.background='#ffdddd';r.innerHTML='❌ Firebase Error: '+e.message+'<br><small>Check internet & Firebase rules</small>';
