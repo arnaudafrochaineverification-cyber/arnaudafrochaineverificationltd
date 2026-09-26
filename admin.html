@@ -111,7 +111,7 @@ async function saveCert(){
   const certNo=document.getElementById('certNo').value.trim();
   if(!certNo){alert("Cert No empty");return;}
   const subjects=[]; for(let i=1;i<=6;i++){ const s=document.getElementById('sub'+i).value.trim(); const r=document.getElementById('res'+i).value.trim().toUpperCase(); if(s&&r){subjects.push({subject:s,score:r});} }
-  const data={ fullName:document.getElementById('fullName').value.trim(), certificateNo:certNo, studentId:document.getElementById('studentId').value.trim(), school:document.getElementById('school').value.trim(), examination:document.getElementById('exam').value.trim(), course:document.getElementById('course').value.trim(), grade:document.getElementById('grade').value, status:document.getElementById('status').value, subjects:subjects, issueDate:new Date().toISOString().split('T')[0], verifiedOn:new Date().toISOString(), verifiedBy:"ARNAUD AFROCHAINE - 12 Idiroko Road, Sango Ota" };
+  const data={ fullName:document.getElementById('fullName').value.trim(), certificateNo:certNo, studentId:document.getElementById('studentId').value.trim(), school:document.getElementById('school').value.trim(), examination:document.getElementById('exam').value.trim(), course:document.getElementById('course').value.trim(), grade:document.getElementById('grade').value, status:document.getElementById('status').value, subjects:subjects, issueDate:new Date().toLocaleDateString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'}), verifiedOn:new Date().toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'}), verifiedBy:"ARNAUD AFROCHAINE - 12 Idiroko Road, Sango Ota" };
   try{ await db.collection("certificates").doc(certNo).set(data); document.getElementById('msg').style.color="green"; document.getElementById('msg').innerText="✅ SAVED! " + certNo; } catch(e){ document.getElementById('msg').style.color="red"; document.getElementById('msg').innerText="Error: " + e.message; }
 }
 function generateQR(){
@@ -125,4 +125,4 @@ function generateQR(){
 document.getElementById('debug').innerText="Ready - Domain: " + window.location.hostname;
 </script>
 </body>
-</html>
+  </html>
