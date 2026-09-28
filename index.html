@@ -66,19 +66,21 @@ body{background:#f6fff6}
 const firebaseConfig = {apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain: "arnaudafrochaineverification.firebaseapp.com",projectId: "arnaudafrochaineverification",storageBucket: "arnaudafrochaineverification.firebasestorage.app",messagingSenderId: "268502946630",appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"};
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-
 function getFlag(country){
   if(!country) return "🌍 Not Set";
   let c=country.toString().toUpperCase().trim();
-  if(c.includes("UK")||c.includes("BRITAIN")||c.includes("ENGLAND")) return "🇬🇧 UK";
+  if(c.includes("UK")||c.includes("BRITAIN")||c.includes("ENGLAND")||c=="GB") return "🇬🇧 UK";
   if(c.includes("NIGERIA")||c=="NG") return "🇳🇬 Nigeria";
   if(c.includes("GHANA")) return "🇬🇭 Ghana";
   if(c.includes("USA")||c.includes("AMERICA")) return "🇺🇸 USA";
   if(c.includes("CANADA")) return "🇨🇦 Canada";
   if(c.includes("SOUTH AFRICA")) return "🇿🇦 South Africa";
+  if(c.includes("GERMANY")) return "🇩🇪 Germany";
+  if(c.includes("FRANCE")) return "🇫🇷 France";
+  if(c.includes("AUSTRALIA")) return "🇦🇺 Australia";
+  if(c.includes("INDIA")) return "🇮🇳 India";
   return "🌍 "+country;
 }
-
 async function check(){
 let v=document.getElementById('cert').value.trim().toUpperCase();
 let r=document.getElementById('res');
@@ -92,12 +94,18 @@ if(snap.empty){r.style.background='#ffdddd';r.innerHTML='❌ NOT FOUND '+v;retur
 snap.forEach(doc=>{
 let d=doc.data();
 let rows="";let list=d.subjects||[];
-if(list.length==0){for(let i=1;i<=10;i++){let n=d['subject'+i]||d['sub'+i];let s=d['score'+i]||d['result'+i];if(n){list.push({name:n,score:s})}}}
-list.forEach(s=>{rows+=`<tr><td style="padding:8px;border:1px solid #ddd">${s.name||''}</td><td style="padding:8px;border:1px solid #ddd;text-align:center;font-weight:700">${s.score||''}</td></tr>`;});
+if(list.length==0){for(let i=1;i<=10;i++){let n=d['subject'+i]||d['sub'+i]||d['Subject'+i]||'';let s=d['score'+i]||d['result'+i]||d['Score'+i]||'';if(n||s){list.push({name:n,score:s})}}}
+list.forEach((s,idx)=>{
+  let subName=s.name||s.subject||s.course||("Subject "+(idx+1));
+  let subScore=s.score||s.result||s.mark||'';
+  if(!subName && !subScore) return;
+  rows+=`<tr><td style="padding:8px;border:1px solid #ddd;word-break:break-word;text-align:left">${subName}</td><td style="padding:8px;border:1px solid #ddd;text-align:center;font-weight:700;color:#0a4d2a">${subScore}</td></tr>`;
+});
+if(!rows){rows=`<tr><td colspan=2 style="padding:10px;text-align:center;color:#888">No subjects - re-save in admin</td></tr>`;}
 let flag=getFlag(d.country||d.Country||"");
 let countryRaw=d.country||d.Country||"Not Set";
 r.style.background='white';r.style.border='2px solid #0a4d2a';
-r.innerHTML=`<div style="text-align:left"><div style="text-align:center;background:#0a4d2a;color:white;padding:10px;border-radius:8px">✅ ${(d.status||'AUTHENTIC').toUpperCase()} - VERIFIED</div><div style="margin-top:10px;background:#f6fff6;padding:10px;border-radius:8px;line-height:1.8"><b>Name:</b> ${d.fullName||d.name||''}<br><b>Cert No:</b> ${d.certificateNo||d.certNo||v}<br><b>🌍 Country:</b> <span style="background:gold;padding:4px 12px;border-radius:12px;font-weight:800;border:2px solid #0a4d2a">${flag}</span> (${countryRaw})<br><b>School:</b> ${d.school||''}<br><b>Grade:</b> ${d.grade||''} | <b>Status:</b> ${d.status||'AUTHENTIC'}<br><b>Issue:</b> ${d.issueDate||''}<br><b>Verified:</b> ${new Date().toLocaleString()}</div><div style="margin-top:12px"><table style="width:100%"><tr style="background:#0a4d2a;color:white"><th style="padding:8px">Subject</th><th style="padding:8px">Score</th></tr>${rows}</table></div><div style="text-align:center;margin:15px 0;padding:12px;border:2px dashed #0a4d2a;border-radius:10px;background:#f6fff6"><p style="font-weight:700;color:#0a4d2a">📱 SCAN QR CODE</p><div id="qrcode" style="display:flex;justify-content:center;margin-top:8px"></div><p id="qrLinkTxt" style="font-size:9px;word-break:break-all;margin-top:8px"></p></div></div>`;
+r.innerHTML=`<div style="text-align:left"><div style="text-align:center;background:#0a4d2a;color:white;padding:10px;border-radius:8px">✅ ${(d.status||'AUTHENTIC').toUpperCase()} - VERIFIED</div><div style="margin-top:10px;background:#f6fff6;padding:10px;border-radius:8px;line-height:1.8"><b>Name:</b> ${d.fullName||d.name||''}<br><b>Cert No:</b> ${d.certificateNo||d.certNo||v}<br><b>🌍 Country:</b> <span style="background:gold;padding:4px 12px;border-radius:12px;font-weight:800;border:2px solid #0a4d2a">${flag}</span> (${countryRaw})<br><b>School:</b> ${d.school||''}<br><b>Grade:</b> ${d.grade||''} | <b>Status:</b> ${d.status||'AUTHENTIC'}<br><b>Issue:</b> ${d.issueDate||''}<br><b>Verified:</b> ${new Date().toLocaleString()}</div><div style="margin-top:12px"><b style="color:#0a4d2a">📚 Subjects + Results</b><table style="width:100%;margin-top:6px;border-collapse:collapse;table-layout:fixed"><colgroup><col style="width:60%"><col style="width:40%"></colgroup><tr style="background:#0a4d2a;color:white"><th style="padding:8px;border:1px solid #0a4d2a;text-align:left">Subject</th><th style="padding:8px;border:1px solid #0a4d2a">Score</th></tr>${rows}</table></div><div style="text-align:center;margin:15px 0;padding:12px;border:2px dashed #0a4d2a;border-radius:10px;background:#f6fff6"><p style="font-weight:700;color:#0a4d2a">📱 SCAN QR CODE</p><div id="qrcode" style="display:flex;justify-content:center;margin-top:8px"></div><p id="qrLinkTxt" style="font-size:9px;word-break:break-all;margin-top:8px"></p></div></div>`;
 let qrUrl=`https://arnaudafrochaineverification-cyber.github.io/verify.html?id=${v}`;
 document.getElementById('qrcode').innerHTML="";
 new QRCode(document.getElementById('qrcode'),{text:qrUrl,width:160,height:160});
@@ -107,4 +115,4 @@ document.getElementById('qrLinkTxt').innerText=qrUrl;
 }
 </script>
 </body>
-  </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </html>
