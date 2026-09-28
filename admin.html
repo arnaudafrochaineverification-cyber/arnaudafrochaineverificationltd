@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARNAUD ADMIN - SECURE | GLOBAL</title>
+<title>ARNAUD ADMIN - SECURE | GLOBAL 30 COUNTRIES</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -22,7 +22,7 @@ button{padding:12px 15px;border:none;border-radius:8px;cursor:pointer;font-weigh
 </head>
 <body>
 <div id="loginDiv" class="login-box">
-  <h2 style="color:#0a4a2a">🔒 ARNAUD ADMIN<br><small style="font-size:12px">SECURE LOGIN REQUIRED - GLOBAL</small></h2>
+  <h2 style="color:#0a4a2a">🔒 ARNAUD ADMIN<br><small style="font-size:12px">SECURE LOGIN - 30 COUNTRIES GLOBAL</small></h2>
   <input type="email" id="email" value="arnaudafrochain@gmail.com">
   <input type="password" id="password" placeholder="Password">
   <button class="btn-green" id="loginBtn" onclick="login()">LOGIN</button>
@@ -31,7 +31,7 @@ button{padding:12px 15px;border:none;border-radius:8px;cursor:pointer;font-weigh
 </div>
 <div id="adminDiv" class="card" style="display:none">
   <div style="display:flex;justify-content:space-between;align-items:center">
-    <h3 style="color:#0a4a2a;margin:0">ARNAUD AFROCHAINE<br><small>VERIFICATION LTD - GLOBAL</small></h3>
+    <h3 style="color:#0a4a2a;margin:0">ARNAUD AFROCHAINE<br><small>VERIFICATION LTD - GLOBAL 30</small></h3>
     <button onclick="logout()" style="background:#d32f2f;color:white">Logout</button>
   </div>
   <p>Welcome <b id="userEmail"></b></p><hr>
@@ -41,7 +41,9 @@ button{padding:12px 15px;border:none;border-radius:8px;cursor:pointer;font-weigh
   <label>Student ID (Auto)</label>
   <div style="display:flex;gap:5px"><input type="text" id="studentId" class="auto-input" readonly><button type="button" class="btn-small" onclick="generateStudentId()">🔄 NEW</button></div>
   <label>School / Institution</label><input type="text" id="school" value="Government schools" placeholder="e.g Government schools / University of Ghana / Harvard">
-  <label>Institution Country (Global)</label><select id="country"><option value="Nigeria">Nigeria</option><option value="Ghana">Ghana</option><option value="USA">USA</option><option value="UK">UK</option><option value="Canada">Canada</option><option value="South Africa">South Africa</option><option value="Other">Other - Global</option></select>
+  <label>Institution Country (Global - 30 Countries)</label><select id="country">
+<option value="Nigeria">🇳🇬 Nigeria</option><option value="Ghana">🇬🇭 Ghana</option><option value="USA">🇺🇸 USA</option><option value="UK">🇬🇧 UK</option><option value="Canada">🇨🇦 Canada</option><option value="South Africa">🇿🇦 South Africa</option><option value="Kenya">🇰🇪 Kenya</option><option value="Cameroon">🇨🇲 Cameroon</option><option value="Togo">🇹🇬 Togo</option><option value="Benin">🇧🇯 Benin</option><option value="Senegal">🇸🇳 Senegal</option><option value="Ivory Coast">🇨🇮 Ivory Coast</option><option value="Egypt">🇪🇬 Egypt</option><option value="Morocco">🇲🇦 Morocco</option><option value="Ethiopia">🇪🇹 Ethiopia</option><option value="India">🇮🇳 India</option><option value="Pakistan">🇵🇰 Pakistan</option><option value="China">🇨🇳 China</option><option value="Philippines">🇵🇭 Philippines</option><option value="Germany">🇩🇪 Germany</option><option value="France">🇫🇷 France</option><option value="Italy">🇮🇹 Italy</option><option value="Spain">🇪🇸 Spain</option><option value="Australia">🇦🇺 Australia</option><option value="UAE">🇦🇪 UAE - Dubai</option><option value="Saudi Arabia">🇸🇦 Saudi Arabia</option><option value="Turkey">🇹🇷 Turkey</option><option value="Brazil">🇧🇷 Brazil</option><option value="Jamaica">🇯🇲 Jamaica</option><option value="Other">🌍 Other - Global</option>
+</select>
   <label>Examination | Course (Global)</label><div style="display:flex;gap:5px"><input type="text" id="exam" value="WAEC" placeholder="e.g WAEC / WASSCE / BSc / Diploma"><input type="text" id="course" value="Engineering" placeholder="e.g Engineering / Business"></div>
   <label>Grade | Status</label><div style="display:flex;gap:5px"><select id="grade"><option>Distinction</option><option>Upper Credit</option><option>Credit</option><option>Pass</option><option>First Class</option><option>Second Class</option></select><select id="status"><option>AUTHENTIC</option><option>PENDING</option></select></div>
   <h4>Subjects + Results / Courses + Scores (Global - A1, Distinction, %, GPA)</h4>
@@ -56,51 +58,16 @@ button{padding:12px 15px;border:none;border-radius:8px;cursor:pointer;font-weigh
   <div id="qrcode" style="text-align:center;margin-top:15px"></div><p id="msg" style="text-align:center;font-weight:bold"></p>
 </div>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-  authDomain: "arnaudafrochaineverification.firebaseapp.com",
-  projectId: "arnaudafrochaineverification",
-  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
-  messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
-  measurementId: "G-Y52LEBJM7Q"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+const firebaseConfig = { apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs", authDomain: "arnaudafrochaineverification.firebaseapp.com", projectId: "arnaudafrochaineverification", storageBucket: "arnaudafrochaineverification.firebasestorage.app", messagingSenderId: "268502946630", appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47", measurementId: "G-Y52LEBJM7Q" };
+firebase.initializeApp(firebaseConfig); const auth = firebase.auth(); const db = firebase.firestore();
 function generateCertNo(){ const year=new Date().getFullYear(); const rand=Math.floor(100000+Math.random()*900000); document.getElementById('certNo').value=`AFR-${year}-${rand}`; return document.getElementById('certNo').value; }
 function generateStudentId(){ const rand=Math.floor(1000+Math.random()*9000); document.getElementById('studentId').value=`${rand}`; return document.getElementById('studentId').value; }
-async function login(){
-  const email=document.getElementById('email').value.trim();
-  const password=document.getElementById('password').value;
-  const msgEl=document.getElementById('loginMsg');
-  const debugEl=document.getElementById('debug');
-  const btn=document.getElementById('loginBtn');
-  if(!email || !password){ msgEl.innerText="Please enter email and password"; return; }
-  btn.innerText="LOGGING IN..."; btn.disabled=true; msgEl.innerText=""; debugEl.innerText="Connecting to Firebase...";
-  try{ await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); debugEl.innerText="Authenticating..."; await auth.signInWithEmailAndPassword(email,password); msgEl.style.color="green"; msgEl.innerText="Success! Loading dashboard..."; } catch(e){ msgEl.style.color="red"; msgEl.innerText=e.code + ": " + e.message; debugEl.innerText="Failed: " + e.code; btn.innerText="LOGIN"; btn.disabled=false; }
-}
+async function login(){ const email=document.getElementById('email').value.trim(); const password=document.getElementById('password').value; const msgEl=document.getElementById('loginMsg'); const debugEl=document.getElementById('debug'); const btn=document.getElementById('loginBtn'); if(!email || !password){ msgEl.innerText="Please enter email and password"; return; } btn.innerText="LOGGING IN..."; btn.disabled=true; msgEl.innerText=""; debugEl.innerText="Connecting to Firebase..."; try{ await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); debugEl.innerText="Authenticating..."; await auth.signInWithEmailAndPassword(email,password); msgEl.style.color="green"; msgEl.innerText="Success! Loading dashboard..."; } catch(e){ msgEl.style.color="red"; msgEl.innerText=e.code + ": " + e.message; debugEl.innerText="Failed: " + e.code; btn.innerText="LOGIN"; btn.disabled=false; } }
 function logout(){ auth.signOut(); }
-auth.onAuthStateChanged(user=>{
-  if(user && user.email.toLowerCase()==="arnaudafrochain@gmail.com"){
-    document.getElementById('loginDiv').style.display="none"; document.getElementById('adminDiv').style.display="block"; document.getElementById('userEmail').innerText=user.email; generateCertNo(); generateStudentId();
-  } else {
-    document.getElementById('loginDiv').style.display="block"; document.getElementById('adminDiv').style.display="none"; if(user && user.email.toLowerCase()!=="arnaudafrochain@gmail.com"){ alert("Access Denied"); auth.signOut(); }
-  }
-});
-async function saveCert(){
-  const certNo=document.getElementById('certNo').value.trim(); if(!certNo){alert("Cert No empty");return;}
-  const subjects=[]; for(let i=1;i<=6;i++){ const s=document.getElementById('sub'+i).value.trim(); const r=document.getElementById('res'+i).value.trim().toUpperCase(); if(s&&r){subjects.push({subject:s,score:r});} }
-  const data={ fullName:document.getElementById('fullName').value.trim(), certificateNo:certNo, studentId:document.getElementById('studentId').value.trim(), school:document.getElementById('school').value.trim(), country:document.getElementById('country').value, examination:document.getElementById('exam').value.trim(), course:document.getElementById('course').value.trim(), grade:document.getElementById('grade').value, status:document.getElementById('status').value, subjects:subjects, issueDate:new Date().toLocaleDateString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'}), verifiedOn:new Date().toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'}), verifiedBy:"ARNAUD AFROCHAINE - 12 Idiroko Road, Sango Ota | GLOBAL HQ" };
-  try{ await db.collection("certificates").doc(certNo).set(data); document.getElementById('msg').style.color="green"; document.getElementById('msg').innerText="✅ SAVED! " + certNo + " - " + data.country; } catch(e){ document.getElementById('msg').style.color="red"; document.getElementById('msg').innerText="Error: " + e.message; }
-}
-function generateQR(){
-  const certNo=document.getElementById('certNo').value.trim(); if(!certNo){alert("Generate Cert No first");return;}
-  const qrDiv=document.getElementById('qrcode'); qrDiv.innerHTML=""; const verifyUrl = `https://${window.location.hostname}/arnaudafrochaineverificationltd/verify.html?cert=${certNo}`;
-  new QRCode(qrDiv, { text: verifyUrl, width: 200, height: 200, colorDark:"#000000", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.H });
-  document.getElementById('msg').innerHTML = `<br>QR for: <b>${certNo}</b><br><small>${verifyUrl}</small>`;
-}
+auth.onAuthStateChanged(user=>{ if(user && user.email.toLowerCase()==="arnaudafrochain@gmail.com"){ document.getElementById('loginDiv').style.display="none"; document.getElementById('adminDiv').style.display="block"; document.getElementById('userEmail').innerText=user.email; generateCertNo(); generateStudentId(); } else { document.getElementById('loginDiv').style.display="block"; document.getElementById('adminDiv').style.display="none"; if(user && user.email.toLowerCase()!=="arnaudafrochain@gmail.com"){ alert("Access Denied"); auth.signOut(); } } });
+async function saveCert(){ const certNo=document.getElementById('certNo').value.trim(); if(!certNo){alert("Cert No empty");return;} const subjects=[]; for(let i=1;i<=6;i++){ const s=document.getElementById('sub'+i).value.trim(); const r=document.getElementById('res'+i).value.trim().toUpperCase(); if(s&&r){subjects.push({subject:s,score:r});} } const data={ fullName:document.getElementById('fullName').value.trim(), certificateNo:certNo, studentId:document.getElementById('studentId').value.trim(), school:document.getElementById('school').value.trim(), country:document.getElementById('country').value, examination:document.getElementById('exam').value.trim(), course:document.getElementById('course').value.trim(), grade:document.getElementById('grade').value, status:document.getElementById('status').value, subjects:subjects, issueDate:new Date().toLocaleDateString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'}), verifiedOn:new Date().toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'}), verifiedBy:"ARNAUD AFROCHAINE - 12 Idiroko Road, Sango Ota | GLOBAL HQ" }; try{ await db.collection("certificates").doc(certNo).set(data); document.getElementById('msg').style.color="green"; document.getElementById('msg').innerText="✅ SAVED! " + certNo + " - " + data.country; } catch(e){ document.getElementById('msg').style.color="red"; document.getElementById('msg').innerText="Error: " + e.message; } }
+function generateQR(){ const certNo=document.getElementById('certNo').value.trim(); if(!certNo){alert("Generate Cert No first");return;} const qrDiv=document.getElementById('qrcode'); qrDiv.innerHTML=""; const verifyUrl = `https://${window.location.hostname}/arnaudafrochaineverificationltd/verify.html?cert=${certNo}`; new QRCode(qrDiv, { text: verifyUrl, width: 200, height: 200, colorDark:"#000000", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.H }); document.getElementById('msg').innerHTML = `<br>QR for: <b>${certNo}</b><br><small>${verifyUrl}</small>`; }
 document.getElementById('debug').innerText="Ready - Domain: " + window.location.hostname;
 </script>
 </body>
-                                                                                                                                      </html>
+</html> </html>
