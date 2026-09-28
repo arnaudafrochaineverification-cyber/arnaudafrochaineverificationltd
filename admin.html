@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARNAUD ADMIN - FINAL NO CAC - REAL FIREBASE</title>
+<title>ARNAUD ADMIN - FINAL 6 SUBJECTS NO CAC</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -14,10 +14,12 @@ body{font-family:Arial;background:#f0f7f0;padding:15px}
 input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
 button{padding:12px 15px;border:none;border-radius:8px;cursor:pointer;font-weight:bold}
 .btn-green{background:#0a4a2a;color:white;width:100%;margin-top:10px}
+.btn-blue{background:#1565c0;color:white;width:100%;margin-top:8px}
 .btn-gold{background:#C9A227;color:#0A3D1F;width:100%;margin-top:10px;display:none}
 .btn-small{background:#0a4a2a;color:white;padding:8px 12px}
 .login-box{max-width:400px;margin:80px auto;background:white;padding:25px;border-radius:15px;text-align:center}
 .auto-input{background:#e8f5e9!important;font-weight:bold;color:#0a4a2a;border:2px solid #0a4a2a!important}
+.subject-row{display:flex;gap:8px}
 .cert{width:1050px;height:760px;background:#FFFEF7;margin:25px auto;border:14px solid #0A3D1F;position:relative;padding:16px}
 .inner{border:3px solid #C9A227;height:100%;padding:14px;position:relative}
 .title{font-size:32px;color:#B8860B;text-align:center;font-weight:900;margin:8px 0;font-family:Times New Roman}
@@ -35,35 +37,41 @@ td{border:1px solid #C9A227;padding:5px;text-align:center}
 </head>
 <body>
 <div id="loginDiv" class="login-box">
-<h2 style="color:#0a4a2a">🔒 ARNAUD ADMIN<br><small>FINAL - NO CAC</small></h2>
+<h2 style="color:#0a4a2a">🔒 ARNAUD ADMIN<br><small>FINAL - 6 SUBJECTS NO CAC</small></h2>
 <input type="email" id="email" value="arnaudafrochain@gmail.com">
 <input type="password" id="password" placeholder="Password">
 <button class="btn-green" onclick="login()">LOGIN</button>
 <p id="loginMsg" style="color:red"></p>
 </div>
+
 <div id="adminDiv" class="card no-print" style="display:none">
 <div style="display:flex;justify-content:space-between;align-items:center">
-<h3 style="color:#0a4a2a;margin:0">ARNAUD AFROCHAINE<br><small>FINAL - NO CAC CERT</small></h3>
+<h3 style="color:#0a4a2a;margin:0">ARNAUD AFROCHAINE<br><small>VERIFICATION LTD - GLOBAL 30</small></h3>
 <button onclick="logout()" style="background:#d32f2f;color:white">Logout</button>
 </div>
 <p>Welcome <b id="userEmail"></b></p><hr>
 <label>Full Name</label><input type="text" id="fullName" placeholder="e.g RAZAKI ADEBAYO">
-<label>Certificate No (Auto)</label>
-<div style="display:flex;gap:5px"><input type="text" id="certNo" class="auto-input" readonly><button type="button" class="btn-small" onclick="generateCertNo()">🔄 NEW</button></div>
-<label>Student ID (Auto)</label>
-<div style="display:flex;gap:5px"><input type="text" id="studentId" class="auto-input" readonly><button type="button" class="btn-small" onclick="generateStudentId()">🔄 NEW</button></div>
+<label>Certificate No (Auto)</label><div style="display:flex;gap:5px"><input type="text" id="certNo" class="auto-input" readonly><button type="button" class="btn-small" onclick="generateCertNo()">🔄 NEW</button></div>
+<label>Student ID (Auto)</label><div style="display:flex;gap:5px"><input type="text" id="studentId" class="auto-input" readonly><button type="button" class="btn-small" onclick="generateStudentId()">🔄 NEW</button></div>
 <label>School / Institution</label><input type="text" id="school" value="Government schools">
 <label>Institution Country (Global - 30 Countries)</label><select id="country">
 <option value="Nigeria">🇳🇬 Nigeria</option><option value="Ghana">🇬🇭 Ghana</option><option value="USA">🇺🇸 USA</option><option value="UK">🇬🇧 UK</option><option value="Canada">🇨🇦 Canada</option><option value="South Africa">🇿🇦 South Africa</option><option value="Kenya">🇰🇪 Kenya</option><option value="Cameroon">🇨🇲 Cameroon</option><option value="Togo">🇹🇬 Togo</option><option value="Benin">🇧🇯 Benin</option><option value="Senegal">🇸🇳 Senegal</option><option value="Ivory Coast">🇨🇮 Ivory Coast</option><option value="Egypt">🇪🇬 Egypt</option><option value="Morocco">🇲🇦 Morocco</option><option value="Ethiopia">🇪🇹 Ethiopia</option><option value="India">🇮🇳 India</option><option value="Pakistan">🇵🇰 Pakistan</option><option value="China">🇨🇳 China</option><option value="Philippines">🇵🇭 Philippines</option><option value="Germany">🇩🇪 Germany</option><option value="France">🇫🇷 France</option><option value="Italy">🇮🇹 Italy</option><option value="Spain">🇪🇸 Spain</option><option value="Australia">🇦🇺 Australia</option><option value="UAE">🇦🇪 UAE - Dubai</option><option value="Saudi Arabia">🇸🇦 Saudi Arabia</option><option value="Turkey">🇹🇷 Turkey</option><option value="Brazil">🇧🇷 Brazil</option><option value="Jamaica">🇯🇲 Jamaica</option><option value="Other">🌍 Other</option>
 </select>
-<label>Examination | Course</label><div style="display:flex;gap:5px"><input type="text" id="exam" value="WAEC"><input type="text" id="course" value="Engineering"></div>
-<label>Grade | Status</label><div style="display:flex;gap:5px"><select id="grade"><option>Distinction</option><option>Upper Credit</option><option>Credit</option><option>Pass</option><option>First Class</option><option>Second Class</option></select><select id="status"><option>AUTHENTIC</option><option>PENDING</option></select></div>
-<label>Subjects</label>
-<input id="subj1" value="Mathematics - 85 - A"><input id="subj2" value="English - 78 - B"><input id="subj3" value="Science - 90 - A"><input id="subj4" value="African History - 82 - A">
-<button class="btn-green" onclick="saveAndGenerate()">💾 SAVE TO FIREBASE + GENERATE BLACK QR + CERT</button>
-<button class="btn-gold" id="printBtn" onclick="window.print()">🖨️ PRINT CERTIFICATE (NO CAC - PERFECT)</button>
+<label>Examination | Course (Global)</label><div class="subject-row"><input type="text" id="exam" value="WAEC"><input type="text" id="course" value="Engineering"></div>
+<label>Grade | Status</label><div class="subject-row"><select id="grade"><option>Distinction</option><option>Upper Credit</option><option>Credit</option><option>Pass</option><option>First Class</option><option>Second Class</option></select><select id="status"><option>AUTHENTIC</option><option>PENDING</option></select></div>
+<h4>Subjects + Results / Courses + Scores (Global - A1, Distinction, %, GPA)</h4>
+<div class="subject-row"><input id="sub1" value="Mathematics" placeholder="Mathematics"><input id="res1" placeholder="e.g A1 / 85% / GPA"></div>
+<div class="subject-row"><input id="sub2" value="English" placeholder="English"><input id="res2" placeholder="e.g B2 / A / Distinc"></div>
+<div class="subject-row"><input id="sub3" value="French" placeholder="French"><input id="res3" placeholder="e.g B3 / % / Credit"></div>
+<div class="subject-row"><input id="sub4" value="Physics" placeholder="Physics"><input id="res4" placeholder="e.g C4 / GPA"></div>
+<div class="subject-row"><input id="sub5" value="Chemistry" placeholder="Chemistry"><input id="res5" placeholder="e.g C5 / Pass"></div>
+<div class="subject-row"><input id="sub6" value="Biology" placeholder="Biology"><input id="res6" placeholder="e.g C6 / Score"></div>
+<button class="btn-green" onclick="saveToFirebase()">💾 SAVE TO FIREBASE</button>
+<button class="btn-blue" onclick="generateCert()">GENERATE BLACK QR + CERTIFICATE (NO CAC)</button>
+<button class="btn-gold" id="printBtn" onclick="window.print()">🖨️ PRINT PERFECT CERTIFICATE (NO CAC)</button>
 <p id="msg" style="text-align:center;font-weight:bold;color:green"></p>
 </div>
+
 <div id="certWrap" style="display:none">
 <div class="cert"><div class="inner">
 <div style="text-align:center"><img src="https://raw.githubusercontent.com/arnaudafrochaineverification-cyber/arnaudafrochaineverification-cyber.github.io/main/logo.png" width="85"><div class="comp">ARNAUD AFROCHAINE VERIFICATION LTD</div><div style="font-size:10px;color:#C9A227">African Roots, Global Vision</div></div>
@@ -72,11 +80,12 @@ td{border:1px solid #C9A227;padding:5px;text-align:center}
 <div style="text-align:center;margin:8px 0"><span id="p_name" style="font-size:26px;font-weight:900;color:#B8860B;border-bottom:2px solid #0A3D1F;min-width:450px;display:inline-block">FULL NAME</span></div>
 <div class="info"><div><div>Certificate No: <b><span id="p_no"></span></b></div><div>Student ID: <span id="p_id"></span></div><div>School: <span id="p_sch"></span></div><div>Country: <span id="p_couTry"></span></div></div><div><div>Course: <span id="p_cou"></span></div><div>Exam: <span id="p_exam"></span></div><div>Grade: <span id="p_gr"></span> | <span id="p_st"></span></div><div>Date: <span id="p_da"></span></div></div></div>
 <div style="text-align:center;font-weight:800;margin-top:8px;font-size:13px;color:#0A3D1F">SUBJECTS PERFORMANCE</div>
-<table><tr><th>SUBJECT</th><th>SCORE</th><th>GRADE</th></tr><tbody id="p_sub"></tbody></table>
+<table><tr><th>SUBJECT</th><th>RESULT</th></tr><tbody id="p_sub"></tbody></table>
 <div class="qr"><div id="qrcode"></div><small style="font-size:7px">SCAN TO VERIFY<br><span id="p_qr"></span></small></div>
 <div class="stamp"><div class="circle">STAMP<br>HERE</div><div style="border-top:2px solid #0A3D1F;width:170px;text-align:center;font-size:10px;padding-top:4px">Signature — Managing Director</div></div>
 <div class="footer">12 Idiroko Road, Sango Ota | +2349132851465 | +2348107522186 | VALID UPON VERIFICATION</div>
 </div></div></div>
+
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
@@ -95,31 +104,33 @@ function generateStudentId(){document.getElementById('studentId').value=Math.flo
 generateCertNo(); generateStudentId();
 function login(){const e=document.getElementById('email').value, p=document.getElementById('password').value; auth.signInWithEmailAndPassword(e,p).then(u=>{document.getElementById('loginDiv').style.display='none';document.getElementById('adminDiv').style.display='block';document.getElementById('userEmail').innerText=u.user.email;}).catch(err=>{document.getElementById('loginMsg').innerText=err.message;});}
 function logout(){auth.signOut().then(()=>{location.reload();});}
-function saveAndGenerate(){
+function saveToFirebase(){
   const fullName=document.getElementById('fullName').value;
   const certNo=document.getElementById('certNo').value;
-  const studentId=document.getElementById('studentId').value;
-  const school=document.getElementById('school').value;
-  const country=document.getElementById('country').value;
-  const exam=document.getElementById('exam').value;
-  const course=document.getElementById('course').value;
-  const grade=document.getElementById('grade').value;
-  const status=document.getElementById('status').value;
   if(!fullName){alert('Enter Full Name');return;}
-  db.collection('certificates').doc(certNo).set({fullName, certNo, studentId, school, country, exam, course, grade, status, createdAt: firebase.firestore.FieldValue.serverTimestamp(), verifyLink: 'https://arnaudafrochaineverification-cyber.github.io/verify?cert='+certNo}).then(()=>{document.getElementById('msg').innerText='✅ Saved to Firebase!';}).catch((e)=>{document.getElementById('msg').innerText='Error: '+e.message;});
+  let subjects={};
+  for(let i=1;i<=6;i++){subjects['sub'+i]=document.getElementById('sub'+i).value; subjects['res'+i]=document.getElementById('res'+i).value;}
+  db.collection('certificates').doc(certNo).set({
+    fullName, certNo, studentId: document.getElementById('studentId').value, school: document.getElementById('school').value, country: document.getElementById('country').value, exam: document.getElementById('exam').value, course: document.getElementById('course').value, grade: document.getElementById('grade').value, status: document.getElementById('status').value, ...subjects, createdAt: firebase.firestore.FieldValue.serverTimestamp(), verifyLink: 'https://arnaudafrochaineverification-cyber.github.io/verify?cert='+certNo
+  }).then(()=>{document.getElementById('msg').innerText='✅ Saved to Firebase! Now click GENERATE';}).catch(e=>{document.getElementById('msg').innerText='Error: '+e.message;});
+}
+function generateCert(){
+  const fullName=document.getElementById('fullName').value;
+  const certNo=document.getElementById('certNo').value;
+  if(!fullName){alert('Enter Full Name first');return;}
   document.getElementById('p_name').innerText=fullName.toUpperCase();
   document.getElementById('p_no').innerText=certNo;
-  document.getElementById('p_id').innerText=studentId;
-  document.getElementById('p_sch').innerText=school;
-  document.getElementById('p_couTry').innerText=country;
-  document.getElementById('p_cou').innerText=course;
-  document.getElementById('p_exam').innerText=exam;
-  document.getElementById('p_gr').innerText=grade;
-  document.getElementById('p_st').innerText=status;
+  document.getElementById('p_id').innerText=document.getElementById('studentId').value;
+  document.getElementById('p_sch').innerText=document.getElementById('school').value;
+  document.getElementById('p_couTry').innerText=document.getElementById('country').value;
+  document.getElementById('p_cou').innerText=document.getElementById('course').value;
+  document.getElementById('p_exam').innerText=document.getElementById('exam').value;
+  document.getElementById('p_gr').innerText=document.getElementById('grade').value;
+  document.getElementById('p_st').innerText=document.getElementById('status').value;
   document.getElementById('p_da').innerText=new Date().toLocaleDateString();
   document.getElementById('p_qr').innerText=certNo;
   var tb=document.getElementById('p_sub');tb.innerHTML='';
-  for(let i=1;i<=4;i++){var v=document.getElementById('subj'+i).value; if(v){var p=v.split('-'); tb.innerHTML+='<tr><td>'+p[0]+'</td><td>'+(p[1]||'')+'</td><td>'+(p[2]||'')+'</td></tr>';}}
+  for(let i=1;i<=6;i++){let s=document.getElementById('sub'+i).value; let r=document.getElementById('res'+i).value; if(s||r){tb.innerHTML+='<tr><td>'+s+'</td><td>'+r+'</td></tr>';}}
   document.getElementById('qrcode').innerHTML='';
   new QRCode(document.getElementById('qrcode'),{text:'https://arnaudafrochaineverification-cyber.github.io/verify?cert='+certNo,width:108,height:108,colorDark:'#000',colorLight:'#fff'});
   document.getElementById('certWrap').style.display='block';
@@ -128,4 +139,4 @@ function saveAndGenerate(){
 }
 </script>
 </body>
-  </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </html>
