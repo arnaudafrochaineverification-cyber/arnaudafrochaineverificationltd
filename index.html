@@ -98,7 +98,6 @@ if(snap.empty){r.style.background='#ffdddd';r.innerHTML='❌ NOT FOUND '+v;retur
 snap.forEach(doc=>{
 let d=doc.data();
 let rows="";let list=d.subjects||[];
-let rows="";let list=d.subjects||[];
 if(list.length==0){
  for(let i=1;i<=10;i++){
   let sub=d['sub'+i]||d['subject'+i]||'';
