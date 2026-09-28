@@ -29,9 +29,6 @@ body{background:#f6fff6}
 .addr{background:#fff8e1;border:1px dashed #b8860b;padding:10px;border-radius:8px;margin-top:10px;font-size:11px;line-height:1.6}
 .foot{background:#0a4d2a;color:white;padding:18px;text-align:center;font-size:10px}
 .wa{position:fixed;bottom:16px;right:16px;background:#25D366;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none}
-table{width:100%;border-collapse:collapse;margin-top:8px}
-th{background:#0a4d2a;color:#C9A227;padding:8px;font-size:12px;text-align:left}
-td{border:1px solid #ddd;padding:8px;font-size:12px}
 </style>
 </head>
 <body>
@@ -43,96 +40,4 @@ td{border:1px solid #ddd;padding:8px;font-size:12px}
 <div class="sec"><h2>👤 About Us</h2><p><b>ARNAUD AFROCHAINE VERIFICATION LTD</b> is CAC-registered global verification company headquartered at 12 Idiroko Road, Sango Ota, Ogun State, serving clients worldwide.</p></div>
 
 <div class="sec"><h2>🌍 Global Coverage - 30 Countries</h2><p style="font-size:11px;margin-bottom:8px">We verify from <b>30 countries worldwide</b>. Each result shows country flag.</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;font-size:10px;font-weight:700">
-<div style="background:#e8f5e9;padding:6px;border-radius:6px">🇳🇬 Nigeria</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇬🇭 Ghana</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇬🇧 UK</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇺🇸 USA</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇨🇦 Canada</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇿🇦 South Africa</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇩🇪 Germany</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇫🇷 France</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇦🇺 Australia</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇮🇳 India</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇰🇪 Kenya</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇨🇲 Cameroon</div>
-</div></div>
-
-<div class="sec"><h2>🛠️ Our Services</h2><ul><li>Certificate Verification</li><li>School Result Management</li><li>Instant QR Generation</li><li>Employer Verification</li></ul><div class="addr"><b>Office:</b> 12 Idiroko Road, Opposite GTBank, Sango Ota, Ogun State<br><b>Phone:</b> 0913 285 1465</div></div>
-
-<div class="foot">© 2026 ARNAUD AFROCHAINE VERIFICATION LTD<br>12 Idiroko Road, Sango Ota • Valid Upon Verification</div>
-<a class="wa" href="https://wa.me/2349132851465">💬</a>
-
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-  authDomain: "arnaudafrochaineverification.firebaseapp.com",
-  projectId: "arnaudafrochaineverification",
-  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
-  messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-function flagForCountry(c){
-  const m={"Nigeria":"🇳🇬","Ghana":"🇬🇭","UK":"🇬🇧","USA":"🇺🇸","Canada":"🇨🇦","South Africa":"🇿🇦","Germany":"🇩🇪","France":"🇫🇷","Australia":"🇦🇺","India":"🇮🇳","Kenya":"🇰🇪","Cameroon":"🇨🇲"};
-  return m[c]||"🌍";
-}
-
-function check(){
-  const certNo=document.getElementById('cert').value.trim();
-  if(!certNo){alert('Enter Cert No');return;}
-  const resDiv=document.getElementById('res');
-  resDiv.style.display='block';
-  resDiv.innerHTML='⏳ Checking...';
-  db.collection('certificates').doc(certNo).get().then(doc=>{
-    if(!doc.exists){
-      resDiv.innerHTML='<div style="background:#ffebee;color:#c62828;padding:10px;border-radius:8px;text-align:center">❌ NOT FOUND - Invalid Certificate</div>';
-      return;
-    }
-    const d=doc.data();
-    let subjectsHTML='';
-    // ===== FIXED SMART READER - reads EVERY format =====
-    let rows=[];
-    if(d.subjects && Array.isArray(d.subjects) && d.subjects.length>0){
-      d.subjects.forEach(s=>{
-        let subj=s.subject||s.sub||s.name||'';
-        let sc=s.score||s.result||s.res||'';
-        if(subj) rows.push([subj,sc]);
-      });
-    }else{
-      for(let i=1;i<=6;i++){
-        let subj = d['sub'+i] || d['subject'+i] || d['subject'+i+'Name'] || '';
-        let score = d['res'+i] || d['result'+i] || d['score'+i] || d['score'+i+'Value'] || d['res'+i+'Value'] || '';
-        // handle combined like "Mathematics - 78% - A"
-        if(subj &&!score && subj.includes('-')){
-          let parts=subj.split('-');
-          if(parts.length>=2){ score=parts[1].trim()+(parts[2]? ' - '+parts[2].trim():''); subj=parts[0].trim(); }
-        }
-        if(subj) rows.push([subj,score]);
-      }
-    }
-    rows.forEach(r=>{
-      subjectsHTML+=`<tr><td>${r[0]}</td><td><b>${r[1]||''}</b></td></tr>`;
-    });
-    if(!subjectsHTML) subjectsHTML='<tr><td colspan=2>No subjects saved</td></tr>';
-
-    const countryFlag=flagForCountry(d.country);
-    resDiv.innerHTML=`
-      <div style="background:#0a4d2a;color:white;padding:10px;border-radius:8px;text-align:center;font-weight:bold">✅ AUTHENTIC - VERIFIED</div>
-      <div style="background:#f1f8e9;padding:10px;border-radius:8px;margin-top:8px;line-height:1.8">
-        <b>Name:</b> ${d.fullName||d.name||''}<br>
-        <b>Cert No:</b> ${d.certNo||certNo}<br>
-        <b>🌍 Country:</b> <span style="background:#ffeb3b;padding:2px 8px;border-radius:12px">${countryFlag} ${d.country||''}</span><br>
-        <b>School:</b> ${d.school||''}<br>
-        <b>Grade:</b> ${d.grade||''} | <b>Status:</b> ${d.status||'AUTHENTIC'}<br>
-        <b>Verified:</b> ${new Date().toLocaleString()}
-      </div>
-      <div style="margin-top:10px"><b>📚 Subjects + Results</b></div>
-      <table><tr><th>Subject</th><th>Score</th></tr>${subjectsHTML}</table>
-      <div style="border:1px dashed #0a4d2a;padding:10px;text-align:center;margin-top:10px;border-radius:8px">📱 SCAN QR CODE<br><div id="qrcode"></div></div>
-    `;
-    document.getElementById('qrcode').innerHTML='';
-    new QRCode(document.getElementById('qrcode'),{text:'https://arnaudafrochaineverification-cyber.github.io/?cert='+certNo,width:100,height:100,colorDark:'#000',colorLight:'#fff'});
-  }).catch(e=>{
-    resDiv.innerHTML='Error: '+e.message;
-  });
-}
-// auto verify if?cert= in URL
-window.onload=()=>{
-  const urlParams=new URLSearchParams(window.location.search);
-  const c=urlParams.get('cert')||urlParams.get('id');
-  if(c){document.getElementById('cert').value=c; check();}
-}
-</script>
-</body>
-</html>
+<div style="background:#e8f5e9;padding:6px;border-radius:6px">🇳🇬 Nigeria</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇬🇭 Ghana</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇬🇧 UK</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇺🇸 USA</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇨🇦 Canada</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇿🇦 South Africa</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇩🇪 Germany</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇫🇷 France</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇦🇺 Australia</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇮🇳 India</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇰🇪 Kenya</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇨🇲 Cameroon</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇿🇲 Zambia</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇿🇼 Zimbabwe</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇷🇼 Rwanda</div><div style="backgro
