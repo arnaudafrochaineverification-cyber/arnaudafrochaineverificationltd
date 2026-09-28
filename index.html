@@ -98,7 +98,14 @@ if(snap.empty){r.style.background='#ffdddd';r.innerHTML='❌ NOT FOUND '+v;retur
 snap.forEach(doc=>{
 let d=doc.data();
 let rows="";let list=d.subjects||[];
-if(list.length==0){for(let i=1;i<=10;i++){let n=d['subject'+i]||d['sub'+i]||d['Subject'+i]||'';let s=d['score'+i]||d['result'+i]||d['Score'+i]||'';if(n||s){list.push({name:n,score:s})}}}
+let rows="";let list=d.subjects||[];
+if(list.length==0){
+ for(let i=1;i<=10;i++){
+  let sub=d['sub'+i]||d['subject'+i]||'';
+  let sc=d['res'+i]||d['result'+i]||d['score'+i]||'';
+  if(sub) list.push({name:sub,score:sc});
+ }
+}
 list.forEach((s,idx)=>{
   let subName=s.name||s.subject||s.course||("Subject "+(idx+1));
   let subScore=s.score||s.result||s.mark||'';
