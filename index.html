@@ -68,18 +68,22 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 function getFlag(country){
   if(!country) return "🌍 Not Set";
-  let c=country.toString().toUpperCase().trim();
-  if(c.includes("UK")||c.includes("BRITAIN")||c.includes("ENGLAND")||c=="GB") return "🇬🇧 UK";
-  if(c.includes("NIGERIA")||c=="NG") return "🇳🇬 Nigeria";
+  let raw = country.toString().trim();
+  let c = raw.toUpperCase().replace(/[^A-Z ]/g, " ").trim();
+  // FIX: Check USA FIRST before UK
+  if(c === "USA" || c.includes("UNITED STATES") || c === "US" || c.includes(" AMERICA")) return "🇺🇸 USA";
+  if(c === "UK" || c === "GB" || c.includes("UNITED KINGDOM") || c.includes("BRITAIN") || c.includes("ENGLAND")) return "🇬🇧 UK";
+  if(c.includes("NIGERIA") || c === "NG") return "🇳🇬 Nigeria";
   if(c.includes("GHANA")) return "🇬🇭 Ghana";
-  if(c.includes("USA")||c.includes("AMERICA")) return "🇺🇸 USA";
   if(c.includes("CANADA")) return "🇨🇦 Canada";
   if(c.includes("SOUTH AFRICA")) return "🇿🇦 South Africa";
   if(c.includes("GERMANY")) return "🇩🇪 Germany";
   if(c.includes("FRANCE")) return "🇫🇷 France";
   if(c.includes("AUSTRALIA")) return "🇦🇺 Australia";
   if(c.includes("INDIA")) return "🇮🇳 India";
-  return "🌍 "+country;
+  if(c.includes("KENYA")) return "🇰🇪 Kenya";
+  if(c.includes("CAMEROON")) return "🇨🇲 Cameroon";
+  return "🌍 " + raw;
 }
 async function check(){
 let v=document.getElementById('cert').value.trim().toUpperCase();
@@ -115,4 +119,4 @@ document.getElementById('qrLinkTxt').innerText=qrUrl;
 }
 </script>
 </body>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </html>
+  </html>
