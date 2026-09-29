@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARNAUD ADMIN - FINAL FIXED LOGO.JPG</title>
+<title>ARNAUD ADMIN - FINE CERTIFICATE</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -20,24 +20,37 @@ button{padding:12px 15px;border:none;border-radius:8px;cursor:pointer;font-weigh
 .login-box{max-width:400px;margin:80px auto;background:white;padding:25px;border-radius:15px;text-align:center}
 .auto-input{background:#e8f5e9!important;font-weight:bold;color:#0a4a2a;border:2px solid #0a4a2a!important}
 .subject-row{display:flex;gap:8px}
-.cert{width:1050px;height:760px;background:#FFFEF7;margin:25px auto;border:14px solid #0A3D1F;position:relative;padding:16px}
-.inner{border:3px solid #C9A227;height:100%;padding:14px;position:relative}
-.title{font-size:32px;color:#B8860B;text-align:center;font-weight:900;margin:8px 0;font-family:Times New Roman}
-.comp{font-size:20px;color:#0A3D1F;text-align:center;font-weight:900}
-.info{display:flex;justify-content:space-between;font-size:12px;margin:10px 30px 0;font-weight:600}
-table{width:70%;margin:10px auto;border-collapse:collapse;font-size:11px}
-th{background:#0A3D1F;color:#C9A227;padding:6px;border:1px solid #C9A227}
-td{border:1px solid #C9A227;padding:5px;text-align:center}
-.qr{position:absolute;left:25px;bottom:65px;border:2px solid #0A3D1F;padding:6px;background:white;width:120px;text-align:center}
-.stamp{position:absolute;right:25px;bottom:65px;display:flex;gap:12px;align-items:center}
-.circle{width:85px;height:85px;border:2px dashed #C9A227;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px}
-.footer{position:absolute;bottom:0;left:0;width:100%;background:#0A3D1F;color:#C9A227;text-align:center;font-size:9px;padding:6px}
-@media print{.no-print{display:none}.cert{margin:0;border:10px solid #0A3D1F}}
+
+/* === NEW FINE CERTIFICATE DESIGN - LIKE SECOND PICTURE === */
+.cert{width:1050px;min-height:780px;background:#fffef7;margin:25px auto;position:relative;padding:0;box-shadow:0 0 25px #0003}
+.cert-outer{border:12px solid #0a4d2a;border-image: linear-gradient(45deg,#0a4d2a,#C9A227,#0a4d2a) 1;padding:5px;height:100%;box-sizing:border-box}
+.cert-inner{border:3px solid #C9A227;height:100%;padding:18px 22px;position:relative;background:#fffef7 url('https://www.transparenttextures.com/patterns/cream-paper.png')}
+.cert-corner{position:absolute;width:60px;height:60px;background:linear-gradient(135deg,#C9A227,#b8860b);z-index:5}
+.cc-tl{top:0;left:0;clip-path: polygon(0 0,100% 0,0 100%)}
+.cc-tr{top:0;right:0;clip-path: polygon(100% 0,100% 100%,0 0)}
+.cc-bl{bottom:0;left:0;clip-path: polygon(0 100%,100% 100%,0 0)}
+.cc-br{bottom:0;right:0;clip-path: polygon(100% 0,100% 100%,0 100%)}
+.title{font-size:36px;color:#B8860B;text-align:center;font-weight:900;margin:10px 0 5px 0;font-family:'Times New Roman',serif;letter-spacing:1px;text-shadow:1px 1px 0 #0001}
+.title span{border:2px solid #C9A227;padding:6px 22px;border-radius:4px;background:linear-gradient(#fff,#fef9e0)}
+.comp{font-size:19px;color:#0A3D1F;text-align:center;font-weight:900;margin-top:4px}
+.comp-sub{font-size:11px;color:#C9A227;text-align:center;letter-spacing:1px}
+.info{display:flex;justify-content:space-between;font-size:12.5px;margin:14px 15px 0;font-weight:600;line-height:2.1;color:#0a4d2a;border-top:1px dashed #C9A227;border-bottom:1px dashed #C9A227;padding:10px 0}
+.info b{color:#000}
+.info>div{flex:1}
+.info>div:last-child{border-left:1px dashed #C9A227;padding-left:18px}
+table{width:78%;margin:12px auto;border-collapse:collapse;font-size:11.5px}
+th{background:#0A3D1F;color:#FFEB3B;padding:8px;border:1px solid #C9A227;font-size:12px}
+td{border:1px solid #C9A227;padding:6px;text-align:center;background:white}
+.qr{position:absolute;left:22px;bottom:60px;border:2px solid #C9A227;padding:7px;background:white;width:128px;text-align:center;border-radius:4px}
+.stamp{position:absolute;right:22px;bottom:55px;display:flex;gap:10px;align-items:flex-end}
+.circle{width:92px;height:92px;border:2px dashed #C9A227;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;text-align:center;color:#8a6a00;line-height:1.2}
+.footer{position:absolute;bottom:0;left:0;width:100%;background:#0A3D1F;color:#FFEB3B;text-align:center;font-size:9px;padding:7px;letter-spacing:0.5px}
+@media print{.no-print{display:none}body{background:white;padding:0}.cert{margin:0;box-shadow:none;width:100%}}
 </style>
 </head>
 <body>
 <div id="loginDiv" class="login-box">
-<h2 style="color:#0a4a2a">🔒 ARNAUD ADMIN<br><small>FINAL - FIXED LOGO</small></h2>
+<h2 style="color:#0a4a2a">🔒 ARNAUD ADMIN<br><small>FINE CERTIFICATE - UPDATED</small></h2>
 <input type="email" id="email" value="arnaudafrochain@gmail.com">
 <input type="password" id="password" placeholder="Password">
 <button class="btn-green" onclick="login()">LOGIN</button>
@@ -67,24 +80,60 @@ td{border:1px solid #C9A227;padding:5px;text-align:center}
 <div class="subject-row"><input id="sub5" value="Chemistry"><input id="res5" placeholder="C5"></div>
 <div class="subject-row"><input id="sub6" value="Biology"><input id="res6" placeholder="C6"></div>
 <button class="btn-green" onclick="saveToFirebase()">💾 SAVE TO FIREBASE</button>
-<button class="btn-blue" onclick="generateCert()">GENERATE BLACK QR + CERTIFICATE</button>
+<button class="btn-blue" onclick="generateCert()">GENERATE BLACK QR + FINE CERTIFICATE</button>
 <button class="btn-gold" id="printBtn" onclick="window.print()">🖨️ PRINT CERTIFICATE</button>
 <p id="msg" style="text-align:center;font-weight:bold;color:green"></p>
 </div>
 
 <div id="certWrap" style="display:none">
-<div class="cert"><div class="inner">
-<div style="text-align:center"><img src="https://arnaudafrochaineverification-cyber.github.io/logo.jpg" width="85" style="border-radius:50%;border:2px solid #0A3D1F;object-fit:cover"><div class="comp">ARNAUD AFROCHAINE VERIFICATION LTD</div><div style="font-size:10px;color:#C9A227">African Roots, Global Vision</div></div>
-<div class="title">CERTIFICATE OF VERIFICATION</div>
-<div style="text-align:center;font-style:italic;font-size:13px">This certifies that</div>
-<div style="text-align:center;margin:8px 0"><span id="p_name" style="font-size:26px;font-weight:900;color:#B8860B;border-bottom:2px solid #0A3D1F;min-width:450px;display:inline-block">FULL NAME</span></div>
-<div class="info"><div><div>Certificate No: <b><span id="p_no"></span></b></div><div>Student ID: <span id="p_id"></span></div><div>School: <span id="p_sch"></span></div><div>Country: <span id="p_couTry"></span></div></div><div><div>Course: <span id="p_cou"></span></div><div>Exam: <span id="p_exam"></span></div><div>Grade: <span id="p_gr"></span> | <span id="p_st"></span></div><div>Date: <span id="p_da"></span></div></div></div>
-<div style="text-align:center;font-weight:800;margin-top:8px;font-size:13px;color:#0A3D1F">SUBJECTS PERFORMANCE</div>
-<table><tr><th>SUBJECT</th><th>RESULT</th></tr><tbody id="p_sub"></tbody></table>
-<div class="qr"><div id="qrcode"></div><small style="font-size:7px">SCAN TO VERIFY<br><span id="p_qr"></span></small></div>
-<div class="stamp"><div class="circle">STAMP<br>HERE</div><div style="border-top:2px solid #0A3D1F;width:170px;text-align:center;font-size:10px;padding-top:4px">Signature — Managing Director</div></div>
-<div class="footer">12 Idiroko Road, Sango Ota | +2349132851465 | +2348107522186 | VALID UPON VERIFICATION</div>
-</div></div></div>
+<div class="cert"><div class="cert-outer"><div class="cert-inner">
+<div class="cert-corner cc-tl"></div><div class="cert-corner cc-tr"></div><div class="cert-corner cc-bl"></div><div class="cert-corner cc-br"></div>
+
+<div style="text-align:center">
+<img src="https://arnaudafrochaineverification-cyber.github.io/logo.jpg" width="90" style="border-radius:50%;border:3px solid #C9A227;object-fit:cover;background:white">
+<div class="comp">ARNAUD AFROCHAINE VERIFICATION LTD</div>
+<div class="comp-sub">African Roots, Global Vision</div>
+</div>
+
+<div class="title"><span>CERTIFICATE OF VERIFICATION</span></div>
+<div style="text-align:center;font-style:italic;font-size:13px;margin-top:8px">This is to certify that the student below has successfully completed the verification assessment</div>
+
+<div style="text-align:center;margin:12px 0">
+<span id="p_name" style="font-size:26px;font-weight:900;color:#B8860B;border-bottom:2px dotted #0A3D1F;min-width:480px;display:inline-block;letter-spacing:1px">FULL NAME</span>
+</div>
+
+<div class="info">
+<div>
+<div>Full Name: <b><span id="p_name2"></span></b></div>
+<div>Certificate No: <b><span id="p_no"></span></b></div>
+<div>Student ID: <b><span id="p_id"></span></b></div>
+<div>School: <span id="p_sch"></span></div>
+</div>
+<div>
+<div>Country: <span id="p_couTry"></span></div>
+<div>Course: <span id="p_cou"></span></div>
+<div>Exam: <span id="p_exam"></span></div>
+<div>Grade: <span id="p_gr"></span> | <span id="p_st"></span></div>
+<div>Date: <span id="p_da"></span></div>
+</div>
+</div>
+
+<div style="text-align:center;font-weight:900;margin-top:14px;font-size:14px;color:#8a6a00;letter-spacing:1px">— SUBJECTS PERFORMANCE TABLE —</div>
+<table><tr><th>SUBJECT</th><th>RESULT</th><th>GRADE</th><th>REMARK</th></tr><tbody id="p_sub"></tbody></table>
+
+<div class="qr"><div style="font-size:9px;font-weight:800;color:#0a4d2a">QR CODE VERIFICATION</div><div id="qrcode" style="margin:5px 0"></div><small style="font-size:7px">SCAN TO VERIFY<br><span id="p_qr" style="font-size:8px;word-break:break-all"></span></small></div>
+
+<div class="stamp">
+<div style="text-align:center">
+<div style="font-size:10px;font-weight:700">Official Stamp:</div>
+<div class="circle">ARNAUD<br>AFROCHAINE<br>VERIFICATION LTD<br>OFFICIAL<br>STAMP</div>
+</div>
+<div style="border-top:2px solid #0A3D1F;width:180px;text-align:center;font-size:10px;padding-top:6px;margin-left:10px">Signature — Managing Director<br><small>Authorized Signatory</small></div>
+</div>
+
+<div class="footer">CAC Registered • 12 Idiroko Road, Sango Ota • Tel: +2349132851465 | +2348107522186 • www.arnaudafrochaine.com • VALID UPON VERIFICATION</div>
+
+</div></div></div></div>
 
 <script>
 const firebaseConfig = {apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain: "arnaudafrochaineverification.firebaseapp.com",projectId: "arnaudafrochaineverification",storageBucket: "arnaudafrochaineverification.firebasestorage.app",messagingSenderId: "268502946630",appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"};
@@ -95,8 +144,10 @@ function generateStudentId(){document.getElementById('studentId').value=Math.flo
 generateCertNo(); generateStudentId();
 function login(){const e=document.getElementById('email').value, p=document.getElementById('password').value; auth.signInWithEmailAndPassword(e,p).then(u=>{document.getElementById('loginDiv').style.display='none';document.getElementById('adminDiv').style.display='block';document.getElementById('userEmail').innerText=u.user.email;}).catch(err=>{document.getElementById('loginMsg').innerText=err.message;});}
 function logout(){auth.signOut().then(()=>{location.reload();});}
-function saveToFirebase(){const fullName=document.getElementById('fullName').value;const certNo=document.getElementById('certNo').value;if(!fullName){alert('Enter Full Name');return;}let subjects={};for(let i=1;i<=6;i++){subjects['sub'+i]=document.getElementById('sub'+i).value; subjects['res'+i]=document.getElementById('res'+i).value;}db.collection('certificates').doc(certNo).set({fullName, certNo, studentId: document.getElementById('studentId').value, school: document.getElementById('school').value, country: document.getElementById('country').value, exam: document.getElementById('exam').value, course: document.getElementById('course').value, grade: document.getElementById('grade').value, status: document.getElementById('status').value, ...subjects, createdAt: firebase.firestore.FieldValue.serverTimestamp(), verifyLink: 'https://arnaudafrochaineverification-cyber.github.io/verify?cert='+certNo}).then(()=>{document.getElementById('msg').innerText='✅ Saved! Now GENERATE';}).catch(e=>{document.getElementById('msg').innerText='Error: '+e.message;});}
-function generateCert(){const fullName=document.getElementById('fullName').value;const certNo=document.getElementById('certNo').value;if(!fullName){alert('Enter Full Name');return;}document.getElementById('p_name').innerText=fullName.toUpperCase();document.getElementById('p_no').innerText=certNo;document.getElementById('p_id').innerText=document.getElementById('studentId').value;document.getElementById('p_sch').innerText=document.getElementById('school').value;document.getElementById('p_couTry').innerText=document.getElementById('country').value;document.getElementById('p_cou').innerText=document.getElementById('course').value;document.getElementById('p_exam').innerText=document.getElementById('exam').value;document.getElementById('p_gr').innerText=document.getElementById('grade').value;document.getElementById('p_st').innerText=document.getElementById('status').value;document.getElementById('p_da').innerText=new Date().toLocaleDateString();document.getElementById('p_qr').innerText=certNo;var tb=document.getElementById('p_sub');tb.innerHTML='';for(let i=1;i<=6;i++){let s=document.getElementById('sub'+i).value; let r=document.getElementById('res'+i).value; if(s||r){tb.innerHTML+='<tr><td>'+s+'</td><td>'+r+'</td></tr>';}}document.getElementById('qrcode').innerHTML='';new QRCode(document.getElementById('qrcode'),{text:'https://arnaudafrochaineverification-cyber.github.io/verify?cert='+certNo,width:108,height:108,colorDark:'#000',colorLight:'#fff'});document.getElementById('certWrap').style.display='block';document.getElementById('printBtn').style.display='block';document.getElementById('certWrap').scrollIntoView({behavior:'smooth'});}
+function saveToFirebase(){const fullName=document.getElementById('fullName').value;const certNo=document.getElementById('certNo').value;if(!fullName){alert('Enter Full Name');return;}let subjects={};for(let i=1;i<=6;i++){subjects['sub'+i]=document.getElementById('sub'+i).value; subjects['res'+i]=document.getElementById('res'+i).value;}db.collection('certificates').doc(certNo).set({fullName, certNo, studentId: document.getElementById('studentId').value, school: document.getElementById('school').value, country: document.getElementById('country').value, exam: document.getElementById('exam').value, course: document.getElementById('course').value, grade: document.getElementById('grade').value, status: document.getElementById('status').value, ...subjects, createdAt: firebase.firestore.FieldValue.serverTimestamp(), verifyLink: 'https://arnaudafrochaineverification-cyber.github.io/verify.html?id='+certNo}).then(()=>{document.getElementById('msg').innerText='✅ Saved! Now GENERATE';}).catch(e=>{document.getElementById('msg').innerText='Error: '+e.message;});}
+function getRemark(r){r=(r||'').toUpperCase(); if(['A1','A','DISTINCTION','80','81','85','90'].includes(r)) return 'Excellent'; if(['B2','B3','B','70','76','75','GOOD'].includes(r)) return 'Very Good'; if(['C4','C5','C6','C','60'].includes(r)) return 'Good'; return 'Pass';}
+function getGrade(r){r=(r||'').toUpperCase(); if(r.includes('A')||r=='DISTINCTION'||parseInt(r)>=80) return 'A'; if(r.includes('B')||parseInt(r)>=60) return 'B'; if(r.includes('C')||parseInt(r)>=50) return 'C'; return 'P';}
+function generateCert(){const fullName=document.getElementById('fullName').value;const certNo=document.getElementById('certNo').value;if(!fullName){alert('Enter Full Name');return;}document.getElementById('p_name').innerText=fullName.toUpperCase();document.getElementById('p_name2').innerText=fullName.toUpperCase();document.getElementById('p_no').innerText=certNo;document.getElementById('p_id').innerText=document.getElementById('studentId').value;document.getElementById('p_sch').innerText=document.getElementById('school').value;document.getElementById('p_couTry').innerText=document.getElementById('country').value;document.getElementById('p_cou').innerText=document.getElementById('course').value;document.getElementById('p_exam').innerText=document.getElementById('exam').value;document.getElementById('p_gr').innerText=document.getElementById('grade').value;document.getElementById('p_st').innerText=document.getElementById('status').value;document.getElementById('p_da').innerText=new Date().toLocaleDateString();document.getElementById('p_qr').innerText=certNo;var tb=document.getElementById('p_sub');tb.innerHTML='';for(let i=1;i<=6;i++){let s=document.getElementById('sub'+i).value; let r=document.getElementById('res'+i).value; if(s||r){tb.innerHTML+='<tr><td style=\"text-align:left;padding-left:12px\">'+s+'</td><td>'+r+'</td><td>'+getGrade(r)+'</td><td>'+getRemark(r)+'</td></tr>';}}document.getElementById('qrcode').innerHTML='';new QRCode(document.getElementById('qrcode'),{text:'https://arnaudafrochaineverification-cyber.github.io/verify.html?id='+certNo,width:108,height:108,colorDark:'#000',colorLight:'#fff'});document.getElementById('certWrap').style.display='block';document.getElementById('printBtn').style.display='block';document.getElementById('certWrap').scrollIntoView({behavior:'smooth'});}
 </script>
 </body>
-                                                                        </html>
+</html>
