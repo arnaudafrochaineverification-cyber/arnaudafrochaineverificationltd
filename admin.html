@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARNAUD ADMIN - FINAL NO OVERLAP</title>
+<title>ARNAUD ADMIN - BLACK TEXT FIX FINAL</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -21,7 +21,7 @@ button{padding:12px 15px;border:none;border-radius:8px;cursor:pointer;font-weigh
 .auto-input{background:#e8f5e9!important;font-weight:bold;color:#0a4a2a;border:2px solid #0a4a2a!important}
 .subject-row{display:flex;gap:8px}
 
-/* === FINAL FIX - NO OVERLAP FINE DESIGN === */
+/* === FINAL - NO OVERLAP + BLACK TEXT FIX === */
 .cert{width:1120px;min-height:1050px;background:#fffef7;margin:25px auto;position:relative;padding:0;box-shadow:0 0 25px #0003}
 .cert-outer{border:12px solid #0a4d2a;border-image: linear-gradient(45deg,#0a4d2a,#C9A227,#0a4d2a) 1;padding:5px;min-height:1050px;box-sizing:border-box}
 .cert-inner{border:3px solid #C9A227;min-height:1020px;padding:18px 22px 160px 22px;position:relative;background:#fffef7;box-sizing:border-box}
@@ -30,28 +30,33 @@ button{padding:12px 15px;border:none;border-radius:8px;cursor:pointer;font-weigh
 .cc-tr{top:0;right:0;clip-path: polygon(100% 0,100% 100%,0 0)}
 .cc-bl{bottom:0;left:0;clip-path: polygon(0 100%,100% 100%,0 0)}
 .cc-br{bottom:0;right:0;clip-path: polygon(100% 0,100% 100%,0 100%)}
-.title{font-size:36px;color:#B8860B;text-align:center;font-weight:900;margin:10px 0 5px 0;font-family:'Times New Roman',serif;letter-spacing:1px}
+.title{font-size:36px;color:#B8860B;text-align:center;font-weight:900;margin:10px 0 5px 0;font-family:'Times New Roman',serif}
 .title span{border:2px solid #C9A227;padding:6px 22px;border-radius:4px;background:linear-gradient(#fff,#fef9e0)}
 .comp{font-size:19px;color:#0A3D1F;text-align:center;font-weight:900;margin-top:4px}
 .comp-sub{font-size:11px;color:#C9A227;text-align:center;letter-spacing:1px}
-.info{display:flex;justify-content:space-between;font-size:12.5px;margin:14px 15px 0;font-weight:600;line-height:2.1;color:#0a4d2a;border-top:1px dashed #C9A227;border-bottom:1px dashed #C9A227;padding:10px 0}
-.info b{color:#000}
-.info>div{flex:1}
-.info>div:last-child{border-left:1px dashed #C9A227;padding-left:18px}
-table{width:82%;margin:14px auto 150px auto!important;border-collapse:collapse;font-size:11.5px}
-th{background:#0A3D1F;color:#FFEB3B;padding:8px;border:1px solid #C9A227;font-size:12px}
-td{border:1px solid #C9A227;padding:6px;text-align:center;background:white}
-td:first-child{text-align:left;padding-left:14px;font-weight:600}
+
+/* FIXED INFO - BLACK TEXT, NOT GREEN */
+.info{display:flex;justify-content:space-between;margin:16px 12px 0;padding:14px 0;border-top:2px solid #C9A227;border-bottom:2px solid #C9A227;background:#fff}
+.info>div{flex:1;line-height:2.4}
+.info>div:last-child{border-left:1px dashed #C9A227;padding-left:20px}
+.info-label{color:#0A3D1F;font-weight:700;font-size:12px}
+.info-value{color:#000!important;font-weight:900!important;font-size:13px}
+
+table{width:85%;margin:16px auto 150px auto!important;border-collapse:collapse;font-size:12px}
+th{background:#0A3D1F;color:#FFEB3B;padding:9px;border:1px solid #C9A227;font-size:12px;letter-spacing:0.5px}
+td{border:1px solid #C9A227;padding:7px;text-align:center;background:white;color:#000;font-weight:600}
+td:first-child{text-align:left;padding-left:14px;color:#000}
+
 .qr{position:absolute;left:20px;bottom:45px;border:2.5px solid #0A3D1F;padding:8px;background:white;width:145px;text-align:center;border-radius:6px;box-shadow:0 2px 6px #0002;z-index:20}
 .stamp{position:absolute;right:20px;bottom:40px;display:flex;gap:10px;align-items:flex-end;z-index:20}
 .circle{width:92px;height:92px;border:2px dashed #C9A227;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;text-align:center;color:#8a6a00;line-height:1.2}
-.footer{position:absolute;bottom:0;left:0;width:100%;background:#0A3D1F;color:#FFEB3B;text-align:center;font-size:9px;padding:7px;letter-spacing:0.5px}
-@media print{.no-print{display:none}body{background:white;padding:0}.cert{margin:0;box-shadow:none;width:100%}}
+.footer{position:absolute;bottom:0;left:0;width:100%;background:#0A3D1F;color:#FFEB3B;text-align:center;font-size:9px;padding:7px}
+@media print{.no-print{display:none}body{background:white;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}.cert{margin:0;box-shadow:none;width:100%}}
 </style>
 </head>
 <body>
 <div id="loginDiv" class="login-box">
-<h2 style="color:#0a4a2a">🔒 ARNAUD ADMIN<br><small>FINAL - NO OVERLAP</small></h2>
+<h2 style="color:#0a4a2a">🔒 ARNAUD ADMIN<br><small>BLACK TEXT FIX - FINAL</small></h2>
 <input type="email" id="email" value="arnaudafrochain@gmail.com">
 <input type="password" id="password" placeholder="Password">
 <button class="btn-green" onclick="login()">LOGIN</button>
@@ -99,30 +104,33 @@ td:first-child{text-align:left;padding-left:14px;font-weight:600}
 <div style="text-align:center;margin:12px 0">
 <span id="p_name" style="font-size:26px;font-weight:900;color:#B8860B;border-bottom:2px dotted #0A3D1F;min-width:480px;display:inline-block;letter-spacing:1px">FULL NAME</span>
 </div>
+
 <div class="info">
 <div>
-<div>Full Name: <b><span id="p_name2"></span></b></div>
-<div>Certificate No: <b><span id="p_no"></span></b></div>
-<div>Student ID: <b><span id="p_id"></span></b></div>
-<div>School: <span id="p_sch"></span></div>
+<div><span class="info-label">Full Name:</span> <span class="info-value" id="p_name2"></span></div>
+<div><span class="info-label">Certificate No:</span> <span class="info-value" id="p_no"></span></div>
+<div><span class="info-label">Student ID:</span> <span class="info-value" id="p_id"></span></div>
+<div><span class="info-label">School:</span> <span class="info-value" id="p_sch"></span></div>
 </div>
 <div>
-<div>Country: <span id="p_couTry"></span></div>
-<div>Course: <span id="p_cou"></span></div>
-<div>Exam: <span id="p_exam"></span></div>
-<div>Grade: <span id="p_gr"></span> | <span id="p_st"></span></div>
-<div>Date: <span id="p_da"></span></div>
+<div><span class="info-label">Country:</span> <span class="info-value" id="p_couTry"></span></div>
+<div><span class="info-label">Course:</span> <span class="info-value" id="p_cou"></span></div>
+<div><span class="info-label">Exam:</span> <span class="info-value" id="p_exam"></span></div>
+<div><span class="info-label">Grade:</span> <span class="info-value"><span id="p_gr"></span> / <span id="p_st"></span></span></div>
+<div><span class="info-label">Date:</span> <span class="info-value" id="p_da"></span></div>
 </div>
 </div>
+
 <div style="text-align:center;font-weight:900;margin-top:14px;font-size:14px;color:#8a6a00;letter-spacing:1px">— SUBJECTS PERFORMANCE TABLE —</div>
 <table><tr><th>SUBJECT</th><th>RESULT</th><th>GRADE</th><th>REMARK</th></tr><tbody id="p_sub"></tbody></table>
-<div class="qr"><div style="font-size:9px;font-weight:800;color:#0a4d2a">QR CODE VERIFICATION</div><div id="qrcode" style="margin:5px 0"></div><small style="font-size:7px">SCAN TO VERIFY<br><span id="p_qr" style="font-size:8px;word-break:break-all"></span></small></div>
+
+<div class="qr"><div style="font-size:9px;font-weight:900;color:#0a4d2a">QR CODE VERIFICATION</div><div id="qrcode" style="margin:5px 0"></div><small style="font-size:7px;color:#000">SCAN TO VERIFY<br><span id="p_qr" style="font-size:8px;word-break:break-all;color:#000;font-weight:800"></span></small></div>
 <div class="stamp">
 <div style="text-align:center">
-<div style="font-size:10px;font-weight:700">Official Stamp:</div>
+<div style="font-size:10px;font-weight:700;color:#000">Official Stamp:</div>
 <div class="circle">ARNAUD<br>AFROCHAINE<br>VERIFICATION LTD<br>OFFICIAL<br>STAMP</div>
 </div>
-<div style="border-top:2px solid #0A3D1F;width:180px;text-align:center;font-size:10px;padding-top:6px;margin-left:10px">Signature — Managing Director<br><small>Authorized Signatory</small></div>
+<div style="border-top:2px solid #0A3D1F;width:180px;text-align:center;font-size:10px;padding-top:6px;margin-left:10px;color:#000">Signature — Managing Director<br><small>Authorized Signatory</small></div>
 </div>
 <div class="footer">CAC Registered • 12 Idiroko Road, Sango Ota • Tel: +2349132851465 | +2348107522186 • www.arnaudafrochaine.com • VALID UPON VERIFICATION</div>
 </div></div></div></div>
@@ -137,9 +145,9 @@ generateCertNo(); generateStudentId();
 function login(){const e=document.getElementById('email').value, p=document.getElementById('password').value; auth.signInWithEmailAndPassword(e,p).then(u=>{document.getElementById('loginDiv').style.display='none';document.getElementById('adminDiv').style.display='block';document.getElementById('userEmail').innerText=u.user.email;}).catch(err=>{document.getElementById('loginMsg').innerText=err.message;});}
 function logout(){auth.signOut().then(()=>{location.reload();});}
 function saveToFirebase(){const fullName=document.getElementById('fullName').value;const certNo=document.getElementById('certNo').value;if(!fullName){alert('Enter Full Name');return;}let subjects={};for(let i=1;i<=6;i++){subjects['sub'+i]=document.getElementById('sub'+i).value; subjects['res'+i]=document.getElementById('res'+i).value;}db.collection('certificates').doc(certNo).set({fullName, certNo, studentId: document.getElementById('studentId').value, school: document.getElementById('school').value, country: document.getElementById('country').value, exam: document.getElementById('exam').value, course: document.getElementById('course').value, grade: document.getElementById('grade').value, status: document.getElementById('status').value, ...subjects, createdAt: firebase.firestore.FieldValue.serverTimestamp(), verifyLink: 'https://arnaudafrochaineverification-cyber.github.io/verify.html?id='+certNo}).then(()=>{document.getElementById('msg').innerText='✅ Saved! Now GENERATE';}).catch(e=>{document.getElementById('msg').innerText='Error: '+e.message;});}
-function getRemark(r){r=(r||'').toUpperCase(); if(['A1','A','DISTINCTION','80','81','85','90'].includes(r)) return 'Excellent'; if(['B2','B3','B','70','76','75','GOOD'].includes(r)) return 'Very Good'; if(['C4','C5','C6','C','60'].includes(r)) return 'Good'; return 'Pass';}
+function getRemark(r){r=(r||'').toUpperCase(); if(['A1','A','DISTINCTION'].includes(r)||parseInt(r)>=80) return 'Excellent'; if(['B2','B3','B'].includes(r)||parseInt(r)>=60) return 'Very Good'; if(['C4','C5','C6','C'].includes(r)||parseInt(r)>=50) return 'Good'; return 'Pass';}
 function getGrade(r){r=(r||'').toUpperCase(); if(r.includes('A')||r=='DISTINCTION'||parseInt(r)>=80) return 'A'; if(r.includes('B')||parseInt(r)>=60) return 'B'; if(r.includes('C')||parseInt(r)>=50) return 'C'; return 'P';}
 function generateCert(){const fullName=document.getElementById('fullName').value;const certNo=document.getElementById('certNo').value;if(!fullName){alert('Enter Full Name');return;}document.getElementById('p_name').innerText=fullName.toUpperCase();document.getElementById('p_name2').innerText=fullName.toUpperCase();document.getElementById('p_no').innerText=certNo;document.getElementById('p_id').innerText=document.getElementById('studentId').value;document.getElementById('p_sch').innerText=document.getElementById('school').value;document.getElementById('p_couTry').innerText=document.getElementById('country').value;document.getElementById('p_cou').innerText=document.getElementById('course').value;document.getElementById('p_exam').innerText=document.getElementById('exam').value;document.getElementById('p_gr').innerText=document.getElementById('grade').value;document.getElementById('p_st').innerText=document.getElementById('status').value;document.getElementById('p_da').innerText=new Date().toLocaleDateString();document.getElementById('p_qr').innerText=certNo;var tb=document.getElementById('p_sub');tb.innerHTML='';for(let i=1;i<=6;i++){let s=document.getElementById('sub'+i).value; let r=document.getElementById('res'+i).value; if(s||r){tb.innerHTML+='<tr><td>'+s+'</td><td>'+r+'</td><td>'+getGrade(r)+'</td><td>'+getRemark(r)+'</td></tr>';}}document.getElementById('qrcode').innerHTML='';new QRCode(document.getElementById('qrcode'),{text:'https://arnaudafrochaineverification-cyber.github.io/verify.html?id='+certNo,width:108,height:108,colorDark:'#000',colorLight:'#fff'});document.getElementById('certWrap').style.display='block';document.getElementById('printBtn').style.display='block';document.getElementById('certWrap').scrollIntoView({behavior:'smooth'});}
 </script>
 </body>
-</html>
+                                                                                                                                                                                                                                                                                                               </html>
