@@ -25,7 +25,6 @@ body{background:#f6fff6}
 .sec ul{padding-left:18px}
 .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
 .gallery img{width:100%;height:160px;object-fit:cover;border-radius:10px;border:1px solid #ddd;background:#eee}
-.addr{background:#fff8e1;border:1px dashed #b8860b;padding:10px;border-radius:8px;margin-top:10px;font-size:11px;line-height:1.6}
 .foot{background:#0a4d2a;color:white;padding:18px;text-align:center;font-size:10px}
 .wa{position:fixed;bottom:16px;right:16px;background:#25D366;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;z-index:999}
 </style>
@@ -45,28 +44,17 @@ body{background:#f6fff6}
 <div class="sec"><h2>🛠️ Our Services</h2><ul><li>Certificate Verification</li><li>Global 30 Countries</li><li>5 Seconds QR Check</li><li>School & Employer Portal</li></ul></div>
 
 <div class="sec"><h2>📸 Our Work Gallery - All 22 Pictures</h2><div class="gallery">
-<img src="IMG-20260912-WA0000.jpg" loading="lazy">
-<img src="IMG-20260912-WA0001.jpg" loading="lazy">
-<img src="IMG-20260913-WA0000.jpg" loading="lazy">
-<img src="IMG-20260913-WA0024.jpg" loading="lazy">
-<img src="IMG-20260913-WA0025.jpg" loading="lazy">
-<img src="IMG-20260915-WA0014.jpg" loading="lazy">
-<img src="IMG-20260915-WA0015.jpg" loading="lazy">
-<img src="IMG-20260920-WA0113.jpg" loading="lazy">
-<img src="IMG-20260922-WA0083.jpg" loading="lazy">
-<img src="IMG-20260922-WA0084.jpg" loading="lazy">
-<img src="IMG-20260922-WA0085.jpg" loading="lazy">
-<img src="IMG-20260922-WA0086.jpg" loading="lazy">
-<img src="IMG-20260922-WA0087.jpg" loading="lazy">
-<img src="IMG-20260922-WA0088.jpg" loading="lazy">
-<img src="IMG-20260922-WA0089.jpg" loading="lazy">
-<img src="IMG-20260922-WA0090.jpg" loading="lazy">
-<img src="IMG-20260922-WA0091.jpg" loading="lazy">
-<img src="IMG-20260922-WA0092.jpg" loading="lazy">
-<img src="IMG-20260922-WA0111.jpg" loading="lazy">
-<img src="IMG-20260922-WA0112.jpg" loading="lazy">
-<img src="IMG-20260922-WA0113.jpg" loading="lazy">
-<img src="IMG-20260924-WA0166.jpg" loading="lazy">
+<img src="IMG-20260912-WA0000.jpg"><img src="IMG-20260912-WA0001.jpg">
+<img src="IMG-20260913-WA0000.jpg"><img src="IMG-20260913-WA0024.jpg">
+<img src="IMG-20260913-WA0025.jpg"><img src="IMG-20260915-WA0014.jpg">
+<img src="IMG-20260915-WA0015.jpg"><img src="IMG-20260920-WA0113.jpg">
+<img src="IMG-20260922-WA0083.jpg"><img src="IMG-20260922-WA0084.jpg">
+<img src="IMG-20260922-WA0085.jpg"><img src="IMG-20260922-WA0086.jpg">
+<img src="IMG-20260922-WA0087.jpg"><img src="IMG-20260922-WA0088.jpg">
+<img src="IMG-20260922-WA0089.jpg"><img src="IMG-20260922-WA0090.jpg">
+<img src="IMG-20260922-WA0091.jpg"><img src="IMG-20260922-WA0092.jpg">
+<img src="IMG-20260922-WA0111.jpg"><img src="IMG-20260922-WA0112.jpg">
+<img src="IMG-20260922-WA0113.jpg"><img src="IMG-20260924-WA0166.jpg">
 </div></div>
 
 <div class="foot"><b>ARNAUD AFROCHAINE VERIFICATION LTD</b><br>© 2026 Verification Services<br>📍 12 Idiroko Road, Sango Ota</div>
@@ -76,7 +64,12 @@ body{background:#f6fff6}
 const firebaseConfig = {apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain: "arnaudafrochaineverification.firebaseapp.com",projectId: "arnaudafrochaineverification",storageBucket: "arnaudafrochaineverification.firebasestorage.app",messagingSenderId: "268502946630",appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"};
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-function getFlag(c){const f={Nigeria:"🇳🇬",Ghana:"🇬🇭",USA:"🇺🇸",UK:"🇬🇧",Canada:"🇨🇦"};return f[c]||"🌍";}
+
+function getFlag(country){
+ const flags = {Nigeria:"🇳🇬",Ghana:"🇬🇭",USA:"🇺🇸",UK:"🇬🇧",Canada:"🇨🇦",Germany:"🇩🇪",France:"🇫🇷",Australia:"🇦🇺",SouthAfrica:"🇿🇦"};
+ return flags[country]||"🌍";
+}
+
 async function check(){
  const id=document.getElementById('cert').value.trim();
  const res=document.getElementById('res');
@@ -84,12 +77,36 @@ async function check(){
  res.style.display='block';res.style.background='#fff8e1';res.innerHTML='⏳ Verifying...';
  try{
   const doc=await db.collection('certificates').doc(id).get();
-  if(!doc.exists){res.style.background='#ffebee';res.innerHTML='❌ NOT FOUND';return;}
+  if(!doc.exists){res.style.background='#ffebee';res.innerHTML='❌ NOT FOUND - Fake Certificate';return;}
   const d=doc.data();
+  const flag = getFlag(d.country);
   res.style.background='#e8f5e9';
-  res.innerHTML=`<div style="background:#0a4d2a;color:white;padding:8px;border-radius:8px;text-align:center">✅ AUTHENTIC</div><br><b>${d.fullName}</b><br>Cert: ${d.certNo}<br>🌍 ${getFlag(d.country)} ${d.country}<br>School: ${d.school}<br>Grade: ${d.grade}`;
- }catch(e){res.style.background='#ffebee';res.innerHTML=e.message;}
+  res.innerHTML=`
+   <div style="background:#0a4d2a;color:white;padding:10px;border-radius:8px;text-align:center;font-weight:900">✅ AUTHENTIC - VERIFIED</div>
+   <div style="margin-top:10px;line-height:1.9">
+   <b>Name:</b> ${d.fullName}<br>
+   <b>Cert No:</b> ${d.certNo}<br>
+   <b>Country:</b> <span style="background:#FFEB3B;padding:3px 10px;border-radius:15px;border:1px solid #000;font-weight:800">${flag} ${d.country}</span><br>
+   <b>School:</b> ${d.school}<br>
+   <b>Grade:</b> ${d.grade} | <b>Status:</b> ${d.status}<br>
+   <hr style="margin:8px 0">
+   <b>📚 Subjects:</b><br>
+   ${d.sub1?`• ${d.sub1}: <b>${d.res1}</b><br>`:''}
+   ${d.sub2?`• ${d.sub2}: <b>${d.res2}</b><br>`:''}
+   ${d.sub3?`• ${d.sub3}: <b>${d.res3}</b><br>`:''}
+   ${d.sub4?`• ${d.sub4}: <b>${d.res4}</b><br>`:''}
+   ${d.sub5?`• ${d.sub5}: <b>${d.res5}</b><br>`:''}
+   ${d.sub6?`• ${d.sub6}: <b>${d.res6}</b><br>`:''}
+   ${d.sub7?`• ${d.sub7}: <b>${d.res7}</b><br>`:''}
+   ${d.sub8?`• ${d.sub8}: <b>${d.res8}</b><br>`:''}
+   <br><small>Verified: ${new Date().toLocaleString()}</small>
+   </div>`;
+ }catch(e){res.style.background='#ffebee';res.innerHTML='Error: '+e.message;}
 }
+window.addEventListener('load',()=>{
+ const p=new URLSearchParams(window.location.search).get('cert');
+ if(p){document.getElementById('cert').value=p;check();}
+});
 </script>
 </body>
-                                                                         </html>
+ </html>
