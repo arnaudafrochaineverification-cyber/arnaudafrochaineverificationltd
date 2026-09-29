@@ -15,35 +15,66 @@ body{background:#f6fff6}
 .logo img{width:44px;height:44px;border-radius:50%;border:2px solid #C9A227;object-fit:cover;background:white}
 .logo b{color:#0a4d2a;font-size:11px;line-height:1}
 .hero{background:linear-gradient(135deg,#0a4d2a,#1a8a4a);color:white;text-align:center;padding:24px 14px}
+.hero h1{font-size:16px;line-height:1.3}
 .box{background:white;margin:-18px 10px 10px 10px;padding:16px;border-radius:14px;box-shadow:0 8px 25px #0002}
 .box h3{color:#0a4d2a;text-align:center;font-size:14px;margin-bottom:10px}
 .box input{width:100%;padding:13px;border:2px solid #a5d6a7;border-radius:9px;margin-bottom:10px;font-size:14px}
 .box button{width:100%;padding:13px;background:#0a4d2a;color:white;border:none;border-radius:9px;font-weight:700}
 .sec{margin:14px 10px;padding:16px;background:white;border-radius:14px;box-shadow:0 4px 15px #0001}
-.sec h2{color:#0a4d2a;font-size:15px;margin-bottom:8px;border-left:4px solid #b8860b;padding-left:8px}
-.sec p,.sec li{font-size:11.5px;line-height:1.7}
-.sec ul{padding-left:18px}
-.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
-.gallery img{width:100%;height:160px;object-fit:cover;border-radius:10px;border:1px solid #ddd;background:#eee}
+.sec h2{color:#0a4d2a;font-size:15px;margin-bottom:10px;border-left:4px solid #b8860b;padding-left:8px}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.gallery img{width:100%;height:165px;object-fit:cover;border-radius:10px;border:1px solid #ddd}
 .foot{background:#0a4d2a;color:white;padding:18px;text-align:center;font-size:10px}
 .wa{position:fixed;bottom:16px;right:16px;background:#25D366;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;z-index:999}
 </style>
 </head>
 <body>
-<div class="top">📍 Office: 12 Idiroko Road, Sango Ota, Ogun State • ☎️ 0913 285 1465 • ✉️ arnaudafrochaine@gmail.com</div>
-<div class="nav"><div class="logo"><img src="logo.jpg" onerror="this.onerror=null;this.src='https://arnaudafrochaineverification-cyber.github.io/logo.jpg'"><b>ARNAUD<br>AFROCHAINE<br><span style="color:#b8860b;font-size:8px">VERIFICATION LTD</span></b></div><div style="font-size:10px;color:#0a4d2a;font-weight:700">✅ CAC REGISTERED</div></div>
-<div class="hero"><h1>RESTORE TRUST IN CERTIFICATES WORLDWIDE</h1><p>No More Fake Credentials. Verify Any Certificate in 5 Seconds<br>Trusted by Schools • Employers • Government Worldwide</p></div>
-<div class="box"><h3>🔍 Verify Certificate Here</h3><input id="cert" placeholder="Enter Certificate No e.g AFR-2026-781971"><button onclick="check()">VERIFY NOW →</button><div id="res" style="display:none;margin-top:12px;padding:12px;border-radius:10px;font-size:12px"></div></div>
-
-<div class="sec"><h2>👤 About Us</h2><p><b>ARNAUD AFROCHAINE VERIFICATION LTD</b> is CAC-registered global verification company headquartered at 12 Idiroko Road, Sango Ota, Ogun State, serving clients worldwide.</p></div>
+<div class="top">📍 12 Idiroko Road, Sango Ota, Ogun State • ☎️ 0913 285 1465 • ✉️ arnaudafrochaine@gmail.com</div>
+<div class="nav"><div class="logo"><img src="logo.jpg"><b>ARNAUD<br>AFROCHAINE<br><span style="color:#b8860b;font-size:8px">VERIFICATION LTD</span></b></div><div style="font-size:10px;color:#0a4d2a;font-weight:700">✅ CAC REGISTERED</div></div>
+<div class="hero"><h1>RESTORE TRUST IN CERTIFICATES WORLDWIDE</h1><p style="margin-top:6px;font-size:12px">No More Fake Credentials. Verify Any Certificate in 5 Seconds<br>Trusted by Schools • Employers • Government</p></div>
+<div class="box"><h3>🔍 Verify Certificate Here</h3><input id="cert" placeholder="Enter Certificate No e.g AFR-2026-..."><button onclick="check()">VERIFY NOW →</button><div id="res" style="display:none;margin-top:14px;border-radius:12px;overflow:hidden;border:2px solid #0a4d2a"></div></div>
 
 <div class="sec"><h2>🌍 Global Coverage - 30 Countries</h2><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;font-size:10px;font-weight:700">
-<div style="background:#e8f5e9;padding:6px;border-radius:6px">🇳🇬 Nigeria</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇬🇭 Ghana</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇬🇧 UK</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇺🇸 USA</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇨🇦 Canada</div><div style="background:#e8f5e9;padding:6px;border-radius:6px">🇿🇦 South Africa</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇳🇬 Nigeria</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇬🇭 Ghana</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇬🇧 UK</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇺🇸 USA</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇨🇦 Canada</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇿🇦 South Africa</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇩🇪 Germany</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇫🇷 France</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇦🇺 Australia</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇮🇳 India</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇨🇳 China</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇯🇵 Japan</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇦🇪 UAE</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇸🇦 Saudi</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇰🇪 Kenya</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇪🇬 Egypt</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇷🇼 Rwanda</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇹🇿 Tanzania</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇺🇬 Uganda</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇨🇲 Cameroon</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇧🇯 Benin</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇹🇬 Togo</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇸🇳 Senegal</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇱🇷 Liberia</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇸🇱 Sierra Leone</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇮🇹 Italy</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇳🇱 Netherlands</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇧🇷 Brazil</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇹🇷 Turkey</div>
+<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇲🇾 Malaysia</div>
 </div></div>
 
-<div class="sec"><h2>🛠️ Our Services</h2><ul><li>Certificate Verification</li><li>Global 30 Countries</li><li>5 Seconds QR Check</li><li>School & Employer Portal</li></ul></div>
+<div class="sec"><h2>✅ Our Services</h2><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:11px;text-align:center">
+<div style="background:#e8f5e9;padding:10px;border-radius:8px">🛡️<br><b>Certificate Verification</b></div>
+<div style="background:#fff8e1;padding:10px;border-radius:8px">🌍<br><b>30 Countries</b></div>
+<div style="background:#e3f2fd;padding:10px;border-radius:8px">⚡<br><b>5 Seconds QR Check</b></div>
+<div style="background:#fce4ec;padding:10px;border-radius:8px">🏫<br><b>School & Employer Portal</b></div>
+</div></div>
 
-<div class="sec"><h2>📸 Our Work Gallery - All 22 Pictures</h2><div class="gallery">
+<div class="sec"><h2>📸 Our Work Gallery - 22 Pictures</h2><div class="gallery">
 <img src="IMG-20260912-WA0000.jpg"><img src="IMG-20260912-WA0001.jpg">
 <img src="IMG-20260913-WA0000.jpg"><img src="IMG-20260913-WA0024.jpg">
 <img src="IMG-20260913-WA0025.jpg"><img src="IMG-20260915-WA0014.jpg">
@@ -57,56 +88,46 @@ body{background:#f6fff6}
 <img src="IMG-20260922-WA0113.jpg"><img src="IMG-20260924-WA0166.jpg">
 </div></div>
 
-<div class="foot"><b>ARNAUD AFROCHAINE VERIFICATION LTD</b><br>© 2026 Verification Services<br>📍 12 Idiroko Road, Sango Ota</div>
+<div class="foot"><b>ARNAUD AFROCHAINE VERIFICATION LTD</b><br>12 Idiroko Road, Sango Ota, Ogun State, Nigeria<br>© 2026 All Rights Reserved | CAC REGISTERED</div>
 <a class="wa" href="https://wa.me/2349132851465">💬</a>
 
 <script>
-const firebaseConfig = {apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain: "arnaudafrochaineverification.firebaseapp.com",projectId: "arnaudafrochaineverification",storageBucket: "arnaudafrochaineverification.firebasestorage.app",messagingSenderId: "268502946630",appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"};
+const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"};
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-function getFlag(country){
- const flags = {Nigeria:"🇳🇬",Ghana:"🇬🇭",USA:"🇺🇸",UK:"🇬🇧",Canada:"🇨🇦",Germany:"🇩🇪",France:"🇫🇷",Australia:"🇦🇺",SouthAfrica:"🇿🇦"};
- return flags[country]||"🌍";
+const db=firebase.firestore();
+function getFlag(c){
+ c=(c||"").toLowerCase();
+ if(c.includes("nigeria")) return "🇳🇬";
+ if(c.includes("ghana")) return "🇬🇭";
+ if(c.includes("uk")||c.includes("oxford")||c.includes("england")) return "🇬🇧";
+ if(c.includes("usa")||c.includes("america")) return "🇺🇸";
+ if(c.includes("canada")) return "🇨🇦";
+ if(c.includes("germany")) return "🇩🇪";
+ if(c.includes("france")) return "🇫🇷";
+ return "🌍";
 }
-
 async function check(){
  const id=document.getElementById('cert').value.trim();
  const res=document.getElementById('res');
- if(!id){res.style.display='block';res.style.background='#ffebee';res.innerHTML='❌ Enter Certificate No';return;}
- res.style.display='block';res.style.background='#fff8e1';res.innerHTML='⏳ Verifying...';
+ if(!id){res.style.display='block';res.innerHTML='<div style="padding:15px;background:#ffebee;text-align:center">❌ Enter Certificate No</div>';return;}
+ res.style.display='block';res.innerHTML='<div style="padding:20px;text-align:center;background:#fff8e1">⏳ Verifying...</div>';
  try{
   const doc=await db.collection('certificates').doc(id).get();
-  if(!doc.exists){res.style.background='#ffebee';res.innerHTML='❌ NOT FOUND - Fake Certificate';return;}
+  if(!doc.exists){res.innerHTML='<div style="padding:20px;background:#ffebee;text-align:center;font-weight:800">❌ NOT FOUND - Invalid Certificate</div>';return;}
   const d=doc.data();
-  const flag = getFlag(d.country);
-  res.style.background='#e8f5e9';
+  const flag=getFlag(d.country);
+  let rows="";
+  for(let i=1;i<=10;i++){
+    let s=d[`sub${i}`]||d[`subject${i}`]||"";
+    let r=d[`res${i}`]||d[`result${i}`]||"";
+    if(s){rows+=`<tr><td style="padding:10px;border:1px solid #ddd">${s}</td><td style="padding:10px;border:1px solid #ddd;text-align:center;font-weight:700;color:#0a4d2a">${r}</td></tr>`;}
+  }
   res.innerHTML=`
-   <div style="background:#0a4d2a;color:white;padding:10px;border-radius:8px;text-align:center;font-weight:900">✅ AUTHENTIC - VERIFIED</div>
-   <div style="margin-top:10px;line-height:1.9">
-   <b>Name:</b> ${d.fullName}<br>
-   <b>Cert No:</b> ${d.certNo}<br>
-   <b>Country:</b> <span style="background:#FFEB3B;padding:3px 10px;border-radius:15px;border:1px solid #000;font-weight:800">${flag} ${d.country}</span><br>
-   <b>School:</b> ${d.school}<br>
-   <b>Grade:</b> ${d.grade} | <b>Status:</b> ${d.status}<br>
-   <hr style="margin:8px 0">
-   <b>📚 Subjects:</b><br>
-   ${d.sub1?`• ${d.sub1}: <b>${d.res1}</b><br>`:''}
-   ${d.sub2?`• ${d.sub2}: <b>${d.res2}</b><br>`:''}
-   ${d.sub3?`• ${d.sub3}: <b>${d.res3}</b><br>`:''}
-   ${d.sub4?`• ${d.sub4}: <b>${d.res4}</b><br>`:''}
-   ${d.sub5?`• ${d.sub5}: <b>${d.res5}</b><br>`:''}
-   ${d.sub6?`• ${d.sub6}: <b>${d.res6}</b><br>`:''}
-   ${d.sub7?`• ${d.sub7}: <b>${d.res7}</b><br>`:''}
-   ${d.sub8?`• ${d.sub8}: <b>${d.res8}</b><br>`:''}
-   <br><small>Verified: ${new Date().toLocaleString()}</small>
-   </div>`;
- }catch(e){res.style.background='#ffebee';res.innerHTML='Error: '+e.message;}
-}
-window.addEventListener('load',()=>{
- const p=new URLSearchParams(window.location.search).get('cert');
- if(p){document.getElementById('cert').value=p;check();}
-});
-</script>
-</body>
- </html>
+<div style="background:white">
+<div style="background:#0a4d2a;color:white;padding:12px;text-align:center;font-weight:900;margin:8px;border-radius:8px;font-size:14px">✅ AUTHENTIC - VERIFIED</div>
+<div style="padding:14px;line-height:2.1;font-size:13px">
+<b>Name:</b> ${d.fullName||""}<br>
+<b>Cert No:</b> ${d.certNo||id}<br>
+<b>Country:</b> <span style="background:#FFEB3B;padding:4px 12px;border-radius:20px;border:1px solid #000;font-weight:900">${flag} ${d.country||""}</span><br>
+<b>School:</b> ${d.school||""}<br>
+<b>Grade:</b> ${d.grade||""} | <b>Status:</b> ${d.status||"AUTH
