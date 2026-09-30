@@ -31,8 +31,7 @@
 </div>
 
 <script>
-// PASTE YOUR GOOGLE SHEET CSV LINK HERE
-const SHEET_CSV_URL = "PASTE_YOUR_LINK_HERE example: https://docs.google.com/spreadsheets/d/1abc.../pub?output=csv";
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1jA-rUXd-KK7OR09B1FkKoSfmkqWHlfMqWaTI1Xeby80/export?format=csv";
 
 let db = {};
 
@@ -40,7 +39,7 @@ async function loadDB(){
  try{
   const res = await fetch(SHEET_CSV_URL);
   const text = await res.text();
-  const rows = text.split("\n").slice(1); // skip header
+  const rows = text.split("\n").slice(1);
   rows.forEach(row=>{
    const cols = row.split(",").map(c=>c.replace(/^"|"$/g,"").trim());
    if(cols[0]){
@@ -51,7 +50,7 @@ async function loadDB(){
    }
   });
   console.log("Loaded", Object.keys(db).length, "records");
- } catch(e){ console.log("Sheet not loaded yet, using empty DB"); }
+ } catch(e){ console.log("Sheet not loaded yet"); }
 }
 loadDB();
 
@@ -84,11 +83,10 @@ function checkReport(){
  }, 600);
 }
 
-// Allow ?ref=AFR-V-2026-001 in link for QR code
 window.onload = ()=>{
  const urlParams = new URLSearchParams(window.location.search);
  const refFromUrl = urlParams.get('ref');
- if(refFromUrl){ document.getElementById('refInput').value=refFromUrl; }
+ if(refFromUrl){ document.getElementById('refInput').value=refFromUrl; checkReport(); }
 };
 </script>
 </body>
