@@ -1,1 +1,81 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><title>QR Generator - Arnaud</title><script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script><style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');body{font-family:Poppins,sans-serif;text-align:center;background:#e8f5e9;padding:15px;margin:0}.box{background:white;max-width:420px;margin:20px auto;padding:25px;border-radius:20px;box-shadow:0 12px 40px rgba(10,92,44,0.15)}input{width:90%;padding:14px;margin:12px 0;border:2px solid #0a5c2c;border-radius:12px;font-size:15px;text-transform:uppercase;text-align:center;font-weight:600}button{width:94%;padding:14px;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin:6px 0}.gen{background:#0a5c2c;color:white}.down{background:#d4af37;color:#0a3d1f}#qrcode{margin:20px auto;display:flex;justify-content:center;padding:15px;border:2px dashed #0a5c2c;border-radius:12px;min-height:80px;background:white}#link{font-size:11px;color:#0a5c2c;word-break:break-all;font-weight:600;margin-top:10px}</style></head><body><div class="box"><img src="./IMG-20260917-WA1432.jpg" style="width:90px;height:90px;object-fit:contain;border-radius:50%"><h2 style="color:#0a5c2c;margin:10px 0">QR Generator</h2><p style="font-size:12px;color:#666">Type Certificate ID - QR will auto-open VALID page</p><input id="cid" placeholder="AA-2025-001"><button class="gen" onclick="gen()">⚡ GENERATE VALID QR</button><div id="qrcode"></div><p id="link"></p><p id="idtext" style="color:#0a5c2c;font-weight:700"></p><button class="down" onclick="dl()">📥 DOWNLOAD QR</button></div><script>const base="https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/?id=";function gen(){let id=document.getElementById('cid').value.trim().toUpperCase().replace(/\s+/g,'-');if(!id)return alert('Enter ID like AA-2025-001');let url=base+id;document.getElementById('qrcode').innerHTML='';new QRCode(document.getElementById('qrcode'),{text:url,width:200,height:200,colorDark:"#0a5c2c",correctLevel:QRCode.CorrectLevel.H});document.getElementById('link').innerText=url;document.getElementById('idtext').innerText="ID: "+id;}function dl(){let c=document.querySelector('#qrcode canvas');if(!c)return alert('Generate first');let id=document.getElementById('cid').value.trim().toUpperCase()||'QR';let a=document.createElement('a');a.download='QR-VALID-'+id+'.png';a.href=c.toDataURL();a.click();}</script></body></html>
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin PDF Generator - ARNAUD AFROCHAINE</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>body{font-family:Arial;padding:15px;background:#f0fff0}input{width:100%;padding:12px;margin:6px 0;border:2px solid #0a4d2a;border-radius:8px}button{width:100%;padding:15px;background:#0a4d2a;color:white;border:none;border-radius:10px;font-weight:900;margin-top:10px}#qr{margin:10px auto;width:200px;height:200px}</style></head><body>
+<h2 style="color:#0a4d2a;text-align:center">ARNAUD PDF GENERATOR</h2>
+<input id="ref" placeholder="Ref: AFR-V-2026-001" value="AFR-V-2026-001">
+<input id="client" placeholder="Client Name" value="Test client">
+<input id="doc" placeholder="Document Type" value="waec certificate">
+<input id="certno" placeholder="Cert No" value="NG123456">
+<input id="issuer" placeholder="Issuer e.g WAEC" value="WAEC">
+<input id="date" placeholder="Date Verified" value="30/09/2026">
+<input id="source" placeholder="Source" value="verification via school email">
+<div id="qr"></div>
+<button onclick="makeQR()">1. GENERATE QR</button>
+<button onclick="makePDF()" style="background:#b8860b">2. DOWNLOAD FINE PDF CERTIFICATE</button>
+<script>
+let qrObj=null;
+function makeQR(){
+ document.getElementById('qr').innerHTML="";
+ let ref=document.getElementById('ref').value.trim().toUpperCase();
+ let url="https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref="+ref;
+ qrObj=new QRCode(document.getElementById('qr'),{text:url,width:200,height:200});
+ alert("QR Generated for "+ref);
+}
+async function makePDF(){
+ const {jsPDF}=window.jspdf;
+ let doc=new jsPDF();
+ // Border
+ doc.setDrawColor(11,77,42); doc.setLineWidth(1.5); doc.rect(5,5,200,287);
+ doc.setDrawColor(201,162,39); doc.setLineWidth(0.5); doc.rect(7,7,196,283);
+ // Header
+ doc.setFillColor(10,77,42); doc.rect(5,275,200,17,'F');
+ doc.setFontSize(22); doc.setTextColor(201,162,39); doc.setFont("helvetica","bold");
+ doc.text("ARNAUD AFROCHAINE VERIFICATION LTD",105,18,{align:"center"});
+ doc.setFontSize(16); doc.setTextColor(11,77,42);
+ doc.text("VERIFICATION CERTIFICATE",105,32,{align:"center"});
+ doc.setFontSize(10); doc.setTextColor(100,100,100);
+ doc.text("CERTIFICATE OF DOCUMENT AUTHENTICITY & VERIFICATION",105,38,{align:"center"});
+ doc.setFillColor(11,77,42); doc.rect(20,43,170,10,'F');
+ doc.setTextColor(255,255,255); doc.setFontSize(9);
+ doc.text("THIS CERTIFIES THAT THE DOCUMENT BELOW HAS BEEN VERIFIED AS AUTHENTIC",105,49,{align:"center"});
+ // Details
+ doc.setTextColor(0,0,0); doc.setFontSize(12);
+ let y=62;
+ let ref=document.getElementById('ref').value;
+ let client=document.getElementById('client').value;
+ let cno=document.getElementById('certno').value;
+ let docT=document.getElementById('doc').value;
+ let issuer=document.getElementById('issuer').value;
+ let date=document.getElementById('date').value;
+ let source=document.getElementById('source').value;
+ doc.setFont("helvetica","bold"); doc.text("Ref:",15,y); doc.setFont("helvetica","normal"); doc.text(ref,35,y);
+ doc.setFont("helvetica","bold"); doc.text("Cert No:",110,y); doc.setFont("helvetica","normal"); doc.text(cno,135,y); y+=12;
+ doc.setFont("helvetica","bold"); doc.text("Client:",15,y); doc.setFont("helvetica","normal"); doc.text(client,35,y);
+ doc.setFont("helvetica","bold"); doc.text("Issuer:",110,y); doc.setFont("helvetica","normal"); doc.text(issuer,135,y); y+=12;
+ doc.setFont("helvetica","bold"); doc.text("Document:",15,y); doc.setFont("helvetica","normal"); doc.text(docT,40,y);
+ doc.setFont("helvetica","bold"); doc.text("Date Verified:",110,y); doc.setFont("helvetica","normal"); doc.text(date,142,y); y+=12;
+ doc.setFont("helvetica","bold"); doc.text("Source:",15,y); doc.setFont("helvetica","normal"); doc.text(source,35,y); y+=18;
+ // Verified Stamp
+ doc.setFillColor(10,77,42); doc.setTextColor(255,255,255); doc.setFontSize(14); doc.setFont("helvetica","bold");
+ doc.rect(15,y,85,15,'F'); doc.text("VERIFIED - AUTHENTIC",57,y+10,{align:"center"}); 
+ doc.setTextColor(0,0,0); doc.setFontSize(10); doc.text("Scan QR to verify online",155,y+8,{align:"center"});
+ // Add QR image from canvas
+ let qrCanvas=document.querySelector('#qr canvas');
+ if(qrCanvas){
+   let imgData=qrCanvas.toDataURL("image/png");
+   doc.addImage(imgData,'PNG',135,y+12,40,40);
+ }
+ y+=60;
+ doc.setFontSize(9); doc.text("Authorized Signature:",135,y); y+=15; doc.line(120,y,190,y);
+ doc.setFontSize(8); doc.text("ARNAUD AFROCHAINE VERIFICATION LTD",155,y+5,{align:"center"});
+ doc.text("12 Idiroko Road, Sango Ota | CAC REGISTERED",155,y+10,{align:"center"});
+ // Footer green
+ doc.setFillColor(10,77,42); doc.rect(5,275,200,17,'F');
+ doc.setTextColor(201,162,39); doc.setFontSize(8);
+ doc.text("ARNAUD AFROCHAINE VERIFICATION LTD • 12 Idiroko Road Sango Ota • www.arnaudafrochaine-verification.com",105,284,{align:"center"});
+ doc.save(ref+"_Verification_Certificate.pdf");
+}
+</script></body></html>
