@@ -9,32 +9,26 @@
  .header{background:#0f2340;color:white;padding:20px;text-align:center}
  .box{background:white;max-width:650px;margin:30px auto;padding:30px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
  input{width:100%;padding:12px;border:1px solid #ccc;border-radius:6px;margin-top:10px}
- button{width:100%;padding:12px;background:#0f2340;color:white;border:none;border-radius:6px;margin-top:15px;font-weight:bold;cursor:pointer}
- .result{margin-top:20px;padding:18px;border-radius:8px;display:none; line-height:1.6}
+ button{width:100%;padding:12px;background:#0f2340;color:white;border:none;border-radius:6px;margin-top:15px;font-weight:bold}
+ .result{margin-top:20px;padding:18px;border-radius:8px;display:none;line-height:1.6}
  .authentic{background:#e6f4ea;border:1px solid #34a853}
  .notfound{background:#fce8e6;border:1px solid #ea4335}
- .small{font-size:11px;color:#666;margin-top:20px;text-align:center}
 </style>
 </head>
 <body>
 <div class="header">
  <h2>ARNAUD AFROCHAINE VERIFICATION LTD</h2>
- <p>Official Verification Portal | Sango Ota, Ogun State</p>
+ <p>Official Verification Portal</p>
 </div>
-
 <div class="box">
  <h3>Check Verification Report Status</h3>
  <input type="text" id="refInput" placeholder="Enter Ref: AFR-V-2026-XXXX">
  <button onclick="checkReport()">VERIFY NOW</button>
  <div id="result" class="result"></div>
- <p class="small">This is a verification report confirmation only. We do not issue certificates. Original certificate remains property of issuing institution. Contact issuer for replacement.</p>
 </div>
-
 <script>
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1jA-rUXd-KK7OR09B1FkKoSfmkqWHlfMqWaTI1Xeby80/export?format=csv";
-
 let db = {};
-
 async function loadDB(){
  try{
   const res = await fetch(SHEET_CSV_URL);
@@ -42,52 +36,27 @@ async function loadDB(){
   const rows = text.split("\n").slice(1);
   rows.forEach(row=>{
    const cols = row.split(",").map(c=>c.replace(/^"|"$/g,"").trim());
-   if(cols[0]){
-    db[cols[0].toUpperCase()] = {
-     clientName: cols[1], docType: cols[2], certNo: cols[3],
-     issuer: cols[4], dateVerified: cols[5], source: cols[6], outcome: cols[7]
-    };
-   }
+   if(cols[0]){ db[cols[0].toUpperCase()] = {clientName:cols[1],docType:cols[2],certNo:cols[3],issuer:cols[4],dateVerified:cols[5],source:cols[6],outcome:cols[7]}; }
   });
-  console.log("Loaded", Object.keys(db).length, "records");
- } catch(e){ console.log("Sheet not loaded yet"); }
+ } catch(e){}
 }
 loadDB();
-
 function checkReport(){
  const ref = document.getElementById('refInput').value.trim().toUpperCase();
  const resultDiv = document.getElementById('result');
  if(!ref){ alert("Enter Reference"); return; }
- resultDiv.style.display="block";
- resultDiv.innerHTML="Checking...";
-
+ resultDiv.style.display="block"; resultDiv.innerHTML="Checking...";
  setTimeout(()=>{
   const data = db[ref];
   if(data){
    resultDiv.className="result authentic";
-   resultDiv.innerHTML=`
-    <h4>✓ VERIFIED - ${data.outcome}</h4>
-    <p><b>Ref:</b> ${ref}</p>
-    <p><b>Client:</b> ${data.clientName}</p>
-    <p><b>Document Type:</b> ${data.docType}</p>
-    <p><b>Certificate No:</b> ${data.certNo}</p>
-    <p><b>Issuer:</b> ${data.issuer}</p>
-    <p><b>Date Verified:</b> ${data.dateVerified}</p>
-    <p><b>Verification Source:</b> ${data.source}</p>
-    <hr><p style="font-size:12px">This report confirms verification against issuer records as of date above. It is not a replacement for original certificate.</p>
-   `;
+   resultDiv.innerHTML=`<h4>✓ VERIFIED - ${data.outcome}</h4><p><b>Ref:</b> ${ref}</p><p><b>Client:</b> ${data.clientName}</p><p><b>Doc:</b> ${data.docType}</p><p><b>Cert No:</b> ${data.certNo}</p><p><b>Issuer:</b> ${data.issuer}</p><p><b>Date:</b> ${data.dateVerified}</p>`;
   } else {
    resultDiv.className="result notfound";
-   resultDiv.innerHTML=`<h4>✗ NOT FOUND</h4><p>Ref <b>${ref}</b> not found. Please check or contact verification office.</p>`;
+   resultDiv.innerHTML=`<h4>✗ NOT FOUND</h4><p>Ref <b>${ref}</b> not found.</p>`;
   }
  }, 600);
 }
-
-window.onload = ()=>{
- const urlParams = new URLSearchParams(window.location.search);
- const refFromUrl = urlParams.get('ref');
- if(refFromUrl){ document.getElementById('refInput').value=refFromUrl; checkReport(); }
-};
 </script>
 </body>
 </html>
