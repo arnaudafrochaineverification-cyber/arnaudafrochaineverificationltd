@@ -3,28 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Verify - Arnaud Afrochaine</title>
+<title>Verify - Arnaud Afrochaine Verification LTD</title>
 <style>
- body{font-family:Arial;background:#f4f6f9;margin:0;padding:20px}
- .header{background:#0f2340;color:white;padding:20px;text-align:center}
- .box{background:white;max-width:650px;margin:30px auto;padding:30px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
- input{width:100%;padding:12px;border:1px solid #ccc;border-radius:6px;margin-top:10px}
- button{width:100%;padding:12px;background:#0f2340;color:white;border:none;border-radius:6px;margin-top:15px;font-weight:bold}
- .result{margin-top:20px;padding:18px;border-radius:8px;display:none;line-height:1.6}
- .authentic{background:#e6f4ea;border:1px solid #34a853}
- .notfound{background:#fce8e6;border:1px solid #ea4335}
+ body{font-family:Arial;background:#f4f6f9;margin:0;padding:0}
+.header{background:linear-gradient(135deg,#0a3d2e,#0f5c3f);color:white;padding:25px;text-align:center}
+.header img{width:140px;height:140px;border-radius:50%;border:4px solid #d4af37;background:white;object-fit:contain}
+.box{background:white;max-width:700px;margin:30px auto;padding:30px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
+ input{width:100%;padding:14px;border:2px solid #0f5c3f;border-radius:8px;margin-top:15px;font-size:16px;box-sizing:border-box}
+ button{width:100%;padding:14px;background:linear-gradient(135deg,#0f5c3f,#d4af37);color:white;border:none;border-radius:8px;margin-top:15px;font-weight:bold;font-size:16px;cursor:pointer}
+.result{margin-top:25px;padding:22px;border-radius:10px;display:none;line-height:1.7}
+.authentic{background:#e6f4ea;border:2px solid #1a7f37}
+.notfound{background:#fce8e6;border:2px solid #d93025}
+.footer{text-align:center;padding:20px;color:#666;font-size:13px}
 </style>
 </head>
 <body>
 <div class="header">
- <h2>ARNAUD AFROCHAINE VERIFICATION LTD</h2>
- <p>Official Verification Portal</p>
+ <img src="logo.png" alt="Logo">
+ <h2 style="margin:15px 0 5px">ARNAUD AFROCHAINE VERIFICATION LTD</h2>
+ <p>Official Verification Portal | Sango Ota, Ogun State<br><em>African Roots, Global Vision</em></p>
 </div>
 <div class="box">
- <h3>Check Verification Report Status</h3>
+ <h3 style="color:#0a3d2e">Check Verification Report Status</h3>
  <input type="text" id="refInput" placeholder="Enter Ref: AFR-V-2026-XXXX">
  <button onclick="checkReport()">VERIFY NOW</button>
  <div id="result" class="result"></div>
+</div>
+<div class="footer">
+ This is a verification report confirmation only. Contact issuer for certificate replacement.<br>
+ © 2026 Arnaud Afrochaine Verification LTD
 </div>
 <script>
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1jA-rUXd-KK7OR09B1FkKoSfmkqWHlfMqWaTI1Xeby80/export?format=csv";
@@ -50,10 +57,10 @@ function checkReport(){
   const data = db[ref];
   if(data){
    resultDiv.className="result authentic";
-   resultDiv.innerHTML=`<h4>✓ VERIFIED - ${data.outcome}</h4><p><b>Ref:</b> ${ref}</p><p><b>Client:</b> ${data.clientName}</p><p><b>Doc:</b> ${data.docType}</p><p><b>Cert No:</b> ${data.certNo}</p><p><b>Issuer:</b> ${data.issuer}</p><p><b>Date:</b> ${data.dateVerified}</p>`;
+   resultDiv.innerHTML=`<h3>✓ VERIFIED - ${data.outcome}</h3><p><b>Ref:</b> ${ref}</p><p><b>Client:</b> ${data.clientName}</p><p><b>Document:</b> ${data.docType}</p><p><b>Cert No:</b> ${data.certNo}</p><p><b>Issuer:</b> ${data.issuer}</p><p><b>Date Verified:</b> ${data.dateVerified}</p><p><b>Source:</b> ${data.source}</p><hr><small>This report confirms verification against issuer records as of date above.</small>`;
   } else {
    resultDiv.className="result notfound";
-   resultDiv.innerHTML=`<h4>✗ NOT FOUND</h4><p>Ref <b>${ref}</b> not found.</p>`;
+   resultDiv.innerHTML=`<h3>✗ NOT FOUND</h3><p>Ref <b>${ref}</b> not found in our database.</p>`;
   }
  }, 600);
 }
