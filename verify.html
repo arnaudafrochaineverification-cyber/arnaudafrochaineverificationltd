@@ -1,69 +1,95 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Verify Certificate - ARNAUD GLOBAL</title>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>body{font-family:Arial;background:#e8f5e9;padding:15px}.box{background:white;max-width:500px;margin:30px auto;padding:25px;border-radius:15px;text-align:center}.auth{color:green;font-size:24px;font-weight:bold}.fake{color:red;font-size:24px;font-weight:bold} #qrBox{margin:20px auto;padding:15px;border:2px dashed #0a3d1a;border-radius:10px;background:#f9fff9} #qrcode{display:flex;justify-content:center;margin:10px 0}</style>
-</head><body><div class="box">
-<h2 style="color:#0a3d1a">ARNAUD AFROCHAINE VERIFICATION LTD - GLOBAL</h2><p id="loading">Checking certificate...</p>
-<div id="result" style="display:none">
-<h3>Certificate Found:</h3>
-<p><b>Full Name:</b> <span id="r1"></span></p><p><b>Institution:</b> <span id="r2"></span></p><p><b>🌍 Country:</b> <span id="rCountry" style="font-weight:bold;color:#0a4a2a;font-size:18px"></span></p><p><b>Course:</b> <span id="r3"></span></p><p><b>Cert No:</b> <span id="r4"></span></p><p><b>Date:</b> <span id="r5"></span></p><p><b>Grade:</b> <span id="r6"></span></p>
-<h2 id="status" class="auth"></h2>
-<div id="qrBox">
-<p style="font-weight:bold;color:#0a3d1a;margin:0">📱 SCAN QR CODE TO VERIFY</p>
-<div id="qrcode"></div>
-<p id="qrLinkText" style="font-size:11px;color:#555;word-break:break-all"></p>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify - Arnaud Afrochaine</title>
+<style>
+ body{font-family:Arial;background:#f4f6f9;margin:0;padding:20px}
+ .header{background:#0f2340;color:white;padding:20px;text-align:center}
+ .box{background:white;max-width:650px;margin:30px auto;padding:30px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+ input{width:100%;padding:12px;border:1px solid #ccc;border-radius:6px;margin-top:10px}
+ button{width:100%;padding:12px;background:#0f2340;color:white;border:none;border-radius:6px;margin-top:15px;font-weight:bold;cursor:pointer}
+ .result{margin-top:20px;padding:18px;border-radius:8px;display:none; line-height:1.6}
+ .authentic{background:#e6f4ea;border:1px solid #34a853}
+ .notfound{background:#fce8e6;border:1px solid #ea4335}
+ .small{font-size:11px;color:#666;margin-top:20px;text-align:center}
+</style>
+</head>
+<body>
+<div class="header">
+ <h2>ARNAUD AFROCHAINE VERIFICATION LTD</h2>
+ <p>Official Verification Portal | Sango Ota, Ogun State</p>
 </div>
-<p style="font-size:12px">We VERIFY, we don't ISSUE certificates. Sango Ota, Ogun State | GLOBAL HQ</p>
-</div><div id="notfound" style="display:none"><h2 class="fake">❌ NOT FOUND / FAKE</h2><p>This certificate number no dey for our database.</p></div>
-</div><script>
-function getFlag(country){
-  if(!country) return "🌍 Nigeria";
-  const c = country.toUpperCase().trim();
-  const map = {
-    "NIGERIA":"🇳🇬 Nigeria","GHANA":"🇬🇭 Ghana","USA":"🇺🇸 USA","UNITED STATES":"🇺🇸 USA",
-    "UK":"🇬🇧 UK","UNITED KINGDOM":"🇬🇧 UK","ENGLAND":"🇬🇧 UK","CANADA":"🇨🇦 Canada",
-    "SOUTH AFRICA":"🇿🇦 South Africa","KENYA":"🇰🇪 Kenya","CAMEROON":"🇨🇲 Cameroon",
-    "TOGO":"🇹🇬 Togo","BENIN":"🇧🇯 Benin","SENEGAL":"🇸🇳 Senegal","IVORY COAST":"🇨🇮 Ivory Coast",
-    "COTE D'IVOIRE":"🇨🇮 Ivory Coast","EGYPT":"🇪🇬 Egypt","MOROCCO":"🇲🇦 Morocco","ETHIOPIA":"🇪🇹 Ethiopia",
-    "INDIA":"🇮🇳 India","PAKISTAN":"🇵🇰 Pakistan","CHINA":"🇨🇳 China","PHILIPPINES":"🇵🇭 Philippines",
-    "GERMANY":"🇩🇪 Germany","FRANCE":"🇫🇷 France","ITALY":"🇮🇹 Italy","SPAIN":"🇪🇸 Spain",
-    "AUSTRALIA":"🇦🇺 Australia","UAE":"🇦🇪 UAE - Dubai","DUBAI":"🇦🇪 UAE - Dubai",
-    "SAUDI ARABIA":"🇸🇦 Saudi Arabia","TURKEY":"🇹🇷 Turkey","BRAZIL":"🇧🇷 Brazil","JAMAICA":"🇯🇲 Jamaica"
-  };
-  return map[c] || "🌍 " + country;
-}
-const firebaseConfig = { apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs", authDomain: "arnaudafrochaineverification.firebaseapp.com", projectId: "arnaudafrochaineverification", storageBucket: "arnaudafrochaineverification.firebasestorage.app", messagingSenderId: "268502946630", appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47" };
-firebase.initializeApp(firebaseConfig); const db=firebase.firestore();
-let params=new URLSearchParams(window.location.search);
-let id=params.get('id') || params.get('cert');
-if(!id){document.getElementById('loading').innerText="No certificate ID in link";} else {
-  db.collection("certificates").doc(id).get().then(doc=>{
-    if(doc.exists){
-      let d=doc.data();
-      document.getElementById('r1').innerText=d.fullName || "";
-      document.getElementById('r2').innerText=d.school || d.institution || "";
-      document.getElementById('rCountry').innerText=getFlag(d.country || "Nigeria");
-      document.getElementById('r3').innerText=(d.examination? d.examination + " - " : "") + (d.course || "");
-      document.getElementById('r4').innerText=d.certificateNo || d.certNum || id;
-      document.getElementById('r5').innerText=d.issueDate || "";
-      document.getElementById('r6').innerText=d.grade || "";
-      document.getElementById('status').innerText="✅ "+ (d.status || "AUTHENTIC");
-      document.getElementById('result').style.display='block'; document.getElementById('loading').style.display='none';
-      let verifyUrl = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?cert=${id}`;
-      document.getElementById('qrLinkText').innerText = verifyUrl;
-      new QRCode(document.getElementById('qrcode'), {text: verifyUrl, width: 180, height: 180, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H});
-    } else {
-      return db.collection("verifications").doc(id).get().then(doc2=>{
-        if(doc2.exists){ let d=doc2.data(); r1.innerText=d.fullName; r2.innerText=d.institution; rCountry.innerText=getFlag(d.country || "Nigeria"); r3.innerText=d.course; r4.innerText=d.certNum; r5.innerText=d.issueDate; r6.innerText=d.grade; status.innerText="✅ "+d.status; result.style.display='block'; loading.style.display='none';
-          let verifyUrl = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?id=${id}`;
-          document.getElementById('qrLinkText').innerText = verifyUrl;
-          new QRCode(document.getElementById('qrcode'), {text: verifyUrl, width: 180, height: 180, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H});
-        } else { notfound.style.display='block'; loading.style.display='none'; }
-      });
-    }
+
+<div class="box">
+ <h3>Check Verification Report Status</h3>
+ <input type="text" id="refInput" placeholder="Enter Ref: AFR-V-2026-XXXX">
+ <button onclick="checkReport()">VERIFY NOW</button>
+ <div id="result" class="result"></div>
+ <p class="small">This is a verification report confirmation only. We do not issue certificates. Original certificate remains property of issuing institution. Contact issuer for replacement.</p>
+</div>
+
+<script>
+// PASTE YOUR GOOGLE SHEET CSV LINK HERE
+const SHEET_CSV_URL = "PASTE_YOUR_LINK_HERE example: https://docs.google.com/spreadsheets/d/1abc.../pub?output=csv";
+
+let db = {};
+
+async function loadDB(){
+ try{
+  const res = await fetch(SHEET_CSV_URL);
+  const text = await res.text();
+  const rows = text.split("\n").slice(1); // skip header
+  rows.forEach(row=>{
+   const cols = row.split(",").map(c=>c.replace(/^"|"$/g,"").trim());
+   if(cols[0]){
+    db[cols[0].toUpperCase()] = {
+     clientName: cols[1], docType: cols[2], certNo: cols[3],
+     issuer: cols[4], dateVerified: cols[5], source: cols[6], outcome: cols[7]
+    };
+   }
   });
+  console.log("Loaded", Object.keys(db).length, "records");
+ } catch(e){ console.log("Sheet not loaded yet, using empty DB"); }
 }
-</script></body></html>
+loadDB();
+
+function checkReport(){
+ const ref = document.getElementById('refInput').value.trim().toUpperCase();
+ const resultDiv = document.getElementById('result');
+ if(!ref){ alert("Enter Reference"); return; }
+ resultDiv.style.display="block";
+ resultDiv.innerHTML="Checking...";
+
+ setTimeout(()=>{
+  const data = db[ref];
+  if(data){
+   resultDiv.className="result authentic";
+   resultDiv.innerHTML=`
+    <h4>✓ VERIFIED - ${data.outcome}</h4>
+    <p><b>Ref:</b> ${ref}</p>
+    <p><b>Client:</b> ${data.clientName}</p>
+    <p><b>Document Type:</b> ${data.docType}</p>
+    <p><b>Certificate No:</b> ${data.certNo}</p>
+    <p><b>Issuer:</b> ${data.issuer}</p>
+    <p><b>Date Verified:</b> ${data.dateVerified}</p>
+    <p><b>Verification Source:</b> ${data.source}</p>
+    <hr><p style="font-size:12px">This report confirms verification against issuer records as of date above. It is not a replacement for original certificate.</p>
+   `;
+  } else {
+   resultDiv.className="result notfound";
+   resultDiv.innerHTML=`<h4>✗ NOT FOUND</h4><p>Ref <b>${ref}</b> not found. Please check or contact verification office.</p>`;
+  }
+ }, 600);
+}
+
+// Allow ?ref=AFR-V-2026-001 in link for QR code
+window.onload = ()=>{
+ const urlParams = new URLSearchParams(window.location.search);
+ const refFromUrl = urlParams.get('ref');
+ if(refFromUrl){ document.getElementById('refInput').value=refFromUrl; }
+};
+</script>
+</body>
+</html>
