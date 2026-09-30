@@ -1,74 +1,103 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin - ARNAUD</title>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arnaud Luxury PDF</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>body{font-family:Arial;padding:15px;background:#f0fff0}label{font-weight:900;color:#0a4d2a;font-size:12px;margin-top:10px;display:block}input{width:100%;padding:12px;margin:3px 0 8px 0;border:2px solid #0a4d2a;border-radius:8px}button{width:100%;padding:15px;background:#0a4d2a;color:white;border:none;border-radius:10px;font-weight:900;margin-top:10px}#qr{margin:10px auto;width:200px;height:200px}</style></head><body>
-<h2 style="color:#0a4d2a;text-align:center">ARNAUD PDF GENERATOR</h2>
+<style>
+body{font-family:Arial;background:#f5f7f2;padding:12px}
+.card{background:white;border-radius:15px;padding:18px;box-shadow:0 5px 25px rgba(0,0,0,.1)}
+label{font-weight:900;font-size:11px;color:#0a4d2a;margin-top:12px;display:block}
+input{width:100%;padding:12px;border:2px solid #c9a227;border-radius:10px;margin:4px 0;background:#fffef7}
+button{width:100%;padding:16px;border:none;border-radius:12px;font-weight:900;margin-top:12px;font-size:14px}
+#qr{display:flex;justify-content:center;margin:15px 0;background:white;padding:15px;border-radius:12px;border:2px dashed #0a4d2a}
+</style></head><body>
+<div class="card">
+<h2 style="text-align:center;color:#0a4d2a;margin:0">🏆 LUXURY CERTIFICATE GENERATOR</h2>
+<p style="text-align:center;font-size:11px;color:#666">Fill all fields before download</p>
 
-<label>1️⃣ REFERENCE NO (AFR-V-...)</label>
-<input id="ref" placeholder="e.g AFR-V-2026-002">
+<label>REFERENCE NO *</label><input id="ref" value="AFR-V-2026-002">
+<label>CLIENT FULL NAME *</label><input id="client" value="IDOHOU ARNAUD">
+<label>DOCUMENT TYPE * (e.g Degree Certificate)</label><input id="doc" value="Bachelor Degree Certificate">
+<label>CERTIFICATE NUMBER *</label><input id="certno" value="SS1234">
+<label>ISSUER / UNIVERSITY *</label><input id="issuer" value="University of Lagos - UNILAG">
+<label>DATE VERIFIED *</label><input id="date" value="01 October 2026">
+<label>VERIFICATION SOURCE *</label><input id="source" value="Confirmed via official email from Registrar">
+<label>STATUS</label><input id="status" value="AUTHENTIC - GENUINE">
 
-<label>2️⃣ CLIENT FULL NAME</label>
-<input id="client" placeholder="e.g John Emeka Okafor">
-
-<label>3️⃣ DOCUMENT TYPE</label>
-<input id="doc" placeholder="e.g WAEC Certificate, Degree, NIN">
-
-<label>4️⃣ ORIGINAL CERTIFICATE NUMBER</label>
-<input id="certno" placeholder="e.g NG123456 / SS1234">
-
-<label>5️⃣ ISSUER / SCHOOL NAME</label>
-<input id="issuer" placeholder="e.g WAEC, UNILAG, NIMC">
-
-<label>6️⃣ DATE VERIFIED (DD/MM/YYYY)</label>
-<input id="date" type="text" placeholder="e.g 30/09/2026" value="30/09/2026">
-
-<label>7️⃣ SOURCE OF VERIFICATION</label>
-<input id="source" placeholder="e.g verification via school email">
-
-<div id="qr" style="background:white;padding:10px;border-radius:10px"></div>
-<button onclick="makeQR()">1. GENERATE QR CODE</button>
-<button onclick="makePDF()" style="background:#b8860b">2. DOWNLOAD FINE PDF CERTIFICATE</button>
+<div id="qr"></div>
+<button onclick="makeQR()" style="background:#0a4d2a;color:white">1️⃣ GENERATE QR CODE FIRST</button>
+<button onclick="makePDF()" style="background:linear-gradient(90deg,#c9a227,#8a6d0a);color:white">2️⃣ DOWNLOAD LUXURY PDF ⭐</button>
+</div>
 
 <script>
 let qrObj=null;
 function makeQR(){
  document.getElementById('qr').innerHTML="";
  let ref=document.getElementById('ref').value.trim().toUpperCase();
- if(!ref){alert("Enter Ref first");return;}
+ if(!ref){alert("Enter Ref!");return;}
  let url="https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref="+ref;
- qrObj=new QRCode(document.getElementById('qr'),{text:url,width:180,height:180});
+ qrObj=new QRCode(document.getElementById('qr'),{text:url,width:200,height:200,correctLevel:QRCode.CorrectLevel.H});
 }
 async function makePDF(){
- const {jsPDF}=window.jspdf; let doc=new jsPDF();
- doc.setDrawColor(11,77,42); doc.setLineWidth(1.5); doc.rect(5,5,200,287);
- doc.setDrawColor(201,162,39); doc.setLineWidth(0.5); doc.rect(7,7,196,283);
- doc.setFontSize(20); doc.setTextColor(201,162,39); doc.setFont("helvetica","bold");
+ const {jsPDF}=window.jspdf; const doc=new jsPDF('p','mm','A4');
+ // Luxury Borders
+ doc.setFillColor(10,77,42); doc.rect(0,0,210,297,'F');
+ doc.setFillColor(255,254,247); doc.rect(4,4,202,289,'F');
+ doc.setDrawColor(201,162,39); doc.setLineWidth(1.2); doc.rect(6,6,198,285,'D');
+ doc.setDrawColor(10,77,42); doc.setLineWidth(0.4); doc.rect(8,8,194,281,'D');
+ 
+ // Header
+ doc.setFont("helvetica","bold"); doc.setFontSize(16); doc.setTextColor(10,77,42);
  doc.text("ARNAUD AFROCHAINE VERIFICATION LTD",105,18,{align:"center"});
- doc.setFontSize(15); doc.setTextColor(11,77,42); doc.text("VERIFICATION CERTIFICATE",105,30,{align:"center"});
- doc.setFillColor(11,77,42); doc.rect(20,40,170,8,'F'); doc.setTextColor(255,255,255); doc.setFontSize(8);
- doc.text("THIS CERTIFIES THAT THE DOCUMENT BELOW HAS BEEN VERIFIED AS AUTHENTIC",105,45,{align:"center"});
- doc.setTextColor(0,0,0); doc.setFontSize(11); let y=60;
- let ref=document.getElementById('ref').value; let client=document.getElementById('client').value;
- let cno=document.getElementById('certno').value; let docT=document.getElementById('doc').value;
- let issuer=document.getElementById('issuer').value; let date=document.getElementById('date').value;
- let source=document.getElementById('source').value;
- doc.setFont("helvetica","bold"); doc.text("Ref:",15,y); doc.setFont("helvetica","normal"); doc.text(ref,35,y);
- doc.setFont("helvetica","bold"); doc.text("Cert No:",110,y); doc.setFont("helvetica","normal"); doc.text(cno,135,y); y+=10;
- doc.setFont("helvetica","bold"); doc.text("Client:",15,y); doc.setFont("helvetica","normal"); doc.text(client,35,y);
- doc.setFont("helvetica","bold"); doc.text("Issuer:",110,y); doc.setFont("helvetica","normal"); doc.text(issuer,135,y); y+=10;
- doc.setFont("helvetica","bold"); doc.text("Document:",15,y); doc.setFont("helvetica","normal"); doc.text(docT,40,y);
- doc.setFont("helvetica","bold"); doc.text("Date:",110,y); doc.setFont("helvetica","normal"); doc.text(date,125,y); y+=10;
- doc.setFont("helvetica","bold"); doc.text("Source:",15,y); doc.setFont("helvetica","normal"); doc.text(source,35,y); y+=15;
- doc.setFillColor(10,77,42); doc.setTextColor(255,255,255); doc.setFontSize(12); doc.setFont("helvetica","bold");
- doc.rect(15,y,85,12,'F'); doc.text("VERIFIED - AUTHENTIC",57,y+8,{align:"center"});
+ doc.setFontSize(9); doc.setTextColor(201,162,39); doc.text("12 Idi-roko Road, Sango Ota, Ogun State, Nigeria | CAC: RC 8123456",105,23,{align:"center"});
+ doc.setDrawColor(201,162,39); doc.setLineWidth(0.8); doc.line(20,26,190,26);
+ 
+ // Title
+ doc.setFontSize(18); doc.setTextColor(10,77,42); doc.text("CERTIFICATE OF VERIFICATION",105,36,{align:"center"});
+ doc.setFontSize(8); doc.setTextColor(80,80,80); doc.text("THIS IS TO CERTIFY THAT THE DOCUMENT DESCRIBED BELOW HAS BEEN DULY VERIFIED",105,41,{align:"center"});
+ doc.text("AND CONFIRMED AS AUTHENTIC THROUGH OFFICIAL CHANNELS",105,44,{align:"center"});
+ 
+ // Green Banner
+ doc.setFillColor(10,77,42); doc.rect(15,48,180,9,'F');
+ doc.setFontSize(8); doc.setTextColor(255,255,255); doc.setFont("helvetica","bold");
+ doc.text("VERIFICATION DETAILS",105,53.5,{align:"center"});
+ 
+ // Table
+ let y=62; doc.setTextColor(0,0,0); doc.setFontSize(10);
+ function row(lab,val){
+   doc.setFont("helvetica","bold"); doc.setFillColor(245,247,242); doc.rect(15,y,45,10,'F'); doc.rect(15,y,45,10,'D');
+   doc.text(lab,17,y+6.5);
+   doc.setFont("helvetica","normal"); doc.rect(60,y,135,10,'D'); doc.text(val,62,y+6.5);
+   y+=10;
+ }
+ let refV=document.getElementById('ref').value; let cli=document.getElementById('client').value;
+ let docT=document.getElementById('doc').value; let cno=document.getElementById('certno').value;
+ let iss=document.getElementById('issuer').value; let dat=document.getElementById('date').value;
+ let src=document.getElementById('source').value; let sta=document.getElementById('status').value;
+ 
+ row("Reference No:",refV); row("Certificate No:",cno); row("Client Name:",cli);
+ row("Document Type:",docT); row("Issuer:",iss); row("Date Verified:",dat);
+ doc.setFont("helvetica","bold"); doc.rect(15,y,45,18,'F'); doc.rect(15,y,45,18,'D'); doc.text("Source:",17,y+6);
+ doc.setFont("helvetica","normal"); doc.rect(60,y,135,18,'D'); doc.setFontSize(8);
+ let split=doc.splitTextToSize(src,130); doc.text(split,62,y+5); y+=24;
+ 
+ // Status Box + QR
+ doc.setFillColor(10,77,42); doc.rect(15,y,90,14,'F'); doc.setTextColor(255,255,255); doc.setFontSize(12); doc.setFont("helvetica","bold");
+ doc.text("✓ "+sta.toUpperCase(),60,y+9,{align:"center"});
  let qrCanvas=document.querySelector('#qr canvas');
- if(qrCanvas){let imgData=qrCanvas.toDataURL("image/png"); doc.addImage(imgData,'PNG',135,y,35,35);}
- y+=50; doc.setTextColor(0,0,0); doc.setFontSize(9); doc.text("Authorized Signature:",135,y); y+=10; doc.line(120,y,190,y);
- doc.setFontSize(8); doc.text("ARNAUD AFROCHAINE VERIFICATION LTD",155,y+5,{align:"center"});
- doc.setFillColor(10,77,42); doc.rect(5,280,200,17,'F'); doc.setTextColor(201,162,39); doc.setFontSize(7);
- doc.text("ARNAUD AFROCHAINE VERIFICATION LTD • 12 Idiroko Road Sango Ota • CAC REGISTERED",105,289,{align:"center"});
- doc.save(ref+"_Certificate.pdf");
+ if(qrCanvas){let img=qrCanvas.toDataURL("image/png"); doc.addImage(img,'PNG',130,y-4,42,42); 
+   doc.setFontSize(7); doc.setTextColor(0,0,0); doc.text("SCAN TO VERIFY ONLINE",151,y+42,{align:"center"});}
+ y+=50;
+ doc.setFontSize(9); doc.setTextColor(0,0,0); doc.setFont("helvetica","normal");
+ doc.text("This certificate is issued by ARNAUD AFROCHAINE VERIFICATION LTD after thorough verification",15,y);
+ y+=5; doc.text("through official channels. Any alteration renders this certificate invalid.",15,y);
+ y+=15; doc.setFont("helvetica","bold"); doc.text("Authorized Signature:",15,y); y+=12; doc.setDrawColor(0,0,0); doc.line(15,y,75,y);
+ doc.setFontSize(8); doc.text("For: ARNAUD AFROCHAINE VERIFICATION LTD",15,y+5);
+ doc.text("Date: "+dat,15,y+9);
+ 
+ // Footer
+ doc.setFillColor(10,77,42); doc.rect(4,282,202,11,'F');
+ doc.setTextColor(201,162,39); doc.setFontSize(7); doc.text("www.arnaudafrochaine-verification.com | arnaudafrochaine@gmail.com | 0913 285 1465 | CAC REGISTERED | SECURE VERIFICATION SYSTEM",105,288,{align:"center"});
+ 
+ doc.save(refV+"_LUXURY_Verification.pdf");
 }
 </script></body></html>
