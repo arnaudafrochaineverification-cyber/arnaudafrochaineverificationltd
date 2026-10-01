@@ -1,0 +1,51 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AV ROBOT - Admin Dashboard</title>
+<style>body{font-family:Arial;background:#0f172a;color:white;padding:14px}.box{max-width:900px;margin:0 auto;background:white;color:#0f172a;border-radius:12px;padding:18px} input,select{width:100%;padding:10px;margin:6px 0;border:1px solid #cbd5e1;border-radius:8px}.btn{padding:12px 18px;border-radius:30px;font-weight:900;border:none;cursor:pointer}.btn-gold{background:#facc15}.btn-dark{background:#0f172a;color:white} table{width:100%;font-size:11px;border-collapse:collapse;margin-top:12px} th,td{border:1px solid #e2e8f0;padding:6px;text-align:left} th{background:#f8fafc}</style></head><body>
+<h2 style="text-align:center">🤖 ARNAUD AFROCHAINE — AV ROBOT DASHBOARD</h2>
+<p style="text-align:center;font-size:11px;opacity:.7">No more writing sheet. Fill here, robot go generate everything.</p>
+<div class="box">
+<h3>Add New Request</h3>
+<input id="ref" placeholder="Ref No e.g AAV-GLB-2026-001">
+<input id="name" placeholder="Candidate Name">
+<input id="phone" placeholder="Candidate Phone e.g 2349132851465">
+<input id="doc" placeholder="Document e.g BSc UNILAG">
+<input id="inst" placeholder="Institution e.g UNILAG">
+<input id="employer" placeholder="Employer e.g XYZ Care UK">
+<select id="route"><option>NG->UK</option><option>NG->CA</option><option>NG->US</option><option>GH->UK</option><option>NG->NG (Local)</option></select>
+<select id="status"><option>REQUEST RECEIVED</option><option>CONSENT RECEIVED</option><option>EMAIL SENT TO REGISTRAR</option><option>AWAITING OFFICIAL REPLY</option><option>REPLY RECEIVED - REPORT READY</option><option>REPORT SENT & CLOSED</option></select>
+<input id="amount" placeholder="Amount e.g £25 / $30 / ₦10k">
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn btn-gold" onclick="add()">Add to Robot</button>
+<button class="btn btn-dark" onclick="exportCSV()">Export Sheet</button>
+</div>
+
+<h3 style="margin-top:20px">Robot List</h3>
+<table id="tbl"><tr><th>Ref</th><th>Name</th><th>Doc</th><th>Route</th><th>Status</th><th>QR Link</th><th>WhatsApp</th></tr></table>
+<div id="qrBox" style="margin-top:14px"></div>
+</div>
+<script>
+let data=JSON.parse(localStorage.getItem('av_robot')||'[]'); render();
+function add(){
+let o={ref:ref.value,name:name.value,phone:phone.value,doc:doc.value,inst:inst.value,employer:employer.value,route:route.value,status:status.value,amount:amount.value};
+if(!o.ref){alert('Put Ref');return} data.push(o); localStorage.setItem('av_robot',JSON.stringify(data)); render(); genQR(o);
+}
+function render(){
+let h='<tr><th>Ref</th><th>Name</th><th>Doc</th><th>Route</th><th>Status</th><th>QR Link</th><th>WhatsApp</th></tr>';
+data.forEach(d=>{
+let link=`https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref=${d.ref}`;
+let wa=`https://wa.me/${d.phone}?text=Hello%20${encodeURIComponent(d.name)}%20your%20verification%20${d.ref}%20is%20${encodeURIComponent(d.status)}%20Track%20here:%20${encodeURIComponent(link)}`;
+h+=`<tr><td>${d.ref}</td><td>${d.name}</td><td>${d.doc}</td><td>${d.route}</td><td>${d.status}</td><td><a href="${link}" target="_blank">Track</a></td><td><a href="${wa}" target="_blank">WhatsApp</a></td></tr>`;
+});
+tbl.innerHTML=h;
+}
+function genQR(o){
+let link=`https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref=${o.ref}`;
+qrBox.innerHTML=`<div style="background:#f8fafc;padding:12px;border-radius:8px"><b>Last Generated:</b> ${o.ref}<br>Track Link: <a href="${link}" target="_blank">${link}</a><br><br><img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(link)}"><br><br><a class="btn btn-dark" href="${link}" target="_blank">Open Verify Page</a></div>`;
+}
+function exportCSV(){
+let csv='Ref,Name,Phone,Doc,Institution,Employer,Route,Status,Amount,TrackLink\n';
+data.forEach(d=>{let link=`https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref=${d.ref}`; csv+=`${d.ref},${d.name},${d.phone},${d.doc},${d.inst},${d.employer},${d.route},${d.status},${d.amount},${link}\n`;});
+let blob=new Blob([csv],{type:'text/csv'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='AV_ROBOT_TRACKER_2026.csv'; a.click();
+}
+</script>
+</body></html>
