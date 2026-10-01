@@ -1,55 +1,107 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Arnaud Admin - Light</title>
+<title>Arnaud Admin PRO</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>body{font-family:Arial;background:#eef2e6;padding:10px} .c{background:#fff;padding:18px;border-radius:14px;border:2px solid #c9a227} input{width:100%;padding:10px;border:2px solid #c9a227;border-radius:8px;margin:3px 0} button{width:100%;padding:14px;border:none;border-radius:10px;font-weight:900;margin-top:8px;color:#fff} #qr{display:flex;justify-content:center;margin:10px 0;min-height:120px;background:#fff;padding:10px;border-radius:8px;border:1px solid #0a4d2a}</style>
-</head><body>
-<div class="c">
-<h3 style="text-align:center;color:#0a4d2a;margin:0">ARNAUD ADMIN - LIGHT</h3>
-<input id="ref" placeholder="Ref e.g AFR-V-2026-002" value="AFR-V-2026-002">
-<input id="client" placeholder="Client Name" value="IDOHOU ARNAUD">
-<input id="doc" placeholder="Document Type" value="Bachelor Degree Certificate">
-<input id="certno" placeholder="Certificate No" value="SS1234">
-<input id="issuer" placeholder="Issuer" value="University of Lagos - UNILAG">
-<input id="date" placeholder="Date" value="01 October 2026">
-<input id="source" placeholder="Source" value="Confirmed via email from Registrar">
-<input id="status" placeholder="Status" value="AUTHENTIC - GENUINE">
-<div id="qr"></div>
-<button onclick="makeQR()" style="background:#0a4d2a">1️⃣ GENERATE QR</button>
-<button onclick="makePDF()" style="background:#c9a227">2️⃣ DOWNLOAD PDF</button>
-<p id="msg" style="text-align:center;font-size:11px;color:red"></p>
-</div>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap');
+body{font-family:'Inter',Arial;background:#0f2e20;margin:0;padding:15px}
+.wrap{max-width:480px;margin:0 auto;background:#fdfbf0;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4);border:2px solid #c9a227}
+.head{background:#0a4d2a;padding:22px;text-align:center;color:#c9a227}
+.head h1{font-family:'Playfair Display';margin:0;font-size:20px;letter-spacing:1px;color:#fff}
+.head p{margin:6px 0 0 0;font-size:10px;color:#c9a227;letter-spacing:2px}
+.body{padding:20px}
+label{font-size:10px;font-weight:700;color:#0a4d2a;text-transform:uppercase;letter-spacing:1px;margin-top:12px;display:block}
+input{width:100%;padding:12px 14px;border:1.5px solid #e0d5a0;border-radius:10px;margin-top:4px;background:white;font-size:13px;box-sizing:border-box}
+input:focus{border-color:#0a4d2a;outline:none}
+#qrBox{background:white;border:1.5px dashed #c9a227;border-radius:14px;padding:16px;margin:16px 0;display:flex;justify-content:center;min-height:100px;align-items:center}
+.btn{width:100%;padding:15px;border:none;border-radius:12px;font-weight:800;letter-spacing:.5px;cursor:pointer;font-size:13px;margin-top:10px}
+.btn1{background:#0a4d2a;color:#fff}.btn2{background:linear-gradient(90deg,#c9a227,#a98600);color:#fff}
+.status{text-align:center;font-size:11px;color:#0a4d2a;margin-top:8px;font-weight:600}
+</style></head><body>
+<div class="wrap">
+<div class="head"><h1>ARNAUD AFROCHAINE</h1><p>VERIFICATION LTD • ADMIN PRO</p></div>
+<div class="body">
+<label>Reference No</label><input id="ref" value="AFR-V-2026-002">
+<label>Client Name</label><input id="client" value="IDOHOU ARNAUD">
+<label>Document Type</label><input id="doc" value="Bachelor Degree Certificate">
+<label>Certificate Number</label><input id="certno" value="SS1234">
+<label>Issuer / Institution</label><input id="issuer" value="University of Lagos - UNILAG">
+<label>Date Verified</label><input id="date" value="01 October 2026">
+<label>Source of Verification</label><input id="source" value="Confirmed via official email from Registrar, UNILAG">
+<label>Status</label><input id="status" value="AUTHENTIC • GENUINE">
+<div id="qrBox"><span style="color:#999;font-size:12px">QR will appear here</span></div>
+<button class="btn btn1" onclick="makeQR()">1️⃣ GENERATE SECURE QR</button>
+<button class="btn btn2" onclick="makePDF()">2️⃣ DOWNLOAD PREMIUM PDF</button>
+<div id="msg" class="status"></div>
+</div></div>
 <script>
 let qrObj=null;
 function makeQR(){
- let ref=document.getElementById('ref').value.trim().toUpperCase();
- if(!ref){document.getElementById('msg').innerText='Enter Reference!';return;}
- document.getElementById('qr').innerHTML='';
- document.getElementById('msg').innerText='Generating QR for '+ref+'...';
- let url="https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref="+ref;
- try{
-  qrObj=new QRCode(document.getElementById('qr'),{text:url,width:160,height:160});
-  document.getElementById('msg').innerText='QR Ready! Now click DOWNLOAD PDF';
- }catch(e){document.getElementById('msg').innerText='Error: '+e.message;}
+ const ref=document.getElementById('ref').value.trim().toUpperCase();
+ if(!ref){document.getElementById('msg').innerText='Enter Reference No';return;}
+ document.getElementById('qrBox').innerHTML=''; document.getElementById('msg').innerText='Creating QR for '+ref+'...';
+ const url="https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref="+ref;
+ qrObj=new QRCode(document.getElementById('qrBox'),{text:url,width:170,height:170,correctLevel:QRCode.CorrectLevel.H});
+ document.getElementById('msg').innerText='✓ QR Ready — Now Download PDF';
 }
 async function makePDF(){
- if(!qrObj){alert('Generate QR first!');return;}
+ if(!qrObj){alert('Generate QR first');return;}
  const {jsPDF}=window.jspdf; const doc=new jsPDF('p','mm','A4');
- doc.setFillColor(10,77,42); doc.rect(0,0,210,297,'F');
- doc.setFillColor(253,251,232); doc.rect(5,5,200,287,'F');
- doc.setDrawColor(201,162,39); doc.setLineWidth(0.8); doc.rect(7,7,196,283,'D');
- doc.setFontSize(12); doc.setTextColor(10,77,42); doc.setFont("helvetica","bold");
- doc.text("ARNAUD AFROCHAINE VERIFICATION LTD",105,20,{align:"center"});
- doc.setFontSize(7); doc.text("12 Idi-roko Road, Sango Ota | arnaudafrochaine@gmail.com | 09132851465",105,24,{align:"center"});
- doc.setFontSize(13); doc.text("CERTIFICATE OF VERIFICATION",105,34,{align:"center"});
- let y=42; 
- function row(l,v){ doc.setFillColor(245,247,235); doc.setDrawColor(201,162,39); doc.rect(14,y,48,7,'FD'); doc.setFontSize(7); doc.setTextColor(10,77,42); doc.setFont("helvetica","bold"); doc.text(l,16,y+4.5); doc.setFillColor(255,255,255); doc.rect(62,y,134,7,'FD'); doc.setFont("helvetica","normal"); doc.setTextColor(0,0,0); doc.text(v,64,y+4.5); y+=7; }
- let refV=document.getElementById('ref').value; let cli=document.getElementById('client').value; let docT=document.getElementById('doc').value; let cno=document.getElementById('certno').value; let iss=document.getElementById('issuer').value; let dat=document.getElementById('date').value; let src=document.getElementById('source').value; let sta=document.getElementById('status').value;
+ const W=210, H=297;
+ // Outer emerald
+ doc.setFillColor(15,46,32); doc.rect(0,0,W,H,'F');
+ // Cream paper
+ doc.setFillColor(253,251,232); doc.rect(6,6,198,285,'F');
+ // Gold outer thin
+ doc.setDrawColor(201,162,39); doc.setLineWidth(1.2); doc.rect(8,8,194,281,'D');
+ // Green inner
+ doc.setDrawColor(15,46,32); doc.setLineWidth(0.4); doc.rect(11,11,188,275,'D');
+ // Gold inner
+ doc.setDrawColor(201,162,39); doc.setLineWidth(0.3); doc.rect(12.5,12.5,185,272,'D');
+ // Corner gold blocks imitation
+ doc.setFillColor(201,162,39); doc.rect(8,8,10,10,'F'); doc.rect(192,8,10,10,'F'); doc.rect(8,281,10,10,'F'); doc.rect(192,281,10,10,'F');
+ // Watermark
+ doc.setFontSize(50); doc.setTextColor(245,240,200); doc.setFont("times","bold"); doc.text("ARNAUD",105,155,{align:"center",angle:45});
+ // Header
+ doc.setFontSize(16); doc.setTextColor(15,46,32); doc.setFont("times","bold"); doc.text("ARNAUD AFROCHAINE",105,28,{align:"center"});
+ doc.text("VERIFICATION LTD",105,35,{align:"center"});
+ doc.setFontSize(9); doc.setTextColor(168,134,0); doc.setFont("times","italic"); doc.text("Certificate of Verification",105,42,{align:"center"});
+ doc.setDrawColor(201,162,39); doc.setLineWidth(0.5); doc.line(60,44,150,44);
+ // Status banner
+ doc.setFillColor(15,46,32); doc.rect(22,48,166,11,'F'); doc.setDrawColor(201,162,39); doc.setLineWidth(0.4); doc.rect(22,48,166,11,'D');
+ doc.setFontSize(12); doc.setTextColor(201,162,39); doc.setFont("times","bold"); doc.text(document.getElementById('status').value,105,55.5,{align:"center"});
+ // Details table
+ let y=67; doc.setFontSize(8);
+ function row(l,v){
+  doc.setDrawColor(15,46,32); doc.setLineWidth(0.25); doc.setFillColor(250,246,220); doc.rect(22,y,46,8,'F'); doc.rect(22,y,46,8,'D');
+  doc.setFont("helvetica","bold"); doc.setTextColor(15,46,32); doc.text(l,24,y+5);
+  doc.setFillColor(255,255,255); doc.rect(68,y,60,8,'F'); doc.rect(68,y,60,8,'D');
+  doc.setFont("helvetica","normal"); doc.setTextColor(0,0,0); doc.text(doc.splitTextToSize(v,58)[0],70,y+5);
+  y+=8;
+ }
+ let refV=document.getElementById('ref').value, cli=document.getElementById('client').value, docT=document.getElementById('doc').value, cno=document.getElementById('certno').value, iss=document.getElementById('issuer').value, dat=document.getElementById('date').value, src=document.getElementById('source').value;
  row("Reference No:",refV); row("Certificate No:",cno); row("Client Name:",cli.toUpperCase()); row("Document Type:",docT); row("Issuer:",iss); row("Date Verified:",dat); row("Source:",src);
- y+=1; doc.setFillColor(10,77,42); doc.rect(14,y,182,9,'F'); doc.setTextColor(255,255,255); doc.setFontSize(10); doc.text("✓ "+sta,105,y+6,{align:"center"});
- doc.setDrawColor(201,162,39); doc.rect(130,y+13,44,44,'D'); let qrCanvas=document.querySelector('#qr canvas'); if(qrCanvas){let img=qrCanvas.toDataURL("image/png"); doc.addImage(img,'PNG',132,y+15,40,40);} y+=50;
- doc.setFontSize(7); doc.setTextColor(0,0,0); doc.text("For: ARNAUD AFROCHAINE VERIFICATION LTD | Date: "+dat,14,y);
- y+=12; doc.setFillColor(255,243,205); doc.rect(14,y,182,13,'F'); doc.rect(14,y,182,13,'D'); doc.setFontSize(5.2); doc.setTextColor(80,60,0); doc.text("DISCLAIMER: This is a VERIFICATION REPORT by ARNAUD AFROCHAINE. NOT original certificate. We are NOT awarding institution.",16,y+4); doc.text("Contact: arnaudafrochaine@gmail.com | 09132851465 - For verification purposes only.",16,y+8);
- doc.save(refV+".pdf");
+ // QR with ornate frame
+ let qrY=67; doc.setDrawColor(201,162,39); doc.setLineWidth(0.8); doc.rect(134,qrY,54,54,'D'); doc.setDrawColor(15,46,32); doc.setLineWidth(0.25); doc.rect(135.5,qrY+1.5,51,51,'D');
+ let canvas=document.querySelector('#qrBox canvas'); if(canvas){let img=canvas.toDataURL("image/png"); doc.addImage(img,'PNG',137,qrY+3,47,47);}
+ doc.setFontSize(6); doc.setTextColor(15,46,32); doc.text("Scan to Verify Online",161,qrY+57,{align:"center"});
+ // Divider
+ y+=6; doc.setDrawColor(201,162,39); doc.setLineWidth(0.2); doc.line(22,y,188,y); y+=8;
+ // Seal and Signature
+ doc.setFillColor(201,162,39); doc.circle(45,y+12,14,'F'); doc.setFillColor(15,46,32); doc.circle(45,y+12,11.5,'F');
+ doc.setFontSize(4.5); doc.setTextColor(201,162,39); doc.setFont("helvetica","bold"); doc.text("ARNAUD",45,y+9,{align:"center"}); doc.text("SEAL",45,y+13,{align:"center"}); doc.text("2026",45,y+16,{align:"center"});
+ doc.setDrawColor(80,80,80); doc.setLineWidth(0.3); doc.line(110,y+15,180,y+15);
+ doc.setFontSize(8); doc.setTextColor(0,0,0); doc.setFont("times","italic"); doc.text("J. Arnaud",145,y+11,{align:"center"});
+ doc.setFontSize(6.5); doc.setFont("helvetica","bold"); doc.text("Authorised Signatory",145,y+18,{align:"center"}); doc.setFont("helvetica","normal"); doc.text("Head of Verification",145,y+21,{align:"center"});
+ y+=28;
+ // Disclaimer professional
+ doc.setFillColor(255,250,230); doc.setDrawColor(201,162,39); doc.rect(22,y,166,18,'FD'); doc.setFontSize(5.2); doc.setTextColor(80,60,0);
+ doc.text("DISCLAIMER: This Certificate of Verification is an independent verification report issued by ARNAUD AFROCHAINE",24,y+4);
+ doc.text("VERIFICATION LTD. It is NOT the original certificate and does NOT replace it. We are NOT the awarding institution.",24,y+7);
+ doc.text("Verification is based on information available at the time of check. Contact: arnaudafrochaine@gmail.com | 09132851465",24,y+10);
+ doc.text("For official online verification, scan the QR code or visit our portal. This document is for verification purposes only.",24,y+13);
+ // Footer
+ doc.setFillColor(15,46,32); doc.rect(6,286,198,5,'F'); doc.setFontSize(5.5); doc.setTextColor(201,162,39); doc.text("Secure Verification System | arnaudafrochaine@gmail.com | 0913 285 1465 | www.arnaudafrochaine-verification.com",105,289,{align:"center"});
+ doc.save(refV+"_PREMIUM_VERIFICATION.pdf");
 }
 </script></body></html>
