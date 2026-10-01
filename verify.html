@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Verify - Arnaud Afrochaine Verification Ltd</title>
+<title>Verify Certificate - Arnaud Afrochaine</title>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
 const firebaseConfig = {
   apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
   authDomain: "arnaudafrochaineverification.firebaseapp.com",
@@ -16,62 +15,59 @@ const firebaseConfig = {
   appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
   measurementId: "G-Y52LEBJM7Q"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-async function loadCert(){
-  const params = new URLSearchParams(window.location.search);
-  const ref = params.get('ref');
-  document.getElementById('refId').innerText = ref || 'No Ref';
-  
-  if(!ref){
-    document.getElementById('result').innerHTML = "<p style='color:red'>No reference number in QR link</p>";
-    return;
+async function load(){
+  const urlParams = new URLSearchParams(window.location.search);
+  let ref = urlParams.get('ref');
+  if(!ref){ 
+    const path = window.location.pathname;
+    const parts = path.split('/');
+    ref = parts[parts.length-1];
+    if(ref.includes('.html')) ref = urlParams.get('ref');
   }
-
+  const id = document.getElementById('refInput').value || ref;
+  if(!id){ document.getElementById('result').innerHTML = "<p style='color:red;text-align:center'>Enter Ref Number</p>"; return; }
+  document.getElementById('result').innerHTML = "Checking cloud... ⏳";
   try{
-    const snap = await getDoc(doc(db, "certificates", ref));
+    const snap = await getDoc(doc(db, "certificates", id.trim()));
     if(!snap.exists()){
-      document.getElementById('result').innerHTML = `<div style='background:#fef2f2;padding:14px;border-radius:10px;border:1px solid #fecaca'><h3 style='color:#991b1b'>❌ Reference Not Found</h3><p>Ref <b>${ref}</b> not found in Arnaud Afrochaine database. Check number or contact support.</p></div>`;
+      document.getElementById('result').innerHTML = `<div style="background:#fee2e2;padding:14px;border-radius:10px;text-align:center;color:#991b1b;font-weight:800">❌ RECORD NOT FOUND<br><span style="font-size:12px;font-weight:400">${id}</span></div>`;
       return;
     }
     const d = snap.data();
     document.getElementById('result').innerHTML = `
-      <div style='background:white;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08);text-align:left'>
-        <div style='text-align:center;border-bottom:2px solid #facc15;padding-bottom:10px;margin-bottom:12px'>
-          <h2 style='margin:0;color:#0f172a'>ARNAUD AFROCHAINE VERIFICATION LTD</h2>
-          <p style='font-size:11px;color:#ca8a04;font-weight:800'>OFFICIAL VERIFICATION REPORT</p>
-        </div>
-        <p><b>Ref:</b> ${d.ref || ref}</p>
-        <p><b>Client Name:</b> ${d.name || d.fullName}</p>
-        <p><b>Document Type:</b> ${d.certificateType || d.course}</p>
-        <p><b>Certificate No:</b> ${d.certificateNumber || '-'}</p>
-        <p><b>Institution / Issuer:</b> ${d.school}</p>
-        <p><b>Date Verified:</b> ${d.issueDate || d.createdAt}</p>
-        <hr>
-        <p><b>Source of Verification:</b><br><span style='font-size:13px;color:#334155'>${d.source}</span></p>
-        <div style='margin-top:12px;padding:10px;border-radius:8px;background:${d.status && d.status.includes('CONFIRMED ISSUANCE') ? '#f0fdf4' : '#fffbeb'};border:1px solid ${d.status && d.status.includes('CONFIRMED ISSUANCE') ? '#bbf7d0' : '#fde68a'}'>
-          <b>Status:</b><br>${d.status}
-        </div>
-        <p style='font-size:11px;color:#64748b;margin-top:12px'><b>Evidence on file:</b> ${d.note || 'Available on request with consent'}</p>
-        <p style='font-size:9px;color:#94a3b8;margin-top:16px;text-align:center'>Disclaimer: Arnaud Afrochaine Verification Ltd reports information received from institutions. We do not issue academic certificates. Original email evidence available on file with consent. For enquiries: arnaudafrochaineverification@gmail.com</p>
+      <div style="background:white;border:3px solid #C9A227;border-radius:14px;padding:16px">
+        <div style="text-align:center;background:#0a4d2a;color:white;padding:10px;border-radius:8px;font-weight:900;margin-bottom:12px">✅ VERIFIED RECORD FOUND</div>
+        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><small style="color:#14532d;font-weight:800">👤 CLIENT NAME</small><br><b>${d.name||d.fullName||''}</b></div>
+        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><small style="color:#14532d;font-weight:800">📄 DOCUMENT TYPE - WETIN YOU DEY VERIFY?</small><br>${d.certificateType||d.course||''}</div>
+        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><small style="color:#14532d;font-weight:800">📜 CERTIFICATE NUMBER - NUMBER WEY DEY THE ORIGINAL CERT</small><br>${d.certificateNumber||''}</div>
+        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><small style="color:#14532d;font-weight:800">🎓 SCHOOL / ISSUER - WHERE THE CERT FROM? (UNILAG, WAEC)</small><br>${d.school||d.institution||''}</div>
+        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><small style="color:#14532d;font-weight:800">📅 DATE VERIFIED - WHEN YOU VERIFY AM?</small><br>${d.issueDate||''}</div>
+        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><small style="color:#14532d;font-weight:800">🔍 SOURCE OF VERIFICATION - HOW YOU TAKE VERIFY AM?</small><br>${d.source||''}</div>
+        <div style="background:#ecfdf5;padding:12px;border-radius:8px;border-left:4px solid #0a4d2a"><small style="color:#14532d;font-weight:800">✅ STATUS - RESULT</small><br><b style="color:#0a4d2a">${d.status||''}</b><br><small style="font-size:9px;color:#64748b">(This report is based on official response from institution. See proof on file)</small></div>
+        <div style="text-align:center;margin-top:14px;font-size:10px;color:#64748b">Ref: ${d.ref||id} | Verified by Arnaud Afrochaine Verification Ltd</div>
       </div>
     `;
   }catch(e){
-    document.getElementById('result').innerHTML = `<p style='color:red'>Error loading: ${e.message}</p>`;
+    document.getElementById('result').innerHTML = "<p style='color:red'>Error: "+e.message+"</p>";
   }
 }
-window.addEventListener('DOMContentLoaded', loadCert);
+window.load = load;
+window.onload = ()=>{ const p=new URLSearchParams(location.search).get('ref'); if(p){ document.getElementById('refInput').value=p; load(); } };
 </script>
-<style>body{font-family:Arial;background:#f4f6f9;padding:12px;margin:0} .box{max-width:540px;margin:20px auto} h3{text-align:center}</style>
+<style>
+body{font-family:Arial;background:#0f172a;padding:12px;margin:0}
+.box{max-width:520px;margin:20px auto}
+.top{background:white;padding:14px;border-radius:12px;text-align:center;margin-bottom:12px}
+input{width:70%;padding:10px;border:1px solid #cbd5e1;border-radius:8px}
+button{padding:10px 14px;background:#0a4d2a;color:white;border:none;border-radius:8px;font-weight:800;cursor:pointer}
+</style>
 </head>
 <body>
 <div class="box">
-<h3>🔍 Verification Portal</h3>
-<p style="text-align:center;font-size:12px">Ref: <b id="refId">Loading...</b></p>
-<div id="result" style="margin-top:16px"><p style="text-align:center">Checking cloud database... ⏳</p></div>
-<p style="text-align:center;margin-top:20px"><a href="index.html" style="font-size:12px;color:#0f172a">← Back to Home</a></p>
+<div class="top"><h3 style="margin:0;color:#0a4d2a">ARNAUD AFROCHAINE VERIFICATION</h3><small>Certificate Verification Portal</small><div style="margin-top:10px"><input id="refInput" placeholder="Enter Ref e.g AAC/2026/112082"><button onclick="load()">Verify</button></div></div>
+<div id="result"></div>
 </div>
 </body>
 </html>
