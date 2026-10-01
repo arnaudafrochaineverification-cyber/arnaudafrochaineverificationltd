@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin - Generate Certificate</title>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Oga Generator - BIG FIREBASE VERSION</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC3HaW1Xh7pAOnS0Gb0jZ-dO0W1M7c2A9E",
   authDomain: "arnaudafrochaineverification.firebaseapp.com",
   projectId: "arnaudafrochaineverification",
   storageBucket: "arnaudafrochaineverification.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
+  messagingSenderId: "YOUR_REAL_ID_HERE", 
+  appId: "YOUR_REAL_APP_ID_HERE"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -30,42 +29,28 @@ window.autoGenID = function(){
 window.saveCert = async function(){
   const certId = document.getElementById('certId').value.trim();
   const fullName = document.getElementById('fullName').value.trim();
-  const course = document.getElementById('course').value.trim();
-  
-  if(!fullName){ alert("Abeg Fill Full Name"); return; }
-  if(!course){ alert("Abeg Fill Course"); return; }
-  
-  const verifyLink = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?cert=${certId}`;
-  
-  document.getElementById('saveBtn').innerText = "Saving... ⏳";
-  document.getElementById('saveBtn').disabled = true;
+  const institution = document.getElementById('institution').value.trim();
+  if(!fullName){ alert("Fill Name"); return; }
+  if(!institution){ alert("Fill Institution"); return; }
+
+  const verifyLink = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref=${certId}`;
+  const btn = document.getElementById('saveBtn');
+  btn.innerText = "Saving to Cloud... ⏳"; btn.disabled = true;
 
   try{
     await setDoc(doc(db, "certificates", certId), {
-      certificateNumber: certId,
-      certNo: certId,
-      certId: certId,
-      id: certId,
-      certificateId: certId,
+      certificateNumber: document.getElementById('certNo').value,
       name: fullName,
       fullName: fullName,
-      studentName: fullName,
-      course: course,
-      courseName: course,
-      school: document.getElementById('institution').value,
-      institution: document.getElementById('institution').value,
       certificateType: document.getElementById('certType').value,
-      type: document.getElementById('certType').value,
+      school: institution,
+      course: document.getElementById('certType').value,
       issueDate: document.getElementById('issueDate').value,
-      expiryDate: document.getElementById('expiryDate').value,
-      grade: document.getElementById('grade').value,
-      score: document.getElementById('grade').value,
-      duration: document.getElementById('duration').value,
+      source: document.getElementById('source').value,
       status: document.getElementById('status').value,
-      issuedBy: document.getElementById('issuedBy').value,
       note: document.getElementById('note').value,
       verifyLink: verifyLink,
-      timestamp: new Date()
+      createdAt: new Date()
     });
 
     document.getElementById('formBox').style.display="none";
@@ -73,23 +58,37 @@ window.saveCert = async function(){
     document.getElementById('savedId').innerText = certId;
     document.getElementById('qrcode').innerHTML="";
     new QRCode(document.getElementById("qrcode"), {
-        text: verifyLink,
-        width: 220,
-        height: 220,
-        colorDark : "#000000",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.H
+      text: verifyLink,
+      width: 220, height: 220,
+      correctLevel: QRCode.CorrectLevel.H
     });
     document.getElementById('qrLink').innerText = verifyLink;
+    document.getElementById('viewLink').href = verifyLink;
+    btn.innerText = "SAVED TO CLOUD ✅"; 
 
-  }catch(e){
-    alert("Error: " + e.message);
-    document.getElementById('saveBtn').innerText = "💾 SAVE & GENERATE QR";
-    document.getElementById('saveBtn').disabled = false;
-  }
+  }catch(e){ alert("Firebase Error: "+e.message); btn.innerText="💾 SAVE & GENERATE QR"; btn.disabled=false; }
 }
 </script>
-
 <style>
-body{font-family:Arial,sans-serif;background:#f4f6f9;padding:12px;margin:0}
-.box{max-width:500px;margin:20px auto;background:white;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,
+body{font-family:Arial;background:#f4f6f9;padding:12px} .box{max-width:520px;margin:20px auto;background:white;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #cbd5e1;border-radius:8px} .btn{width:100%;padding:12px;border:none;border-radius:30px;font-weight:900;cursor:pointer;margin-top:10px} .btn-gold{background:#facc15} .btn-dark{background:#0f172a;color:white} label{font-size:11px;font-weight:800;color:#14532d;margin-top:10px;display:block} #successBox{display:none;text-align:center}
+</style>
+</head>
+<body>
+<div class="box" id="formBox">
+<h2 style="text-align:center">ARNAUD AFROCHAINE<br><span style="font-size:12px;color:#ca8a04">BIG FIREBASE GENERATOR - CLOUD SAVE</span></h2>
+<label>REFERENCE NUMBER</label><div style="display:flex;gap:6px"><input id="certId" readonly><button onclick="autoGenID()" style="padding:10px;border-radius:8px;border:none;background:#e2e8f0;font-weight:800">Auto</button></div>
+<label>CLIENT NAME</label><input id="fullName" placeholder="IDOHOU ARNAUD">
+<label>DOCUMENT TYPE</label><select id="certType"><option>Bachelor Degree Certificate</option><option>Master Degree</option><option>WAEC / NECO</option><option>NYSC Certificate</option></select>
+<label>CERTIFICATE NUMBER</label><input id="certNo" placeholder="SS1234">
+<label>SCHOOL / ISSUER</label><input id="institution" placeholder="University of Lagos - UNILAG">
+<label>DATE VERIFIED</label><input id="issueDate" type="date" value="2026-10-01">
+<label>SOURCE</label><textarea id="source" rows="2">Confirmed via official email from Registrar, UNILAG - registrar@unilag.edu.ng dated 30 Sept 2026</textarea>
+<label>STATUS (SAFE)</label><select id="status"><option>PER OFFICIAL EMAIL FROM REGISTRAR - INSTITUTION CONFIRMED ISSUANCE (See proof on file)</option><option>PER OFFICIAL EMAIL FROM REGISTRAR - NO RECORD FOUND (See proof on file)</option><option>CONSENT RECEIVED - AWAITING REGISTRAR REPLY</option><option>UNABLE TO VERIFY - INSTITUTION DID NOT RESPOND</option></select>
+<label>NOTE</label><input id="note" placeholder="Drive link to proof">
+<button class="btn btn-gold" id="saveBtn" onclick="saveCert()">💾 SAVE TO CLOUD & GENERATE QR</button>
+</div>
+<div class="box" id="successBox"><h3 style="color:#166534">✅ SAVED TO CLOUD!</h3><p>Ref: <b id="savedId"></b></p><div id="qrcode" style="display:flex;justify-content:center;margin:14px 0"></div><p style="font-size:11px;word-break:break-all" id="qrLink"></p><a id="viewLink" href="#" target="_blank" class="btn btn-dark" style="display:block;text-align:center;text-decoration:none">Open Verify Page</a><button class="btn btn-gold" onclick="location.reload()">Generate Another</button></div>
+<script>document.addEventListener('DOMContentLoaded',()=>{ if(window.autoGenID) window.autoGenID(); });</script>
+</body>
+</html>
