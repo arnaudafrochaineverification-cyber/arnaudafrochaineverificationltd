@@ -1,65 +1,77 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Track Verification - Arnaud Afrochaine Global</title>
-<style>body{font-family:Inter,Arial;background:#f8fafc;margin:0;padding:14px}.top{background:#0f172a;color:white;padding:12px 5%;display:flex;justify-content:space-between;align-items:center}.card{max-width:700px;margin:20px auto;background:white;border-radius:16px;padding:20px;border:1px solid #e2e8f0;box-shadow:0 8px 30px rgba(0,0,0,.06)}.badge{font-size:10px;font-weight:800;padding:4px 8px;border-radius:20px;display:inline-block}.b-green{background:#dcfce7;color:#166534}.b-yellow{background:#fef9c3;color:#854d0e}.b-blue{background:#dbeafe;color:#1e40af}.prog{height:6px;background:#e2e8f0;border-radius:10px;overflow:hidden;margin:10px 0}.bar{height:100%;background:#0f172a;width:20%;transition:.5s} .row{display:flex;justify-content:space-between;font-size:12px;padding:8px 0;border-bottom:1px solid #f1f5f9} .btn{padding:10px 16px;border-radius:30px;font-weight:800;text-decoration:none;display:inline-block;font-size:12px}.btn-dark{background:#0f172a;color:white}</style></head><body>
-<div class="top"><div style="font-weight:900">ARNAUD AFROCHAINE • GLOBAL TRACKING</div><a href="index.html" style="color:#facc15;text-decoration:none;font-size:12px;font-weight:800">Home</a></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Verify - Arnaud Afrochaine Verification Ltd</title>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-<div class="card">
-<h2 style="margin:0">Verification Tracker</h2>
-<p style="font-size:11px;color:#64748b;margin:6px 0">Enter your Ref No to track live status. e.g AAV-GLB-2026-001</p>
-<div style="display:flex;gap:8px;margin:14px 0">
-<input id="refInput" placeholder="AAV-GLB-2026-001" style="flex:1;padding:12px;border:1px solid #cbd5e1;border-radius:10px">
-<button onclick="track()" style="padding:12px 18px;background:#facc15;border:none;border-radius:10px;font-weight:900;cursor:pointer">Track</button>
-</div>
+const firebaseConfig = {
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+  authDomain: "arnaudafrochaineverification.firebaseapp.com",
+  projectId: "arnaudafrochaineverification",
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+  measurementId: "G-Y52LEBJM7Q"
+};
 
-<div id="result" style="display:none">
-<div style="display:flex;justify-content:space-between;align-items:center">
-<div><div id="rRef" style="font-weight:900;font-size:18px"></div><div id="rName" style="font-size:12px;color:#475569"></div></div>
-<div id="rStatusBadge" class="badge b-yellow">REQUEST RECEIVED</div>
-</div>
-<div class="prog"><div id="rBar" class="bar"></div></div>
-<div id="rRoute" style="font-size:11px;color:#64748b"></div>
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-<div style="margin-top:14px;background:#f8fafc;padding:12px;border-radius:10px">
-<div class="row"><span>Candidate</span><b id="rCand"></b></div>
-<div class="row"><span>Document</span><b id="rDoc"></b></div>
-<div class="row"><span>Institution</span><b id="rInst"></b></div>
-<div class="row"><span>Employer</span><b id="rEmp"></b></div>
-<div class="row"><span>Amount</span><b id="rAmt"></b></div>
-<div class="row"><span>Evidence</span><b style="color:#64748b;font-size:10px">Direct source email + consent on file. Final decision = issuing institution</b></div>
-</div>
+async function loadCert(){
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get('ref');
+  document.getElementById('refId').innerText = ref || 'No Ref';
+  
+  if(!ref){
+    document.getElementById('result').innerHTML = "<p style='color:red'>No reference number in QR link</p>";
+    return;
+  }
 
-<div style="margin-top:14px;text-align:center">
-<img id="rQR" src="" style="width:160px;border:1px solid #e2e8f0;border-radius:8px;padding:6px">
-<div style="font-size:10px;color:#94a3b8;margin-top:6px">Scan to verify this report</div>
-</div>
-
-<div style="margin-top:16px;display:flex;gap:8px;justify-content:center">
-<a id="rWA" href="#" target="_blank" class="btn btn-dark">WhatsApp Candidate</a>
-<a href="consent.html" target="_blank" class="btn" style="background:#f1f5f9;color:#0f172a">View Consent Form</a>
-</div>
-<p style="font-size:9px;color:#94a3b8;text-align:center;margin-top:14px">Arnaud Afrochaine Verification Ltd provides verification SUPPORT only. We retain correspondence evidence. We do not issue certificates.</p>
-</div>
-
-<div id="notFound" style="display:none;text-align:center;color:#dc2626;font-size:12px;margin-top:12px">Ref not found for this browser. Check if you added it via AV-ROBOT on same phone, or enter Ref from link: ?ref=AAV-GLB-xxxx</div>
-</div>
-
-<script>
-function getAll(){return JSON.parse(localStorage.getItem('av_robot')||'[]');}
-function track(){
-let ref=(document.getElementById('refInput').value||new URLSearchParams(location.search).get('ref')||'').trim().toUpperCase();
-if(!ref){alert('Enter Ref');return}
-let all=getAll(); let d=all.find(x=>x.ref.toUpperCase()===ref);
-if(!d){notFound.style.display='block'; result.style.display='none'; return}
-notFound.style.display='none'; result.style.display='block';
-rRef.textContent=d.ref; rName.textContent=d.name+' • '+d.phone; rCand.textContent=d.name;
-rDoc.textContent=d.doc; rInst.textContent=d.inst; rEmp.textContent=d.employer+' ('+d.route+')'; rAmt.textContent=d.amount; rRoute.textContent='Route: '+d.route;
-let st=d.status; rStatusBadge.textContent=st;
-let pct=20; if(st.includes('CONSENT')){pct=35;rStatusBadge.className='badge b-blue'} else if(st.includes('EMAIL')){pct=55;rStatusBadge.className='badge b-blue'} else if(st.includes('AWAITING')){pct=75;rStatusBadge.className='badge b-yellow'} else if(st.includes('REPLY')||st.includes('READY')){pct=90;rStatusBadge.className='badge b-green'} else if(st.includes('CLOSED')||st.includes('SENT')){pct=100;rStatusBadge.className='badge b-green'} else {pct=20;rStatusBadge.className='badge b-yellow'}
-rBar.style.width=pct+'%';
-let link=`https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref=${d.ref}`;
-rQR.src=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}`;
-rWA.href=`https://wa.me/${d.phone}?text=Hello%20${encodeURIComponent(d.name)}%20your%20verification%20${d.ref}%20is%20${encodeURIComponent(d.status)}%20Track:%20${encodeURIComponent(link)}`;
+  try{
+    const snap = await getDoc(doc(db, "certificates", ref));
+    if(!snap.exists()){
+      document.getElementById('result').innerHTML = `<div style='background:#fef2f2;padding:14px;border-radius:10px;border:1px solid #fecaca'><h3 style='color:#991b1b'>❌ Reference Not Found</h3><p>Ref <b>${ref}</b> not found in Arnaud Afrochaine database. Check number or contact support.</p></div>`;
+      return;
+    }
+    const d = snap.data();
+    document.getElementById('result').innerHTML = `
+      <div style='background:white;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08);text-align:left'>
+        <div style='text-align:center;border-bottom:2px solid #facc15;padding-bottom:10px;margin-bottom:12px'>
+          <h2 style='margin:0;color:#0f172a'>ARNAUD AFROCHAINE VERIFICATION LTD</h2>
+          <p style='font-size:11px;color:#ca8a04;font-weight:800'>OFFICIAL VERIFICATION REPORT</p>
+        </div>
+        <p><b>Ref:</b> ${d.ref || ref}</p>
+        <p><b>Client Name:</b> ${d.name || d.fullName}</p>
+        <p><b>Document Type:</b> ${d.certificateType || d.course}</p>
+        <p><b>Certificate No:</b> ${d.certificateNumber || '-'}</p>
+        <p><b>Institution / Issuer:</b> ${d.school}</p>
+        <p><b>Date Verified:</b> ${d.issueDate || d.createdAt}</p>
+        <hr>
+        <p><b>Source of Verification:</b><br><span style='font-size:13px;color:#334155'>${d.source}</span></p>
+        <div style='margin-top:12px;padding:10px;border-radius:8px;background:${d.status && d.status.includes('CONFIRMED ISSUANCE') ? '#f0fdf4' : '#fffbeb'};border:1px solid ${d.status && d.status.includes('CONFIRMED ISSUANCE') ? '#bbf7d0' : '#fde68a'}'>
+          <b>Status:</b><br>${d.status}
+        </div>
+        <p style='font-size:11px;color:#64748b;margin-top:12px'><b>Evidence on file:</b> ${d.note || 'Available on request with consent'}</p>
+        <p style='font-size:9px;color:#94a3b8;margin-top:16px;text-align:center'>Disclaimer: Arnaud Afrochaine Verification Ltd reports information received from institutions. We do not issue academic certificates. Original email evidence available on file with consent. For enquiries: arnaudafrochaineverification@gmail.com</p>
+      </div>
+    `;
+  }catch(e){
+    document.getElementById('result').innerHTML = `<p style='color:red'>Error loading: ${e.message}</p>`;
+  }
 }
-let urlRef=new URLSearchParams(location.search).get('ref'); if(urlRef){refInput.value=urlRef; track();}
+window.addEventListener('DOMContentLoaded', loadCert);
 </script>
-</body></html>
+<style>body{font-family:Arial;background:#f4f6f9;padding:12px;margin:0} .box{max-width:540px;margin:20px auto} h3{text-align:center}</style>
+</head>
+<body>
+<div class="box">
+<h3>🔍 Verification Portal</h3>
+<p style="text-align:center;font-size:12px">Ref: <b id="refId">Loading...</b></p>
+<div id="result" style="margin-top:16px"><p style="text-align:center">Checking cloud database... ⏳</p></div>
+<p style="text-align:center;margin-top:20px"><a href="index.html" style="font-size:12px;color:#0f172a">← Back to Home</a></p>
+</div>
+</body>
+</html>
