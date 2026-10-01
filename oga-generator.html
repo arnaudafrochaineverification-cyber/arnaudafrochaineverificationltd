@@ -94,4 +94,58 @@ label{font-size:11px;font-weight:800;color:#14532d;margin-top:10px;display:block
 </style>
 </head>
 <body>
-<div class="
+<div class="box no-print" id="pinBox">
+<h2>🔐 OGA LOCKED</h2>
+<p style="font-size:12px;color:#64748b">Enter Oga PIN</p>
+<input id="pinInput" type="password" placeholder="Enter PIN">
+<button class="btn btn-dark" onclick="checkPin()">UNLOCK GENERATOR 🔓</button>
+<p style="font-size:9px;color:#94a3b8;margin-top:10px">PIN: Gbenga333649</p>
+</div>
+<div class="box no-print" id="formBox">
+<h2 style="text-align:center;color:#0f172a">ARNAUD AFROCHAINE<br><span style="font-size:12px;color:#ca8a04">VERIFICATION LTD - CLOUD GENERATOR</span></h2>
+<label>📌 REFERENCE NUMBER</label>
+<div style="display:flex;gap:6px"><input id="certId" readonly><button type="button" onclick="autoGenID()" style="padding:10px;border-radius:8px;border:none;background:#e2e8f0;font-weight:800">Auto</button></div>
+<label>👤 CLIENT NAME</label><input id="fullName" placeholder="GBADAMASI SANUSI">
+<label>📄 DOCUMENT TYPE</label><select id="certType"><option>Bachelor Degree Certificate</option><option>Master Degree</option><option>WAEC / NECO</option><option>NYSC Certificate</option><option>Professional Certificate</option></select>
+<label>📜 CERTIFICATE NUMBER</label><input id="certNo" placeholder="AFR-2026-865554">
+<label>🎓 SCHOOL / ISSUER</label><input id="institution" placeholder="University of Lagos">
+<label>📅 DATE VERIFIED</label><input id="issueDate" type="date" value="2026-10-01">
+<label>🔍 SOURCE OF VERIFICATION</label><textarea id="source" rows="2">Confirmed via official email from Registrar</textarea>
+<label>✅ STATUS</label><select id="status"><option>PER OFFICIAL EMAIL FROM REGISTRAR - INSTITUTION CONFIRMED ISSUANCE (See proof on file)</option><option>PER OFFICIAL EMAIL FROM REGISTRAR - NO RECORD FOUND (See proof on file)</option><option>CONSENT RECEIVED - AWAITING REGISTRAR REPLY</option></select>
+<label>📝 NOTE</label><input id="note" placeholder="Drive link to proof">
+<button class="btn btn-gold" id="saveBtn" onclick="saveCert()">💾 SAVE TO CLOUD & GENERATE QR</button>
+</div>
+<div class="box no-print" id="successBox">
+<h3 style="color:#166534;text-align:center">✅ SAVED TO CLOUD!</h3>
+<p style="text-align:center">Ref: <b id="savedId"></b></p>
+<div id="qrcode" style="display:flex;justify-content:center;margin:14px 0"></div>
+<p style="font-size:11px;word-break:break-all;text-align:center" id="qrLink"></p>
+<a id="viewLink" href="#" target="_blank" class="btn btn-dark" style="display:block;text-align:center;text-decoration:none">Open Verify Page</a>
+<button class="btn btn-green" onclick="printCert()">🖨️ PRINT CERTIFICATE WITH QR</button>
+<button class="btn btn-gold" onclick="location.reload()">Generate Another</button>
+</div>
+<div id="printArea">
+  <div style="border:6px double #0a4d2a;padding:20px;max-width:750px;margin:0 auto;background:white">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #0a4d2a;padding-bottom:12px">
+      <div style="display:flex;align-items:center;gap:10px"><img src="logo.jpg" style="width:60px;height:60px;border-radius:50%;border:2px solid #C9A227"><div><div style="font-weight:900;color:#0a4d2a;font-size:14px">ARNAUD AFROCHAINE<br>VERIFICATION LTD</div><div style="font-size:9px;color:#b8860b">CAC REGISTERED | African Roots, Global Vision</div></div></div>
+      <div style="text-align:right"><div style="font-size:10px">📍 12 Idiroko Road, Sango Ota</div><div style="font-size:10px">☎️ 0913 285 1465</div><div style="font-size:9px;font-weight:800;color:#0a4d2a">✅ OFFICIAL VERIFICATION REPORT</div></div>
+    </div>
+    <h2 style="text-align:center;color:#0a4d2a;margin:18px 0 6px">CERTIFICATE VERIFICATION REPORT</h2>
+    <div style="background:#0a4d2a;color:white;text-align:center;padding:8px;border-radius:6px;font-weight:900;margin-bottom:14px" id="pStatus">PER OFFICIAL EMAIL FROM REGISTRAR - INSTITUTION CONFIRMED ISSUANCE</div>
+    <table style="width:100%;font-size:13px;line-height:2.2;border-collapse:collapse">
+      <tr><td style="font-weight:800;width:140px">Ref Number:</td><td id="savedId">AAC/2026/112082</td></tr>
+      <tr><td style="font-weight:800">Client Name:</td><td id="pName">GBADAMASI SANUSI</td></tr>
+      <tr><td style="font-weight:800">Document Type:</td><td id="pType">Bachelor Degree Certificate</td></tr>
+      <tr><td style="font-weight:800">Certificate No:</td><td id="pCertNo">AFR-2026-865554</td></tr>
+      <tr><td style="font-weight:800">Issuer:</td><td id="pSchool">University of Lagos</td></tr>
+      <tr><td style="font-weight:800">Date Verified:</td><td id="pDate">2026-10-01</td></tr>
+    </table>
+    <div style="display:flex;justify-content:space-between;align-items:end;margin-top:20px;border-top:2px dashed #0a4d2a;padding-top:14px">
+      <div><div id="printQR"></div><div style="font-size:8px;margin-top:6px;word-break:break-all;max-width:150px" id="printLink"></div></div>
+      <div style="text-align:center"><div style="width:160px;border-top:1px solid black;margin-bottom:4px"></div><div style="font-size:10px;font-weight:800">Authorized Signature</div><div style="font-size:9px">Arnaud Afrochaine Verification Ltd</div><img src="logo.jpg" style="width:50px;opacity:0.2;margin-top:8px"></div>
+    </div>
+    <div style="text-align:center;font-size:8px;color:#666;margin-top:16px">This is a computer generated report. Verify online at: https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html</div>
+  </div>
+</div>
+</body>
+</html>
