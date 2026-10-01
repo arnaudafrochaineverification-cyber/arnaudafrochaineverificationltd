@@ -26,12 +26,64 @@ body{background:#f6fff6}
 .wa{position:fixed;bottom:16px;right:16px;background:#25D366;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;z-index:999}
 .resbox{margin-top:14px;border-radius:12px;overflow:hidden;border:2px solid #0a4d2a;display:none}
 </style>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+  authDomain: "arnaudafrochaineverification.firebaseapp.com",
+  projectId: "arnaudafrochaineverification",
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.check = async function(){
+ const raw = document.getElementById('cert').value.trim().toUpperCase();
+ const resDiv = document.getElementById('res');
+ if(!raw){resDiv.style.display='block';resDiv.innerHTML='<div style="padding:15px;background:#ffebee;text-align:center">❌ Enter Reference</div>';return;}
+ resDiv.style.display='block';
+ resDiv.innerHTML='<div style="padding:20px;text-align:center;background:#fff8e1">⏳ Checking Cloud... '+raw+'...</div>';
+ try{
+  const snap = await getDoc(doc(db, "certificates", raw));
+  if(!snap.exists()){
+   resDiv.innerHTML='<div style="padding:20px;background:#ffebee;text-align:center"><b>❌ NOT FOUND</b><br>'+raw+' no dey for our Cloud yet. Add am for Oga Generator first.<br><br><a href="oga-generator.html" style="background:#0a4d2a;color:white;padding:8px 14px;border-radius:20px;text-decoration:none">Go to Generator</a></div>';
+   return;
+  }
+  const d = snap.data();
+  resDiv.innerHTML=`
+<div style="background:white">
+<div style="background:#0a4d2a;color:white;padding:12px;text-align:center;font-weight:900;margin:8px;border-radius:8px">✅ VERIFIED - ${d.status || 'AUTHENTIC'}</div>
+<div style="padding:14px;line-height:2.2;font-size:13px">
+<b>Ref:</b> ${d.ref}<br>
+<b>Client:</b> ${d.fullName || d.name || d.clientName}<br>
+<b>Document:</b> ${d.certificateType || d.course || d.docType}<br>
+<b>Cert No:</b> ${d.certificateNumber || d.certNo}<br>
+<b>Issuer:</b> ${d.school || d.issuer}<br>
+<b>Date Verified:</b> ${d.issueDate || d.dateVerified}<br>
+<b>Source:</b> CLOUD FIREBASE<br>
+</div>
+<div style="margin:14px;border:2px dashed #0a4d2a;padding:12px;text-align:center;border-radius:12px">
+<div style="font-weight:800;color:#0a4d2a">📱 QR VERIFY</div>
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref=${d.ref}" style="margin:10px 0">
+<div style="font-size:9px;word-break:break-all">.../verify.html?ref=${d.ref}</div>
+<div style="margin-top:8px"><a href="verify.html?ref=${d.ref}" style="background:#0a4d2a;color:white;padding:8px 14px;border-radius:20px;text-decoration:none;font-size:12px">View Full Report →</a></div>
+</div>
+</div>`;
+  resDiv.scrollIntoView({behavior:'smooth'});
+ }catch(e){
+  resDiv.innerHTML='<div style="padding:20px;background:#ffebee;text-align:center">❌ Error: '+e.message+'</div>';
+ }
+}
+</script>
 </head>
 <body>
 <div class="top">📍 12 Idiroko Road, Sango Ota • ☎️ 0913 285 1465 • ✉️ arnaudafrochaine@gmail.com</div>
 <div class="nav"><div class="logo"><img src="logo.jpg"><b>ARNAUD<br>AFROCHAINE<br><span style="color:#b8860b;font-size:8px">VERIFICATION LTD</span></b></div><div style="font-size:10px;color:#0a4d2a;font-weight:700">✅ CAC REGISTERED</div></div>
 <div class="hero"><h1>RESTORE TRUST IN CERTIFICATES WORLDWIDE</h1><p style="margin-top:6px;font-size:12px">No More Fake Credentials. Verify Any Certificate in 5 Seconds<br>Trusted by Schools • Employers • Government</p></div>
-<div class="box"><h3>🔍 Verify Certificate Here</h3><input id="cert" placeholder="Enter Ref e.g AFR-V-2026-001"><button onclick="check()">VERIFY NOW →</button><div id="res" class="resbox"></div></div>
+<div class="box"><h3>🔍 Verify Certificate Here</h3><input id="cert" placeholder="Enter Ref e.g AAC/2026/112082" value="AAC/2026/112082"><button onclick="check()">VERIFY NOW →</button><div id="res" class="resbox"></div></div>
 
 <div class="sec"><h2>🌍 Global Coverage - 30 Countries</h2><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;font-size:10px;font-weight:700">
 <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇳🇬 Nigeria</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇬🇭 Ghana</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇬🇧 UK</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇺🇸 USA</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇨🇦 Canada</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇿🇦 South Africa</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇩🇪 Germany</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇫🇷 France</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇦🇺 Australia</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇮🇳 India</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇨🇳 China</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇯🇵 Japan</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇦🇪 UAE</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇸🇦 Saudi</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇰🇪 Kenya</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇪🇬 Egypt</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇷🇼 Rwanda</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇹🇿 Tanzania</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇺🇬 Uganda</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇨🇲 Cameroon</div>
@@ -53,56 +105,5 @@ body{background:#f6fff6}
 
 <div class="foot"><b>ARNAUD AFROCHAINE VERIFICATION LTD</b><br>12 Idiroko Road, Sango Ota, Nigeria<br>© 2026 | CAC REGISTERED | African Roots, Global Vision</div>
 <a class="wa" href="https://wa.me/2349132851465">💬</a>
-
-<script>
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1jA-rUXd-KK7OR09B1FkKoSfmkqWHlfMqWaTI1Xeby80/export?format=csv";
-let db = {};
-async function loadDB(){
- try{
-  const res = await fetch(SHEET_CSV_URL);
-  const text = await res.text();
-  const rows = text.split("\n").slice(1);
-  rows.forEach(r=>{
-   const c = r.split(",").map(x=>x.replace(/^"|"$/g,"").trim());
-   if(c[0]) db[c[0].toUpperCase()] = {clientName:c[1],docType:c[2],certNo:c[3],issuer:c[4],dateVerified:c[5],source:c[6],outcome:c[7]};
-  });
- }catch(e){console.log(e)}
-}
-loadDB();
-
-function check(){
- const raw = document.getElementById('cert').value.trim().toUpperCase();
- const resDiv = document.getElementById('res');
- if(!raw){resDiv.style.display='block';resDiv.innerHTML='<div style="padding:15px;background:#ffebee;text-align:center">❌ Enter Reference</div>';return;}
- resDiv.style.display='block';
- resDiv.innerHTML='<div style="padding:20px;text-align:center;background:#fff8e1">⏳ Verifying '+raw+'...</div>';
- setTimeout(()=>{
-  const d = db[raw];
-  if(!d){
-   resDiv.innerHTML='<div style="padding:20px;background:#ffebee;text-align:center"><b>❌ NOT FOUND</b><br>'+raw+' no dey for our Google Sheet. Add am for Sheet first.</div>';
-   return;
-  }
-  resDiv.innerHTML=`
-<div style="background:white">
-<div style="background:#0a4d2a;color:white;padding:12px;text-align:center;font-weight:900;margin:8px;border-radius:8px">✅ VERIFIED - ${d.outcome}</div>
-<div style="padding:14px;line-height:2.2;font-size:13px">
-<b>Ref:</b> ${raw}<br>
-<b>Client:</b> ${d.clientName}<br>
-<b>Document:</b> ${d.docType}<br>
-<b>Cert No:</b> ${d.certNo}<br>
-<b>Issuer:</b> ${d.issuer}<br>
-<b>Date Verified:</b> ${d.dateVerified}<br>
-<b>Source:</b> ${d.source}<br>
-</div>
-<div style="margin:14px;border:2px dashed #0a4d2a;padding:12px;text-align:center;border-radius:12px">
-<div style="font-weight:800;color:#0a4d2a">📱 QR VERIFY</div>
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref=${raw}" style="margin:10px 0">
-<div style="font-size:9px;word-break:break-all">.../verify.html?ref=${raw}</div>
-</div>
-</div>`;
-  resDiv.scrollIntoView({behavior:'smooth'});
- }, 600);
-}
-</script>
 </body>
 </html>
