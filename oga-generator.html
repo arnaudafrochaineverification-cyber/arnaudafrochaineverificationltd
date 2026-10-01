@@ -5,49 +5,38 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const OGA_PASSWORD = "Gbenga333649";
+const p = prompt("🔐 OGA ONLY - Enter Password:");
+if(p !== OGA_PASSWORD){ document.body.innerHTML="<h1 style='text-align:center;margin-top:100px;color:red'>❌ WRONG PASSWORD<br><small>Oga only!</small></h1>"; throw new Error("Blocked"); }
 const firebaseConfig = { apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs", authDomain: "arnaudafrochaineverification.firebaseapp.com", projectId: "arnaudafrochaineverification", storageBucket: "arnaudafrochaineverification.firebasestorage.app", messagingSenderId: "268502946630", appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47", measurementId: "G-Y52LEBJM7Q" };
 const app = initializeApp(firebaseConfig); const db = getFirestore(app);
-function safeHeader(status){
-  let s = (status||"").toUpperCase();
-  if(s.includes("AUTHENTIC")||s.includes("GENUINE")) return "PER OFFICIAL EMAIL FROM REGISTRAR";
-  return status;
-}
 window.generate = async()=>{
-  const ref = document.getElementById('ref').value.trim();
-  const name = document.getElementById('name').value.trim();
-  const certNo = document.getElementById('certNo').value.trim();
-  const type = document.getElementById('type').value;
-  const school = document.getElementById('school').value.trim();
-  const date = document.getElementById('date').value.trim();
-  const source = document.getElementById('source').value.trim();
-  const status = document.getElementById('status').value;
+  const ref=document.getElementById('ref').value.trim(); const name=document.getElementById('name').value.trim();
+  const certNo=document.getElementById('certNo').value.trim(); const type=document.getElementById('type').value;
+  const school=document.getElementById('school').value.trim(); const date=document.getElementById('date').value.trim();
+  const source=document.getElementById('source').value.trim(); const status=document.getElementById('status').value;
   if(!ref||!name){ alert("Put Ref and Name"); return; }
-  const data = { ref, name, fullName:name, certificateNumber:certNo, certificateType:type, course:type, school, institution:school, issueDate:date, source, status };
+  const data={ ref, name, fullName:name, certificateNumber:certNo, certificateType:type, course:type, school, institution:school, issueDate:date, source, status };
   await setDoc(doc(db,"certificates",ref), data);
-  document.getElementById('pRef').innerText=ref;
-  document.getElementById('pCertNo').innerText=certNo;
-  document.getElementById('pClient').innerText=name;
-  document.getElementById('pDocType').innerText=type;
-  document.getElementById('pIssuer').innerText=school;
-  document.getElementById('pDate').innerText=date;
-  document.getElementById('pSource').innerText=source;
-  document.getElementById('pStatusHeader').innerText=safeHeader(status);
-  document.getElementById('pStatus').innerText=status;
-  document.getElementById('qrcode').innerHTML="";
+  document.getElementById('pRef').innerText=ref; document.getElementById('pCertNo').innerText=certNo;
+  document.getElementById('pClient').innerText=name; document.getElementById('pDocType').innerText=type;
+  document.getElementById('pIssuer').innerText=school; document.getElementById('pDate').innerText=date;
+  document.getElementById('pSource').innerText=source; 
+  document.getElementById('pStatusHeader').innerText="PER OFFICIAL EMAIL FROM REGISTRAR";
+  document.getElementById('pStatus').innerText=status; document.getElementById('qrcode').innerHTML="";
   new QRCode(document.getElementById('qrcode'), { text: `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref=${encodeURIComponent(ref)}`, width:110, height:110 });
-  document.getElementById('printArea').style.display='block';
-  alert("Saved to cloud! Now PRINT");
+  document.getElementById('printArea').style.display='block'; alert("Saved! Now PRINT");
 }
 </script>
-<style>body{font-family:Arial;background:#0f172a;color:white;padding:12px} input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:none} button{padding:12px 20px;background:#C9A227;color:#0a4d2a;font-weight:900;border:none;border-radius:8px;cursor:pointer;width:100%;margin-top:10px} #printArea{background:white;color:black;padding:14px;margin-top:20px;display:none} .cert{border:4px solid #0a4d2a;padding:10px} .hdr{text-align:center;background:#0a4d2a;color:#C9A227;padding:8px;font-weight:900} table{width:100%;border-collapse:collapse;margin-top:10px} td{border:1px solid #333;padding:4px;font-size:12px} @media print{body *{visibility:hidden} #printArea,#printArea *{visibility:visible} #printArea{position:absolute;left:0;top:0;width:100%}}</style>
+<style>body{font-family:Arial;background:#0f172a;color:white;padding:12px} input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:none} button{padding:12px;background:#C9A227;color:#0a4d2a;font-weight:900;border:none;border-radius:8px;cursor:pointer;width:100%;margin-top:10px} #printArea{background:white;color:black;padding:14px;margin-top:20px;display:none} .cert{border:4px solid #0a4d2a;padding:10px} table{width:100%;border-collapse:collapse;margin-top:10px} td{border:1px solid #333;padding:4px;font-size:12px} @media print{body *{visibility:hidden} #printArea,#printArea *{visibility:visible} #printArea{position:absolute;left:0;top:0;width:100%}}</style>
 </head><body>
-<h2 style="text-align:center;color:#C9A227">OGA GENERATOR - PRIVATE (With Print)</h2>
+<h2 style="text-align:center;color:#C9A227">OGA GENERATOR - PRIVATE 🔐</h2>
 <input id="ref" placeholder="Ref No e.g AFR-V-2026-001">
 <input id="name" placeholder="Client Name e.g IDOHOU ARNAUD">
 <input id="certNo" placeholder="Cert No e.g SS1234">
 <select id="type"><option>Bachelor Degree Certificate</option><option>Master Degree</option><option>WAEC</option><option>NECO</option><option>NYSC</option></select>
 <input id="school" placeholder="School e.g University of Lagos - UNILAG">
-<input id="date" placeholder="Date Verified e.g 01 October 2026" value="01 October 2026">
+<input id="date" placeholder="Date Verified" value="01 October 2026">
 <input id="source" placeholder="Source e.g Confirmed via official email from Registrar, UNILAG">
 <select id="status">
 <option>PER OFFICIAL EMAIL FROM REGISTRAR - INSTITUTION CONFIRMED ISSUANCE (See proof on file)</option>
@@ -55,6 +44,5 @@ window.generate = async()=>{
 <option>PER OFFICIAL EMAIL FROM REGISTRAR - DISCREPANCY NOTED (See proof on file)</option>
 </select>
 <button onclick="generate()">SAVE TO CLOUD & GENERATE PDF</button>
-
-<div id="printArea"><div class="cert"><div style="text-align:center;font-weight:900;color:#0a4d2a">ARNAUD AFROCHAINE VERIFICATION LTD</div><div style="text-align:center;font-size:10px;color:#C9A227">Certificate of Verification</div><div id="pStatusHeader" style="text-align:center;background:#0a4d2a;color:#C9A227;padding:6px;margin:8px 0;font-size:11px;font-weight:900">PER OFFICIAL EMAIL FROM REGISTRAR</div><table><tr><td>Ref No:</td><td id="pRef"></td><td rowspan="7"><div id="qrcode"></div></td></tr><tr><td>Cert No:</td><td id="pCertNo"></td></tr><tr><td>Client:</td><td id="pClient"></td></tr><tr><td>Doc Type:</td><td id="pDocType"></td></tr><tr><td>Issuer:</td><td id="pIssuer"></td></tr><tr><td>Date:</td><td id="pDate"></td></tr><tr><td>Source:</td><td id="pSource"></td></tr></table><div style="margin-top:8px;font-size:10px">Status: <b id="pStatus"></b> (This report is based on official response from institution. See proof on file)</div></div><br><button onclick="window.print()">🖨️ PRINT OFFICIAL REPORT</button></div>
+<div id="printArea"><div class="cert"><div style="text-align:center;font-weight:900;color:#0a4d2a">ARNAUD AFROCHAINE VERIFICATION LTD</div><div style="text-align:center;font-size:10px;color:#C9A227">Certificate of Verification</div><div id="pStatusHeader" style="text-align:center;background:#0a4d2a;color:#C9A227;padding:6px;margin:8px 0;font-size:11px;font-weight:900">PER OFFICIAL EMAIL FROM REGISTRAR</div><table><tr><td>Ref No:</td><td id="pRef"></td><td rowspan="7"><div id="qrcode"></div></td></tr><tr><td>Cert No:</td><td id="pCertNo"></td></tr><tr><td>Client:</td><td id="pClient"></td></tr><tr><td>Doc Type:</td><td id="pDocType"></td></tr><tr><td>Issuer:</td><td id="pIssuer"></td></tr><tr><td>Date:</td><td id="pDate"></td></tr><tr><td>Source:</td><td id="pSource"></td></tr></table><div style="margin-top:8px;font-size:10px">Status: <b id="pStatus"></b></div><div style="margin-top:6px;font-size:8px;color:#64748b">This report is based on official response from institution. See proof on file. Ref: <span id="pRef2"></span></div></div><br><button onclick="window.print()">🖨️ PRINT OFFICIAL REPORT</button></div>
 </body></html>
