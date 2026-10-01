@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Oga Generator - BIG FIREBASE CLOUD</title>
+<title>Oga Generator - LOCKED 🔐</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const OGA_PIN = "Gbenga333649";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
@@ -21,29 +23,32 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+window.checkPin = function(){
+  const pin = document.getElementById('pinInput').value;
+  if(pin === OGA_PIN){
+    document.getElementById('pinBox').style.display="none";
+    document.getElementById('formBox').style.display="block";
+  } else { alert("❌ Wrong PIN Oga!"); }
+}
 window.autoGenID = function(){
   const year = new Date().getFullYear();
   const rand = Math.floor(100000 + Math.random()*900000);
   document.getElementById('certId').value = `AAC/${year}/${rand}`;
 }
-
 window.saveCert = async function(){
   const certId = document.getElementById('certId').value.trim();
   const fullName = document.getElementById('fullName').value.trim();
   const institution = document.getElementById('institution').value.trim();
-  if(!fullName){ alert("Fill Client Name Oga"); return; }
+  if(!fullName){ alert("Fill Client Name"); return; }
   if(!institution){ alert("Fill Institution"); return; }
-
   const verifyLink = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref=${certId}`;
   const btn = document.getElementById('saveBtn');
   btn.innerText = "Saving to Cloud... ⏳"; btn.disabled = true;
-
   try{
     await setDoc(doc(db, "certificates", certId), {
       ref: certId,
       certificateNumber: document.getElementById('certNo').value,
-      name: fullName,
-      fullName: fullName,
+      name: fullName, fullName: fullName,
       certificateType: document.getElementById('certType').value,
       school: institution,
       course: document.getElementById('certType').value,
@@ -54,63 +59,54 @@ window.saveCert = async function(){
       verifyLink: verifyLink,
       createdAt: new Date().toISOString()
     });
-
     document.getElementById('formBox').style.display="none";
     document.getElementById('successBox').style.display="block";
     document.getElementById('savedId').innerText = certId;
     document.getElementById('qrcode').innerHTML="";
-    new QRCode(document.getElementById("qrcode"), {
-      text: verifyLink,
-      width: 220, height: 220,
-      colorDark : "#000000",
-      colorLight : "#ffffff",
-      correctLevel : QRCode.CorrectLevel.H
-    });
+    new QRCode(document.getElementById("qrcode"), { text: verifyLink, width: 220, height: 220, correctLevel: QRCode.CorrectLevel.H });
     document.getElementById('qrLink').innerText = verifyLink;
     document.getElementById('viewLink').href = verifyLink;
-    btn.innerText = "SAVED TO CLOUD ✅"; 
-  }catch(e){ 
-    alert("Error: "+e.message); 
-    btn.innerText="💾 SAVE TO CLOUD & GENERATE QR"; 
-    btn.disabled=false; 
-  }
+  }catch(e){ alert("Error: "+e.message); btn.innerText="💾 SAVE TO CLOUD & GENERATE QR"; btn.disabled=false; }
 }
 </script>
 <style>
-body{font-family:Arial;background:#f4f6f9;padding:12px} 
-.box{max-width:520px;margin:20px auto;background:white;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+body{font-family:Arial;background:#0f172a;padding:12px} 
+.box{max-width:520px;margin:20px auto;background:white;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.2)}
 input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #cbd5e1;border-radius:8px;box-sizing:border-box}
 .btn{width:100%;padding:12px;border:none;border-radius:30px;font-weight:900;cursor:pointer;margin-top:10px}
 .btn-gold{background:#facc15} .btn-dark{background:#0f172a;color:white}
 label{font-size:11px;font-weight:800;color:#14532d;margin-top:10px;display:block}
-#successBox{display:none;text-align:center}
+#successBox,#formBox{display:none}
+#pinBox{text-align:center}
 </style>
 </head>
 <body>
+<div class="box" id="pinBox">
+<h2>🔐 OGA LOCKED</h2>
+<p style="font-size:12px;color:#64748b">Enter Oga PIN</p>
+<input id="pinInput" type="password" placeholder="Enter PIN">
+<button class="btn btn-dark" onclick="checkPin()">UNLOCK GENERATOR 🔓</button>
+<p style="font-size:9px;color:#94a3b8;margin-top:10px">PIN: Gbenga333649</p>
+</div>
 <div class="box" id="formBox">
 <h2 style="text-align:center;color:#0f172a">ARNAUD AFROCHAINE<br><span style="font-size:12px;color:#ca8a04">VERIFICATION LTD - CLOUD GENERATOR</span></h2>
-
 <label>📌 REFERENCE NUMBER</label>
 <div style="display:flex;gap:6px"><input id="certId" readonly><button type="button" onclick="autoGenID()" style="padding:10px;border-radius:8px;border:none;background:#e2e8f0;font-weight:800">Auto</button></div>
-
-<label>👤 CLIENT NAME</label><input id="fullName" placeholder="IDOHOU ARNAUD">
+<label>👤 CLIENT NAME</label><input id="fullName" placeholder="GBADAMASI SANUSI">
 <label>📄 DOCUMENT TYPE</label><select id="certType"><option>Bachelor Degree Certificate</option><option>Master Degree</option><option>WAEC / NECO</option><option>NYSC Certificate</option><option>Professional Certificate</option></select>
 <label>📜 CERTIFICATE NUMBER</label><input id="certNo" placeholder="SS1234">
-<label>🎓 SCHOOL / ISSUER</label><input id="institution" placeholder="University of Lagos - UNILAG">
+<label>🎓 SCHOOL / ISSUER</label><input id="institution" placeholder="University of Lagos">
 <label>📅 DATE VERIFIED</label><input id="issueDate" type="date" value="2026-10-01">
-<label>🔍 SOURCE OF VERIFICATION</label><textarea id="source" rows="2">Confirmed via official email from Registrar, UNILAG - registrar@unilag.edu.ng dated 30 Sept 2026</textarea>
-<label>✅ STATUS - SAFE WORDING</label><select id="status"><option>PER OFFICIAL EMAIL FROM REGISTRAR - INSTITUTION CONFIRMED ISSUANCE (See proof on file)</option><option>PER OFFICIAL EMAIL FROM REGISTRAR - NO RECORD FOUND (See proof on file)</option><option>CONSENT RECEIVED - AWAITING REGISTRAR REPLY</option><option>UNABLE TO VERIFY - INSTITUTION DID NOT RESPOND</option></select>
-<label>📝 NOTE / EVIDENCE LINK</label><input id="note" placeholder="Drive link to proof">
-
+<label>🔍 SOURCE OF VERIFICATION</label><textarea id="source" rows="2">Confirmed via official email from Registrar</textarea>
+<label>✅ STATUS</label><select id="status"><option>PER OFFICIAL EMAIL FROM REGISTRAR - INSTITUTION CONFIRMED ISSUANCE (See proof on file)</option><option>PER OFFICIAL EMAIL FROM REGISTRAR - NO RECORD FOUND (See proof on file)</option><option>CONSENT RECEIVED - AWAITING REGISTRAR REPLY</option></select>
+<label>📝 NOTE</label><input id="note" placeholder="Drive link to proof">
 <button class="btn btn-gold" id="saveBtn" onclick="saveCert()">💾 SAVE TO CLOUD & GENERATE QR</button>
-<p style="font-size:9px;color:#94a3b8;text-align:center;margin-top:8px">Data dey save for Firebase Cloud — e go show for verify.html globally</p>
 </div>
-
 <div class="box" id="successBox">
-<h3 style="color:#166534">✅ SAVED TO CLOUD!</h3>
-<p>Ref: <b id="savedId"></b></p>
+<h3 style="color:#166534;text-align:center">✅ SAVED TO CLOUD!</h3>
+<p style="text-align:center">Ref: <b id="savedId"></b></p>
 <div id="qrcode" style="display:flex;justify-content:center;margin:14px 0"></div>
-<p style="font-size:11px;word-break:break-all" id="qrLink"></p>
+<p style="font-size:11px;word-break:break-all;text-align:center" id="qrLink"></p>
 <a id="viewLink" href="#" target="_blank" class="btn btn-dark" style="display:block;text-align:center;text-decoration:none">Open Verify Page</a>
 <button class="btn btn-gold" onclick="location.reload()">Generate Another</button>
 </div>
