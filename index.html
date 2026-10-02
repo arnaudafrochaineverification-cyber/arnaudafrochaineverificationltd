@@ -1,348 +1,171 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Admin Portal | ARNAUD AFROCHAINE VERIFICATION LTD</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      background: #f4f7f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 430px;
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.10);
-    }
-
-    .logo {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .logo h1 {
-      font-size: 22px;
-      color: #146b3a;
-      margin-bottom: 8px;
-    }
-
-    .logo p {
-      color: #666;
-      font-size: 14px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 25px;
-      color: #222;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 7px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    input {
-      width: 100%;
-      padding: 13px;
-      margin-bottom: 18px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
-      background: #146b3a;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #0e512b;
-    }
-
-    button:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    .message {
-      margin-top: 15px;
-      text-align: center;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .footer {
-      margin-top: 25px;
-      text-align: center;
-      font-size: 12px;
-      color: #777;
-    }
-  </style>
-</head>
-
-<body>
-
-  <div class="container">
-
-    <div class="logo">
-      <h1>
-        ARNAUD AFROCHAINE<br>
-        VERIFICATION LTD
-      </h1>
-
-      <p>Certificate Verification System</p>
-    </div>
-
-    <h2>Admin Portal</h2>
-
-    <form id="loginForm">
-
-      <label for="email">
-        Admin Email
-      </label>
-
-      <input
-        type="email"
-        id="email"
-        placeholder="Enter admin email"
-        autocomplete="username"
-        required
-      >
-
-      <label for="password">
-        Password
-      </label>
-
-      <input
-        type="password"
-        id="password"
-        placeholder="Enter password"
-        autocomplete="current-password"
-        required
-      >
-
-      <button
-        type="submit"
-        id="loginButton"
-      >
-        LOGIN
-      </button>
-
-    </form>
-
-    <div
-      id="message"
-      class="message"
-    ></div>
-
-    <div class="footer">
-      © 2026 ARNAUD AFROCHAINE VERIFICATION LTD
-    </div>
-
-  </div>
-
-
-  <script type="module">
-
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-
-    import {
-      getAuth,
-      signInWithEmailAndPassword
-    }
-      from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-
-
-    /*
-      FIREBASE CONFIGURATION
-    */
-
-    const firebaseConfig = {
-
-      apiKey:
-        "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-
-      authDomain:
-        "arnaudafrochaineverification.firebaseapp.com",
-
-      projectId:
-        "arnaudafrochaineverification",
-
-      storageBucket:
-        "arnaudafrochaineverification.firebasestorage.app",
-
-      messagingSenderId:
-        "268502946630",
-
-      appId:
-        "1:268502946630:web:c7abe320c83a1d9c3b4b47",
-
-      measurementId:
-        "G-Y52LEBJM7Q"
-
-    };
-
-
-    /*
-      START FIREBASE
-    */
-
-    const app =
-      initializeApp(firebaseConfig);
-
-    const auth =
-      getAuth(app);
-
-
-    /*
-      LOGIN FORM
-    */
-
-    const loginForm =
-      document.getElementById("loginForm");
-
-    const loginButton =
-      document.getElementById("loginButton");
-
-    const message =
-      document.getElementById("message");
-
-
-    loginForm.addEventListener(
-      "submit",
-      async (event) => {
-
-        event.preventDefault();
-
-
-        const email =
-          document
-            .getElementById("email")
-            .value
-            .trim();
-
-        const password =
-          document
-            .getElementById("password")
-            .value;
-
-
-        message.style.color = "#333";
-
-        message.textContent =
-          "Signing in...";
-
-        loginButton.disabled = true;
-
-
-        try {
-
-          await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
-
-
-          message.style.color =
-            "#146b3a";
-
-          message.textContent =
-            "Login successful. Opening dashboard...";
-
-
-          /*
-            SEND ADMIN TO DASHBOARD
-          */
-
-          window.location.href =
-            "dashboard.html";
-
-
-        } catch (error) {
-
-          console.error(error);
-
-          message.style.color =
-            "#b00020";
-
-
-          if (
-            error.code ===
-            "auth/invalid-credential"
-          ) {
-
-            message.textContent =
-              "Incorrect email or password.";
-
-          } else if (
-            error.code ===
-            "auth/user-not-found"
-          ) {
-
-            message.textContent =
-              "Admin account was not found.";
-
-          } else if (
-            error.code ===
-            "auth/wrong-password"
-          ) {
-
-            message.textContent =
-              "Incorrect password.";
-
-          } else if (
-            error.code ===
-            "auth/too-many-requests"
-          ) {
-
-            message.textContent =
-              "Too many attempts. Please try again later.";
-
-          } else {
-
-            message.textContent =
-              "Login failed. Please try again.";
-
-          }
-
-          loginButton.disabled = false;
-
-        }
-
-      }
-
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+  authDomain: "arnaudafrochaineverification.firebaseapp.com",
+  projectId: "arnaudafrochaineverification",
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.check = async function () {
+
+  const raw = document
+    .getElementById("cert")
+    .value
+    .trim()
+    .toUpperCase();
+
+  const resDiv = document.getElementById("res");
+
+  if (!raw) {
+    resDiv.style.display = "block";
+    resDiv.innerHTML = `
+      <div style="padding:15px;background:#ffebee;text-align:center">
+        ❌ Please enter a certificate reference.
+      </div>`;
+    return;
+  }
+
+  resDiv.style.display = "block";
+  resDiv.innerHTML = `
+    <div style="padding:20px;text-align:center;background:#fff8e1">
+      ⏳ Checking certificate... ${raw}
+    </div>`;
+
+  try {
+
+    const q = query(
+      collection(db, "certificates"),
+      where("ref", "==", raw)
     );
 
-  </script>
+    const snapshot = await getDocs(q);
 
-</body>
-</html>
+    if (snapshot.empty) {
+
+      resDiv.innerHTML = `
+        <div style="padding:20px;background:#ffebee;text-align:center">
+          <b>❌ CERTIFICATE NOT FOUND</b><br><br>
+          Reference <b>${raw}</b> could not be found in the verification database.
+          <br><br>
+          Please check the certificate reference and try again.
+        </div>`;
+
+      return;
+    }
+
+    const snap = snapshot.docs[0];
+    const d = snap.data();
+
+    const status = d.status || "VERIFIED";
+    const fullName = d.fullName || d.name || "Not provided";
+    const certificateType =
+      d.certificateType || d.course || d.docType || "Certificate";
+    const certificateNumber =
+      d.certificateNumber || d.certNo || "Not provided";
+    const issuer =
+      d.school || d.issuer || "Not provided";
+    const issueDate =
+      d.issueDate || d.dateVerified || "Not provided";
+    const reference =
+      d.ref || raw;
+
+    const publicVerifyUrl =
+      "https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/?id=" +
+      encodeURIComponent(reference);
+
+    const qrUrl =
+      "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
+      encodeURIComponent(publicVerifyUrl);
+
+    resDiv.innerHTML = `
+      <div style="background:white">
+
+        <div style="
+          background:#0a4d2a;
+          color:white;
+          padding:12px;
+          text-align:center;
+          font-weight:900;
+          margin:8px;
+          border-radius:8px">
+          ✅ ${status}
+        </div>
+
+        <div style="
+          padding:14px;
+          line-height:2.2;
+          font-size:13px">
+
+          <b>Reference:</b> ${reference}<br>
+          <b>Name:</b> ${fullName}<br>
+          <b>Document:</b> ${certificateType}<br>
+          <b>Certificate No:</b> ${certificateNumber}<br>
+          <b>Issuing Institution:</b> ${issuer}<br>
+          <b>Issue Date:</b> ${issueDate}<br>
+          <b>Verification Source:</b> ARNAUD AFROCHAINE VERIFICATION LTD
+
+        </div>
+
+        <div style="
+          margin:14px;
+          border:2px dashed #0a4d2a;
+          padding:12px;
+          text-align:center;
+          border-radius:12px">
+
+          <div style="
+            font-weight:800;
+            color:#0a4d2a">
+            📱 QR VERIFICATION
+          </div>
+
+          <img
+            src="${qrUrl}"
+            alt="QR Verification"
+            style="margin:10px 0;width:200px;height:200px">
+
+          <div style="
+            font-size:9px;
+            word-break:break-all">
+            ${publicVerifyUrl}
+          </div>
+
+        </div>
+
+      </div>`;
+
+    resDiv.scrollIntoView({
+      behavior: "smooth"
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    resDiv.innerHTML = `
+      <div style="
+        padding:20px;
+        background:#ffebee;
+        text-align:center">
+
+        ❌ Verification service error.<br><br>
+        Please try again later.
+
+      </div>`;
+  }
+};
+</script>
