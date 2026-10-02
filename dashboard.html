@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Dashboard - ARNAUD AFROCHAINE VERIFICATION LTD</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f7f6;
+      color: #222;
+    }
+
+    header {
+      background: #176b45;
+      color: white;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    #logoutBtn {
+      background: white;
+      color: #176b45;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 7px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 25px auto;
+      padding: 0 15px;
+    }
+
+    .welcome {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+    }
+
+    .card {
+      background: white;
+      padding: 22px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #176b45;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 14px;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .save-btn {
+      margin-top: 18px;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 7px;
+      background: #176b45;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .save-btn:hover {
+      background: #0f5133;
+    }
+
+    #message {
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    .search {
+      margin-bottom: 15px;
+    }
+
+    .certificate {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 12px;
+      background: #fafafa;
+    }
+
+    .certificate strong {
+      color: #176b45;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-top: 7px;
+    }
+
+    .verified {
+      background: #d8f5df;
+      color: #176b45;
+    }
+
+    .pending {
+      background: #fff1c7;
+      color: #765800;
+    }
+
+    .rejected {
+      background: #ffdede;
+      color: #a00000;
+    }
+
+    .link {
+      display: inline-block;
+      margin-top: 8px;
+      color: #176b45;
+      word-break: break-all;
+    }
+
+    @media (max-width: 700px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>ARNAUD AFROCHAINE VERIFICATION LTD</h1>
+  <button id="logoutBtn">Logout</button>
+</header>
+
+<main>
+
+  <div class="welcome">
+    <h2>Admin Dashboard</h2>
+    <p id="adminEmail">Checking administrator...</p>
+  </div>
+
+  <div class="card">
+
+    <h2>Add Certificate</h2>
+
+    <form id="certificateForm">
+
+      <div class="grid">
+
+        <div>
+          <label>Certificate Number</label>
+          <input id="certificateNumber" required>
+        </div>
+
+        <div>
+          <label>Reference</label>
+          <input id="ref" required>
+        </div>
+
+        <div>
+          <label>Full Name</label>
+          <input id="fullName" required>
+        </div>
+
+        <div>
+          <label>Certificate Type</label>
+          <input id="certificateType" placeholder="University Degree / WAEC / NYSC..." required>
+        </div>
+
+        <div>
+          <label>Course / Qualification</label>
+          <input id="course">
+        </div>
+
+        <div>
+          <label>School / Awarding Institution</label>
+          <input id="school" required>
+        </div>
+
+        <div>
+          <label>Issue Date</label>
+          <input id="issueDate" type="date">
+        </div>
+
+        <div>
+          <label>Status</label>
+          <select id="status">
+            <option value="Verified">Verified</option>
+            <option value="Pending">Pending</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+
+        <div class="full">
+          <label>Note</label>
+          <textarea id="note"></textarea>
+        </div>
+
+      </div>
+
+      <button class="save-btn" type="submit">
+        Add Certificate
+      </button>
+
+      <div id="message"></div>
+
+    </form>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>Certificate Records</h2>
+
+    <input
+      class="search"
+      id="search"
+      placeholder="Search by certificate number, name or reference..."
+    >
+
+    <div id="certificateList">
+      Loading certificates...
+    </div>
+
+  </div>
+
+</main>
+
+
+<script type="module">
+
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+
+  import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    orderBy
+  } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+
+  const firebaseConfig = {
+
+    apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+
+    authDomain:
+      "arnaudafrochaineverification.firebaseapp.com",
+
+    projectId:
+      "arnaudafrochaineverification",
+
+    storageBucket:
+      "arnaudafrochaineverification.firebasestorage.app",
+
+    messagingSenderId:
+      "268502946630",
+
+    appId:
+      "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+
+    measurementId:
+      "G-Y52LEBJM7Q"
+  };
+
+
+  const app = initializeApp(firebaseConfig);
+
+  const auth = getAuth(app);
+
+  const db = getFirestore(app);
+
+
+  /*
+    PUBLIC VERIFICATION WEBSITE
+
+    This is kept separate from the admin website.
+  */
+
+  const PUBLIC_VERIFICATION_URL =
+    "https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/?id=";
+
+
+  /*
+    CHECK LOGIN
+  */
+
+  onAuthStateChanged(auth, (user) => {
+
+    if (!user) {
+
+      window.location.href = "index.html";
+
+      return;
+    }
+
+    document.getElementById("adminEmail").textContent =
+      "Logged in as: " + user.email;
+
+    loadCertificates();
+
+  });
+
+
+  /*
+    LOGOUT
+  */
+
+  document.getElementById("logoutBtn")
+    .addEventListener("click", async () => {
+
+      await signOut(auth);
+
+      window.location.href = "index.html";
+
+    });
+
+
+  /*
+    ADD CERTIFICATE
+  */
+
+  document.getElementById("certificateForm")
+    .addEventListener("submit", async (event) => {
+
+      event.preventDefault();
+
+      const message =
+        document.getElementById("message");
+
+      message.style.color = "#333";
+      message.textContent = "Saving certificate...";
+
+
+      try {
+
+        const certificateNumber =
+          document.getElementById("certificateNumber").value.trim();
+
+        const ref =
+          document.getElementById("ref").value.trim();
+
+        const fullName =
+          document.getElementById("fullName").value.trim();
+
+        const certificateType =
+          document.getElementById("certificateType").value.trim();
+
+        const course =
+          document.getElementById("course").value.trim();
+
+        const school =
+          document.getElementById("school").value.trim();
+
+        const issueDate =
+          document.getElementById("issueDate").value;
+
+        const status =
+          document.getElementById("status").value;
+
+        const note =
+          document.getElementById("note").value.trim();
+
+
+        const verifyLink =
+          PUBLIC_VERIFICATION_URL +
+          encodeURIComponent(ref);
+
+
+        await addDoc(
+          collection(db, "certificates"),
+          {
+
+            certificateNumber: certificateNumber,
+
+            certificateType: certificateType,
+
+            course: course,
+
+            createdAt:
+              new Date().toISOString(),
+
+            fullName: fullName,
+
+            issueDate: issueDate,
+
+            name: fullName,
+
+            note: note,
+
+            ref: ref,
+
+            school: school,
+
+            source: "Admin Portal",
+
+            status: status,
+
+            verifyLink: verifyLink
+
+          }
+        );
+
+
+        message.style.color = "green";
+        message.textContent =
+          "Certificate added successfully.";
+
+
+        document
+          .getElementById("certificateForm")
+          .reset();
+
+
+        loadCertificates();
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        message.style.color = "red";
+
+        message.textContent =
+          "Could not save certificate: " +
+          error.message;
+
+      }
+
+    });
+
+
+  /*
+    LOAD CERTIFICATES
+  */
+
+  let certificates = [];
+
+
+  async function loadCertificates() {
+
+    const list =
+      document.getElementById("certificateList");
+
+    list.textContent =
+      "Loading certificates...";
+
+
+    try {
+
+      const certificateQuery =
+        query(
+          collection(db, "certificates"),
+          orderBy("createdAt", "desc")
+        );
+
+
+      const snapshot =
+        await getDocs(certificateQuery);
+
+
+      certificates = [];
+
+
+      snapshot.forEach((doc) => {
+
+        certificates.push({
+
+          id: doc.id,
+
+          ...doc.data()
+
+        });
+
+      });
+
+
+      displayCertificates(certificates);
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      list.innerHTML =
+        "<p>Could not load certificates.</p>";
+
+    }
+
+  }
+
+
+  /*
+    DISPLAY CERTIFICATES
+  */
+
+  function displayCertificates(data) {
+
+    const list =
+      document.getElementById("certificateList");
+
+
+    if (data.length === 0) {
+
+      list.innerHTML =
+        "<p>No certificates found.</p>";
+
+      return;
+    }
+
+
+    list.innerHTML = "";
+
+
+    data.forEach((certificate) => {
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "certificate";
+
+
+      const statusClass =
+        String(certificate.status || "")
+          .toLowerCase();
+
+
+      item.innerHTML = `
+
+        <strong>
+          Certificate Number:
+        </strong>
+        ${escapeHTML(certificate.certificateNumber || "")}
+
+        <br>
+
+        <strong>
+          Name:
+        </strong>
+        ${escapeHTML(certificate.fullName || certificate.name || "")}
+
+        <br>
+
+        <strong>
+          Reference:
+        </strong>
+        ${escapeHTML(certificate.ref || "")}
+
+        <br>
+
+        <strong>
+          School:
+        </strong>
+        ${escapeHTML(certificate.school || "")}
+
+        <br>
+
+        <span class="status ${statusClass}">
+          ${escapeHTML(certificate.status || "Unknown")}
+        </span>
+
+        <br>
+
+        ${
+          certificate.verifyLink
+          ?
+          `<a class="link"
+             href="${escapeAttribute(certificate.verifyLink)}"
+             target="_blank">
+             Open Verification Link
+           </a>`
+          :
+          ""
+        }
+
+      `;
+
+
+      list.appendChild(item);
+
+    });
+
+  }
+
+
+  /*
+    SEARCH
+  */
+
+  document.getElementById("search")
+    .addEventListener("input", (event) => {
+
+      const search =
+        event.target.value
+          .toLowerCase()
+          .trim();
+
+
+      const filtered =
+        certificates.filter((certificate) => {
+
+          const number =
+            String(
+              certificate.certificateNumber || ""
+            ).toLowerCase();
+
+          const name =
+            String(
+              certificate.fullName ||
+              certificate.name ||
+              ""
+            ).toLowerCase();
+
+          const ref =
+            String(
+              certificate.ref || ""
+            ).toLowerCase();
+
+
+          return (
+            number.includes(search) ||
+            name.includes(search) ||
+            ref.includes(search)
+          );
+
+        });
+
+
+      displayCertificates(filtered);
+
+    });
+
+
+  /*
+    SECURITY HELPERS
+  */
+
+  function escapeHTML(value) {
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  function escapeAttribute(value) {
+
+    return String(value)
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+</script>
+
+</body>
+</html>
