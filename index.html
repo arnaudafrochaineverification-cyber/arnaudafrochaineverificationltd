@@ -1,109 +1,348 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARNAUD AFROCHAINE VERIFICATION LTD</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#f6fff6}
-.top{background:#0a4d2a;color:white;text-align:center;padding:7px;font-size:9px}
-.nav{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:white;box-shadow:0 2px 10px #0001;position:sticky;top:0;z-index:100}
-.logo{display:flex;align-items:center;gap:8px}
-.logo img{width:44px;height:44px;border-radius:50%;border:2px solid #C9A227;object-fit:cover;background:white}
-.logo b{color:#0a4d2a;font-size:11px;line-height:1}
-.hero{background:linear-gradient(135deg,#0a4d2a,#1a8a4a);color:white;text-align:center;padding:24px 14px}
-.hero h1{font-size:16px;line-height:1.3}
-.box{background:white;margin:-18px 10px 10px 10px;padding:16px;border-radius:14px;box-shadow:0 8px 25px #0002}
-.box h3{color:#0a4d2a;text-align:center;font-size:14px;margin-bottom:10px}
-.box input{width:100%;padding:13px;border:2px solid #a5d6a7;border-radius:9px;margin-bottom:10px;font-size:14px;text-transform:uppercase}
-.box button{width:100%;padding:13px;background:#0a4d2a;color:white;border:none;border-radius:9px;font-weight:700}
-.sec{margin:14px 10px;padding:16px;background:white;border-radius:14px;box-shadow:0 4px 15px #0001}
-.sec h2{color:#0a4d2a;font-size:15px;margin-bottom:10px;border-left:4px solid #b8860b;padding-left:8px}
-.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.gallery img{width:100%;height:165px;object-fit:cover;border-radius:10px;border:1px solid #ddd}
-.foot{background:#0a4d2a;color:white;padding:18px;text-align:center;font-size:10px}
-.wa{position:fixed;bottom:16px;right:16px;background:#25D366;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;z-index:999}
-.resbox{margin-top:14px;border-radius:12px;overflow:hidden;border:2px solid #0a4d2a;display:none}
-</style>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-  authDomain: "arnaudafrochaineverification.firebaseapp.com",
-  projectId: "arnaudafrochaineverification",
-  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
-  messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-window.check = async function(){
- const raw = document.getElementById('cert').value.trim().toUpperCase();
- const resDiv = document.getElementById('res');
- if(!raw){resDiv.style.display='block';resDiv.innerHTML='<div style="padding:15px;background:#ffebee;text-align:center">❌ Enter Reference</div>';return;}
- resDiv.style.display='block';
- resDiv.innerHTML='<div style="padding:20px;text-align:center;background:#fff8e1">⏳ Checking Cloud... '+raw+'...</div>';
- try{
-  const snap = await getDoc(doc(db, "certificates", raw));
-  if(!snap.exists()){
-   resDiv.innerHTML='<div style="padding:20px;background:#ffebee;text-align:center"><b>❌ NOT FOUND</b><br>'+raw+' no dey for our Cloud yet. Add am for Oga Generator first.<br><br><a href="oga-generator.html" style="background:#0a4d2a;color:white;padding:8px 14px;border-radius:20px;text-decoration:none">Go to Generator</a></div>';
-   return;
-  }
-  const d = snap.data();
-  resDiv.innerHTML=`
-<div style="background:white">
-<div style="background:#0a4d2a;color:white;padding:12px;text-align:center;font-weight:900;margin:8px;border-radius:8px">✅ VERIFIED - ${d.status || 'AUTHENTIC'}</div>
-<div style="padding:14px;line-height:2.2;font-size:13px">
-<b>Ref:</b> ${d.ref}<br>
-<b>Client:</b> ${d.fullName || d.name || d.clientName}<br>
-<b>Document:</b> ${d.certificateType || d.course || d.docType}<br>
-<b>Cert No:</b> ${d.certificateNumber || d.certNo}<br>
-<b>Issuer:</b> ${d.school || d.issuer}<br>
-<b>Date Verified:</b> ${d.issueDate || d.dateVerified}<br>
-<b>Source:</b> CLOUD FIREBASE<br>
-</div>
-<div style="margin:14px;border:2px dashed #0a4d2a;padding:12px;text-align:center;border-radius:12px">
-<div style="font-weight:800;color:#0a4d2a">📱 QR VERIFY</div>
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify.html?ref=${d.ref}" style="margin:10px 0">
-<div style="font-size:9px;word-break:break-all">.../verify.html?ref=${d.ref}</div>
-<div style="margin-top:8px"><a href="verify.html?ref=${d.ref}" style="background:#0a4d2a;color:white;padding:8px 14px;border-radius:20px;text-decoration:none;font-size:12px">View Full Report →</a></div>
-</div>
-</div>`;
-  resDiv.scrollIntoView({behavior:'smooth'});
- }catch(e){
-  resDiv.innerHTML='<div style="padding:20px;background:#ffebee;text-align:center">❌ Error: '+e.message+'</div>';
- }
-}
-</script>
+  <title>Admin Portal | ARNAUD AFROCHAINE VERIFICATION LTD</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #f4f7f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.10);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo h1 {
+      font-size: 22px;
+      color: #146b3a;
+      margin-bottom: 8px;
+    }
+
+    .logo p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #222;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      margin-bottom: 18px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #146b3a;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0e512b;
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .footer {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+    }
+  </style>
 </head>
+
 <body>
-<div class="top">📍 12 Idiroko Road, Sango Ota • ☎️ 0913 285 1465 • ✉️ arnaudafrochaine@gmail.com</div>
-<div class="nav"><div class="logo"><img src="logo.jpg"><b>ARNAUD<br>AFROCHAINE<br><span style="color:#b8860b;font-size:8px">VERIFICATION LTD</span></b></div><div style="font-size:10px;color:#0a4d2a;font-weight:700">✅ CAC REGISTERED</div></div>
-<div class="hero"><h1>RESTORE TRUST IN CERTIFICATES WORLDWIDE</h1><p style="margin-top:6px;font-size:12px">No More Fake Credentials. Verify Any Certificate in 5 Seconds<br>Trusted by Schools • Employers • Government</p></div>
-<div class="box"><h3>🔍 Verify Certificate Here</h3><input id="cert" placeholder="Enter Ref e.g AAC/2026/112082" value="AAC/2026/112082"><button onclick="check()">VERIFY NOW →</button><div id="res" class="resbox"></div></div>
 
-<div class="sec"><h2>🌍 Global Coverage - 30 Countries</h2><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;font-size:10px;font-weight:700">
-<div style="background:#e8f5e9;padding:7px;border-radius:6px">🇳🇬 Nigeria</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇬🇭 Ghana</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇬🇧 UK</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇺🇸 USA</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇨🇦 Canada</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇿🇦 South Africa</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇩🇪 Germany</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇫🇷 France</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇦🇺 Australia</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇮🇳 India</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇨🇳 China</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇯🇵 Japan</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇦🇪 UAE</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇸🇦 Saudi</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇰🇪 Kenya</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇪🇬 Egypt</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇷🇼 Rwanda</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇹🇿 Tanzania</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇺🇬 Uganda</div><div style="background:#e8f5e9;padding:7px;border-radius:6px">🇨🇲 Cameroon</div>
-</div></div>
+  <div class="container">
 
-<div class="sec"><h2>📸 Our Work Gallery</h2><div class="gallery">
-<img src="IMG-20260912-WA0000.jpg"><img src="IMG-20260912-WA0001.jpg">
-<img src="IMG-20260913-WA0000.jpg"><img src="IMG-20260913-WA0024.jpg">
-<img src="IMG-20260913-WA0025.jpg"><img src="IMG-20260915-WA0014.jpg">
-<img src="IMG-20260915-WA0015.jpg"><img src="IMG-20260920-WA0113.jpg">
-<img src="IMG-20260922-WA0083.jpg"><img src="IMG-20260922-WA0084.jpg">
-<img src="IMG-20260922-WA0085.jpg"><img src="IMG-20260922-WA0086.jpg">
-<img src="IMG-20260922-WA0087.jpg"><img src="IMG-20260922-WA0088.jpg">
-<img src="IMG-20260922-WA0089.jpg"><img src="IMG-20260922-WA0090.jpg">
-<img src="IMG-20260922-WA0091.jpg"><img src="IMG-20260922-WA0092.jpg">
-<img src="IMG-20260922-WA0111.jpg"><img src="IMG-20260922-WA0112.jpg">
-<img src="IMG-20260922-WA0113.jpg"><img src="IMG-20260924-WA0166.jpg">
-</div></div>
+    <div class="logo">
+      <h1>
+        ARNAUD AFROCHAINE<br>
+        VERIFICATION LTD
+      </h1>
 
-<div class="foot"><b>ARNAUD AFROCHAINE VERIFICATION LTD</b><br>12 Idiroko Road, Sango Ota, Nigeria<br>© 2026 | CAC REGISTERED | African Roots, Global Vision</div>
-<a class="wa" href="https://wa.me/2349132851465">💬</a>
+      <p>Certificate Verification System</p>
+    </div>
+
+    <h2>Admin Portal</h2>
+
+    <form id="loginForm">
+
+      <label for="email">
+        Admin Email
+      </label>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="Enter admin email"
+        autocomplete="username"
+        required
+      >
+
+      <label for="password">
+        Password
+      </label>
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Enter password"
+        autocomplete="current-password"
+        required
+      >
+
+      <button
+        type="submit"
+        id="loginButton"
+      >
+        LOGIN
+      </button>
+
+    </form>
+
+    <div
+      id="message"
+      class="message"
+    ></div>
+
+    <div class="footer">
+      © 2026 ARNAUD AFROCHAINE VERIFICATION LTD
+    </div>
+
+  </div>
+
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+
+    import {
+      getAuth,
+      signInWithEmailAndPassword
+    }
+      from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+
+    /*
+      FIREBASE CONFIGURATION
+    */
+
+    const firebaseConfig = {
+
+      apiKey:
+        "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+
+      authDomain:
+        "arnaudafrochaineverification.firebaseapp.com",
+
+      projectId:
+        "arnaudafrochaineverification",
+
+      storageBucket:
+        "arnaudafrochaineverification.firebasestorage.app",
+
+      messagingSenderId:
+        "268502946630",
+
+      appId:
+        "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+
+      measurementId:
+        "G-Y52LEBJM7Q"
+
+    };
+
+
+    /*
+      START FIREBASE
+    */
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const auth =
+      getAuth(app);
+
+
+    /*
+      LOGIN FORM
+    */
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const loginButton =
+      document.getElementById("loginButton");
+
+    const message =
+      document.getElementById("message");
+
+
+    loginForm.addEventListener(
+      "submit",
+      async (event) => {
+
+        event.preventDefault();
+
+
+        const email =
+          document
+            .getElementById("email")
+            .value
+            .trim();
+
+        const password =
+          document
+            .getElementById("password")
+            .value;
+
+
+        message.style.color = "#333";
+
+        message.textContent =
+          "Signing in...";
+
+        loginButton.disabled = true;
+
+
+        try {
+
+          await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+          message.style.color =
+            "#146b3a";
+
+          message.textContent =
+            "Login successful. Opening dashboard...";
+
+
+          /*
+            SEND ADMIN TO DASHBOARD
+          */
+
+          window.location.href =
+            "dashboard.html";
+
+
+        } catch (error) {
+
+          console.error(error);
+
+          message.style.color =
+            "#b00020";
+
+
+          if (
+            error.code ===
+            "auth/invalid-credential"
+          ) {
+
+            message.textContent =
+              "Incorrect email or password.";
+
+          } else if (
+            error.code ===
+            "auth/user-not-found"
+          ) {
+
+            message.textContent =
+              "Admin account was not found.";
+
+          } else if (
+            error.code ===
+            "auth/wrong-password"
+          ) {
+
+            message.textContent =
+              "Incorrect password.";
+
+          } else if (
+            error.code ===
+            "auth/too-many-requests"
+          ) {
+
+            message.textContent =
+              "Too many attempts. Please try again later.";
+
+          } else {
+
+            message.textContent =
+              "Login failed. Please try again.";
+
+          }
+
+          loginButton.disabled = false;
+
+        }
+
+      }
+
+    );
+
+  </script>
+
 </body>
 </html>
