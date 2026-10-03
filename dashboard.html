@@ -49,14 +49,7 @@
       padding: 0 15px;
     }
 
-    .welcome {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      box-shadow: 0 3px 12px rgba(0,0,0,.08);
-    }
-
+    .welcome,
     .card {
       background: white;
       padding: 22px;
@@ -92,6 +85,10 @@
       font-size: 14px;
     }
 
+    input[type="file"] {
+      background: white;
+    }
+
     textarea {
       min-height: 90px;
       resize: vertical;
@@ -116,6 +113,19 @@
 
     .save-btn:hover {
       background: #0f5133;
+    }
+
+    .cancel-btn {
+      margin-top: 10px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 7px;
+      background: #777;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      display: none;
     }
 
     #message {
@@ -170,6 +180,37 @@
       word-break: break-all;
     }
 
+    .action-btn {
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 8px 5px 0 0;
+    }
+
+    .edit-btn {
+      background: #e8f5e9;
+      color: #176b45;
+    }
+
+    .delete-btn {
+      background: #ffebee;
+      color: #a00000;
+    }
+
+    .file-info {
+      margin-top: 7px;
+      font-size: 12px;
+      color: #555;
+    }
+
+    .help {
+      font-size: 12px;
+      color: #666;
+      margin-top: 6px;
+    }
+
     @media (max-width: 700px) {
       .grid {
         grid-template-columns: 1fr;
@@ -178,6 +219,10 @@
       header {
         flex-direction: column;
         align-items: flex-start;
+      }
+
+      .full {
+        grid-column: auto;
       }
     }
   </style>
@@ -199,7 +244,7 @@
 
   <div class="card">
 
-    <h2>Add Certificate</h2>
+    <h2 id="formTitle">Add Certificate</h2>
 
     <form id="certificateForm">
 
@@ -222,7 +267,10 @@
 
         <div>
           <label>Certificate Type</label>
-          <input id="certificateType" placeholder="University Degree / WAEC / NYSC..." required>
+          <input
+            id="certificateType"
+            placeholder="University Degree / WAEC / NYSC..."
+            required>
         </div>
 
         <div>
@@ -250,14 +298,41 @@
         </div>
 
         <div class="full">
+          <label>Certificate Image / PDF</label>
+          <input
+            id="certificateFile"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,application/pdf">
+
+          <div class="help">
+            Allowed: JPG, PNG, WEBP or PDF. Maximum size: 10 MB.
+          </div>
+
+          <div
+            id="currentFile"
+            class="file-info">
+          </div>
+        </div>
+
+        <div class="full">
           <label>Note</label>
           <textarea id="note"></textarea>
         </div>
 
       </div>
 
-      <button class="save-btn" type="submit">
+      <button
+        id="saveBtn"
+        class="save-btn"
+        type="submit">
         Add Certificate
+      </button>
+
+      <button
+        id="cancelBtn"
+        class="cancel-btn"
+        type="button">
+        Cancel Edit
       </button>
 
       <div id="message"></div>
@@ -274,8 +349,7 @@
     <input
       class="search"
       id="search"
-      placeholder="Search by certificate number, name or reference..."
-    >
+      placeholder="Search by certificate number, name or reference...">
 
     <div id="certificateList">
       Loading certificates...
@@ -288,8 +362,9 @@
 
 <script type="module">
 
-  import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import {
+    initializeApp
+  } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 
   import {
     getAuth,
@@ -303,61 +378,55 @@
     addDoc,
     getDocs,
     query,
-    orderBy
+    orderBy,
+    doc,
+    updateDoc,
+    deleteDoc
   } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+  import {
+    getStorage,
+    ref as storageRef,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject
+  } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-storage.js";
 
 
   const firebaseConfig = {
-
     apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-
-    authDomain:
-      "arnaudafrochaineverification.firebaseapp.com",
-
-    projectId:
-      "arnaudafrochaineverification",
-
-    storageBucket:
-      "arnaudafrochaineverification.firebasestorage.app",
-
-    messagingSenderId:
-      "268502946630",
-
-    appId:
-      "1:268502946630:web:c7abe320c83a1d9c3b4b47",
-
-    measurementId:
-      "G-Y52LEBJM7Q"
+    authDomain: "arnaudafrochaineverification.firebaseapp.com",
+    projectId: "arnaudafrochaineverification",
+    storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+    messagingSenderId: "268502946630",
+    appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+    measurementId: "G-Y52LEBJM7Q"
   };
 
 
   const app = initializeApp(firebaseConfig);
-
   const auth = getAuth(app);
-
   const db = getFirestore(app);
+  const storage = getStorage(app);
 
-
-  /*
-    PUBLIC VERIFICATION WEBSITE
-
-    This is kept separate from the admin website.
-  */
 
   const PUBLIC_VERIFICATION_URL =
     "https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/?id=";
 
 
+  let certificates = [];
+  let editingId = null;
+  let editingFilePath = null;
+
+
   /*
-    CHECK LOGIN
+    LOGIN CHECK
   */
 
   onAuthStateChanged(auth, (user) => {
 
     if (!user) {
-
-      window.location.href = "index.html";
-
+      window.location.href = "admin-login.html";
       return;
     }
 
@@ -378,13 +447,13 @@
 
       await signOut(auth);
 
-      window.location.href = "index.html";
+      window.location.href = "admin-login.html";
 
     });
 
 
   /*
-    ADD CERTIFICATE
+    ADD / EDIT CERTIFICATE
   */
 
   document.getElementById("certificateForm")
@@ -395,8 +464,12 @@
       const message =
         document.getElementById("message");
 
+      const saveBtn =
+        document.getElementById("saveBtn");
+
       message.style.color = "#333";
       message.textContent = "Saving certificate...";
+      saveBtn.disabled = true;
 
 
       try {
@@ -405,7 +478,7 @@
           document.getElementById("certificateNumber").value.trim();
 
         const ref =
-          document.getElementById("ref").value.trim();
+          document.getElementById("ref").value.trim().toUpperCase();
 
         const fullName =
           document.getElementById("fullName").value.trim();
@@ -428,58 +501,182 @@
         const note =
           document.getElementById("note").value.trim();
 
+        const fileInput =
+          document.getElementById("certificateFile");
+
+        const file =
+          fileInput.files[0];
+
+
+        /*
+          FILE VALIDATION
+        */
+
+        if (file) {
+
+          const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "application/pdf"
+          ];
+
+          if (!allowedTypes.includes(file.type)) {
+            throw new Error(
+              "Only JPG, PNG, WEBP or PDF files are allowed."
+            );
+          }
+
+          if (file.size > 10 * 1024 * 1024) {
+            throw new Error(
+              "File is too large. Maximum size is 10 MB."
+            );
+          }
+
+        }
+
 
         const verifyLink =
           PUBLIC_VERIFICATION_URL +
           encodeURIComponent(ref);
 
 
-        await addDoc(
-          collection(db, "certificates"),
-          {
+        let certificateImageUrl =
+          editingId ? getExistingImageUrl(editingId) : "";
 
-            certificateNumber: certificateNumber,
+        let certificateFilePath =
+          editingId ? editingFilePath : "";
 
-            certificateType: certificateType,
 
-            course: course,
+        /*
+          UPLOAD FILE
+        */
 
-            createdAt:
-              new Date().toISOString(),
+        if (file) {
 
-            fullName: fullName,
+          const safeFileName =
+            file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
 
-            issueDate: issueDate,
+          const uniqueName =
+            Date.now() + "_" + safeFileName;
 
-            name: fullName,
+          const filePath =
+            "certificates/" +
+            ref +
+            "/" +
+            uniqueName;
 
-            note: note,
+          const fileReference =
+            storageRef(storage, filePath);
 
-            ref: ref,
+          await uploadBytes(fileReference, file);
 
-            school: school,
+          certificateImageUrl =
+            await getDownloadURL(fileReference);
 
-            source: "Admin Portal",
+          certificateFilePath =
+            filePath;
 
-            status: status,
 
-            verifyLink: verifyLink
+          /*
+            Delete old file after successful replacement
+          */
+
+          if (editingId && editingFilePath) {
+
+            try {
+
+              await deleteObject(
+                storageRef(storage, editingFilePath)
+              );
+
+            } catch (deleteError) {
+
+              console.warn(
+                "Old file could not be deleted:",
+                deleteError
+              );
+
+            }
 
           }
-        );
+
+        }
 
 
-        message.style.color = "green";
-        message.textContent =
-          "Certificate added successfully.";
+        const certificateData = {
+
+          certificateNumber,
+          certificateType,
+          course,
+
+          fullName,
+          name: fullName,
+
+          issueDate,
+          status,
+          note,
+
+          ref,
+          school,
+
+          source: "Admin Portal",
+
+          verifyLink,
+
+          certificateImageUrl:
+            certificateImageUrl || "",
+
+          certificateFilePath:
+            certificateFilePath || "",
+
+          updatedAt:
+            new Date().toISOString()
+
+        };
 
 
-        document
-          .getElementById("certificateForm")
-          .reset();
+        /*
+          EDIT EXISTING
+        */
+
+        if (editingId) {
+
+          await updateDoc(
+            doc(db, "certificates", editingId),
+            certificateData
+          );
+
+          message.style.color = "green";
+          message.textContent =
+            "Certificate updated successfully.";
+
+        }
 
 
-        loadCertificates();
+        /*
+          ADD NEW
+        */
+
+        else {
+
+          certificateData.createdAt =
+            new Date().toISOString();
+
+          await addDoc(
+            collection(db, "certificates"),
+            certificateData
+          );
+
+          message.style.color = "green";
+          message.textContent =
+            "Certificate added successfully.";
+
+        }
+
+
+        resetForm();
+        await loadCertificates();
 
 
       } catch (error) {
@@ -487,10 +684,13 @@
         console.error(error);
 
         message.style.color = "red";
-
         message.textContent =
           "Could not save certificate: " +
           error.message;
+
+      } finally {
+
+        saveBtn.disabled = false;
 
       }
 
@@ -498,11 +698,24 @@
 
 
   /*
-    LOAD CERTIFICATES
+    GET EXISTING IMAGE URL
   */
 
-  let certificates = [];
+  function getExistingImageUrl(id) {
 
+    const certificate =
+      certificates.find(item => item.id === id);
+
+    return certificate
+      ? certificate.certificateImageUrl || ""
+      : "";
+
+  }
+
+
+  /*
+    LOAD CERTIFICATES
+  */
 
   async function loadCertificates() {
 
@@ -529,13 +742,13 @@
       certificates = [];
 
 
-      snapshot.forEach((doc) => {
+      snapshot.forEach((item) => {
 
         certificates.push({
 
-          id: doc.id,
+          id: item.id,
 
-          ...doc.data()
+          ...item.data()
 
         });
 
@@ -595,30 +808,26 @@
 
       item.innerHTML = `
 
-        <strong>
-          Certificate Number:
-        </strong>
+        <strong>Certificate Number:</strong>
         ${escapeHTML(certificate.certificateNumber || "")}
 
         <br>
 
-        <strong>
-          Name:
-        </strong>
-        ${escapeHTML(certificate.fullName || certificate.name || "")}
+        <strong>Name:</strong>
+        ${escapeHTML(
+          certificate.fullName ||
+          certificate.name ||
+          ""
+        )}
 
         <br>
 
-        <strong>
-          Reference:
-        </strong>
+        <strong>Reference:</strong>
         ${escapeHTML(certificate.ref || "")}
 
         <br>
 
-        <strong>
-          School:
-        </strong>
+        <strong>School:</strong>
         ${escapeHTML(certificate.school || "")}
 
         <br>
@@ -635,11 +844,38 @@
           `<a class="link"
              href="${escapeAttribute(certificate.verifyLink)}"
              target="_blank">
-             Open Verification Link
+             Open Verification
            </a>`
           :
           ""
         }
+
+        ${
+          certificate.certificateImageUrl
+          ?
+          `<br>
+           <a class="link"
+              href="${escapeAttribute(certificate.certificateImageUrl)}"
+              target="_blank">
+              📄 Open Certificate File
+           </a>`
+          :
+          ""
+        }
+
+        <br>
+
+        <button
+          class="action-btn edit-btn"
+          data-id="${escapeAttribute(certificate.id)}">
+          ✏️ Edit
+        </button>
+
+        <button
+          class="action-btn delete-btn"
+          data-id="${escapeAttribute(certificate.id)}">
+          🗑️ Delete
+        </button>
 
       `;
 
@@ -647,6 +883,244 @@
       list.appendChild(item);
 
     });
+
+
+    /*
+      EDIT BUTTONS
+    */
+
+    list.querySelectorAll(".edit-btn")
+      .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+          editCertificate(button.dataset.id);
+
+        });
+
+      });
+
+
+    /*
+      DELETE BUTTONS
+    */
+
+    list.querySelectorAll(".delete-btn")
+      .forEach(button => {
+
+        button.addEventListener("click", () => {
+
+          deleteCertificate(button.dataset.id);
+
+        });
+
+      });
+
+  }
+
+
+  /*
+    EDIT CERTIFICATE
+  */
+
+  function editCertificate(id) {
+
+    const certificate =
+      certificates.find(item => item.id === id);
+
+    if (!certificate) return;
+
+
+    editingId = id;
+
+    editingFilePath =
+      certificate.certificateFilePath || null;
+
+
+    document.getElementById("certificateNumber").value =
+      certificate.certificateNumber || "";
+
+    document.getElementById("ref").value =
+      certificate.ref || "";
+
+    document.getElementById("fullName").value =
+      certificate.fullName ||
+      certificate.name ||
+      "";
+
+    document.getElementById("certificateType").value =
+      certificate.certificateType || "";
+
+    document.getElementById("course").value =
+      certificate.course || "";
+
+    document.getElementById("school").value =
+      certificate.school || "";
+
+    document.getElementById("issueDate").value =
+      certificate.issueDate || "";
+
+    document.getElementById("status").value =
+      certificate.status || "Verified";
+
+    document.getElementById("note").value =
+      certificate.note || "";
+
+
+    document.getElementById("formTitle").textContent =
+      "Edit Certificate";
+
+    document.getElementById("saveBtn").textContent =
+      "Update Certificate";
+
+    document.getElementById("cancelBtn").style.display =
+      "block";
+
+
+    const currentFile =
+      document.getElementById("currentFile");
+
+
+    if (certificate.certificateImageUrl) {
+
+      currentFile.innerHTML =
+        `Current file:
+         <a href="${escapeAttribute(
+           certificate.certificateImageUrl
+         )}" target="_blank">
+           Open certificate file
+         </a>`;
+
+    } else {
+
+      currentFile.textContent =
+        "No certificate file uploaded.";
+
+    }
+
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  }
+
+
+  /*
+    DELETE CERTIFICATE
+  */
+
+  async function deleteCertificate(id) {
+
+    const certificate =
+      certificates.find(item => item.id === id);
+
+    if (!certificate) return;
+
+
+    const confirmed =
+      confirm(
+        "Are you sure you want to delete this certificate?"
+      );
+
+
+    if (!confirmed) return;
+
+
+    try {
+
+      /*
+        Delete Storage file first
+      */
+
+      if (certificate.certificateFilePath) {
+
+        try {
+
+          await deleteObject(
+            storageRef(
+              storage,
+              certificate.certificateFilePath
+            )
+          );
+
+        } catch (fileError) {
+
+          console.warn(
+            "Certificate file could not be deleted:",
+            fileError
+          );
+
+        }
+
+      }
+
+
+      /*
+        Delete Firestore record
+      */
+
+      await deleteDoc(
+        doc(db, "certificates", id)
+      );
+
+
+      alert("Certificate deleted successfully.");
+
+      await loadCertificates();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "Could not delete certificate: " +
+        error.message
+      );
+
+    }
+
+  }
+
+
+  /*
+    CANCEL EDIT
+  */
+
+  document.getElementById("cancelBtn")
+    .addEventListener("click", () => {
+
+      resetForm();
+
+    });
+
+
+  /*
+    RESET FORM
+  */
+
+  function resetForm() {
+
+    document
+      .getElementById("certificateForm")
+      .reset();
+
+    editingId = null;
+    editingFilePath = null;
+
+    document.getElementById("formTitle").textContent =
+      "Add Certificate";
+
+    document.getElementById("saveBtn").textContent =
+      "Add Certificate";
+
+    document.getElementById("cancelBtn").style.display =
+      "none";
+
+    document.getElementById("currentFile").textContent =
+      "";
 
   }
 
@@ -726,4 +1200,4 @@
 </script>
 
 </body>
-</html>
+  </html>
