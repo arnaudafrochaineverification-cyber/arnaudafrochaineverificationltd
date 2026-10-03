@@ -1,11 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARNAUD AFROCHAINE VERIFICATION LTD</title>
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0">
+
+<title>
+ARNAUD AFROCHAINE VERIFICATION LTD
+</title>
+
 
 <style>
+
 *{
   margin:0;
   padding:0;
@@ -168,12 +177,44 @@ body{
   border:2px solid #0a4d2a;
   display:none;
 }
+
+.certificate-file{
+  margin:14px;
+  border:2px dashed #0a4d2a;
+  padding:12px;
+  text-align:center;
+  border-radius:12px;
+}
+
+.certificate-file img{
+  width:100%;
+  max-height:700px;
+  object-fit:contain;
+  border-radius:8px;
+  margin-top:10px;
+}
+
+.pdf-button{
+  display:inline-block;
+  margin-top:10px;
+  background:#0a4d2a;
+  color:white;
+  padding:10px 15px;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:bold;
+}
+
 </style>
+
 
 <script type="module">
 
-import { initializeApp }
+import {
+  initializeApp
+}
 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
 
 import {
   getFirestore,
@@ -181,31 +222,62 @@ import {
   query,
   where,
   getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-  authDomain: "arnaudafrochaineverification.firebaseapp.com",
-  projectId: "arnaudafrochaineverification",
-  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
-  messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"
+
+  apiKey:
+    "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+
+  authDomain:
+    "arnaudafrochaineverification.firebaseapp.com",
+
+  projectId:
+    "arnaudafrochaineverification",
+
+  storageBucket:
+    "arnaudafrochaineverification.firebasestorage.app",
+
+  messagingSenderId:
+    "268502946630",
+
+  appId:
+    "1:268502946630:web:c7abe320c83a1d9c3b4b47"
+
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+
+const app =
+  initializeApp(firebaseConfig);
+
+const db =
+  getFirestore(app);
 
 
-window.check = async function(){
+/*
+  VERIFY CERTIFICATE
+*/
 
-  const raw = document
-    .getElementById("cert")
-    .value
+window.check = async function(valueFromQR = null){
+
+  const input =
+    document.getElementById("cert");
+
+
+  const raw =
+    String(
+      valueFromQR ||
+      input.value ||
+      ""
+    )
     .trim()
     .toUpperCase();
 
-  const resDiv = document.getElementById("res");
+
+  const resDiv =
+    document.getElementById("res");
 
 
   if(!raw){
@@ -213,43 +285,59 @@ window.check = async function(){
     resDiv.style.display="block";
 
     resDiv.innerHTML=`
+
       <div style="
         padding:15px;
         background:#ffebee;
         text-align:center">
+
         ❌ Please enter a certificate reference.
+
       </div>
+
     `;
 
     return;
+
   }
 
 
+  input.value = raw;
+
   resDiv.style.display="block";
 
+
   resDiv.innerHTML=`
+
     <div style="
       padding:20px;
       text-align:center;
       background:#fff8e1">
-      ⏳ Checking certificate... ${raw}
+
+      ⏳ Checking certificate... ${escapeHTML(raw)}
+
     </div>
+
   `;
 
 
   try{
 
-    const q = query(
-      collection(db,"certificates"),
-      where("ref","==",raw)
-    );
+    const q =
+      query(
+        collection(db,"certificates"),
+        where("ref","==",raw)
+      );
 
-    const snapshot = await getDocs(q);
+
+    const snapshot =
+      await getDocs(q);
 
 
     if(snapshot.empty){
 
       resDiv.innerHTML=`
+
         <div style="
           padding:20px;
           background:#ffebee;
@@ -259,7 +347,7 @@ window.check = async function(){
 
           <br><br>
 
-          Reference <b>${raw}</b>
+          Reference <b>${escapeHTML(raw)}</b>
           could not be found in the
           verification database.
 
@@ -269,23 +357,30 @@ window.check = async function(){
           reference and try again.
 
         </div>
+
       `;
 
       return;
+
     }
 
 
-    const snap = snapshot.docs[0];
-    const d = snap.data();
+    const snap =
+      snapshot.docs[0];
+
+    const d =
+      snap.data();
 
 
     const status =
       d.status || "VERIFIED";
 
+
     const fullName =
       d.fullName ||
       d.name ||
       "Not provided";
+
 
     const certificateType =
       d.certificateType ||
@@ -293,20 +388,24 @@ window.check = async function(){
       d.docType ||
       "Certificate";
 
+
     const certificateNumber =
       d.certificateNumber ||
       d.certNo ||
       "Not provided";
+
 
     const issuer =
       d.school ||
       d.issuer ||
       "Not provided";
 
+
     const issueDate =
       d.issueDate ||
       d.dateVerified ||
       "Not provided";
+
 
     const reference =
       d.ref ||
@@ -323,9 +422,92 @@ window.check = async function(){
       encodeURIComponent(publicVerifyUrl);
 
 
+    let certificateFileHTML = "";
+
+
+    /*
+      DISPLAY CERTIFICATE FILE
+    */
+
+    if(d.certificateImageUrl){
+
+      const fileUrl =
+        d.certificateImageUrl;
+
+
+      const lowerUrl =
+        fileUrl.toLowerCase();
+
+
+      const isPDF =
+        lowerUrl.includes(".pdf") ||
+        lowerUrl.includes("application%2fpdf");
+
+
+      if(isPDF){
+
+        certificateFileHTML = `
+
+          <div class="certificate-file">
+
+            <div style="
+              font-weight:800;
+              color:#0a4d2a">
+
+              📄 CERTIFICATE DOCUMENT
+
+            </div>
+
+            <a
+              class="pdf-button"
+              href="${escapeAttribute(fileUrl)}"
+              target="_blank">
+
+              📄 OPEN CERTIFICATE PDF
+
+            </a>
+
+          </div>
+
+        `;
+
+      }else{
+
+        certificateFileHTML = `
+
+          <div class="certificate-file">
+
+            <div style="
+              font-weight:800;
+              color:#0a4d2a">
+
+              🖼️ CERTIFICATE DOCUMENT
+
+            </div>
+
+            <a
+              href="${escapeAttribute(fileUrl)}"
+              target="_blank">
+
+              <img
+                src="${escapeAttribute(fileUrl)}"
+                alt="Verified Certificate">
+
+            </a>
+
+          </div>
+
+        `;
+
+      }
+
+    }
+
+
     resDiv.innerHTML=`
 
-      <div style="background:white">
+      <div style="
+        background:white">
 
         <div style="
           background:#0a4d2a;
@@ -336,7 +518,7 @@ window.check = async function(){
           margin:8px;
           border-radius:8px">
 
-          ✅ ${status}
+          ✅ ${escapeHTML(status)}
 
         </div>
 
@@ -347,27 +529,36 @@ window.check = async function(){
           font-size:13px">
 
           <b>Reference:</b>
-          ${reference}<br>
+          ${escapeHTML(reference)}
+          <br>
 
           <b>Name:</b>
-          ${fullName}<br>
+          ${escapeHTML(fullName)}
+          <br>
 
           <b>Document:</b>
-          ${certificateType}<br>
+          ${escapeHTML(certificateType)}
+          <br>
 
           <b>Certificate No:</b>
-          ${certificateNumber}<br>
+          ${escapeHTML(certificateNumber)}
+          <br>
 
           <b>Issuing Institution:</b>
-          ${issuer}<br>
+          ${escapeHTML(issuer)}
+          <br>
 
           <b>Issue Date:</b>
-          ${issueDate}<br>
+          ${escapeHTML(issueDate)}
+          <br>
 
           <b>Verification Source:</b>
           ARNAUD AFROCHAINE VERIFICATION LTD
 
         </div>
+
+
+        ${certificateFileHTML}
 
 
         <div style="
@@ -399,13 +590,14 @@ window.check = async function(){
             font-size:9px;
             word-break:break-all">
 
-            ${publicVerifyUrl}
+            ${escapeHTML(publicVerifyUrl)}
 
           </div>
 
         </div>
 
       </div>
+
     `;
 
 
@@ -418,7 +610,9 @@ window.check = async function(){
 
     console.error(error);
 
+
     resDiv.innerHTML=`
+
       <div style="
         padding:20px;
         background:#ffebee;
@@ -431,10 +625,62 @@ window.check = async function(){
         Please try again later.
 
       </div>
+
     `;
+
   }
 
 };
+
+
+/*
+  AUTOMATIC QR VERIFICATION
+*/
+
+window.addEventListener("DOMContentLoaded", () => {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const id =
+    params.get("id");
+
+
+  if(id){
+
+    check(id);
+
+  }
+
+});
+
+
+/*
+  SECURITY HELPERS
+*/
+
+function escapeHTML(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttribute(value){
+
+  return String(value)
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
 
 </script>
 
@@ -445,9 +691,11 @@ window.check = async function(){
 
 
 <div class="top">
+
 📍 12 Idiroko Road, Sango Ota •
 ☎️ 0913 285 1465 •
 ✉️ arnaudafrochaine@gmail.com
+
 </div>
 
 
@@ -458,13 +706,18 @@ window.check = async function(){
     <img src="logo.jpg">
 
     <b>
+
       ARNAUD<br>
       AFROCHAINE<br>
+
       <span style="
         color:#b8860b;
         font-size:8px">
+
         VERIFICATION LTD
+
       </span>
+
     </b>
 
   </div>
@@ -485,8 +738,11 @@ window.check = async function(){
 <div class="hero">
 
   <h1>
+
     RESTORE TRUST IN CERTIFICATES WORLDWIDE
+
   </h1>
+
 
   <p style="
     margin-top:6px;
@@ -507,7 +763,9 @@ window.check = async function(){
 <div class="box">
 
   <h3>
+
     🔍 Verify Certificate Here
+
   </h3>
 
 
@@ -517,13 +775,16 @@ window.check = async function(){
 
 
   <button onclick="check()">
+
     VERIFY NOW →
+
   </button>
 
 
   <div
     id="res"
     class="resbox">
+
   </div>
 
 </div>
@@ -532,8 +793,11 @@ window.check = async function(){
 <div class="sec">
 
   <h2>
+
     🌍 Global Coverage
+
   </h2>
+
 
   <div style="
     display:grid;
@@ -543,32 +807,92 @@ window.check = async function(){
     font-size:10px;
     font-weight:700">
 
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇳🇬 Nigeria</div>
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇬🇭 Ghana</div>
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇬🇧 UK</div>
 
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇺🇸 USA</div>
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇨🇦 Canada</div>
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇿🇦 South Africa</div>
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇳🇬 Nigeria
+    </div>
 
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇩🇪 Germany</div>
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇫🇷 France</div>
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇦🇺 Australia</div>
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇬🇭 Ghana
+    </div>
 
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇮🇳 India</div>
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇨🇳 China</div>
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇯🇵 Japan</div>
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇬🇧 UK
+    </div>
 
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇦🇪 UAE</div>
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇸🇦 Saudi Arabia</div>
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇰🇪 Kenya</div>
 
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇪🇬 Egypt</div>
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇷🇼 Rwanda</div>
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇹🇿 Tanzania</div>
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇺🇸 USA
+    </div>
 
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇺🇬 Uganda</div>
-    <div style="background:#e8f5e9;padding:7px;border-radius:6px">🇨🇲 Cameroon</div>
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇨🇦 Canada
+    </div>
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇿🇦 South Africa
+    </div>
+
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇩🇪 Germany
+    </div>
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇫🇷 France
+    </div>
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇦🇺 Australia
+    </div>
+
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇮🇳 India
+    </div>
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇨🇳 China
+    </div>
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇯🇵 Japan
+    </div>
+
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇦🇪 UAE
+    </div>
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇸🇦 Saudi Arabia
+    </div>
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇰🇪 Kenya
+    </div>
+
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇪🇬 Egypt
+    </div>
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇷🇼 Rwanda
+    </div>
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇹🇿 Tanzania
+    </div>
+
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇺🇬 Uganda
+    </div>
+
+    <div style="background:#e8f5e9;padding:7px;border-radius:6px">
+      🇨🇲 Cameroon
+    </div>
 
   </div>
 
@@ -578,8 +902,11 @@ window.check = async function(){
 <div class="sec">
 
   <h2>
+
     📸 Our Work Gallery
+
   </h2>
+
 
   <div class="gallery">
 
@@ -651,4 +978,4 @@ window.check = async function(){
 
 
 </body>
-</html>
+    </html>
