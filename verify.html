@@ -1,73 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Verify Certificate - Arnaud Afrochaine</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify Certificate - Arnaud Global Verification</title>
+<style>
+body{font-family:Arial;background:#0f172a;padding:12px;margin:0;color:#1f2937}
+.box{max-width:520px;margin:20px auto}
+.top,.card{background:white;padding:18px;border-radius:12px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.top{text-align:center;border-top:4px solid #C9A227}
+h3{color:#0a1931;margin:0}
+.sub{font-size:11px;color:#64748b;margin-top:4px}
+.search{display:flex;gap:8px;margin-top:15px}
+input{flex:1;padding:12px;border:1px solid #cbd5e1;border-radius:8px}
+button{padding:12px 16px;background:#0a4d2a;color:white;border:none;border-radius:8px;font-weight:800;cursor:pointer}
+.field{background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px}
+.label{color:#14532d;font-size:11px;font-weight:800}
+.status{padding:12px;background:#ecfdf5;border-left:4px solid #0a4d2a;border-radius:8px}
+.error{padding:14px;color:#991b1b;background:#fee2e2;border-radius:8px;text-align:center}
+footer{font-size:10px;color:#64748b;text-align:center;margin-top:15px}
+.badge{display:inline-block;background:#0a1931;color:#C9A227;padding:4px 8px;border-radius:4px;font-size:10px;margin-top:6px}
+</style>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
   authDomain: "arnaudafrochaineverification.firebaseapp.com",
   projectId: "arnaudafrochaineverification",
   storageBucket: "arnaudafrochaineverification.firebasestorage.app",
   messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
-  measurementId: "G-Y52LEBJM7Q"
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-async function load(){
-  const urlParams = new URLSearchParams(window.location.search);
-  let ref = urlParams.get('ref');
-  if(!ref){ 
-    const path = window.location.pathname;
-    const parts = path.split('/');
-    ref = parts[parts.length-1];
-    if(ref.includes('.html')) ref = urlParams.get('ref');
-  }
-  const id = document.getElementById('refInput').value || ref;
-  if(!id){ document.getElementById('result').innerHTML = "<p style='color:red;text-align:center'>Enter Ref Number</p>"; return; }
-  document.getElementById('result').innerHTML = "Checking cloud... ⏳";
+
+async function findCertificate(searchValue){
+  const value = searchValue.trim();
+  if(!value) return null;
+
+  // 1. Try Doc ID but DON'T CRASH if slash dey inside
   try{
-    const snap = await getDoc(doc(db, "certificates", id.trim()));
-    if(!snap.exists()){
-      document.getElementById('result').innerHTML = `<div style="background:#fee2e2;padding:14px;border-radius:10px;text-align:center;color:#991b1b;font-weight:800">❌ RECORD NOT FOUND<br><span style="font-size:12px;font-weight:400">${id}</span></div>`;
-      return;
+    if(!value.includes('/')){ // only try Doc ID if no slash
+      const direct = await getDoc(doc(db, "certificates", value));
+      if(direct.exists()) return {id: direct.id, data: direct.data()};
     }
-    const d = snap.data();
-    document.getElementById('result').innerHTML = `
-      <div style="background:white;border:3px solid #C9A227;border-radius:14px;padding:16px">
-        <div style="text-align:center;background:#0a4d2a;color:white;padding:10px;border-radius:8px;font-weight:900;margin-bottom:12px">✅ VERIFIED RECORD FOUND</div>
-        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><small style="color:#14532d;font-weight:800">👤 CLIENT NAME</small><br><b>${d.name||d.fullName||''}</b></div>
-        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><small style="color:#14532d;font-weight:800">📄 DOCUMENT TYPE - WETIN YOU DEY VERIFY?</small><br>${d.certificateType||d.course||''}</div>
-        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><small style="color:#14532d;font-weight:800">📜 CERTIFICATE NUMBER - NUMBER WEY DEY THE ORIGINAL CERT</small><br>${d.certificateNumber||''}</div>
-        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><small style="color:#14532d;font-weight:800">🎓 SCHOOL / ISSUER - WHERE THE CERT FROM? (UNILAG, WAEC)</small><br>${d.school||d.institution||''}</div>
-        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><small style="color:#14532d;font-weight:800">📅 DATE VERIFIED - WHEN YOU VERIFY AM?</small><br>${d.issueDate||''}</div>
-        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><small style="color:#14532d;font-weight:800">🔍 SOURCE OF VERIFICATION - HOW YOU TAKE VERIFY AM?</small><br>${d.source||''}</div>
-        <div style="background:#ecfdf5;padding:12px;border-radius:8px;border-left:4px solid #0a4d2a"><small style="color:#14532d;font-weight:800">✅ STATUS - RESULT</small><br><b style="color:#0a4d2a">${d.status||''}</b><br><small style="font-size:9px;color:#64748b">(This report is based on official response from institution. See proof on file)</small></div>
-        <div style="text-align:center;margin-top:14px;font-size:10px;color:#64748b">Ref: ${d.ref||id} | Verified by Arnaud Afrochaine Verification Ltd</div>
-      </div>
-    `;
-  }catch(e){
-    document.getElementById('result').innerHTML = "<p style='color:red'>Error: "+e.message+"</p>";
+  }catch(e){ console.log("Doc ID search skip:", e.message); }
+
+  // 2. Search by all possible ref fields
+  const fields = ["ref", "reference", "refNumber", "verificationRef"];
+  for(const field of fields){
+    try{
+      const q = query(collection(db, "certificates"), where(field, "==", value), limit(1));
+      const snap = await getDocs(q);
+      if(!snap.empty) return {id: snap.docs[0].id, data: snap.docs[0].data()};
+    }catch(e){ console.log(field+" search error", e.message); }
   }
+
+  // 3. Search by certificateNumber and certificate number with space
+  for(const field of ["certificateNumber", "certNumber"]){
+    try{
+      const q = query(collection(db, "certificates"), where(field, "==", value), limit(1));
+      const snap = await getDocs(q);
+      if(!snap.empty) return {id: snap.docs[0].id, data: snap.docs[0].data()};
+    }catch(e){}
+  }
+  return null;
 }
-window.load = load;
-window.onload = ()=>{ const p=new URLSearchParams(location.search).get('ref'); if(p){ document.getElementById('refInput').value=p; load(); } };
+
+function safe(v){ const el=document.createElement("span"); el.textContent=v==null?"":String(v); return el.innerHTML; }
+
+async function load(){
+  const input = document.getElementById("refInput");
+  const result = document.getElementById("result");
+  const value = input.value.trim();
+  if(!value){ result.innerHTML='<div class="error">Please enter Ref Number</div>'; return; }
+  result.textContent="Checking global database... ⏳";
+  try{
+    const found = await findCertificate(value);
+    if(!found){ result.innerHTML=`<div class="error"><b>❌ RECORD NOT FOUND</b><br>No record for: ${safe(value)}<br><small>Check Admin - make sure field 'ref' = ${safe(value)}</small></div>`; return; }
+    const d=found.data;
+    const status=String(d.status||"Verified");
+    result.innerHTML=`
+      <div class="card">
+        <div style="text-align:center;background:#0a4d2a;color:white;padding:10px;border-radius:8px;font-weight:900">✅ VERIFIED - RECORD FOUND</div>
+        <div style="text-align:center;margin:8px 0"><span class="badge">ARNAUD GLOBAL VERIFICATION - Serving Canada, USA, UK</span></div>
+        <div class="field"><div class="label">FULL NAME</div><b>${safe(d.fullName||d.name)}</b></div>
+        <div class="field"><div class="label">CERTIFICATE NUMBER</div>${safe(d.certificateNumber)}</div>
+        <div class="field"><div class="label">CERTIFICATE TYPE / COURSE</div>${safe(d.certificateType||d.course)}</div>
+        <div class="field"><div class="label">SCHOOL / ISSUER</div>${safe(d.school||d.institution)}</div>
+        <div class="field"><div class="label">ISSUE DATE</div>${safe(d.issueDate)}</div>
+        <div class="status"><div class="label">STATUS</div><b>${safe(status)}</b><p style="font-size:12px;margin:6px 0">This record has been verified via direct contact with issuing institution. For employer confirmation: verify@arnaudglobal.com</p></div>
+        <footer>Ref: ${safe(d.ref||found.id)}<br>ARNAUD AFROCHAINE VERIFICATION LTD | Global Verification Service<br>African Roots, Global Trust</footer>
+      </div>`;
+  }catch(e){ result.innerHTML=`<div class="error"><b>SEARCH ERROR</b><br>${safe(e.message)}</div>`; console.error(e); }
+}
+window.load=load;
+window.addEventListener('DOMContentLoaded',()=>{
+  const input=document.getElementById("refInput");
+  document.getElementById("verifyButton").addEventListener("click",load);
+  input.addEventListener("keydown",e=>{ if(e.key==="Enter") load(); });
+  const p=new URLSearchParams(location.search).get("ref")||new URLSearchParams(location.search).get("id");
+  if(p){ input.value=p; load(); }
+});
 </script>
-<style>
-body{font-family:Arial;background:#0f172a;padding:12px;margin:0}
-.box{max-width:520px;margin:20px auto}
-.top{background:white;padding:14px;border-radius:12px;text-align:center;margin-bottom:12px}
-input{width:70%;padding:10px;border:1px solid #cbd5e1;border-radius:8px}
-button{padding:10px 14px;background:#0a4d2a;color:white;border:none;border-radius:8px;font-weight:800;cursor:pointer}
-</style>
 </head>
 <body>
 <div class="box">
-<div class="top"><h3 style="margin:0;color:#0a4d2a">ARNAUD AFROCHAINE VERIFICATION</h3><small>Certificate Verification Portal</small><div style="margin-top:10px"><input id="refInput" placeholder="Enter Ref e.g AAC/2026/112082"><button onclick="load()">Verify</button></div></div>
-<div id="result"></div>
+  <div class="top">
+    <h3>ARNAUD GLOBAL VERIFICATION</h3>
+    <div class="sub">Official Verification Service of Arnaud Afrochaine Verification Ltd</div>
+    <div class="sub">Lagos, NG | Cotonou, BJ | Trusted by Diaspora in Canada, USA, UK, Australia</div>
+    <div class="search"><input id="refInput" placeholder="Enter Ref e.g AAC/2026/112082"><button id="verifyButton" type="button">Verify</button></div>
+  </div>
+  <div id="result"></div>
 </div>
 </body>
-</html>
+  </html>
