@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dashboard - ARNAUD</title>
+<title>Dashboard - ARNAUD GLOBAL</title>
 <style>
 *{box-sizing:border-box;font-family:Arial}body{margin:0;background:#f4f7f6}
-.top{background:#176b45;color:white;padding:15px;display:flex;justify-content:space-between}
+.top{background:#0a1931;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center}
+.top b{color:#C9A227}
 .card{margin:15px;background:white;padding:20px;border-radius:12px;box-shadow:0 3px 12px rgba(0,0,0,.08)}
-h2{color:#176b45}label{font-weight:bold;display:block;margin:12px 0 5px;font-size:13px}
+h2{color:#0a4d2a}label{font-weight:bold;display:block;margin:12px 0 5px;font-size:12px;color:#14532d}
 input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:7px}
-button{background:#176b45;color:white;border:none;padding:14px;border-radius:7px;font-weight:bold;width:100%;margin-top:15px}
-#msg{font-weight:bold;margin-top:10px;text-align:center}
+button{background:#0a4d2a;color:white;border:none;padding:14px;border-radius:7px;font-weight:bold;width:100%;margin-top:15px;cursor:pointer}
+#msg{font-weight:bold;margin-top:10px;text-align:center;white-space:pre-wrap}
+.linkBox{background:#ecfdf5;border:1px dashed #0a4d2a;padding:10px;border-radius:8px;margin-top:10px;font-size:12px;word-break:break-all}
 </style></head><body>
-<div class="top"><b>ARNAUD VERIFICATION</b><button onclick="logout()" style="width:auto;padding:8px 15px;background:white;color:#176b45;border-radius:6px">Logout</button></div>
+<div class="top"><b>ARNAUD GLOBAL VERIFICATION</b><button onclick="logout()" style="width:auto;padding:8px 15px;background:white;color:#0a1931;border-radius:6px;border:none;font-weight:bold">Logout</button></div>
 <div class="card">
-<div id="userInfo">Loading...</div>
-<h2>Add Certificate</h2>
+<div id="userInfo" style="font-size:12px;color:#64748b">Loading...</div>
+<h2>Add New Certificate</h2>
 <form id="certForm">
-<label>Certificate Number *</label><input id="certNum" required>
-<label>Reference *</label><input id="ref" required>
+<label>Reference * (e.g AAC/2026/112082) - This is what employer will type</label><input id="ref" required placeholder="AAC/2026/112082">
+<label>Certificate Number * (Number on original cert)</label><input id="certNum" required placeholder="YABATECH/2023/123">
 <label>Full Name *</label><input id="fullName" required>
-<label>Certificate Type</label><input id="certType" placeholder="Degree">
-<label>Course</label><input id="course">
-<label>School</label><input id="school">
+<label>Certificate Type</label><input id="certType" placeholder="BSc, Diploma, WAEC">
+<label>Course / Qualification</label><input id="course" placeholder="Computer Science">
+<label>School / Issuing Institution</label><input id="school" placeholder="UNILAG, Yabatech, WAEC">
 <label>Issue Date</label><input type="date" id="issueDate">
 <label>Status</label><select id="status"><option>Verified</option><option>Pending</option><option>Invalid</option></select>
-<label>Certificate Image *</label><input type="file" id="certImg" accept="image/*" required>
-<div style="font-size:12px;color:#666">Image will be compressed automatically (no Storage needed)</div>
-<label>Note</label><textarea id="note" rows="3"></textarea>
-<button type="submit" id="addBtn">Add Certificate</button>
+<label>Certificate Image * (will be compressed)</label><input type="file" id="certImg" accept="image/*" required>
+<div style="font-size:11px;color:#666">Image will be compressed to save cost - no Storage needed</div>
+<label>Note / Source of Verification</label><textarea id="note" rows="3" placeholder="Verified via registrar office on 12/05/2026"></textarea>
+<button type="submit" id="addBtn">Add Certificate & Generate Link</button>
 <div id="msg"></div>
+<div id="linkResult"></div>
 </form>
 </div>
 <script type="module">
@@ -47,10 +50,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-onAuthStateChanged(auth, (u)=>{ if(!u) location.href="admin-login.html"; else document.getElementById('userInfo').innerHTML=`Logged in as: <b>${u.email}</b>`; });
+onAuthStateChanged(auth, (u)=>{ if(!u) location.href="admin-login.html"; else document.getElementById('userInfo').innerHTML=`Logged in as: <b>${u.email}</b> | <span style="color:green">● Secure</span>`; });
 window.logout=async()=>{await signOut(auth); location.href="admin-login.html";}
 
-// Compress image to base64
 function compressImage(file){
   return new Promise((resolve)=>{
     const reader = new FileReader();
@@ -58,12 +60,11 @@ function compressImage(file){
       const img = new Image();
       img.onload = ()=>{
         const canvas=document.createElement('canvas');
-        let w=img.width, h=img.height;
-        const max=800; // max width/height
+        let w=img.width, h=img.height; const max=800;
         if(w>h && w>max){ h=h*max/w; w=max; } else if(h>max){ w=w*max/h; h=max; }
         canvas.width=w; canvas.height=h;
         canvas.getContext('2d').drawImage(img,0,0,w,h);
-        resolve(canvas.toDataURL('image/jpeg',0.7)); // compressed jpeg 70%
+        resolve(canvas.toDataURL('image/jpeg',0.6));
       };
       img.src=e.target.result;
     };
@@ -73,34 +74,61 @@ function compressImage(file){
 
 document.getElementById('certForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
-  const btn=document.getElementById('addBtn'); const msg=document.getElementById('msg');
-  btn.disabled=true; msg.style.color="#333"; msg.textContent="Compressing image...";
+  const btn=document.getElementById('addBtn'); const msg=document.getElementById('msg'); const linkResult=document.getElementById('linkResult');
+  btn.disabled=true; msg.style.color="#333"; msg.textContent="⏳ Compressing image...";
   try{
-    const certNum=document.getElementById('certNum').value.trim();
+    const refRaw = document.getElementById('ref').value.trim();
+    const certNumRaw = document.getElementById('certNum').value.trim();
     const file=document.getElementById('certImg').files[0];
-    if(!file) throw new Error("Add image");
+    if(!file) throw new Error("Add certificate image");
+
     const base64 = await compressImage(file);
+    msg.textContent="⏳ Saving to global database...";
+
+    // FIX: Doc ID must NOT contain slash. We replace slash with dash for Doc ID only
+    const safeDocId = refRaw.replace(/\//g, "-").replace(/[^a-zA-Z0-9-_]/g, "_") || certNumRaw.replace(/\//g, "-");
     
-    msg.textContent="Saving...";
-    await setDoc(doc(db, "certificates", certNum), {
-      certNumber: certNum,
-      reference: document.getElementById('ref').value.trim(),
+    // Save with ALL field names so any verify version can find it
+    const data = {
+      ref: refRaw,
+      reference: refRaw,
+      refNumber: refRaw,
+      verificationRef: refRaw,
+      certNumber: certNumRaw,
+      certificateNumber: certNumRaw,
+      certNumberRaw: certNumRaw,
       fullName: document.getElementById('fullName').value.trim(),
+      name: document.getElementById('fullName').value.trim(),
       certificateType: document.getElementById('certType').value.trim(),
       course: document.getElementById('course').value.trim(),
       school: document.getElementById('school').value.trim(),
+      institution: document.getElementById('school').value.trim(),
       issueDate: document.getElementById('issueDate').value,
       status: document.getElementById('status').value,
       note: document.getElementById('note').value.trim(),
+      source: document.getElementById('note').value.trim(),
       imageBase64: base64,
       imageUrl: base64,
+      safeId: safeDocId,
       createdAt: serverTimestamp(),
       verifiedBy: auth.currentUser.email
-    });
+    };
+
+    await setDoc(doc(db, "certificates", safeDocId), data);
+
     msg.style.color="green";
-    msg.textContent=`✅ Saved! Link: verify.html?id=${certNum}`;
-    e.target.reset();
-  }catch(err){ msg.style.color="red"; msg.textContent="❌ "+err.message; console.error(err); }
+    msg.textContent=`✅ SAVED SUCCESSFULLY!\nDoc ID: ${safeDocId}`;
+    
+    // Generate the link employer will use
+    const verifyLink = `${window.location.origin}/verify.html?ref=${encodeURIComponent(refRaw)}`;
+    linkResult.innerHTML = `<div class="linkBox"><b>🔗 Verification Link for Employer (copy this):</b><br><br>${verifyLink}<br><br><b>QR Code will point to this link</b><br>Test it now: <a href="${verifyLink}" target="_blank">Click to test verify</a></div>`;
+    
+    // e.target.reset(); // don't reset immediately so you can copy link
+  }catch(err){ 
+    msg.style.color="red"; 
+    msg.textContent="❌ "+err.message; 
+    console.error(err); 
+  }
   btn.disabled=false;
 });
 </script></body></html>
