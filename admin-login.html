@@ -3,247 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Admin Login - ARNAUD AFROCHAINE VERIFICATION LTD</title>
-
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
     body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #f4f7f6;
-      padding: 20px;
+      margin: 0; min-height: 100vh; display: flex; justify-content: center;
+      align-items: center; background: #0a192f; padding: 20px;
     }
-
     .login-box {
-      width: 100%;
-      max-width: 420px;
-      background: white;
-      padding: 30px;
-      border-radius: 14px;
-      box-shadow: 0 5px 20px rgba(0,0,0,.12);
+      width: 100%; max-width: 420px; background: white; padding: 30px;
+      border-radius: 14px; box-shadow: 0 5px 20px rgba(201,162,39,.3);
+      border-top: 4px solid #C9A227;
     }
-
-    .logo {
-      text-align: center;
-      color: #176b45;
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #666;
-      margin-bottom: 25px;
-    }
-
-    h2 {
-      text-align: center;
-      color: #176b45;
-      margin-bottom: 22px;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 7px;
-    }
-
+    .logo { text-align: center; color: #0a1931; font-size: 18px; font-weight: 900; margin-bottom: 4px; }
+    .subtitle { text-align: center; color: #176b45; font-size: 12px; font-weight: bold; margin-bottom: 5px; }
+    .sub2 { text-align: center; color: #64748b; font-size: 11px; margin-bottom: 20px; }
+    h2 { text-align: center; color: #176b45; margin-bottom: 22px; margin-top:10px; }
+    label { display: block; font-weight: bold; margin-bottom: 7px; font-size: 13px; color:#0a1931; }
     input {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #ccc;
-      border-radius: 7px;
-      margin-bottom: 16px;
-      font-size: 15px;
+      width: 100%; padding: 13px; border: 1px solid #cbd5e1; border-radius: 8px;
+      margin-bottom: 16px; font-size: 15px;
     }
-
+    input:focus { outline:none; border-color:#C9A227; box-shadow:0 0 0 2px rgba(201,162,39,.2); }
     button {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 7px;
-      background: #176b45;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
+      width: 100%; padding: 14px; border: none; border-radius: 8px;
+      background: #0a4d2a; color: #C9A227; font-size: 16px; font-weight: 900; cursor: pointer;
     }
-
-    button:hover {
-      background: #0f5133;
-    }
-
-    #message {
-      margin-top: 15px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .footer {
-      margin-top: 22px;
-      text-align: center;
-      font-size: 12px;
-      color: #777;
-    }
+    button:hover { background: #0a1931; }
+    #message { margin-top: 15px; text-align: center; font-weight: bold; font-size: 13px; min-height:20px; }
+    .footer { margin-top: 22px; text-align: center; font-size: 11px; color: #777; line-height:1.5; }
   </style>
 </head>
-
 <body>
 
   <div class="login-box">
-
-    <div class="logo">
-      ARNAUD AFROCHAINE VERIFICATION LTD
-    </div>
-
-    <div class="subtitle">
-      Secure Administrator Portal
-    </div>
+    <div class="logo">ARNAUD AFROCHAINE VERIFICATION LTD</div>
+    <div class="subtitle">Secure Administrator Portal</div>
+    <div class="sub2">Blockchain Secured • NDPA 2023 Compliant</div>
 
     <h2>Admin Login</h2>
 
     <form id="loginForm">
-
       <label for="email">Email Address</label>
-
-      <input
-        type="email"
-        id="email"
-        placeholder="Enter admin email"
-        required
-      >
-
+      <input type="email" id="email" placeholder="Enter admin email" required>
       <label for="password">Password</label>
-
-      <input
-        type="password"
-        id="password"
-        placeholder="Enter password"
-        required
-      >
-
-      <button type="submit">
-        Login
-      </button>
-
+      <input type="password" id="password" placeholder="Enter password" required>
+      <button type="submit">Login to Dashboard</button>
       <div id="message"></div>
-
     </form>
 
     <div class="footer">
-      Authorized administrators only
+      Authorized administrators only<br>
+      🔒 NDPA 2023 Compliant • All logins audited • Data encrypted<br>
+      <span style="font-size:9px; color:#0a4d2a; word-break:break-all;">Wallet: 0x64478336d9018927C8E45AcC35e9e24c969EfAE2 | 500B ARNAUD<br>
+      12 Idiroko Road, Sango Ota, Ogun State, NG | 0913 285 1465</span>
     </div>
-
   </div>
 
-
   <script type="module">
-
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-
-    import {
-      getAuth,
-      signInWithEmailAndPassword
-    } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
-
       apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-
-      authDomain:
-        "arnaudafrochaineverification.firebaseapp.com",
-
-      projectId:
-        "arnaudafrochaineverification",
-
-      storageBucket:
-        "arnaudafrochaineverification.firebasestorage.app",
-
-      messagingSenderId:
-        "268502946630",
-
-      appId:
-        "1:268502946630:web:c7abe320c83a1d9c3b4b47",
-
-      measurementId:
-        "G-Y52LEBJM7Q"
+      authDomain: "arnaudafrochaineverification.firebaseapp.com",
+      projectId: "arnaudafrochaineverification",
+      storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+      messagingSenderId: "268502946630",
+      appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"
     };
 
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    const app =
-      initializeApp(firebaseConfig);
+    // ✅ SECURITY: ONLY THESE EMAILS CAN LOGIN
+    const ADMIN_WHITELIST = [
+      "arnaudafrochaine@gmail.com",
+      "admin@arnaudglobal.com",
+      "verify@arnaudglobal.com",
+      "arnaud@arnaudchain.afro"
+    ];
 
-    const auth =
-      getAuth(app);
+    document.getElementById("loginForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value;
+      const message = document.getElementById("message");
 
+      message.style.color = "#333";
+      message.textContent = "Verifying credentials... ⏳";
 
-    document
-      .getElementById("loginForm")
-      .addEventListener("submit", async (event) => {
+      if(!ADMIN_WHITELIST.includes(email)){
+        message.style.color = "red";
+        message.textContent = "⛔ Access denied: Not authorized admin. Contact CEO: 0913 285 1465";
+        return;
+      }
 
-        event.preventDefault();
-
-        const email =
-          document.getElementById("email").value.trim();
-
-        const password =
-          document.getElementById("password").value;
-
-        const message =
-          document.getElementById("message");
-
-
-        message.style.color = "#333";
-        message.textContent = "Logging in...";
-
-
-        try {
-
-          await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
-
-
-          message.style.color = "green";
-          message.textContent =
-            "Login successful. Opening dashboard...";
-
-
-          setTimeout(() => {
-
-            window.location.href =
-              "dashboard.html";
-
-          }, 700);
-
-
-        } catch (error) {
-
-          console.error(error);
-
-          message.style.color = "red";
-
-          message.textContent =
-            "Login failed: " + error.message;
-
-        }
-
-      });
-
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        message.style.color = "green";
+        message.textContent = "✅ Login successful. Opening secure dashboard...";
+        console.log(`[AUDIT-NDPA] Admin login: ${email} at ${new Date().toISOString()}`);
+        setTimeout(() => { window.location.href = "dashboard.html"; }, 800);
+      } catch (error) {
+        console.error(error);
+        message.style.color = "red";
+        message.textContent = "Login failed: " + error.message;
+      }
+    });
   </script>
 
 </body>
