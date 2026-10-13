@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ARNAUD AFROCHAINE VERIFICATION LTD - Global Blockchain Network</title><script src="https://cdn.jsdelivr.net/npm/ethers@6.8.1/dist/ethers.umd.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}body{background:#f6fff6;color:#222}.top{background:#0a4d2a;color:white;text-align:center;padding:7px;font-size:9px}.nav{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:white;box-shadow:0 2px 10px #0001;position:sticky;top:0;z-index:100}.logo{display:flex;align-items:center;gap:8px}.logo img{width:44px;height:44px;border-radius:50%;border:2px solid #C9A227;object-fit:cover;background:white}.logo b{color:#0a4d2a;font-size:11px;line-height:1}
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ARNAUD AFROCHAINE VERIFICATION LTD - Global Blockchain Network</title><script src="https://cdn.jsdelivr.net/npm/ethers@6.8.1/dist/ethers.umd.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}body{background:#f6fff6;color:#222}.top{background:linear-gradient(90deg,#0a4d2a,#0f6d3a);color:white;text-align:center;padding:8px 6px;font-size:9px;letter-spacing:0.3px}.nav{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:white;box-shadow:0 4px 20px rgba(0,0,0,0.08);position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}.logo{display:flex;align-items:center;gap:8px}.logo img{width:44px;height:44px;border-radius:50%;border:2px solid #C9A227;object-fit:cover;background:white;box-shadow:0 0 12px rgba(201,162,39,0.3)}.logo b{color:#0a4d2a;font-size:11px;line-height:1}
 
-/* NEW - WORLD MAP HERO - ADDED */
-.world-hero{position:relative;background:radial-gradient(ellipse at center,#0a2a5a 0%,#020a14 80%);height:400px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+/* POLISHED WORLD MAP - PREMIUM */
+.world-hero{position:relative;background:radial-gradient(ellipse at center,#0d2a5e 0%,#061433 35%,#020a14 75%);height:460px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border-bottom:2px solid #C9A227}
 #worldCanvas{position:absolute;top:0;left:0;width:100%;height:100%}
-.hero-content{position:relative;z-index:2;pointer-events:none}
-.hero-content h1{font-size:18px;font-weight:900;line-height:1.2;color:#fff;text-shadow:0 0 15px #00ff88}
-.live-stats{display:flex;gap:8px;margin-top:10px;justify-content:center;flex-wrap:wrap}
-.stat-box{background:rgba(10,77,42,0.85);border:1px solid #C9A227;padding:5px 9px;border-radius:20px;font-size:8px;font-weight:800;color:#fff}
-.pulse-dot{width:7px;height:7px;background:#00ff66;border-radius:50%;display:inline-block;animation:pulse 1.5s infinite;margin-right:3px}
-@keyframes pulse{0%{box-shadow:0 0 0 0 #00ff66}70%{box-shadow:0 0 0 7px rgba(0,255,102,0)}100%{box-shadow:0 0 0 0 rgba(0,255,102,0)}}
-.map-toggle{pointer-events:auto;text-align:center;margin-top:10px}
-.map-toggle button{padding:5px 10px;margin:0 3px;border-radius:20px;border:1px solid #C9A227;background:transparent;color:#C9A227;font-size:9px;font-weight:700;cursor:pointer}
-.map-toggle button.active{background:#C9A227;color:#000}
+.hero-content{position:relative;z-index:3;pointer-events:none;padding:0 12px}
+.hero-content h1{font-size:20px;font-weight:900;line-height:1.2;color:#fff;text-shadow:0 0 25px rgba(0,255,136,0.6),0 2px 10px rgba(0,0,0,0.8);letter-spacing:0.5px}
+.hero-content.subtitle{color:#00ff88;font-size:13px;font-weight:800;margin-top:4px;letter-spacing:1px;text-shadow:0 0 15px rgba(0,255,136,0.8)}
+.hero-content.desc{font-size:10px;margin-top:8px;color:#a0b8d0;letter-spacing:0.5px}
+.live-stats{display:flex;gap:8px;margin-top:14px;justify-content:center;flex-wrap:wrap}
+.stat-box{background:rgba(10,40,70,0.85);border:1px solid rgba(201,162,39,0.5);padding:6px 11px;border-radius:20px;font-size:8.5px;font-weight:800;color:#fff;box-shadow:0 0 15px rgba(0,180,255,0.15),inset 0 1px 0 rgba(255,255,255,0.1);backdrop-filter:blur(5px)}
+.pulse-dot{width:7px;height:7px;background:#00ff66;border-radius:50%;display:inline-block;animation:pulse 1.8s infinite;margin-right:4px;box-shadow:0 0 8px #00ff66}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #00ff66}70%{box-shadow:0 0 0 8px rgba(0,255,102,0)}100%{box-shadow:0 0 0 0 rgba(0,255,102,0)}}
+.map-toggle{pointer-events:auto;margin-top:14px;display:flex;gap:8px;justify-content:center}
+.map-toggle button{padding:7px 14px;border-radius:25px;border:1px solid rgba(201,162,39,0.6);background:rgba(0,0,0,0.4);color:#C9A227;font-size:9.5px;font-weight:800;cursor:pointer;transition:all 0.3s;backdrop-filter:blur(5px)}
+.map-toggle button.active{background:linear-gradient(135deg,#C9A227,#ffd700);color:#000;box-shadow:0 0 20px rgba(201,162,39,0.6);border-color:#ffd700;transform:scale(1.05)}
+.map-toggle button:hover{border-color:#ffd700;box-shadow:0 0 12px rgba(201,162,39,0.4)}
 
-.hero{background:linear-gradient(135deg,#0a4d2a,#1a8a4a);color:white;text-align:center;padding:20px 14px}.hero h1{font-size:15px;line-height:1.3}.box{background:white;margin:-18px 10px 10px 10px;padding:16px;border-radius:14px;box-shadow:0 8px 25px #0002;position:relative;z-index:5}.box h3{color:#0a4d2a;text-align:center;font-size:14px;margin-bottom:10px}.box input{width:100%;padding:13px;border:2px solid #a5d6a7;border-radius:9px;margin-bottom:10px;font-size:14px;text-transform:uppercase}.box button{width:100%;padding:13px;background:#0a4d2a;color:white;border:none;border-radius:9px;font-weight:700;cursor:pointer;margin-bottom:8px}.box button.blockchain{background:linear-gradient(135deg,#0a4d2a,#C9A227);border:1px solid #C9A227}.sec{margin:14px 10px;padding:16px;background:white;border-radius:14px;box-shadow:0 4px 15px #0001}.sec h2{color:#0a4d2a;font-size:15px;margin-bottom:10px;border-left:4px solid #b8860b;padding-left:8px}.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.gallery img{width:100%;height:165px;object-fit:cover;border-radius:10px;border:1px solid #ddd}.foot{background:#0a4d2a;color:white;padding:18px;text-align:center;font-size:10px}.wa{position:fixed;bottom:16px;right:16px;background:#25D366;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;z-index:999}.resbox{margin-top:14px;border-radius:12px;overflow:hidden;border:2px solid #0a4d2a;display:none}.certificate-file{margin:14px;border:2px dashed #0a4d2a;padding:12px;text-align:center;border-radius:12px}.certificate-file img{width:100%;max-height:700px;object-fit:contain;border-radius:8px;margin-top:10px}.pdf-button{display:inline-block;margin-top:10px;background:#0a4d2a;color:white;padding:10px 15px;border-radius:8px;text-decoration:none;font-weight:bold}.badge{display:inline-block;background:#C9A227;color:black;padding:3px 8px;border-radius:20px;font-size:8px;font-weight:800;margin-left:5px}.blockchain-status{background:#051208;border:1px solid #C9A227;color:#C9A227;padding:8px;border-radius:8px;font-size:10px;text-align:center;margin-bottom:10px}</style>
+.hero{background:linear-gradient(135deg,#0a4d2a 0%,#129a55 100%);color:white;text-align:center;padding:22px 14px;position:relative;overflow:hidden}.hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at top,rgba(255,255,255,0.1),transparent 60%);pointer-events:none}.hero h1{font-size:15px;line-height:1.3;position:relative}.box{background:white;margin:-20px 10px 10px 10px;padding:18px;border-radius:16px;box-shadow:0 12px 35px rgba(0,0,0,0.12);position:relative;z-index:5;border:1px solid rgba(201,162,39,0.15)}.box h3{color:#0a4d2a;text-align:center;font-size:14px;margin-bottom:12px;font-weight:800}.box input{width:100%;padding:14px;border:2px solid #a5d6a7;border-radius:10px;margin-bottom:11px;font-size:14px;text-transform:uppercase;transition:all 0.2s}.box input:focus{border-color:#0a4d2a;box-shadow:0 0 0 3px rgba(10,77,42,0.1);outline:none}.box button{width:100%;padding:14px;background:linear-gradient(135deg,#0a4d2a,#0f7a42);color:white;border:none;border-radius:10px;font-weight:800;cursor:pointer;margin-bottom:9px;box-shadow:0 4px 12px rgba(10,77,42,0.25);transition:all 0.2s}.box button:active{transform:scale(0.98)}.box button.blockchain{background:linear-gradient(135deg,#0a4d2a 0%,#C9A227 100%);border:1px solid #C9A227;box-shadow:0 4px 15px rgba(201,162,39,0.3)}.sec{margin:14px 10px;padding:16px;background:white;border-radius:14px;box-shadow:0 4px 15px #0001;border:1px solid rgba(0,0,0,0.04)}.sec h2{color:#0a4d2a;font-size:15px;margin-bottom:10px;border-left:4px solid #C9A227;padding-left:10px;font-weight:800}.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.gallery img{width:100%;height:165px;object-fit:cover;border-radius:10px;border:1px solid #eee;transition:transform 0.2s}.gallery img:hover{transform:scale(1.02)}.foot{background:linear-gradient(180deg,#0a4d2a,#082e1a);color:white;padding:20px;text-align:center;font-size:10px;line-height:1.6}.wa{position:fixed;bottom:18px;right:18px;background:linear-gradient(135deg,#25D366,#1ebe5b);width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;z-index:999;box-shadow:0 6px 20px rgba(37,211,102,0.4)}.resbox{margin-top:14px;border-radius:12px;overflow:hidden;border:2px solid #0a4d2a;display:none}.certificate-file{margin:14px;border:2px dashed #0a4d2a;padding:12px;text-align:center;border-radius:12px}.certificate-file img{width:100%;max-height:700px;object-fit:contain;border-radius:8px;margin-top:10px}.pdf-button{display:inline-block;margin-top:10px;background:#0a4d2a;color:white;padding:10px 15px;border-radius:8px;text-decoration:none;font-weight:bold}.badge{display:inline-block;background:linear-gradient(135deg,#C9A227,#ffd700);color:black;padding:3px 8px;border-radius:20px;font-size:8px;font-weight:800;margin-left:5px}.blockchain-status{background:linear-gradient(90deg,#051208,#0a2810);border:1px solid #C9A227;color:#C9A227;padding:8px;border-radius:8px;font-size:9.5px;text-align:center;margin-bottom:11px;letter-spacing:0.3px}</style>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {getFirestore, collection, query, where, getDocs} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -24,23 +27,22 @@ const OWNER_WALLET="0x64478336d9018927C8E45AcC35e9e24c969EfAE2";
 const REGISTRY_ADDRESS="REPLACE_WITH_DEPLOYED_ADDRESS";
 const REGISTRY_ABI=["function verify(string calldata id) external view returns (bool isValid, string memory name, string memory school, uint256 date)"];
 async function checkBlockchain(ref){if(REGISTRY_ADDRESS.startsWith("REPLACE")) return {enabled:false};try{const p=new ethers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");const c=new ethers.Contract(REGISTRY_ADDRESS,REGISTRY_ABI,p);const [isValid,name,school,date]=await c.verify(ref);return {enabled:true,isValid,name,school,date}}catch(e){return {enabled:false}}}
-window.check=async function(valueFromQR=null){const input=document.getElementById("cert");const raw=String(valueFromQR||input.value||"").trim().toUpperCase();const resDiv=document.getElementById("res");if(!raw){resDiv.style.display="block";resDiv.innerHTML=`<div style="padding:15px;background:#ffebee;text-align:center">❌ Please enter a certificate reference.</div>`;return;}input.value=raw;resDiv.style.display="block";resDiv.innerHTML=`<div style="padding:20px;text-align:center;background:#fff8e1">⏳ Checking certificate... ${raw}<br><small>Checking Firebase + Blockchain (Owner: 0x6447...fAE2)</small></div>`;try{const q=query(collection(db,"certificates"),where("ref","==",raw));const snapshot=await getDocs(q);const chainResult=await checkBlockchain(raw);if(snapshot.empty&&(!chainResult.enabled||!chainResult.isValid)){resDiv.innerHTML=`<div style="padding:20px;background:#ffebee;text-align:center"><b>❌ CERTIFICATE NOT FOUND</b><br><br>Reference <b>${raw}</b> not found.</div>`;return;}let d={};if(!snapshot.empty){d=snapshot.docs[0].data()}else if(chainResult.isValid){d={fullName:chainResult.name,school:chainResult.school,ref:raw,status:"VERIFIED ON BLOCKCHAIN",issueDate:new Date(Number(chainResult.date)*1000).toLocaleDateString()}}const status=d.status||(chainResult.isValid?"VERIFIED ON BLOCKCHAIN + FIREBASE":"VERIFIED");const fullName=d.fullName||d.name||chainResult.name||"Not provided";const certificateType=d.certificateType||d.course||d.docType||"Certificate";const certificateNumber=d.certificateNumber||d.certNo||"Not provided";const issuer=d.school||d.issuer||chainResult.school||"Not provided";const issueDate=d.issueDate||d.dateVerified||(chainResult.date?new Date(Number(chainResult.date)*1000).toLocaleDateString():"Not provided");const reference=d.ref||raw;const publicVerifyUrl="https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/?id="+encodeURIComponent(reference);const qrUrl="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="+encodeURIComponent(publicVerifyUrl);let blockchainBadge="";if(chainResult.enabled&&chainResult.isValid){blockchainBadge=`<div style="background:#0a2a12;border:1px solid #00ff66;color:#00ff66;padding:6px;border-radius:6px;font-size:10px;margin:8px;text-align:center">🔗 BLOCKCHAIN VERIFIED - Owner: ${OWNER_WALLET.substring(0,10)}... - Immutable</div>`}else{blockchainBadge=`<div style="background:#111;border:1px solid #C9A227;color:#C9A227;padding:6px;border-radius:6px;font-size:9px;margin:8px;text-align:center">⏳ Blockchain layer ready - Deploy registry to activate (Owner: 0x6447...fAE2 | Token: 500B ARNAUD)</div>`}let certificateFileHTML="";if(d.certificateImageUrl){const fileUrl=d.certificateImageUrl;const isPDF=fileUrl.toLowerCase().includes(".pdf");if(isPDF){certificateFileHTML=`<div class="certificate-file"><div style="font-weight:800;color:#0a4d2a">📄 CERTIFICATE DOCUMENT</div><a class="pdf-button" href="${fileUrl}" target="_blank">📄 OPEN CERTIFICATE PDF</a></div>`}else{certificateFileHTML=`<div class="certificate-file"><div style="font-weight:800;color:#0a4d2a">🖼️ CERTIFICATE DOCUMENT</div><a href="${fileUrl}" target="_blank"><img src="${fileUrl}" alt="Verified Certificate"></a></div>`}}resDiv.innerHTML=`<div style="background:white"><div style="background:#0a4d2a;color:white;padding:12px;text-align:center;font-weight:900;margin:8px;border-radius:8px">✅ ${status} <span class="badge">500B ARNAUD POWERED</span></div>${blockchainBadge}<div style="padding:14px;line-height:2.2;font-size:13px"><b>Reference:</b> ${reference}<br><b>Name:</b> ${fullName}<br><b>Doc:</b> ${certificateType}<br><b>Cert No:</b> ${certificateNumber}<br><b>Institution:</b> ${issuer}<br><b>Date:</b> ${issueDate}<br><b>Owner Wallet:</b> ${OWNER_WALLET.substring(0,6)}...${OWNER_WALLET.slice(-4)}<br></div>${certificateFileHTML}<div style="margin:14px;border:2px dashed #0a4d2a;padding:12px;text-align:center;border-radius:12px"><div style="font-weight:800;color:#0a4d2a">📱 QR VERIFICATION - Blockchain Secured</div><img src="${qrUrl}" alt="QR Verification" style="margin:10px 0;width:200px;height:200px"><div style="font-size:9px;word-break:break-all">${publicVerifyUrl}</div></div></div>`;resDiv.scrollIntoView({behavior:"smooth"})}catch(error){resDiv.innerHTML=`<div style="padding:20px;background:#ffebee;text-align:center">❌ Error: ${error.message}</div>`}};
+window.check=async function(valueFromQR=null){const input=document.getElementById("cert");const raw=String(valueFromQR||input.value||"").trim().toUpperCase();const resDiv=document.getElementById("res");if(!raw){resDiv.style.display="block";resDiv.innerHTML=`<div style="padding:15px;background:#ffebee;text-align:center">❌ Please enter a certificate reference.</div>`;return;}input.value=raw;resDiv.style.display="block";resDiv.innerHTML=`<div style="padding:20px;text-align:center;background:#fff8e1">⏳ Checking certificate... ${raw}<br><small>Checking Firebase + Blockchain (Owner: 0x6447...fAE2)</small></div>`;try{const q=query(collection(db,"certificates"),where("ref","==",raw));const snapshot=await getDocs(q);const chainResult=await checkBlockchain(raw);if(snapshot.empty&&(!chainResult.enabled||!chainResult.isValid)){resDiv.innerHTML=`<div style="padding:20px;background:#ffebee;text-align:center"><b>❌ CERTIFICATE NOT FOUND</b><br><br>Reference <b>${raw}</b> not found.</div>`;return;}let d={};if(!snapshot.empty){d=snapshot.docs[0].data()}else if(chainResult.isValid){d={fullName:chainResult.name,school:chainResult.school,ref:raw,status:"VERIFIED ON BLOCKCHAIN",issueDate:new Date(Number(chainResult.date)*1000).toLocaleDateString()}}const status=d.status||(chainResult.isValid?"VERIFIED ON BLOCKCHAIN + FIREBASE":"VERIFIED");const fullName=d.fullName||d.name||chainResult.name||"Not provided";const certificateType=d.certificateType||d.course||d.docType||"Certificate";const certificateNumber=d.certificateNumber||d.certNo||"Not provided";const issuer=d.school||d.issuer||chainResult.school||"Not provided";const issueDate=d.issueDate||d.dateVerified||(chainResult.date?new Date(Number(chainResult.date)*1000).toLocaleDateString():"Not provided");const reference=d.ref||raw;const publicVerifyUrl="https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/?id="+encodeURIComponent(reference);const qrUrl="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="+encodeURIComponent(publicVerifyUrl);let blockchainBadge="";if(chainResult.enabled&&chainResult.isValid){blockchainBadge=`<div style="background:#0a2a12;border:1px solid #00ff66;color:#00ff66;padding:6px;border-radius:6px;font-size:10px;margin:8px;text-align:center">🔗 BLOCKCHAIN VERIFIED - Owner: ${OWNER_WALLET.substring(0,10)}... - Immutable</div>`}else{blockchainBadge=`<div style="background:#111;border:1px solid #C9A227;color:#C9A227;padding:6px;border-radius:6px;font-size:9px;margin:8px;text-align:center">⏳ Blockchain layer ready - Owner: 0x6447...fAE2 | Token: 500B ARNAUD</div>`}let certificateFileHTML="";if(d.certificateImageUrl){const fileUrl=d.certificateImageUrl;const isPDF=fileUrl.toLowerCase().includes(".pdf");if(isPDF){certificateFileHTML=`<div class="certificate-file"><div style="font-weight:800;color:#0a4d2a">📄 CERTIFICATE DOCUMENT</div><a class="pdf-button" href="${fileUrl}" target="_blank">📄 OPEN CERTIFICATE PDF</a></div>`}else{certificateFileHTML=`<div class="certificate-file"><div style="font-weight:800;color:#0a4d2a">🖼️ CERTIFICATE DOCUMENT</div><a href="${fileUrl}" target="_blank"><img src="${fileUrl}" alt="Verified Certificate"></a></div>`}}resDiv.innerHTML=`<div style="background:white"><div style="background:#0a4d2a;color:white;padding:12px;text-align:center;font-weight:900;margin:8px;border-radius:8px">✅ ${status} <span class="badge">500B ARNAUD</span></div>${blockchainBadge}<div style="padding:14px;line-height:2.2;font-size:13px"><b>Reference:</b> ${reference}<br><b>Name:</b> ${fullName}<br><b>Doc:</b> ${certificateType}<br><b>Cert No:</b> ${certificateNumber}<br><b>Institution:</b> ${issuer}<br><b>Date:</b> ${issueDate}<br><b>Owner:</b> ${OWNER_WALLET.substring(0,6)}...${OWNER_WALLET.slice(-4)}<br></div>${certificateFileHTML}<div style="margin:14px;border:2px dashed #0a4d2a;padding:12px;text-align:center;border-radius:12px"><div style="font-weight:800;color:#0a4d2a">📱 QR VERIFICATION</div><img src="${qrUrl}" alt="QR Verification" style="margin:10px 0;width:200px;height:200px"><div style="font-size:9px;word-break:break-all">${publicVerifyUrl}</div></div></div>`;resDiv.scrollIntoView({behavior:"smooth"})}catch(error){resDiv.innerHTML=`<div style="padding:20px;background:#ffebee;text-align:center">❌ Error: ${error.message}</div>`}};
 window.addEventListener("DOMContentLoaded",()=>{const params=new URLSearchParams(window.location.search);const id=params.get("id");if(id){check(id)}});
 </script></head><body>
 <div class="top">📍 12 Idiroko Road, Sango Ota • ☎️ 0913 285 1465 • ✉️ arnaudafrochaine@gmail.com • 🔗 Blockchain: 0x6447...fAE2 • 500B ARNAUD • 🌍 GLOBAL NETWORK ACTIVE</div>
-<div class="nav"><div class="logo"><img src="logo.jpg"><b>ARNAUD<br>AFROCHAINE<br><span style="color:#b8860b;font-size:8px">VERIFICATION LTD</span></b></div><div style="font-size:10px;color:#0a4d2a;font-weight:700">✅ CAC REGISTERED • 🔗 BLOCKCHAIN SECURED • 🌍 GLOBAL</div></div>
-
-<!-- NEW WORLD MAP NETWORK - ADDED HERE - LIKE YOUR 2 IMAGES -->
+<div class="nav"><div class="logo"><img src="logo.jpg"><b>ARNAUD<br>AFROCHAINE<br><span style="color:#b8860b;font-size:8px">VERIFICATION LTD</span></b></div><div style="font-size:10px;color:#0a4d2a;font-weight:700">✅ CAC • 🔗 BLOCKCHAIN • 🌍 GLOBAL</div></div>
 <div class="world-hero">
 <canvas id="worldCanvas"></canvas>
 <div class="hero-content">
-<h1>🌍 GLOBAL VERIFICATION NETWORK<br><span style="color:#00ff66;font-size:13px">AFRICAN ROOTS, GLOBAL VISION</span></h1>
-<p style="font-size:10px;margin-top:6px;color:#ccc">Live Blockchain Verification • 6 Continents • Immutable</p>
+<h1>🌍 GLOBAL VERIFICATION NETWORK</h1>
+<div class="subtitle">AFRICAN ROOTS, GLOBAL VISION</div>
+<div class="desc">Live Blockchain Verification • 6 Continents • Immutable • 500B ARNAUD Secured</div>
 <div class="live-stats">
 <div class="stat-box"><span class="pulse-dot"></span>2,847 VERIFIED TODAY</div>
 <div class="stat-box">🌐 43 COUNTRIES</div>
 <div class="stat-box">🔗 0x6447...fAE2</div>
-<div class="stat-box">500B ARNAUD</div>
+<div class="stat-box">💎 500B ARNAUD</div>
 </div>
 <div class="map-toggle">
 <button id="btnBlue" class="active" onclick="setMode('blue')">💙 HUB MODE (Blue)</button>
@@ -48,67 +50,85 @@ window.addEventListener("DOMContentLoaded",()=>{const params=new URLSearchParams
 </div>
 </div>
 </div>
-
-<div class="hero"><h1>RESTORE TRUST IN CERTIFICATES WORLDWIDE</h1><p style="margin-top:6px;font-size:12px">No More Fake Credentials. Verify Any Certificate in 5 Seconds<br>Trusted by Schools • Employers • Government<br><span style="background:#C9A227;color:black;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:800">NOW POWERED BY 500 BILLION ARNAUD BLOCKCHAIN + GLOBAL NETWORK</span></p></div>
-<div class="box"><div class="blockchain-status">🔗 Owner: 0x64478336d9018927C8E45AcC35e9e24c969EfAE2 | Token: 500,000,000,000 ARNAUD | Dual: Firebase + Blockchain | Global Network: BLUE Hub + RED Mesh Active</div><h3>🔍 Verify Certificate Here - Global Blockchain Network</h3><input id="cert" placeholder="Enter Certificate Reference e.g. AA-2025-001"><button onclick="check()">VERIFY NOW →</button><button class="blockchain" onclick="check()">🔗 VERIFY ON GLOBAL BLOCKCHAIN + FIREBASE</button><div id="res" class="resbox"></div></div>
-<div class="sec"><h2>🌍 Global Coverage - Live Nodes</h2><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;font-size:10px;font-weight:700" id="nodeGrid"></div></div>
+<div class="hero"><h1>RESTORE TRUST IN CERTIFICATES WORLDWIDE</h1><p style="margin-top:6px;font-size:12px">No More Fake Credentials. Verify Any Certificate in 5 Seconds<br>Trusted by Schools • Employers • Government<br><span style="background:#C9A227;color:black;padding:3px 10px;border-radius:12px;font-size:9px;font-weight:800">NOW POWERED BY 500 BILLION ARNAUD BLOCKCHAIN + GLOBAL NETWORK</span></p></div>
+<div class="box"><div class="blockchain-status">🔗 Owner: 0x64478336d9018927C8E45AcC35e9e24c969EfAE2 | Token: 500B ARNAUD | Dual: Firebase + Blockchain | Global Network: BLUE Hub + RED Mesh Active - Polished Premium</div><h3>🔍 Verify Certificate Here - Global Blockchain Network</h3><input id="cert" placeholder="Enter Certificate Reference e.g. AA-2025-001"><button onclick="check()">VERIFY NOW →</button><button class="blockchain" onclick="check()">🔗 VERIFY ON GLOBAL BLOCKCHAIN + FIREBASE</button><div id="res" class="resbox"></div></div>
+<div class="sec"><h2>🌍 Global Coverage - Live Nodes</h2><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;text-align:center;font-size:10px;font-weight:700" id="nodeGrid"></div></div>
 <div class="sec"><h2>📸 Our Work Gallery</h2><div class="gallery"><img src="IMG-20260912-WA0000.jpg"><img src="IMG-20260912-WA0001.jpg"><img src="IMG-20260913-WA0000.jpg"><img src="IMG-20260913-WA0024.jpg"><img src="IMG-20260913-WA0025.jpg"><img src="IMG-20260915-WA0014.jpg"><img src="IMG-20260915-WA0015.jpg"><img src="IMG-20260920-WA0113.jpg"><img src="IMG-20260922-WA0083.jpg"><img src="IMG-20260922-WA0084.jpg"><img src="IMG-20260922-WA0085.jpg"><img src="IMG-20260922-WA0086.jpg"><img src="IMG-20260922-WA0087.jpg"><img src="IMG-20260922-WA0088.jpg"><img src="IMG-20260922-WA0089.jpg"><img src="IMG-20260922-WA0090.jpg"><img src="IMG-20260922-WA0091.jpg"><img src="IMG-20260922-WA0092.jpg"><img src="IMG-20260922-WA0111.jpg"><img src="IMG-20260922-WA0112.jpg"><img src="IMG-20260922-WA0113.jpg"><img src="IMG-20260924-WA0166.jpg"></div></div>
-<div class="sec"><h2>🔗 Blockchain Compliance</h2><p style="font-size:11px;line-height:1.6">ARNAUD Token: 500B Supply | Owner: 0x64478336d9018927C8E45AcC35e9e24c969EfAE2 | Verification fee: 10,000 ARNAUD per cert | Dual verification: Firebase + Ethereum Blockchain | Global Network: Hub + Mesh | SEC ARIP Compliant | NDPA 2023 Compliant | African Roots, Global Vision</p></div>
-<div class="foot"><b>ARNAUD AFROCHAINE VERIFICATION LTD</b><br>12 Idiroko Road, Sango Ota, Nigeria<br>Owner Wallet: 0x64478336d9018927C8E45AcC35e9e24c969EfAE2 | 500B ARNAUD Token | Global Network Active<br>© 2026 | CAC REGISTERED | African Roots, Global Vision | Blockchain Secured</div>
+<div class="foot"><b>ARNAUD AFROCHAINE VERIFICATION LTD</b><br>12 Idiroko Road, Sango Ota, Nigeria<br>Owner: 0x64478336d9018927C8E45AcC35e9e24c969EfAE2 | 500B ARNAUD | Global Network Polished Premium<br>© 2026 | CAC REGISTERED | African Roots, Global Vision | Blockchain Secured</div>
 <a class="wa" href="https://wa.me/2349132851465" target="_blank">💬</a>
 <script>
-// WORLD MAP ANIMATION - SAME AS YOUR 2 IMAGES
+// POLISHED WORLD MAP - PREMIUM GLOW
 const canvas=document.getElementById('worldCanvas');const ctx=canvas.getContext('2d');
 let mode='blue';
 window.setMode=function(m){mode=m;document.getElementById('btnBlue').classList.toggle('active',m==='blue');document.getElementById('btnRed').classList.toggle('active',m==='red');};
 function resize(){canvas.width=canvas.offsetWidth*2;canvas.height=canvas.offsetHeight*2;}window.addEventListener('resize',resize);resize();
 const nodes=[
-{x:0.50,y:0.48,name:'NG',label:'🇳🇬 Nigeria HQ',hub:true},
+{x:0.50,y:0.50,name:'NG',label:'🇳🇬 Nigeria HQ',hub:true},
 {x:0.22,y:0.35,name:'USA',label:'🇺🇸 USA'},
-{x:0.25,y:0.58,name:'BR',label:'🇧🇷 Brazil'},
+{x:0.26,y:0.60,name:'BR',label:'🇧🇷 Brazil'},
 {x:0.48,y:0.32,name:'UK',label:'🇬🇧 UK'},
-{x:0.52,y:0.35,name:'DE',label:'🇩🇪 Germany'},
-{x:0.56,y:0.38,name:'EG',label:'🇪🇬 Egypt'},
-{x:0.55,y:0.55,name:'ZA',label:'🇿🇦 S.Africa'},
-{x:0.68,y:0.38,name:'IN',label:'🇮🇳 India'},
-{x:0.72,y:0.32,name:'CN',label:'🇨🇳 China'},
-{x:0.80,y:0.45,name:'AU',label:'🇦🇺 Australia'},
-{x:0.62,y:0.30,name:'AE',label:'🇦🇪 UAE'},
-{x:0.18,y:0.45,name:'CA',label:'🇨🇦 Canada'},
+{x:0.53,y:0.36,name:'DE',label:'🇩🇪 Germany'},
+{x:0.57,y:0.40,name:'EG',label:'🇪🇬 Egypt'},
+{x:0.56,y:0.57,name:'ZA',label:'🇿🇦 S.Africa'},
+{x:0.68,y:0.40,name:'IN',label:'🇮🇳 India'},
+{x:0.73,y:0.34,name:'CN',label:'🇨🇳 China'},
+{x:0.82,y:0.48,name:'AU',label:'🇦🇺 Australia'},
+{x:0.63,y:0.31,name:'AE',label:'🇦🇪 UAE'},
+{x:0.18,y:0.46,name:'CA',label:'🇨🇦 Canada'},
+{x:0.46,y:0.43,name:'FR',label:'🇫🇷 France'},
+{x:0.61,y:0.54,name:'KE',label:'🇰🇪 Kenya'},
 ];
+// stars background
+const stars=[];
+for(let i=0;i<80;i++){stars.push({x:Math.random(),y:Math.random(),r:Math.random()*1.2+0.3,blink:Math.random()*Math.PI*2});}
 let tick=0;
 function draw(){
-const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);
-const grad=ctx.createRadialGradient(w*0.5,h*0.5,0,w*0.5,h*0.5,h*0.6);
-grad.addColorStop(0, mode==='blue'? 'rgba(0,120,255,0.18)' : 'rgba(255,40,40,0.18)');
-grad.addColorStop(1, 'rgba(0,0,0,0)');ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
+const w=canvas.width,h=canvas.height;
+ctx.clearRect(0,0,w,h);
+// stars twinkle
+stars.forEach(s=>{
+const alpha=0.3+Math.sin(tick*0.02+s.blink)*0.4;
+ctx.beginPath();ctx.arc(s.x*w,s.y*h,s.r,0,Math.PI*2);
+ctx.fillStyle=`rgba(180,210,255,${alpha})`;ctx.fill();
+});
+const grad=ctx.createRadialGradient(w*0.5,h*0.5,0,w*0.5,h*0.5,h*0.65);
+grad.addColorStop(0, mode==='blue'? 'rgba(0,140,255,0.22)' : 'rgba(255,60,60,0.20)');
+grad.addColorStop(1, 'rgba(0,0,0,0)');
+ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
 nodes.forEach(n=>{
 if(mode==='blue'){
 const hub=nodes[0];
 if(n!==hub){
 ctx.beginPath();ctx.moveTo(hub.x*w, hub.y*h);
-const mx=(hub.x+n.x)/2*w, my=(hub.y+n.y)/2*h - 30*Math.sin(tick*0.02 + n.x*5);
+const mx=(hub.x+n.x)/2*w, my=(hub.y+n.y)/2*h - 45*Math.sin(tick*0.015 + n.x*6);
 ctx.quadraticCurveTo(mx,my,n.x*w,n.y*h);
-ctx.strokeStyle='rgba(0,180,255,0.55)';ctx.lineWidth=1.3;ctx.stroke();
-const t=(tick*0.008 + n.x*10)%1;
-const px=hub.x*(1-t)+n.x*t; const py=hub.y*(1-t)+n.y*t - Math.sin(Math.PI*t)*40;
-ctx.beginPath();ctx.arc(px*w,py*h,3,0,Math.PI*2);ctx.fillStyle='#00ff88';ctx.fill();
+ctx.strokeStyle=n.hub? 'rgba(0,255,150,0.95)' : 'rgba(0,200,255,0.65)';
+ctx.lineWidth=1.6;ctx.shadowColor='#00b4ff';ctx.shadowBlur=12;ctx.stroke();ctx.shadowBlur=0;
+const t=(tick*0.006 + n.x*8)%1;
+const px=hub.x*(1-t)+n.x*t; const py=hub.y*(1-t)+n.y*t - Math.sin(Math.PI*t)*55;
+ctx.beginPath();ctx.arc(px*w,py*h,3.5,0,Math.PI*2);
+ctx.fillStyle='#00ff88';ctx.shadowColor='#00ff88';ctx.shadowBlur=15;ctx.fill();ctx.shadowBlur=0;
 }
 } else {
 nodes.forEach(m=>{
-if(m!==n && Math.random()>0.75){
+if(m!==n && Math.random()>0.72){
 ctx.beginPath();ctx.moveTo(n.x*w,n.y*h);ctx.lineTo(m.x*w,m.y*h);
-ctx.strokeStyle='rgba(255,50,50,0.28)';ctx.lineWidth=0.8;ctx.stroke();
+ctx.strokeStyle='rgba(255,70,70,0.35)';ctx.lineWidth=1;ctx.shadowColor='#ff3344';ctx.shadowBlur=6;ctx.stroke();ctx.shadowBlur=0;
 }
 });
 }
 });
 nodes.forEach(n=>{
 const x=n.x*w,y=n.y*h;
-ctx.beginPath();ctx.arc(x,y,n.hub?10:5,0,Math.PI*2);
-ctx.fillStyle=n.hub? '#00ff88' : (mode==='blue'? '#00b4ff' : '#ff3344');
-ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=15;ctx.fill();ctx.shadowBlur=0;
-if(n.hub){ctx.beginPath();ctx.arc(x,y,18+Math.sin(tick*0.05)*3,0,Math.PI*2);ctx.strokeStyle='rgba(0,255,136,0.45)';ctx.lineWidth=1.5;ctx.stroke();}
+ctx.beginPath();ctx.arc(x,y,n.hub?12:6,0,Math.PI*2);
+ctx.fillStyle=n.hub? '#00ff88' : (mode==='blue'? '#00b4ff' : '#ff3b3b');
+ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=n.hub?25:18;ctx.fill();ctx.shadowBlur=0;
+if(n.hub){
+ctx.beginPath();ctx.arc(x,y,22+Math.sin(tick*0.04)*4,0,Math.PI*2);
+ctx.strokeStyle='rgba(0,255,136,0.55)';ctx.lineWidth=1.8;ctx.stroke();
+ctx.beginPath();ctx.arc(x,y,32+Math.sin(tick*0.04+1)*4,0,Math.PI*2);
+ctx.strokeStyle='rgba(0,255,136,0.20)';ctx.lineWidth=1;ctx.stroke();
+}
 });
 tick++;requestAnimationFrame(draw);
 }
@@ -116,7 +136,7 @@ draw();
 const grid=document.getElementById('nodeGrid');
 nodes.forEach(n=>{
 const div=document.createElement('div');
-div.style.background=n.hub?'#00ff8822':'#e8f5e9';div.style.padding='7px';div.style.borderRadius='6px';div.style.border=n.hub?'1px solid #00ff88':'1px solid #ddd';
+div.style.background=n.hub?'linear-gradient(135deg,#00ff8822,#00ff8833)':'#e8f5e9';div.style.padding='8px';div.style.borderRadius='8px';div.style.border=n.hub?'1px solid #00ff88':'1px solid #ddd';div.style.boxShadow=n.hub?'0 0 12px rgba(0,255,136,0.3)':'none';div.style.fontWeight='800';
 div.innerHTML=n.label+(n.hub?' ⭐ HQ':'');grid.appendChild(div);
 });
 </script>
