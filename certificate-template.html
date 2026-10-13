@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Print - ARNAUD AFROCHAINE</title>
+<style>
+@media print{ .no-print{display:none} @page{size:A4 landscape; margin:0} }
+body{margin:0; font-family:Arial, serif; background:#eee}
+.cert{width:1100px; height:720px; margin:15px auto; background:#fffef7; border:12px solid #0a1931; outline:4px solid #C9A227; padding:20px 35px; position:relative; box-sizing:border-box}
+.logo{text-align:center} .logo img{width:160px; height:160px; object-fit:contain}
+h1{text-align:center; color:#C9A227; font-size:38px; margin:5px 0; letter-spacing:1px}
+.line{border-bottom:2px solid #0a1931; width:75%; margin:15px auto; font-size:26px; font-weight:bold; text-align:center; padding:5px}
+.row{display:flex; justify-content:space-between; margin-top:18px; font-size:13px; line-height:1.6}
+.qr{border:2px solid #C9A227; padding:10px; text-align:center; width:145px; background:white; border-radius:8px}
+.footer{position:absolute; bottom:0; left:0; right:0; background:#0a1931; color:#C9A227; text-align:center; font-size:9px; padding:9px; display:flex; justify-content:space-between}
+</style></head><body>
+<div class="no-print" style="text-align:center; padding:12px"><button onclick="window.print()" style="padding:12px 25px; background:#0a4d2a; color:white; border:none; border-radius:8px; font-weight:900">🖨️ PRINT FOR POSTAL</button></div>
+
+<div class="cert">
+<div class="logo"><img src="logo.png" alt="ARNAUD LOGO"><br><small style="color:#0a1931; font-weight:900">ARNAUD AFROCHAINE VERIFICATION LTD - African Roots, Global Vision</small></div>
+<h1>CERTIFICATE OF VERIFICATION</h1>
+<div style="text-align:center; font-family:cursive; font-size:22px; margin-top:10px">This is to certify that</div>
+<div class="line" id="name">John Doe</div>
+<div class="row">
+<div><b>Verification Reference:</b> <span id="ref" style="font-weight:900; font-size:15px">AAC/2026/112082</span><br><b>Issue Date:</b> <span id="date">15 Oct 2026</span><br><b>Wallet:</b> <span style="background:#C9A227; padding:2px 6px; border-radius:4px">0x6447...fAE2</span><br><b>School:</b> <span id="school">Goldfields Academy Sango</span><br><br>Has successfully completed verification conducted by ARNAUD AFROCHAINE VERIFICATION LTD, confirming legitimacy and authenticity. This certificate is blockchain secured (hash only on-chain).<br><br><br>______________________<br><b>Authorized Signatory</b><br>Director, ARNAUD AFROCHAINE VERIFICATION LTD</div>
+<div class="qr"><div id="qrcode"></div><b>SCAN TO VERIFY</b><br><span id="link" style="font-size:7px; word-break:break-all"></span><br><small>Verify at arnaudafrochaine.com/verify</small></div>
+</div>
+<div class="footer"><span>Registered Office: 12 Idiroko Road, Sango Ota, Ogun State, NG</span><span>NDPA Compliant - Hash only on-chain | VALID/INVALID only public</span><span>Certificate valid unless revoked</span></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+const p=new URLSearchParams(location.search);
+document.getElementById('name').textContent=p.get('name')||'John Doe';
+document.getElementById('ref').textContent=p.get('ref')||'AAC/2026/112082';
+document.getElementById('school').textContent=p.get('school')||'Goldfields Academy Sango';
+document.getElementById('date').textContent=p.get('date')||new Date().toDateString();
+const link=`https://n-cyber.github.io/ArnaudAfrochaineVerification/verify.html?ref=${encodeURIComponent(p.get('ref')||'')}`;
+document.getElementById('link').textContent=link;
+new QRCode(document.getElementById('qrcode'),{text:link, width:130, height:130, colorDark:"#0a1931"});
+</script>
+</body></html>
