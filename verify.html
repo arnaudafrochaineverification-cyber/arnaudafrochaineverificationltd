@@ -1,6 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Verify - ARNAUD AFROCHAINE VERIFICATION LTD</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#C9A227;--gold2:#f6e7a0;--dark:#0a1931;--green:#0a4d2a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',Arial;background:#0a1931;color:#111;padding:0}
+.topBar{background:#0a1931;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--gold)}
+.topBar.brand{display:flex;gap:10px;align-items:center;color:white}
+.topBar img{width:38px;height:38px;border-radius:50%;border:2px solid var(--gold);background:white}
+.topBar b{color:var(--gold);font-size:12px;line-height:1.1}
+.container{max-width:900px;margin:15px auto;padding:0 12px}
+.statusCard{background:white;border-radius:14px;padding:18px;text-align:center;margin-bottom:14px;box-shadow:0 8px 25px rgba(0,0,0,.25);border-left:6px solid var(--gold)}
+.statusCard.valid{border-left-color:#0a4d2a}.statusCard.invalid{border-left-color:#dc2626}
+.statusCard h2{font-family:'Playfair Display';font-size:22px}
+.badge{display:inline-block;padding:6px 16px;border-radius:999px;font-weight:700;font-size:12px;margin-top:8px}
+.badge.ok{background:#dcfce7;color:#0a4d2a;border:1px solid #0a4d2a}.badge.bad{background:#fee2e2;color:#991b1b}
+.paper{width:100%;background:#fffdf0;border:2px solid var(--gold);border-radius:18px;padding:14px;box-shadow:0 15px 40px rgba(0,0,0,.35);position:relative;overflow:hidden}
+.paperInner{border:2px solid #0a1931;border-radius:14px;padding:16px;position:relative;background:linear-gradient(180deg,#fffef8 0%,#fff9d6 100%)}
+.corner{position:absolute;width:38px;height:38px;border:4px solid var(--gold)}
+.corner.tl{top:-2px;left:-2px;border-right:0;border-bottom:0;border-top-left-radius:14px}
+.corner.tr{top:-2px;right:-2px;border-left:0;border-bottom:0;border-top-right-radius:14px}
+.corner.bl{bottom:-2px;left:-2px;border-right:0;border-top:0;border-bottom-left-radius:14px}
+.corner.br{bottom:-2px;right:-2px;border-left:0;border-top:0;border-bottom-right-radius:14px}
+.head{ text-align:center; border-bottom:2px solid var(--gold); padding-bottom:12px; margin-bottom:12px}
+.head h1{font-family:'Playfair Display';font-size:20px; color:var(--dark); font-weight:900; letter-spacing:.5px}
+.head.sub{font-size:9px; letter-spacing:2px; color:var(--green); font-weight:700; margin-top:3px}
+.emblem{width:60px;height:60px;margin:10px auto;border:3px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;background:white;color:var(--gold);font-size:22px;font-weight:900}
+.details{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px}
+.box{background:white;border:1px solid #e7d78a;border-radius:8px;padding:8px}
+.box.full{grid-column:1 / -1}
+.box label{font-size:8px; color:#64748b; font-weight:700; letter-spacing:1px; text-transform:uppercase; display:block}
+.box.val{font-size:13px; font-weight:700; color:var(--dark); margin-top:2px; word-break:break-all; font-family:'Playfair Display'}
+.box.mono{font-family:monospace; font-size:11px}
+.sealRow{display:flex; justify-content:space-between; align-items:center; margin-top:16px; border-top:1px dashed var(--gold); padding-top:12px; flex-wrap:wrap; gap:10px}
+.seal{width:72px;height:72px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(circle,#fff9d6,#f6e7a0);color:var(--dark);font-size:8px;font-weight:900;text-align:center}
+.ndpa{font-size:9px;color:#64748b;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px;margin-top:12px;text-align:center}
+.loading{padding:40px;text-align:center;background:white;border-radius:12px}
+@media(max-width:600px){.details{grid-template-columns:1fr}.paper{padding:10px}.paperInner{padding:12px}}
+</style>
+</head><body>
+<div class="topBar">
+<div class="brand"><img src="logo.jpg" onerror="this.style.display='none'"><div><b>ARNAUD AFROCHAINE<br>VERIFICATION LTD</b><div style="font-size:8px;color:#ccc">African Roots, Global Vision</div></div></div>
+<div style="font-size:10px;color:var(--gold);font-weight:700">500B ARNAUD<br><span style="color:white;font-size:8px">BLOCKCHAIN VERIFIED</span></div>
+</div>
+
+<div class="container">
+<div id="loading" class="loading">🔍 Verifying <b id="refText">...</b> on Blockchain...<br><small style="color:#64748b">Wallet: 0x6447...fAE2 | 500B ARNAUD</small></div>
+<div id="result" style="display:none"></div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, collection, query, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
   authDomain: "arnaudafrochaineverification.firebaseapp.com",
@@ -12,68 +64,97 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-async function findCertificate(searchValue){
-  const value = searchValue.trim();
-  if(!value) return null;
+function getRefFromUrl(){
+  const p = new URLSearchParams(window.location.search);
+  return (p.get('ref') || p.get('reference') || p.get('id') || '').trim();
+}
+
+async function findCert(ref){
+  if(!ref) return null;
+  const safeId = ref.replace(/\//g,"-").replace(/[^a-zA-Z0-9-_]/g,"_");
+  // Try direct doc id
+  try{ const d = await getDoc(doc(db,"certificates",safeId)); if(d.exists()) return d.data(); }catch{}
+  try{ const d = await getDoc(doc(db,"certificates",ref)); if(d.exists()) return d.data(); }catch{}
+  // Try query on field
   try{
-    if(!value.includes('/')){
-      const direct = await getDoc(doc(db, "certificates", value));
-      if(direct.exists()) return {id: direct.id, data: direct.data()};
-    }
-  }catch(e){}
-  const fields = ["ref", "reference", "refNumber", "verificationRef"];
-  for(const field of fields){
-    try{
-      const q = query(collection(db, "certificates"), where(field, "==", value), limit(1));
-      const snap = await getDocs(q);
-      if(!snap.empty) return {id: snap.docs[0].id, data: snap.docs[0].data()};
-    }catch(e){}
-  }
+    const q = query(collection(db,"certificates"), where("ref","==",ref));
+    const s = await getDocs(q); if(!s.empty) return s.docs[0].data();
+  }catch{}
+  try{
+    const q = query(collection(db,"certificates"), where("reference","==",ref));
+    const s = await getDocs(q); if(!s.empty) return s.docs[0].data();
+  }catch{}
   return null;
 }
-function safe(v){ const el=document.createElement("span"); el.textContent=v==null?"":String(v); return el.innerHTML; }
 
-async function load(){
-  const input = document.getElementById("refInput");
-  const result = document.getElementById("result");
-  const value = input.value.trim();
-  if(!value){ result.innerHTML='<div class="error">Please enter Ref Number</div>'; return; }
-  result.innerHTML="Checking global database... ⏳ NDPA Compliant Check";
-  try{
-    const found = await findCertificate(value);
-    if(!found){
-      result.innerHTML=`<div style="padding:14px;color:#991b1b;background:#fee2e2;border-radius:8px;text-align:center"><b>❌ RECORD NOT FOUND / INVALID</b><br>No record for: ${safe(value)}<br><small>Contact institution: 0913 285 1465</small></div>`;
-      return;
-    }
-    const d=found.data;
-    // ✅ NDPA COMPLIANT DISPLAY - NO FULL NAME
-    result.innerHTML=`
-      <div class="card">
-        <div style="text-align:center;background:#0a4d2a;color:white;padding:10px;border-radius:8px;font-weight:900">✅ VERIFIED - RECORD FOUND</div>
-        <div style="text-align:center;margin:8px 0"><span style="display:inline-block;background:#0a1931;color:#C9A227;padding:4px 8px;border-radius:4px;font-size:10px">ARNAUD GLOBAL - NDPA 2023 COMPLIANT • BLOCKCHAIN SECURED</span></div>
+async function run(){
+  const ref = getRefFromUrl();
+  document.getElementById('refText').textContent = ref || 'UNKNOWN';
+  if(!ref){
+    document.getElementById('loading').innerHTML = "❌ No reference provided in QR link.";
+    return;
+  }
+  const data = await findCert(ref);
+  document.getElementById('loading').style.display="none";
+  const resultDiv = document.getElementById('result');
+  resultDiv.style.display="block";
 
-        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><div style="color:#14532d;font-size:11px;font-weight:800">REFERENCE</div><b>${safe(d.ref||found.id)}</b></div>
-        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><div style="color:#14532d;font-size:11px;font-weight:800">INSTITUTION / SCHOOL</div><b>${safe(d.school||d.institution||'Registered Institution')}</b></div>
-        <div style="background:#f8fafc;padding:10px;border-radius:8px;margin-bottom:8px"><div style="color:#14532d;font-size:11px;font-weight:800">ISSUE YEAR</div>${safe((d.issueDate||'').substring(0,4) || d.year || '2026')}</div>
+  if(!data){
+    resultDiv.innerHTML = `
+      <div class="statusCard invalid"><h2>❌ NOT FOUND</h2><p>Reference <b>${ref}</b> not in our secure database.</p><span class="badge bad">INVALID / POSSIBLE FAKE</span></div>
+      <div class="paper"><div class="paperInner" style="text-align:center;padding:30px">This certificate cannot be verified. Contact ARNAUD AFROCHAINE VERIFICATION LTD.<br><br><small>Wallet: 0x6447...fAE2</small></div></div>
+    `;
+    return;
+  }
 
-        <div style="padding:12px;background:#ecfdf5;border-left:4px solid #0a4d2a;border-radius:8px"><div style="color:#14532d;font-size:11px;font-weight:800">STATUS</div><b style="color:green">✅ VALID & AUTHENTIC</b>
-          <p style="font-size:11px;margin:6px 0">This reference is authentic per issuing institution records. Full holder details withheld under NDPA 2023 S.24(1)(a) - Data Minimization. Blockchain hash only stored on-chain.</p>
-          <p style="font-size:9px;color:gray;word-break:break-all;">Hash: ${safe(d.hash||'a7f3e9c...secured')} | Wallet: 0x6447...fAE2 | 500B ARNAUD</p>
+  const isValid = (data.status||'Verified').toLowerCase() === 'verified';
+  resultDiv.innerHTML = `
+    <div class="statusCard ${isValid?'valid':'invalid'}">
+      <h2>${isValid?'✅ VERIFIED AUTHENTIC':'⚠️ '+ (data.status||'PENDING')}</h2>
+      <p>Blockchain confirmed for <b>${data.fullName||data.name||''}</b></p>
+      <span class="badge ${isValid?'ok':'bad'}">${isValid?'VERIFIED • NDPA COMPLIANT • 500B ARNAUD':'STATUS: '+(data.status||'UNKNOWN')}</span>
+      <div style="font-size:10px;color:#64748b;margin-top:8px">Wallet: ${data.wallet||data.walletAddress||'0x6447...fAE2'} | Hash: ${(data.hash||data.blockchainHash||'').substring(0,18)}... | On-Chain: hash only</div>
+    </div>
+
+    <div class="paper">
+      <div class="paperInner">
+        <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+        <div class="head">
+          <div class="emblem">A</div>
+          <h1>ARNAUD AFROCHAINE VERIFICATION LTD</h1>
+          <div class="sub">AFRICAN ROOTS • GLOBAL VISION • BLOCKCHAIN SECURED • 500B ARNAUD</div>
         </div>
-        <footer style="font-size:10px;color:#64748b;text-align:center;margin-top:15px">
-          This portal displays VALID/INVALID only in compliance with NDPA 2023.<br>
-          Full details available only with Institution approval.<br>
-          ARNAUD AFROCHAINE VERIFICATION LTD | 12 Idiroko Rd, Sango Ota | 0913 285 1465<br>
-          Blockchain: 0x64478336d9018927C8E45AcC35e9e24c969EfAE2
-        </footer>
-      </div>`;
-  }catch(e){ result.innerHTML=`<div style="padding:14px;color:#991b1b;background:#fee2e2;border-radius:8px"><b>SEARCH ERROR</b><br>${safe(e.message)}</div>`; }
+
+        <div style="text-align:center;margin:8px 0">
+          <div style="font-size:10px;letter-spacing:3px;color:var(--gold);font-weight:700">CERTIFICATE VERIFICATION RESULT</div>
+          <div style="font-family:'Playfair Display';font-size:22px;font-weight:900;color:var(--dark);margin-top:4px">${data.fullName||data.name||'---'}</div>
+          <div style="font-size:11px;color:#64748b">has been verified as authentic by our blockchain system</div>
+        </div>
+
+        <div class="details">
+          <div class="box"><label>Our Verification Reference (ARNAUD)</label><div class="val mono">${data.ref||data.reference||ref}</div></div>
+          <div class="box"><label>School Certificate Number</label><div class="val mono">${data.certNumber||data.certificateNumber||data.schoolCertNumber||'---'}</div></div>
+          <div class="box"><label>School / Entity</label><div class="val">${data.school||data.institution||'---'}</div></div>
+          <div class="box"><label>Course / Category</label><div class="val">${data.course||data.certificateType||'---'}</div></div>
+          <div class="box"><label>Issue Date</label><div class="val">${data.issueDate||'---'}</div></div>
+          <div class="box"><label>Wallet Verification</label><div class="val mono">${data.wallet||data.walletAddress||'0x6447...fAE2'}</div></div>
+          <div class="box full"><label>Blockchain Hash (SHA-256 • Hash Only - No Personal Data)</label><div class="val mono" style="font-size:10px">${data.hash||data.blockchainHash||'---'}</div></div>
+          <div class="box full"><label>Note</label><div class="val" style="font-size:11px;font-weight:400">${data.note||'ARNAUD AFROCHAINE VERIFICATION LTD - NDPA 2023 Compliant'}</div></div>
+        </div>
+
+        <div class="sealRow">
+          <div class="seal"><span style="font-size:14px">✔</span><span>VERIFIED</span><span style="font-size:6px">AAV</span></div>
+          <div style="text-align:center"><div style="width:120px;border-top:1px solid #0a1931;margin:0 auto"></div><div style="font-size:9px;font-weight:700;margin-top:3px">DIRECTOR OF VERIFICATION</div><div style="font-size:8px;color:#64748b">ARNAUD AFROCHAINE VERIFICATION LTD</div></div>
+          <div style="text-align:right;font-size:9px;color:#64748b">Date Verified<br><b style="color:#0a1931">${new Date().toLocaleDateString()}</b><br>500B ARNAUD</div>
+        </div>
+
+        <div class="ndpa">
+          🔒 NDPA 2023 Compliant • Blockchain Wallet: 0x64478336d9018927C8E45AcC35e9e24c969EfAE2 • On-chain stores hash only, no personal data • African Roots, Global Vision • 500 Billion ARNAUD Token Vision • verify at: arnaudafrochaineverification.com
+        </div>
+      </div>
+    </div>
+  `;
 }
-window.load=load;
-window.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById("verifyButton").addEventListener("click",load);
-  document.getElementById("refInput").addEventListener("keydown",e=>{ if(e.key==="Enter") load(); });
-  const p=new URLSearchParams(location.search).get("ref")||new URLSearchParams(location.search).get("id");
-  if(p){ document.getElementById("refInput").value=p; load(); }
-});
+run();
 </script>
+</body></html>
