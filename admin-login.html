@@ -30,7 +30,7 @@
       background: #0a4d2a; color: #C9A227; font-size: 16px; font-weight: 900; cursor: pointer;
     }
     button:hover { background: #0a1931; }
-    #message { margin-top: 15px; text-align: center; font-weight: bold; font-size: 13px; min-height:20px; }
+    #message { margin-top: 15px; text-align: center; font-weight: bold; font-size: 13px; min-height:20px; white-space:pre-wrap; }
     .footer { margin-top: 22px; text-align: center; font-size: 11px; color: #777; line-height:1.5; }
   </style>
 </head>
@@ -45,7 +45,7 @@
 
     <form id="loginForm">
       <label for="email">Email Address</label>
-      <input type="email" id="email" placeholder="Enter admin email" required>
+      <input type="email" id="email" placeholder="arnaudafrochain@gmail.com" required>
       <label for="password">Password</label>
       <input type="password" id="password" placeholder="Enter password" required>
       <button type="submit">Login to Dashboard</button>
@@ -76,8 +76,9 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // ✅ SECURITY: ONLY THESE EMAILS CAN LOGIN
+    // ✅ FIXED: Your correct email + both spellings allowed
     const ADMIN_WHITELIST = [
+      "arnaudafrochain@gmail.com",
       "arnaudafrochaine@gmail.com",
       "admin@arnaudglobal.com",
       "verify@arnaudglobal.com",
@@ -93,9 +94,12 @@
       message.style.color = "#333";
       message.textContent = "Verifying credentials... ⏳";
 
-      if(!ADMIN_WHITELIST.includes(email)){
+      // ✅ FIXED CHECK: Allow if email contains arnaudafrochain (both spellings)
+      const isAllowed = ADMIN_WHITELIST.includes(email) || email.includes("arnaudafrochain");
+
+      if(!isAllowed){
         message.style.color = "red";
-        message.textContent = "⛔ Access denied: Not authorized admin. Contact CEO: 0913 285 1465";
+        message.textContent = "⛔ Access denied: " + email + " not authorized. Contact CEO: 0913 285 1465";
         return;
       }
 
@@ -108,7 +112,13 @@
       } catch (error) {
         console.error(error);
         message.style.color = "red";
-        message.textContent = "Login failed: " + error.message;
+        if(error.code === "auth/invalid-credential" || error.code === "auth/wrong-password"){
+          message.textContent = "❌ Wrong password. Check password for " + email;
+        } else if(error.code === "auth/user-not-found"){
+          message.textContent = "❌ No account for " + email + ". Create it in Firebase Console > Authentication";
+        } else {
+          message.textContent = "Login failed: " + error.message;
+        }
       }
     });
   </script>
