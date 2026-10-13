@@ -2,91 +2,96 @@
 <html><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Certificate - ARNAUD AFROCHAINE</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 <style>
-@media print{.no-print{display:none} @page{size:A4 landscape; margin:0} body{background:white!important} .cert{box-shadow:none!important}}
-*{box-sizing:border-box} body{margin:0; background:#0a1931; padding:12px}
-.no-print{text-align:center; padding:12px; background:white; border-radius:10px; margin-bottom:12px}
-.cert{width:1150px; max-width:100%; margin:0 auto; background:#fdf6e3; background-image: linear-gradient(to bottom, #fffdf0 0%, #f9ecd0 100%); border:12px solid #0a1a3a; outline:4px solid #C9A227; outline-offset:2px; padding:0; position:relative; box-shadow:0 0 0 6px #0a1a3a}
-.inner{border:2px solid #C9A22788; margin:8px; padding:18px 30px 0 30px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" opacity="0.04"><text x="0" y="100" font-size="80" transform="rotate(-30)">♦</text></svg>'); position:relative}
+@media print{
+  .no-print{display:none !important}
+  @page{size:A4 landscape; margin:0}
+  body{background:white !important; padding:0 !important; overflow:visible !important}
+  .wrap{overflow:visible !important; width:100% !important}
+  .cert{transform:none !important; width:1100px !important; height:700px !important; box-shadow:none !important}
+}
+*{box-sizing:border-box}
+body{margin:0; background:#0a1931; font-family:Arial, sans-serif}
+.no-print{background:white; padding:12px; text-align:center; position:sticky; top:0; z-index:99; box-shadow:0 4px 10px rgba(0,0,0,.3)}
+.wrap{width:100%; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; padding:10px; display:flex; justify-content:flex-start}
+@media(min-width:1150px){ .wrap{justify-content:center} }
+.cert{flex-shrink:0; width:1100px; height:700px; background:#fdf6e3; background: radial-gradient(ellipse at center, #fffdf2 0%, #fdf6e3 45%, #f5e6b8 100%); border:12px solid #0a1931; outline:4px solid #C9A227; position:relative; padding:0; box-shadow:0 0 0 4px #0a1931, 0 15px 40px rgba(0,0,0,.5)}
+.inner{margin:6px; border:1.5px solid #C9A22788; height:calc(100% - 12px); padding:12px 28px 0 28px; position:relative; background-image: linear-gradient(45deg, rgba(201,162,39,0.03) 25%, transparent 25%, transparent 75%, rgba(201,162,39,0.03) 75%)}
+.corner{position:absolute; width:28px; height:28px; border:2px solid #C9A227; z-index:5}
+.corner::after{content:"🌿"; position:absolute; font-size:12px; color:#C9A227; top:-2px}
+.ct{top:8px; left:8px; border-right:none; border-bottom:none}
+.ct2{top:8px; right:8px; border-left:none; border-bottom:none; transform:scaleX(-1)}
+.cb{bottom:38px; left:8px; border-right:none; border-top:none; transform:scaleY(-1)}
+.cb2{bottom:38px; right:8px; border-left:none; border-top:none; transform:scale(-1)}
 .logo{text-align:center}
-.logo img{width:155px; height:115px; object-fit:contain; background:white; border-radius:50%; border:2px solid #C9A227; padding:4px}
-h1{font-family:Cinzel, serif; text-align:center; font-size:34px; font-weight:900; margin:8px 0 0; background: linear-gradient(to bottom, #FFD700 0%, #C9A227 50%, #8a6d00 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:1px; text-shadow: 2px 2px 0 rgba(0,0,0,.1); filter: drop-shadow(0 2px 1px rgba(0,0,0,.2))}
-.divider{text-align:center; margin:4px 0}
-.divider::after{content:""; display:inline-block; width:60%; height:1px; background:linear-gradient(to right, transparent, #C9A227, transparent); position:relative}
-.cursive{font-family:'Playfair Display', serif; text-align:center; font-style:italic; font-size:26px; font-weight:900; color:#0a1931; margin:10px 0; letter-spacing:1px; text-shadow:0 1px 0 #fff}
-.recipient{font-family:'Playfair Display', serif; font-size:18px; font-weight:900; color:#0a1931; margin:15px 0 15px 10px; display:flex; align-items:center; gap:10px}
-.recipient span.line{flex:1; border-bottom:2px solid #C9A227; display:inline-block; min-width:200px; font-family:Cinzel; font-size:22px; color:#0a1931; padding-left:10px}
-.fields{display:flex; justify-content:space-between; margin-top:10px; gap:20px}
-.left{flex:1; font-family:Arial; font-size:14px; line-height:2.2; color:#0a1931}
-.left b{color:#0a1931; font-size:14px}
-.left .icon{width:18px; height:18px; display:inline-block; vertical-align:middle; margin-right:6px; background:#fff4c2; border:1px solid #C9A227; border-radius:4px; text-align:center; font-size:12px; line-height:16px}
-.desc{font-size:12px; line-height:1.6; margin-top:8px; color:#1a1a1a}
-.sign{margin-top:25px; font-family:Arial; font-size:11px; line-height:1.4}
-.sign b{font-family:'Playfair Display'; color:#8a6d00; font-size:14px}
-.qrBox{width:150px; border:2px solid #C9A227; background:#fffef0; border-radius:8px; padding:8px; text-align:center; height:fit-content}
-.qrBox .topLabel{font-family:Arial; font-size:10px; font-weight:900; color:#8a6d00; letter-spacing:.5px; margin-bottom:6px}
-.footer{background:#0a1a3a; color:#fff; display:flex; justify-content:space-between; align-items:center; padding:8px 15px; font-size:9px; font-family:Arial; margin:12px -30px 0 -30px}
+.logo img{width:148px; height:108px; object-fit:contain; background:white; border-radius:50%; border:2px solid #C9A227; padding:3px}
+h1{font-family:Times, serif; text-align:center; font-size:37px; font-weight:900; margin:6px 0 4px; letter-spacing:1px; background:linear-gradient(#FFD700, #C9A227, #7a5a00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; filter:drop-shadow(1px 1px 0 rgba(0,0,0,.3)); line-height:1}
+.divider{display:flex; align-items:center; justify-content:center; gap:10px; margin:2px 0 6px}
+.divider i{height:1px; width:220px; background:linear-gradient(to right, transparent, #C9A227, transparent); display:block}
+.cursive{font-family:cursive; text-align:center; font-size:24px; font-weight:900; color:#0a1931; margin:0; font-style:italic; letter-spacing:.5px}
+.recRow{margin:14px 0 12px; display:flex; align-items:center; gap:12px; font-family:serif; font-style:italic; font-weight:900; font-size:19px; color:#0a1931}
+.recRow .line{flex:1; border-bottom:2px solid #0a1931; font-family:Arial, sans-serif; font-style:normal; font-weight:900; font-size:20px; text-transform:uppercase; padding:0 0 2px 10px; letter-spacing:.5px}
+.main{display:flex; gap:18px; margin-top:8px}
+.left{flex:1; font-size:14px; color:#0a1931; line-height:1.9}
+.left b{font-size:14px}
+.icon{display:inline-flex; width:20px; height:20px; background:#fff3b0; border:1px solid #C9A227; border-radius:5px; align-items:center; justify-content:center; font-size:11px; margin-right:5px; vertical-align:middle}
+.desc{font-size:12px; line-height:1.5; margin-top:8px; color:#111}
+.sign{margin-top:28px}
+.sign .gold{font-family:serif; color:#8a6d00; font-weight:900; font-style:italic; font-size:14px}
+.sign .small{font-size:10px; margin-top:2px}
+.qrBox{width:155px; border:2px solid #d4b44a; border-radius:10px; background:#fffff5; padding:8px 8px 6px; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,.08); flex-shrink:0}
+.qrBox .lbl{font-size:11px; font-weight:900; color:#8a6d00; margin-bottom:6px; letter-spacing:.3px}
+.footer{position:absolute; bottom:0; left:0; right:0; background:#0a1931; color:#ddd; display:flex; justify-content:space-between; align-items:center; padding:7px 12px; font-size:9px; font-family:Arial}
 .footer b{color:#C9A227}
-.leaf{position:absolute; font-size:18px; color:#C9A227}
 </style>
 </head><body>
 
 <div class="no-print">
-<button onclick="window.print()" style="padding:12px 28px; background:#0a4d2a; color:white; border:none; border-radius:25px; font-weight:900">🖨️ PRINT EXACT CERTIFICATE (Like Image)</button>
-<button onclick="window.close()" style="padding:10px; margin-left:8px; border-radius:8px">Close</button>
+<div style="font-weight:900; color:#0a1931">Your target design - Scroll sideways on phone, prints perfect</div>
+<button onclick="window.print()" style="margin-top:8px; padding:12px 26px; background:#0a4d2a; color:white; border:none; border-radius:8px; font-weight:900; font-size:15px">🖨️ PRINT FOR POSTAL - Exact Like 1st Image</button>
+<div style="font-size:10px; color:#555; margin-top:5px">On phone: SWIPE LEFT/RIGHT to see full certificate → Print = A4 landscape perfect</div>
 </div>
 
+<div class="wrap">
 <div class="cert">
 <div class="inner">
-<span class="leaf" style="top:10px; left:15px">🌿</span><span class="leaf" style="top:10px; right:15px">🌿</span>
+<div class="corner ct"></div><div class="corner ct2"></div><div class="corner cb"></div><div class="corner cb2"></div>
 
-<div class="logo"><img src="logo.jpg" onerror="this.src='wa_image_1354315342275297760'"><div style="font-size:8px; font-weight:900; color:#0a1931; margin-top:2px">ARNAUD AFROCHAINE VERIFICATION LTD<br><span style="font-size:6px; color:#555">African Roots, Global Vision</span></div></div>
-
+<div class="logo"><img src="logo.jpg" onerror="this.style.display='none'"><div style="display:none">ARNAUD AFROCHAINE</div></div>
 <h1>CERTIFICATE OF VERIFICATION</h1>
-<div class="divider">✦</div>
+<div class="divider"><i></i><span style="color:#C9A227">✦</span><i></i></div>
 <div class="cursive">This is to certify that</div>
 
-<div class="recipient">Recipient Name: <span class="line" id="name">GBADAMASI SANUSI</span></div>
+<div class="recRow"><span style="white-space:nowrap">Recipient Name:</span><span class="line" id="name">ALEXANDRE</span></div>
 
-<div class="fields">
+<div class="main">
 <div class="left">
-<div><b>Verification Reference:</b> <span class="icon">🛡️</span> <span id="ref" style="font-weight:700">VR-AAV-2024-1127</span></div>
-<div><b>Issue Date:</b> <span class="icon">☑</span> <span id="date">27 November 2024</span></div>
-<div><b>Wallet Address:</b> <span class="icon">⛓️</span> <span id="wallet">0x6447...fAE2</span></div>
-<div class="desc">
-Has successfully completed the verification process conducted by ARNAUD AFROCHAINE VERIFICATION LTD, confirming legitimacy, compliance, and authenticity of the associated entity/wallet in accordance with our standards and due diligence protocols.
+<div><b>Verification Reference:</b> <span class="icon">🛡️</span> <span id="ref" style="font-weight:800">VR-AAV-2024-1127</span></div>
+<div><b>Issue Date:</b> <span class="icon">☑️</span> <span id="date">27 November 2024</span></div>
+<div><b>Wallet Address:</b> <span class="icon">🔗</span> <span id="wallet">0x6447...fAE2</span></div>
+<div class="desc">Has successfully completed the verification process conducted by ARNAUD AFROCHAINE VERIFICATION LTD, confirming legitimacy, compliance, and authenticity of the associated entity/wallet in accordance with our standards and due diligence protocols.</div>
+<div class="sign"><div class="gold">Authorized Signatory</div><div class="small">Director, ARNAUD AFROCHAINE VERIFICATION LTD</div></div>
 </div>
-<div class="sign">
-<b>Authorized Signatory</b><br>
-Director, ARNAUD AFROCHAINE VERIFICATION LTD
-</div>
+<div class="qrBox"><div class="lbl">SCAN TO VERIFY</div><div id="qrcode"></div><div style="font-size:8px; font-weight:700; margin-top:6px; line-height:1.2">Verify authenticity at<br>arnaudafrochaine.com/verify</div></div>
 </div>
 
-<div class="qrBox">
-<div class="topLabel">SCAN TO VERIFY</div>
-<div id="qrcode"></div>
-<div style="font-size:8px; margin-top:6px; font-weight:bold; line-height:1.2">Verify authenticity at<br>arnaudafrochaine.com/verify</div>
+<div class="footer"><span>Registered Office: Sango Ota, Ogun State, Nigeria</span><span>NDPA Compliant — <b>Nigeria Data Protection Act 2023 | Certificate is valid unless revoked</b></span></div>
 </div>
-</div>
-
-<div class="footer">
-<span>Registered Office: Sango Ota, Ogun State, Nigeria</span>
-<span style="text-align:right">NDPA Compliant —<br><b>Nigeria Data Protection Act 2023 | Certificate is valid unless revoked</b></span>
-</div>
-
 </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
 const p=new URLSearchParams(location.search);
-document.getElementById('name').textContent=(p.get('name')||'GBADAMASI SANUSI').toUpperCase();
-document.getElementById('ref').textContent=p.get('ref')||'VR-AAV-2024-1127';
-document.getElementById('date').textContent=p.get('date')||'27 November 2024';
-document.getElementById('wallet').textContent=p.get('wallet')||'0x6447...fAE2';
-const link=`https://n-cyber.github.io/ArnaudAfrochaineVerification/verify.html?ref=${encodeURIComponent(p.get('ref')||'VR-AAV-2024-1127')}`;
-document.getElementById('qrcode').innerHTML="";
-new QRCode(document.getElementById('qrcode'),{text:link, width:125, height:125, colorDark:"#0a1931", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.H});
+const n=p.get('name')||'GBADAMASI SANUSI';
+const r=p.get('ref')||'VR-AAV-2024-1127';
+const d=p.get('date')||'27 November 2024';
+const w=p.get('wallet')||'0x6447...fAE2';
+document.getElementById('name').textContent=n.toUpperCase();
+document.getElementById('ref').textContent=r;
+document.getElementById('date').textContent=d;
+document.getElementById('wallet').textContent=w;
+const link=`https://n-cyber.github.io/ArnaudAfrochaineVerification/verify.html?ref=${encodeURIComponent(r)}`;
+new QRCode(document.getElementById('qrcode'),{text:link, width:128, height:128, colorDark:"#0a1931", colorLight:"#fffff5", correctLevel: QRCode.CorrectLevel.H});
 </script>
 </body></html>
