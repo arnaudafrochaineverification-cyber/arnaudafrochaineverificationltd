@@ -1,51 +1,92 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Print - ARNAUD AFROCHAINE</title>
+<html><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Certificate - ARNAUD AFROCHAINE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 <style>
-@media print{ .no-print{display:none} @page{size:A4 landscape; margin:0} body{background:white} .cert{box-shadow:none; border:14px solid #0a1931} }
-body{margin:0; font-family:Arial, serif; background:#eee}
-.cert{width:1100px; height:720px; margin:15px auto; background:#fffef7; border:12px solid #0a1931; outline:4px solid #C9A227; padding:20px 35px; position:relative; box-sizing:border-box}
-.logo{text-align:center} .logo img{width:165px; height:165px; object-fit:contain}
-h1{text-align:center; color:#C9A227; font-size:38px; margin:5px 0; letter-spacing:1px; text-shadow:1px 1px 0 #0a1931}
-.line{border-bottom:2px solid #0a1931; width:75%; margin:15px auto; font-size:26px; font-weight:bold; text-align:center; padding:5px; color:#0a1931}
-.row{display:flex; justify-content:space-between; margin-top:18px; font-size:13px; line-height:1.6; color:#0a1931}
-.qr{border:2px solid #C9A227; padding:10px; text-align:center; width:145px; background:white; border-radius:8px}
-.footer{position:absolute; bottom:0; left:0; right:0; background:#0a1931; color:#C9A227; text-align:center; font-size:9px; padding:9px; display:flex; justify-content:space-between}
-</style></head><body>
-<div class="no-print" style="text-align:center; padding:12px">
-<button onclick="window.print()" style="padding:12px 25px; background:#0a4d2a; color:white; border:none; border-radius:8px; font-weight:900">🖨️ PRINT FOR POSTAL</button>
-<button onclick="window.close()" style="padding:10px 18px; margin-left:10px">Close</button>
+@media print{.no-print{display:none} @page{size:A4 landscape; margin:0} body{background:white!important} .cert{box-shadow:none!important}}
+*{box-sizing:border-box} body{margin:0; background:#0a1931; padding:12px}
+.no-print{text-align:center; padding:12px; background:white; border-radius:10px; margin-bottom:12px}
+.cert{width:1150px; max-width:100%; margin:0 auto; background:#fdf6e3; background-image: linear-gradient(to bottom, #fffdf0 0%, #f9ecd0 100%); border:12px solid #0a1a3a; outline:4px solid #C9A227; outline-offset:2px; padding:0; position:relative; box-shadow:0 0 0 6px #0a1a3a}
+.inner{border:2px solid #C9A22788; margin:8px; padding:18px 30px 0 30px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" opacity="0.04"><text x="0" y="100" font-size="80" transform="rotate(-30)">♦</text></svg>'); position:relative}
+.logo{text-align:center}
+.logo img{width:155px; height:115px; object-fit:contain; background:white; border-radius:50%; border:2px solid #C9A227; padding:4px}
+h1{font-family:Cinzel, serif; text-align:center; font-size:34px; font-weight:900; margin:8px 0 0; background: linear-gradient(to bottom, #FFD700 0%, #C9A227 50%, #8a6d00 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:1px; text-shadow: 2px 2px 0 rgba(0,0,0,.1); filter: drop-shadow(0 2px 1px rgba(0,0,0,.2))}
+.divider{text-align:center; margin:4px 0}
+.divider::after{content:""; display:inline-block; width:60%; height:1px; background:linear-gradient(to right, transparent, #C9A227, transparent); position:relative}
+.cursive{font-family:'Playfair Display', serif; text-align:center; font-style:italic; font-size:26px; font-weight:900; color:#0a1931; margin:10px 0; letter-spacing:1px; text-shadow:0 1px 0 #fff}
+.recipient{font-family:'Playfair Display', serif; font-size:18px; font-weight:900; color:#0a1931; margin:15px 0 15px 10px; display:flex; align-items:center; gap:10px}
+.recipient span.line{flex:1; border-bottom:2px solid #C9A227; display:inline-block; min-width:200px; font-family:Cinzel; font-size:22px; color:#0a1931; padding-left:10px}
+.fields{display:flex; justify-content:space-between; margin-top:10px; gap:20px}
+.left{flex:1; font-family:Arial; font-size:14px; line-height:2.2; color:#0a1931}
+.left b{color:#0a1931; font-size:14px}
+.left .icon{width:18px; height:18px; display:inline-block; vertical-align:middle; margin-right:6px; background:#fff4c2; border:1px solid #C9A227; border-radius:4px; text-align:center; font-size:12px; line-height:16px}
+.desc{font-size:12px; line-height:1.6; margin-top:8px; color:#1a1a1a}
+.sign{margin-top:25px; font-family:Arial; font-size:11px; line-height:1.4}
+.sign b{font-family:'Playfair Display'; color:#8a6d00; font-size:14px}
+.qrBox{width:150px; border:2px solid #C9A227; background:#fffef0; border-radius:8px; padding:8px; text-align:center; height:fit-content}
+.qrBox .topLabel{font-family:Arial; font-size:10px; font-weight:900; color:#8a6d00; letter-spacing:.5px; margin-bottom:6px}
+.footer{background:#0a1a3a; color:#fff; display:flex; justify-content:space-between; align-items:center; padding:8px 15px; font-size:9px; font-family:Arial; margin:12px -30px 0 -30px}
+.footer b{color:#C9A227}
+.leaf{position:absolute; font-size:18px; color:#C9A227}
+</style>
+</head><body>
+
+<div class="no-print">
+<button onclick="window.print()" style="padding:12px 28px; background:#0a4d2a; color:white; border:none; border-radius:25px; font-weight:900">🖨️ PRINT EXACT CERTIFICATE (Like Image)</button>
+<button onclick="window.close()" style="padding:10px; margin-left:8px; border-radius:8px">Close</button>
 </div>
 
 <div class="cert">
-<div class="logo"><img src="logo.jpg" alt="ARNAUD LOGO" onerror="this.src='wa_image_3439596786167791626.jpg'"><br><small style="color:#0a1931; font-weight:900">ARNAUD AFROCHAINE VERIFICATION LTD - African Roots, Global Vision</small></div>
+<div class="inner">
+<span class="leaf" style="top:10px; left:15px">🌿</span><span class="leaf" style="top:10px; right:15px">🌿</span>
+
+<div class="logo"><img src="logo.jpg" onerror="this.src='wa_image_1354315342275297760'"><div style="font-size:8px; font-weight:900; color:#0a1931; margin-top:2px">ARNAUD AFROCHAINE VERIFICATION LTD<br><span style="font-size:6px; color:#555">African Roots, Global Vision</span></div></div>
+
 <h1>CERTIFICATE OF VERIFICATION</h1>
-<div style="text-align:center; font-family:cursive; font-size:22px; margin-top:10px">This is to certify that</div>
-<div class="line" id="name">John Doe</div>
-<div class="row">
-<div>
-<b>Verification Reference:</b> <span id="ref" style="font-weight:900; font-size:15px">AAC/2026/112082</span><br>
-<b>Course:</b> <span id="course">Catering & Hospitality</span><br>
-<b>Issue Date:</b> <span id="date">15 Oct 2026</span><br>
-<b>Wallet:</b> <span style="background:#C9A227; padding:2px 6px; border-radius:4px; font-weight:bold">0x6447...fAE2</span> | <span style="font-size:10px">500B ARNAUD</span><br>
-<b>School:</b> <span id="school">Goldfields Academy Sango</span><br><br>
-Has successfully completed verification conducted by ARNAUD AFROCHAINE VERIFICATION LTD, confirming legitimacy and authenticity. This certificate is blockchain secured (hash only on-chain).<br><br><br>
-______________________<br><b>Authorized Signatory</b><br>Director, ARNAUD AFROCHAINE VERIFICATION LTD
+<div class="divider">✦</div>
+<div class="cursive">This is to certify that</div>
+
+<div class="recipient">Recipient Name: <span class="line" id="name">GBADAMASI SANUSI</span></div>
+
+<div class="fields">
+<div class="left">
+<div><b>Verification Reference:</b> <span class="icon">🛡️</span> <span id="ref" style="font-weight:700">VR-AAV-2024-1127</span></div>
+<div><b>Issue Date:</b> <span class="icon">☑</span> <span id="date">27 November 2024</span></div>
+<div><b>Wallet Address:</b> <span class="icon">⛓️</span> <span id="wallet">0x6447...fAE2</span></div>
+<div class="desc">
+Has successfully completed the verification process conducted by ARNAUD AFROCHAINE VERIFICATION LTD, confirming legitimacy, compliance, and authenticity of the associated entity/wallet in accordance with our standards and due diligence protocols.
 </div>
-<div class="qr"><div id="qrcode"></div><b>SCAN TO VERIFY</b><br><span id="link" style="font-size:7px; word-break:break-all"></span><br><small>Verify at arnaudafrochaine.com/verify</small></div>
+<div class="sign">
+<b>Authorized Signatory</b><br>
+Director, ARNAUD AFROCHAINE VERIFICATION LTD
 </div>
-<div class="footer"><span>Registered Office: 12 Idiroko Road, Sango Ota, Ogun State, NG</span><span>NDPA Compliant - Hash only on-chain | VALID/INVALID only public</span><span>Certificate valid unless revoked</span></div>
+</div>
+
+<div class="qrBox">
+<div class="topLabel">SCAN TO VERIFY</div>
+<div id="qrcode"></div>
+<div style="font-size:8px; margin-top:6px; font-weight:bold; line-height:1.2">Verify authenticity at<br>arnaudafrochaine.com/verify</div>
+</div>
+</div>
+
+<div class="footer">
+<span>Registered Office: Sango Ota, Ogun State, Nigeria</span>
+<span style="text-align:right">NDPA Compliant —<br><b>Nigeria Data Protection Act 2023 | Certificate is valid unless revoked</b></span>
+</div>
+
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
 const p=new URLSearchParams(location.search);
-document.getElementById('name').textContent=p.get('name')||'John Doe';
-document.getElementById('ref').textContent=p.get('ref')||'AAC/2026/112082';
-document.getElementById('school').textContent=p.get('school')||'Goldfields Academy Sango';
-document.getElementById('course').textContent=p.get('course')||'Business / Diploma';
-document.getElementById('date').textContent=p.get('date')||new Date().toLocaleDateString('en-GB',{day:'2-digit', month:'short', year:'numeric'});
-const link=`https://n-cyber.github.io/ArnaudAfrochaineVerification/verify.html?ref=${encodeURIComponent(p.get('ref')||'')}`;
-document.getElementById('link').textContent=link;
-new QRCode(document.getElementById('qrcode'),{text:link, width:130, height:130, colorDark:"#0a1931", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.H});
+document.getElementById('name').textContent=(p.get('name')||'GBADAMASI SANUSI').toUpperCase();
+document.getElementById('ref').textContent=p.get('ref')||'VR-AAV-2024-1127';
+document.getElementById('date').textContent=p.get('date')||'27 November 2024';
+document.getElementById('wallet').textContent=p.get('wallet')||'0x6447...fAE2';
+const link=`https://n-cyber.github.io/ArnaudAfrochaineVerification/verify.html?ref=${encodeURIComponent(p.get('ref')||'VR-AAV-2024-1127')}`;
+document.getElementById('qrcode').innerHTML="";
+new QRCode(document.getElementById('qrcode'),{text:link, width:125, height:125, colorDark:"#0a1931", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.H});
 </script>
 </body></html>
