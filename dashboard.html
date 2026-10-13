@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dashboard - ARNAUD GLOBAL</title>
+<title>Dashboard - ARNAUD AFROCHAINE VERIFICATION LTD</title>
 <style>
 *{box-sizing:border-box;font-family:Arial}body{margin:0;background:#f4f7f6}
-.top{background:#0a1931;color:white;padding:15px;display:flex;justify-content:space-between;align-items:center}
-.top b{color:#C9A227}
+.top{background:#0a1931;color:white;padding:10px 15px;display:flex;justify-content:space-between;align-items:center}
+.top .brand{display:flex;align-items:center;gap:10px}
+.top img{width:42px;height:42px;border-radius:50%;border:2px solid #C9A227;background:white;object-fit:contain}
+.top b{color:#C9A227; font-size:13px; line-height:1.2}
 .card{margin:15px;background:white;padding:20px;border-radius:12px;box-shadow:0 3px 12px rgba(0,0,0,.08)}
 h2{color:#0a4d2a}label{font-weight:bold;display:block;margin:12px 0 5px;font-size:12px;color:#14532d}
 input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:7px}
@@ -13,14 +15,24 @@ button{background:#0a4d2a;color:white;border:none;padding:14px;border-radius:7px
 .linkBox{background:#ecfdf5;border:1px dashed #0a4d2a;padding:12px;border-radius:10px;margin-top:12px;font-size:12px;word-break:break-all;text-align:center}
 #qrcode{display:flex;justify-content:center;margin:12px 0}
 #qrcode img{border:6px solid white;box-shadow:0 2px 10px rgba(0,0,0,.2);border-radius:8px}
+.btnRow{display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:10px}
+.btnRow button{width:auto; padding:8px 14px; font-size:12px; margin-top:0}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </head><body>
-<div class="top"><b>ARNAUD GLOBAL VERIFICATION</b><button onclick="logout()" style="width:auto;padding:8px 15px;background:white;color:#0a1931;border-radius:6px;border:none;font-weight:bold">Logout</button></div>
+
+<div class="top">
+<div class="brand">
+<img src="logo.jpg" alt="LOGO" onerror="this.style.display='none'">
+<div><b>ARNAUD AFROCHAINE<br>VERIFICATION LTD</b><div style="font-size:9px;color:#fff;font-weight:400">African Roots, Global Vision • 500B ARNAUD</div></div>
+</div>
+<button onclick="logout()" style="width:auto;padding:8px 15px;background:white;color:#0a1931;border-radius:6px;border:none;font-weight:bold">Logout</button>
+</div>
+
 <div class="card">
 <div id="userInfo" style="font-size:12px;color:#64748b">Loading...</div>
 <h2>Add New Certificate - NDPA Compliant</h2>
-<p style="font-size:10px;color:#176b45;background:#ecfdf5;padding:8px;border-radius:6px">🔒 Blockchain: Hash only on-chain • Public shows VALID/INVALID only • Full data private</p>
+<p style="font-size:10px;color:#176b45;background:#ecfdf5;padding:8px;border-radius:6px">🔒 Blockchain: Hash only on-chain • Public shows VALID/INVALID only • Full data private • Wallet: 0x6447...fAE2</p>
 <form id="certForm">
 <label>Reference *</label><input id="ref" required placeholder="AAC/2026/112082">
 <label>Certificate Number *</label><input id="certNum" required placeholder="CERT-2026-001">
@@ -31,12 +43,13 @@ button{background:#0a4d2a;color:white;border:none;padding:14px;border-radius:7px
 <label>Issue Date *</label><input type="date" id="issueDate" required>
 <label>Status</label><select id="status"><option>Verified</option><option>Pending</option><option>Invalid</option></select>
 <label>Certificate Image (Optional)</label><input type="file" id="certImg" accept="image/*">
-<label>Note</label><textarea id="note" rows="2">ARNAUD GLOBAL - Blockchain Secured - NDPA 2023 Compliant</textarea>
+<label>Note</label><textarea id="note" rows="2">ARNAUD GLOBAL - Blockchain Secured - NDPA 2023 Compliant - African Roots, Global Vision</textarea>
 <button type="submit" id="addBtn">Add Certificate & Generate QR + Blockchain Hash</button>
 <div id="msg"></div>
 <div id="linkResult"></div>
 </form>
 </div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -53,7 +66,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ✅ NDPA COMPLIANT HASH GENERATOR - hash only, not personal data on chain
 function generateHash(str){
   let hash = 0;
   for(let i=0;i<str.length;i++){ hash = ((hash<<5)-hash)+str.charCodeAt(i); hash = hash & hash; }
@@ -90,41 +102,37 @@ document.getElementById('certForm').addEventListener('submit', async (e)=>{
   try{
     const refRaw = document.getElementById('ref').value.trim();
     const certNumRaw = document.getElementById('certNum').value.trim();
+    const fullNameRaw = document.getElementById('fullName').value.trim();
+    const schoolRaw = document.getElementById('school').value.trim();
+    const courseRaw = document.getElementById('course').value.trim();
+    const issueDateRaw = document.getElementById('issueDate').value.trim();
     const file=document.getElementById('certImg').files[0];
     let base64 = "";
     if(file){ base64 = await compressImage(file); }
     const safeDocId = refRaw.replace(/\//g, "-").replace(/[^a-zA-Z0-9-_]/g, "_") || certNumRaw.replace(/\//g, "-");
-    
-    const blockchainHash = generateHash(refRaw + document.getElementById('fullName').value.trim() + Date.now());
-    
+    const blockchainHash = generateHash(refRaw + fullNameRaw + Date.now());
+
     const data = {
       ref: refRaw, reference: refRaw, refNumber: refRaw,
       certNumber: certNumRaw, certificateNumber: certNumRaw,
-      fullName: document.getElementById('fullName').value.trim(),
-      name: document.getElementById('fullName').value.trim(),
+      fullName: fullNameRaw, name: fullNameRaw,
       certificateType: document.getElementById('certType').value.trim(),
-      course: document.getElementById('course').value.trim(),
-      school: document.getElementById('school').value.trim(),
-      institution: document.getElementById('school').value.trim(),
-      issueDate: document.getElementById('issueDate').value,
-      year: (document.getElementById('issueDate').value || '').substring(0,4),
+      course: courseRaw, school: schoolRaw, institution: schoolRaw,
+      issueDate: issueDateRaw, year: (issueDateRaw || '').substring(0,4),
       status: document.getElementById('status').value,
       note: document.getElementById('note').value.trim(),
-      imageBase64: base64,
-      hash: blockchainHash,
-      blockchainHash: blockchainHash,
-      ndpaCompliant: true,
-      onChain: "hash only - no personal data",
+      imageBase64: base64, hash: blockchainHash, blockchainHash: blockchainHash,
+      ndpaCompliant: true, onChain: "hash only - no personal data",
       blockchainWallet: "0x64478336d9018927C8E45AcC35e9e24c969EfAE2",
-      createdAt: serverTimestamp(),
-      verifiedBy: auth.currentUser.email
+      createdAt: serverTimestamp(), verifiedBy: auth.currentUser.email
     };
-    
+
     await setDoc(doc(db, "certificates", safeDocId), data);
     msg.style.color="green";
     msg.textContent=`✅ SAVED! Hash: ${blockchainHash.substring(0,15)}... | NDPA Compliant`;
 
     const verifyLink = `https://n-cyber.github.io/ArnaudAfrochaineVerification/verify.html?ref=${encodeURIComponent(refRaw)}`;
+    const printLink = `certificate-template.html?ref=${encodeURIComponent(refRaw)}&name=${encodeURIComponent(fullNameRaw)}&school=${encodeURIComponent(schoolRaw)}&course=${encodeURIComponent(courseRaw)}&date=${encodeURIComponent(issueDateRaw)}&hash=${encodeURIComponent(blockchainHash)}`;
 
     linkResult.innerHTML = `
       <div class="linkBox">
@@ -133,25 +141,20 @@ document.getElementById('certForm').addEventListener('submit', async (e)=>{
         <div id="qrcode"></div>
         <b>Scan to Verify:</b><br>
         <a href="${verifyLink}" target="_blank" style="font-size:11px;color:#0a4d2a">${verifyLink}</a>
-        <br><br>
-        <button type="button" onclick="downloadQR()" style="background:#0a1931;width:auto;padding:8px 14px">📥 Download QR Code</button>
-        <button type="button" onclick="window.open('${verifyLink}')" style="background:#C9A227;color:#0a1931;width:auto;padding:8px 14px">🔍 Test Verify (VALID/INVALID only)</button>
-        <p style="font-size:10px;color:#64748b;margin-top:10px">Public verification shows VALID/INVALID only - Full name private per NDPA 2023 S.24</p>
+        <div class="btnRow">
+          <button type="button" onclick="downloadQR()" style="background:#0a1931">📥 Download QR</button>
+          <button type="button" onclick="window.open('${verifyLink}')" style="background:#C9A227;color:#0a1931">🔍 Test Verify</button>
+          <button type="button" onclick="window.open('${printLink}','_blank')" style="background:#0a4d2a; border:2px solid #C9A227">🖨️ Print Postal Certificate</button>
+        </div>
+        <p style="font-size:10px;color:#64748b;margin-top:10px">Public verification shows VALID/INVALID only - Full name private per NDPA 2023 S.24 | Logo: logo.jpg</p>
       </div>
     `;
 
-    // Generate QR Code
     document.getElementById("qrcode").innerHTML = "";
     new QRCode(document.getElementById("qrcode"), {
-      text: verifyLink,
-      width: 200,
-      height: 200,
-      colorDark : "#0a1931",
-      colorLight : "#ffffff",
-      correctLevel : QRCode.CorrectLevel.H
+      text: verifyLink, width: 200, height: 200,
+      colorDark : "#0a1931", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H
     });
-
-    window.currentQRLink = verifyLink;
 
   }catch(err){ msg.style.color="red"; msg.textContent="❌ "+err.message; console.error(err); }
   btn.disabled=false;
@@ -161,16 +164,12 @@ window.downloadQR = ()=>{
   const img = document.querySelector("#qrcode img");
   if(img){
     const a = document.createElement("a");
-    a.href = img.src;
-    a.download = "QR_"+document.getElementById('ref').value.replace(/\//g,"-")+".png";
-    a.click();
+    a.href = img.src; a.download = "QR_"+document.getElementById('ref').value.replace(/\//g,"-")+".png"; a.click();
   } else {
     const canvas = document.querySelector("#qrcode canvas");
     if(canvas){
       const a = document.createElement("a");
-      a.href = canvas.toDataURL();
-      a.download = "QR_"+document.getElementById('ref').value.replace(/\//g,"-")+".png";
-      a.click();
+      a.href = canvas.toDataURL(); a.download = "QR_"+document.getElementById('ref').value.replace(/\//g,"-")+".png"; a.click();
     }
   }
 }
