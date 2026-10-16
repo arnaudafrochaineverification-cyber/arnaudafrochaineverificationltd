@@ -1,45 +1,164 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seal Document - Secured</title>
-<style>body{font-family:Arial;background:#051208;padding:12px;color:#fff}.box{background:#fff;color:#222;max-width:540px;margin:20px auto;padding:22px;border-radius:18px}input,select{width:100%;padding:12px;border:2px solid #0a4d2a;border-radius:10px;margin-bottom:10px;box-sizing:border-box}button{width:100%;padding:14px;background:#0a4d2a;color:#fff;border:none;border-radius:10px;font-weight:800;cursor:pointer;margin-top:6px}label{font-size:11px;font-weight:800;color:#0a4d2a}#hash{font-size:10px;background:#e8f5e9;padding:8px;border-radius:6px;word-break:break-all;margin:6px 0}</style>
-<script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {getFirestore,collection,addDoc,serverTimestamp,getDocs} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import {getAuth,signInWithPopup,GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seal Document - ARNAUD AFROCHAINE</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<style>
+body{font-family:Arial;background:#f5f5f5;padding:15px}
+.card{max-width:550px;margin:auto;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+h2{color:#0d4a2e;text-align:center}
+input,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
+button{width:100%;padding:13px;background:#0d4a2e;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px}
+#loginBtn{background:#4285f4}
+#userInfo{display:none;background:#e8f5e9;padding:10px;border-radius:8px;margin:10px 0;text-align:center;font-weight:bold}
+#status{margin-top:12px;padding:12px;border-radius:8px;display:none;word-break:break-all}
+.hashBox{background:#f0f0f0;padding:10px;border-radius:8px;margin-top:10px;font-family:monospace;font-size:12px;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>📜 SEAL DOCUMENT - SECURED</h2>
 
-const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"};
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
-const auth=getAuth(app);const provider=new GoogleAuthProvider();
-let currentUser=null;
+<button id="loginBtn" onclick="login()">🔐 LOGIN WITH arnaudafrochain@gmail.com</button>
+<div id="userInfo"></div>
 
-window.doLogin=async()=>{
- try{const res=await signInWithPopup(auth,provider);currentUser=res.user;document.getElementById('loginStatus').innerText="✅ Logged as: "+currentUser.email;document.getElementById('loginBtn').style.display="none";loadDirectors();}catch(e){alert("Login fail: "+e.message)}
+<label>Director:</label>
+<select id="directorSelect"><option>Login first to load directors...</option></select>
+
+<label>Document Name:</label>
+<input type="text" id="docName" placeholder="e.g. Board Resolution 2026">
+
+<label>Document Type:</label>
+<select id="docType">
+<option>Board Resolution</option>
+<option>Bank Instruction</option>
+<option>Share Certificate</option>
+<option>Authorization Letter</option>
+</select>
+
+<button onclick="sealDocument()">🔏 SEAL DOCUMENT</button>
+
+<div id="status"></div>
+</div>
+
+<script>
+// YOUR REAL HAPPY KEY - NO FAKE!
+const firebaseConfig = {
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+  authDomain: "arnaudafrochaineverification.firebaseapp.com",
+  projectId: "arnaudafrochaineverification",
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+  measurementId: "G-Y52LEBJM7Q"
 };
 
-async function loadDirectors(){
- try{const snap=await getDocs(collection(db,"directors"));const sel=document.getElementById('directorSel');sel.innerHTML="";snap.forEach(d=>{const o=document.createElement('option');o.value=d.id;o.textContent=d.data().directorName+" - "+d.data().companyName;sel.appendChild(o);});}catch(e){console.log(e)}
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+let currentUser = null;
+
+function login(){
+ const provider = new firebase.auth.GoogleAuthProvider();
+ auth.signInWithPopup(provider).then(r=>{
+   currentUser=r.user; showUser(r.user);
+ }).catch(e=>{
+   if(e.code==='auth/popup-blocked' || e.code==='auth/popup-closed-by-user'){
+     auth.signInWithRedirect(provider);
+   } else {
+     showStatus('❌ Login failed: '+e.message,'#ffebee');
+   }
+ });
 }
 
-window.sealDoc=async()=>{
- if(!currentUser){alert("Abeg login first!");return;}
- const title=document.getElementById('docTitle').value;const dirId=document.getElementById('directorSel').value;
- if(!title||!dirId){alert("Title & Director needed");return;}
- const hash="SHA256-"+Date.now().toString(16)+"-"+Math.random().toString(16).slice(2);
- document.getElementById('hash').innerText="Hash: "+hash;
- const btn=document.getElementById('sealBtn');btn.innerText="⏳ SEALING...";
- try{
-   const ref=await addDoc(collection(db,"sealedDocs"),{documentTitle:title,directorId:dirId,documentHash:hash,sealedAt:serverTimestamp(),ownerWallet:"0x64478336d9018927C8E45AcC35e9e24c969EfAE2",status:"SEALED"});
-   alert("✅ DOCUMENT SEALED! ID: "+ref.id+"\nHash: "+hash);btn.innerText="✅ SEALED";
- }catch(e){alert("Seal fail: "+e.message);btn.innerText="❌ FAILED";console.error(e)}
-};
-</script></head><body><div class="box">
-<h3 style="text-align:center;color:#0a4d2a;margin:0 0 10px 0">📜 SEAL DOCUMENT - SECURED</h3>
-<button id="loginBtn" onclick="doLogin()" style="background:#4285f4">🔐 LOGIN WITH arnaudafrochain@gmail.com</button>
-<div id="loginStatus" style="font-size:10px;color:green;margin:6px 0">Not logged in - Login to seal</div>
-<label>Document Title *</label><input id="docTitle" placeholder="Board Resolution 2026">
-<label>Select Director *</label><select id="directorSel"><option>Login first to load directors</option></select>
-<div id="hash">Hash go show here after seal</div>
-<button id="sealBtn" onclick="sealDoc()">🔏 SEAL DOCUMENT ON BLOCKCHAIN</button>
-<p style="font-size:9px;color:#666;margin-top:10px">✅ Secured by your new rule: Only you fit seal. Bank fit verify.</p>
-</div></body></html>
+// For phone redirect login
+auth.getRedirectResult().then(r=>{
+ if(r && r.user){ currentUser=r.user; showUser(r.user); }
+});
+
+auth.onAuthStateChanged(user=>{
+ if(user){
+   currentUser=user;
+   showUser(user);
+   loadDirectors();
+ }
+});
+
+function showUser(user){
+ document.getElementById('userInfo').style.display='block';
+ document.getElementById('userInfo').innerHTML='✅ Logged as: '+user.email;
+ document.getElementById('loginBtn').style.display='none';
+ showStatus('✅ Login OK - Directors loading...','#e8f5e9');
+}
+
+function loadDirectors(){
+ db.collection('directors').get().then(snap=>{
+   const sel=document.getElementById('directorSelect');
+   sel.innerHTML='';
+   if(snap.empty){
+     sel.innerHTML='<option>No directors - Go add for add-director.html</option>';
+   } else {
+     snap.forEach(doc=>{
+       const d=doc.data();
+       const opt=document.createElement('option');
+       opt.value=d.id; opt.textContent=d.name+' - '+d.title;
+       sel.appendChild(opt);
+     });
+   }
+ }).catch(e=>{
+   showStatus('❌ Load directors error: '+e.message+' (Enable Firestore)','#ffebee');
+ });
+}
+
+async function sealDocument(){
+ if(!currentUser){ alert('Abeg login first Oga!'); return; }
+ const docName=document.getElementById('docName').value.trim();
+ const docType=document.getElementById('docType').value;
+ const dirId=document.getElementById('directorSelect').value;
+ const dirText=document.getElementById('directorSelect').selectedOptions[0]?.textContent || '';
+
+ if(!docName){ showStatus('❌ Enter document name','#ffebee'); return; }
+ if(!dirId || dirId.includes('Login first') || dirId.includes('No directors')){ showStatus('❌ Select valid director','#ffebee'); return; }
+
+ // Create hash
+ const dataToHash = docName + '|' + docType + '|' + dirId + '|' + Date.now() + '|' + currentUser.email;
+ const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(dataToHash));
+ const hashArray = Array.from(new Uint8Array(hashBuffer));
+ const hashHex = hashArray.map(b=>b.toString(16).padStart(2,'0')).join('');
+
+ const sealedData = {
+   documentName:docName,
+   documentType:docType,
+   directorId:dirId,
+   directorInfo:dirText,
+   hash:hashHex,
+   sealedBy:currentUser.email,
+   sealedAt:firebase.firestore.FieldValue.serverTimestamp(),
+   verifyLink: 'https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify-signature.html?hash='+hashHex
+ };
+
+ db.collection('sealedDocuments').doc(hashHex).set(sealedData).then(()=>{
+   showStatus(
+     '✅ DOCUMENT SEALED SUCCESSFULLY!\n\nHASH: '+hashHex+'\n\nVerify Link:\n'+sealedData.verifyLink+
+     '\n\nCopy this link give bank - dem go verify!',
+     '#e8f5e9'
+   );
+ }).catch(e=>{
+   showStatus('❌ Seal error: '+e.message,'#ffebee');
+ });
+}
+
+function showStatus(msg,color){
+ const s=document.getElementById('status');
+ s.style.display='block';
+ s.style.background=color;
+ s.style.whiteSpace='pre-wrap';
+ s.textContent=msg;
+}
+</script>
+</body>
+</html>
