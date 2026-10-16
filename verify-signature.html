@@ -1,68 +1,87 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Verify - ARNAUD AFROCHAINE</title>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<title>VERIFY DOCUMENT - ARNAUD TRUST VERIFY</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body{font-family:Arial;background:#f5f5f5;padding:15px;text-align:center}
-.card{max-width:550px;margin:20px auto;background:white;padding:25px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
-input{width:100%;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;font-family:monospace}
-button{width:100%;padding:13px;background:#0d4a2e;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
-.result{margin-top:20px;padding:20px;border-radius:10px;display:none;text-align:left}
-.verified{background:#e8f5e9;border:2px solid #4caf50}
-.failed{background:#ffebee;border:2px solid #f44336}
-.hashText{font-family:monospace;font-size:11px;word-break:break-all;background:#f5f5f5;padding:8px;border-radius:6px;margin:8px 0}
+body{font-family:Arial; padding:20px; background:#f5f5f5}
+.box{background:white; padding:20px; border-radius:12px; max-width:600px; margin:auto; box-shadow:0 2px 10px #ccc}
+.green{border:3px solid #0a5c36; background:#f0f9f0}
+.red{border:3px solid #c00; background:#fff0f0}
+input{width:100%; padding:12px; margin:10px 0; border-radius:8px; border:1px solid #ccc}
+button{width:100%; padding:12px; background:#0a5c36; color:white; border:none; border-radius:8px; font-weight:bold}
 </style>
 </head>
 <body>
-<div class="card">
+<div class="box">
 <h2>🔍 VERIFY DOCUMENT</h2>
-<input type="text" id="hashInput" placeholder="Paste Hash or Full Link">
-<button onclick="verifyHash()">✅ VERIFY NOW</button>
-<div id="result" class="result"></div>
+<input id="hashInput" placeholder="Enter Hash or Scan QR" />
+<button onclick="verify()">✅ VERIFY NOW</button>
+<div id="result" style="margin-top:20px; padding:15px; border-radius:8px;"></div>
+<div id="qrBox" style="margin-top:20px; text-align:center; display:none;">
+<img id="qrImg" style="width:300px; height:300px; border:8px solid #0a5c36; border-radius:12px;" />
+<p id="qrLinkText" style="font-size:11px; word-break:break-all; color:#0a5c36; margin-top:10px;"></p>
+<button onclick="window.print()" style="background:#222; margin-top:10px;">🖨️ PRINT CERTIFICATE</button>
 </div>
-<script>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
 const firebaseConfig = {
-  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-  authDomain: "arnaudafrochaineverification.firebaseapp.com",
-  projectId: "arnaudafrochaineverification",
-  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
-  messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
-  measurementId: "G-Y52LEBJM7Q"
+  apiKey: "AIzaSy...",
+  authDomain: "arnaudtrustverify.firebaseapp.com",
+  projectId: "arnaudtrustverify"
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-window.onload = ()=>{
- const params = new URLSearchParams(window.location.search);
- const hash = params.get('hash');
- if(hash){ document.getElementById('hashInput').value=hash; verifyHash(); }
-};
-function verifyHash(){
- let input=document.getElementById('hashInput').value.trim();
- if(!input){ alert('Paste hash!'); return; }
- if(input.includes('hash=')){ 
-  try{ const p=new URLSearchParams(new URL(input).search); input=p.get('hash')||input; }catch(e){}
- }
- input=input.replace(/\s/g,'');
- const resultDiv=document.getElementById('result');
- resultDiv.style.display='block';
- resultDiv.innerHTML='⏳ Verifying...';
- db.collection('sealedDocuments').doc(input).get().then(doc=>{
-   if(doc.exists){
-     const data=doc.data();
-     const sealedDate=data.sealedAt?data.sealedAt.toDate().toLocaleString():'N/A';
-     resultDiv.className='result verified';
-     resultDiv.innerHTML=`<h3 style="color:#2e7d32">✅ VERIFIED - AUTHENTIC</h3><p><b>Document:</b> ${data.documentName}</p><p><b>Type:</b> ${data.documentType}</p><p><b>Director:</b> ${data.directorInfo}</p><p><b>Sealed By:</b> ${data.sealedBy}</p><p><b>Date:</b> ${sealedDate}</p><div class="hashText">${data.hash}</div>`;
-   }else{
-     resultDiv.className='result failed';
-     resultDiv.innerHTML=`<h3 style="color:#c62828">❌ NOT FOUND</h3><p>Hash no dey for database - Fake document!</p><div class="hashText">${input}</div>`;
-   }
- }).catch(e=>{ resultDiv.className='result failed'; resultDiv.innerHTML='❌ Error: '+e.message; });
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function showQR(hash){
+  const url = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify-signature.html?hash=${hash}`;
+  const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(url)}`;
+  document.getElementById('qrImg').src = qrApi;
+  document.getElementById('qrLinkText').innerText = url;
+  document.getElementById('qrBox').style.display='block';
 }
+
+window.verify = async function(){
+  let hash = document.getElementById('hashInput').value.trim() || new URLSearchParams(location.search).get('hash');
+  if(!hash){ alert('Enter hash'); return; }
+  document.getElementById('result').innerHTML = 'Verifying...';
+  try {
+    // try both collections
+    let ref1 = doc(db, "sealedDocs", hash);
+    let snap = await getDoc(ref1);
+    if(!snap.exists()){
+      ref1 = doc(db, "sealed_documents", hash);
+      snap = await getDoc(ref1);
+    }
+    if(snap.exists()){
+      const d = snap.data();
+      document.getElementById('result').className='green';
+      document.getElementById('result').innerHTML = `
+        <h2 style="color:#0a5c36;">✅ VERIFIED - AUTHENTIC</h2>
+        <p><b>Document:</b> ${d.docName || d.name}</p>
+        <p><b>Type:</b> ${d.docType || d.type}</p>
+        <p><b>Director:</b> ${d.director || d.directorName}</p>
+        <p><b>Sealed By:</b> ${d.sealedBy}</p>
+        <p><b>Date:</b> ${d.timestamp ? new Date(d.timestamp.seconds*1000).toLocaleString() : d.date}</p>
+        <p style="font-size:10px; background:white; padding:8px; word-break:break-all;">${hash}</p>
+      `;
+      showQR(hash);
+    } else {
+      document.getElementById('result').className='red';
+      document.getElementById('result').innerHTML = `<h2 style="color:red;">❌ NOT FOUND - FAKE DOCUMENT</h2><p>This hash does not exist in ARNAUD TRUST VERIFY system.</p>`;
+    }
+  } catch(e){
+    document.getElementById('result').innerHTML = 'Error: '+e.message;
+  }
+}
+
+// auto verify if ?hash= in URL
+const urlHash = new URLSearchParams(location.search).get('hash');
+if(urlHash){ document.getElementById('hashInput').value=urlHash; verify(); }
 </script>
 </body>
 </html>
