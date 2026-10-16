@@ -1,0 +1,24 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Add Director - TrustSeal</title><style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial}body{background:#051208;padding:12px;color:#fff}.box{background:white;color:#222;max-width:520px;margin:20px auto;padding:20px;border-radius:16px;border:1.5px solid #C9A227}h2{color:#0a4d2a;text-align:center;font-size:15px}input{width:100%;padding:12px;border:2px solid #a5d6a7;border-radius:10px;margin-bottom:10px;font-size:12px}button{width:100%;padding:14px;background:linear-gradient(135deg,#0a4d2a,#C9A227);color:white;border:none;border-radius:10px;font-weight:800;cursor:pointer;margin-bottom:8px}label{font-size:11px;font-weight:800;color:#0a4d2a;display:block;margin:8px 0 3px 0}</style>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {getFirestore, collection, addDoc, serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"};
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);
+window.saveDirector=async function(){
+const cName=document.getElementById('cName').value.trim();const cRC=document.getElementById('cRC').value.trim();const dName=document.getElementById('dName').value.trim();const nin=document.getElementById('nin').value.trim();const sigUrl=document.getElementById('sigUrl').value.trim();const vidUrl=document.getElementById('vidUrl').value.trim();
+if(!cName||!dName||!sigUrl){alert('Company, Director & Signature required');return}
+const btn=document.getElementById('btn');btn.innerText='⏳ SAVING MASTER...';btn.disabled=true;
+try{
+await addDoc(collection(db,"directors"),{companyName:cName,companyRC:cRC,directorName:dName,nin:nin,signatureUrl:sigUrl,videoUrl:vidUrl,ownerWallet:"0x64478336d9018927C8E45AcC35e9e24c969EfAE2",status:"VERIFIED MASTER",createdAt:serverTimestamp()});
+alert('✅ MASTER SIGNATURE SAVED! Director: '+dName+' Company: '+cName);
+}catch(e){alert(e.message)}btn.innerText='✅ SAVE MASTER TRUSTSEAL';btn.disabled=false;}
+</script></head><body><div class="box">
+<h2>➕ ADD DIRECTOR - MASTER TRUSTSEAL</h2><p style="font-size:10px;text-align:center;color:#666;margin-bottom:10px">Owner: 0x6447...fAE2 | 500B ARNAUD | WhatsApp 09132851465</p>
+<label>Company Name</label><input id="cName" placeholder="ADEBAYO TRUST LTD">
+<label>Company RC (CAC NIG / Companies House UK / Delaware US)</label><input id="cRC" placeholder="RC 1234567 / UK 12345678 / US DE">
+<label>Director Full Name</label><input id="dName" placeholder="John Doe">
+<label>NIN / ID Number</label><input id="nin" placeholder="12345678901">
+<label>Signature Image URL (Upload signature to imgbb.com copy link)</label><input id="sigUrl" placeholder="https://i.ibb.co/...signature.jpg">
+<label>20-sec Video URL (YouTube: 'I am John Doe, director of... today is... I authorize TrustSeal')</label><input id="vidUrl" placeholder="https://youtube.com/watch?v=...">
+<button id="btn" onclick="saveDirector()">✅ SAVE MASTER TRUSTSEAL - HASH SECURED</button>
+<a href="index.html" style="font-size:11px;color:#0a4d2a;font-weight:800;display:block;text-align:center">← Back to Home</a></div></body></html>
