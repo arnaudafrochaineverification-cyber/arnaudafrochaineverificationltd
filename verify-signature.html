@@ -1,31 +1,68 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Verify Signature - TrustSeal</title><style>body{font-family:Arial;background:#f6fff6;margin:0}.top{background:#0a4d2a;color:white;text-align:center;padding:8px;font-size:9px}.box{max-width:560px;margin:15px auto;background:white;padding:18px;border-radius:14px;box-shadow:0 8px 25px #0001}.hash{background:#000;color:#00ff88;font-family:monospace;font-size:10px;padding:10px;border-radius:8px;word-break:break-all;margin:8px 0}</style>
-<script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {getFirestore, collection, query, where, getDocs} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"};
-const app=initializeApp(firebaseConfig);const db=getFirestore(app);
-window.verify=async function(){
-const ref=document.getElementById('ref').value.trim().toUpperCase();const res=document.getElementById('res');
-res.innerHTML='⏳ Verifying TrustSeal...';
-const q=query(collection(db,"certificates"),where("ref","==",ref));const snap=await getDocs(q);
-if(snap.empty){res.innerHTML=`<div style="background:#ffebee;padding:15px;text-align:center;border-radius:8px"><b style="color:red">❌ SIGNATURE MISMATCH - POSSIBLE FORGERY</b><br>Ref ${ref} not found. Document may be forged. Contact 09132851465</div>`;return}
-const d=snap.docs[0].data();
-res.innerHTML=`<div style="background:white;border:2px solid #0a4d2a;border-radius:10px;overflow:hidden">
-<div style="background:#0a4d2a;color:white;padding:10px;text-align:center;font-weight:800">✓ Document Authentic - TrustSeal Verified</div>
-<div style="padding:12px;line-height:2;font-size:12px">
-<b>Company:</b> ${d.companyName||d.school} (${d.cacType})<br>
-<b>Signed by:</b> ${d.fullName} (Director)<br>
-<b>Document:</b> ${d.certificateType}<br>
-<b>Ref:</b> ${d.ref}<br>
-<b>Hash:</b> <div class="hash">${d.blockchainHash} - Unchanged since ${d.timestamp}</div>
-<b>Video authorization:</b> ${d.videoUrl?'✅ Available':'Pending'}<br>
-<b>Status:</b> <span style="background:#0a4d2a;color:white;padding:3px 8px;border-radius:12px;font-size:10px">VALID</span>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify - ARNAUD AFROCHAINE</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<style>
+body{font-family:Arial;background:#f5f5f5;padding:15px;text-align:center}
+.card{max-width:550px;margin:20px auto;background:white;padding:25px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+input{width:100%;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;font-family:monospace}
+button{width:100%;padding:13px;background:#0d4a2e;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+.result{margin-top:20px;padding:20px;border-radius:10px;display:none;text-align:left}
+.verified{background:#e8f5e9;border:2px solid #4caf50}
+.failed{background:#ffebee;border:2px solid #f44336}
+.hashText{font-family:monospace;font-size:11px;word-break:break-all;background:#f5f5f5;padding:8px;border-radius:6px;margin:8px 0}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>🔍 VERIFY DOCUMENT</h2>
+<input type="text" id="hashInput" placeholder="Paste Hash or Full Link">
+<button onclick="verifyHash()">✅ VERIFY NOW</button>
+<div id="result" class="result"></div>
 </div>
-${d.signatureUrl?`<div style="margin:10px;text-align:center"><img src="${d.signatureUrl}" style="max-width:220px;border:1px solid #C9A227;padding:5px;border-radius:8px"><div style="background:#0a4d2a;color:white;padding:6px;border-radius:20px;font-size:11px;font-weight:800;margin-top:6px;display:inline-block">Signature matches file - ${d.signatureScore} Match</div></div>`:''}
-${d.videoUrl?`<div style="margin:10px"><iframe width="100%" height="200" src="${d.videoUrl.replace('watch?v=','embed/')}" frameborder="0" allowfullscreen></iframe></div>`:''}
-${d.certificateImageUrl?`<div style="margin:10px"><img src="${d.certificateImageUrl}" style="width:100%;border-radius:8px"></div>`:''}
-</div>`;
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+  authDomain: "arnaudafrochaineverification.firebaseapp.com",
+  projectId: "arnaudafrochaineverification",
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+  measurementId: "G-Y52LEBJM7Q"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+window.onload = ()=>{
+ const params = new URLSearchParams(window.location.search);
+ const hash = params.get('hash');
+ if(hash){ document.getElementById('hashInput').value=hash; verifyHash(); }
+};
+function verifyHash(){
+ let input=document.getElementById('hashInput').value.trim();
+ if(!input){ alert('Paste hash!'); return; }
+ if(input.includes('hash=')){ 
+  try{ const p=new URLSearchParams(new URL(input).search); input=p.get('hash')||input; }catch(e){}
+ }
+ input=input.replace(/\s/g,'');
+ const resultDiv=document.getElementById('result');
+ resultDiv.style.display='block';
+ resultDiv.innerHTML='⏳ Verifying...';
+ db.collection('sealedDocuments').doc(input).get().then(doc=>{
+   if(doc.exists){
+     const data=doc.data();
+     const sealedDate=data.sealedAt?data.sealedAt.toDate().toLocaleString():'N/A';
+     resultDiv.className='result verified';
+     resultDiv.innerHTML=`<h3 style="color:#2e7d32">✅ VERIFIED - AUTHENTIC</h3><p><b>Document:</b> ${data.documentName}</p><p><b>Type:</b> ${data.documentType}</p><p><b>Director:</b> ${data.directorInfo}</p><p><b>Sealed By:</b> ${data.sealedBy}</p><p><b>Date:</b> ${sealedDate}</p><div class="hashText">${data.hash}</div>`;
+   }else{
+     resultDiv.className='result failed';
+     resultDiv.innerHTML=`<h3 style="color:#c62828">❌ NOT FOUND</h3><p>Hash no dey for database - Fake document!</p><div class="hashText">${input}</div>`;
+   }
+ }).catch(e=>{ resultDiv.className='result failed'; resultDiv.innerHTML='❌ Error: '+e.message; });
 }
-window.addEventListener('DOMContentLoaded',()=>{const p=new URLSearchParams(location.search);const id=p.get('id');if(id){document.getElementById('ref').value=id;verify();}});
-</script></head><body><div class="top">🔗 TrustSeal • Hash Secured • Signature Match • Video Proof • CAC Multi • 0x6447...fAE2</div>
-<div class="box"><h3 style="text-align:center;color:#0a4d2a">🔍 Verify TrustSeal Signature</h3><input id="ref" placeholder="Enter TS-DOC-XXXX" style="width:100%;padding:14px;border:2px solid #a5d6a7;border-radius:10px;margin:12px 0;text-transform:uppercase"><button onclick="verify()" style="width:100%;padding:14px;background:#0a4d2a;color:white;border:none;border-radius:10px;font-weight:800">VERIFY SIGNATURE →</button><div id="res" style="margin-top:15px"></div></div></body></html>
+</script>
+</body>
+</html>
