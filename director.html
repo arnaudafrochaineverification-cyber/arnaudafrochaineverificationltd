@@ -1,24 +1,68 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Add Director - TrustSeal</title><style>*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial}body{background:#051208;padding:12px;color:#fff}.box{background:white;color:#222;max-width:520px;margin:20px auto;padding:20px;border-radius:16px;border:1.5px solid #C9A227}h2{color:#0a4d2a;text-align:center;font-size:15px}input{width:100%;padding:12px;border:2px solid #a5d6a7;border-radius:10px;margin-bottom:10px;font-size:12px}button{width:100%;padding:14px;background:linear-gradient(135deg,#0a4d2a,#C9A227);color:white;border:none;border-radius:10px;font-weight:800;cursor:pointer;margin-bottom:8px}label{font-size:11px;font-weight:800;color:#0a4d2a;display:block;margin:8px 0 3px 0}</style>
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Director - 100% Owned</title>
+<style>body{font-family:Arial;background:#051208;padding:12px;color:#fff}.box{background:#fff;color:#222;max-width:540px;margin:20px auto;padding:22px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.4)}input{width:100%;padding:12px;border:2px solid #0a4d2a;border-radius:10px;margin-bottom:10px;box-sizing:border-box}button{width:100%;padding:14px;background:#0a4d2a;color:#fff;border:none;border-radius:10px;font-weight:800;cursor:pointer;margin-top:6px}#status{font-size:11px;padding:8px;background:#e8f5e9;border-radius:6px;margin-top:8px;word-break:break-all}label{font-size:11px;font-weight:800;color:#0a4d2a}</style>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {getFirestore, collection, addDoc, serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {getFirestore,collection,addDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {getStorage,ref,uploadBytes,getDownloadURL} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import {getAuth,signInWithPopup,GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
 const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47"};
-const app=initializeApp(firebaseConfig);const db=getFirestore(app);
-window.saveDirector=async function(){
-const cName=document.getElementById('cName').value.trim();const cRC=document.getElementById('cRC').value.trim();const dName=document.getElementById('dName').value.trim();const nin=document.getElementById('nin').value.trim();const sigUrl=document.getElementById('sigUrl').value.trim();const vidUrl=document.getElementById('vidUrl').value.trim();
-if(!cName||!dName||!sigUrl){alert('Company, Director & Signature required');return}
-const btn=document.getElementById('btn');btn.innerText='⏳ SAVING MASTER...';btn.disabled=true;
-try{
-await addDoc(collection(db,"directors"),{companyName:cName,companyRC:cRC,directorName:dName,nin:nin,signatureUrl:sigUrl,videoUrl:vidUrl,ownerWallet:"0x64478336d9018927C8E45AcC35e9e24c969EfAE2",status:"VERIFIED MASTER",createdAt:serverTimestamp()});
-alert('✅ MASTER SIGNATURE SAVED! Director: '+dName+' Company: '+cName);
-}catch(e){alert(e.message)}btn.innerText='✅ SAVE MASTER TRUSTSEAL';btn.disabled=false;}
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);const storage=getStorage(app);
+const auth=getAuth(app);const provider=new GoogleAuthProvider();
+
+let sigUrlFinal="";let currentUser=null;
+
+window.doLogin=async()=>{
+ try{const res=await signInWithPopup(auth,provider);currentUser=res.user;document.getElementById('loginStatus').innerText="✅ Logged as: "+currentUser.email;document.getElementById('loginBtn').style.display="none";}catch(e){alert("Login fail: "+e.message)}
+};
+
+window.uploadSig=async()=>{
+ const file=document.getElementById('sigFile').files[0];
+ if(!file){alert("Choose signature image first");return;}
+ if(!currentUser){alert("Abeg login first with arnaudafrochain@gmail.com");return;}
+ const btn=document.getElementById('upBtn');btn.innerText="⏳ UPLOADING...";
+ try{
+   const storageRef=ref(storage,'signatures/'+Date.now()+'_'+file.name);
+   await uploadBytes(storageRef,file);
+   sigUrlFinal=await getDownloadURL(storageRef);
+   document.getElementById('status').innerText="✅ Signature uploaded! URL: "+sigUrlFinal;
+   document.getElementById('sigUrlDisplay').value=sigUrlFinal;
+   btn.innerText="✅ UPLOADED";
+ }catch(e){alert("Upload fail: "+e.message+"\nCheck Storage Rules");btn.innerText="❌ FAILED";console.error(e)}
+};
+
+window.saveDirector=async()=>{
+ if(!sigUrlFinal){alert("Upload signature first!");return;}
+ const cN=document.getElementById('cName').value,dN=document.getElementById('dName').value;
+ if(!cN||!dN){alert("Company & Director name needed");return;}
+ const btn=document.getElementById('saveBtn');btn.innerText="⏳ SAVING...";
+ try{
+   const docRef=await addDoc(collection(db,"directors"),{
+     companyName:cN,companyRC:document.getElementById('cRC').value,
+     directorName:dN,nin:document.getElementById('nin').value,
+     signatureUrl:sigUrlFinal,
+     ownerWallet:"0x64478336d9018927C8E45AcC35e9e24c969EfAE2",
+     createdAt:serverTimestamp()
+   });
+   alert("✅ SUCCESS! Director saved ID: "+docRef.id);btn.innerText="✅ SAVED 100% OWNED";
+ }catch(e){alert("Save fail: "+e.message+"\nRule must allow your email");btn.innerText="❌ FAILED";console.error(e)}
+};
 </script></head><body><div class="box">
-<h2>➕ ADD DIRECTOR - MASTER TRUSTSEAL</h2><p style="font-size:10px;text-align:center;color:#666;margin-bottom:10px">Owner: 0x6447...fAE2 | 500B ARNAUD | WhatsApp 09132851465</p>
-<label>Company Name</label><input id="cName" placeholder="ADEBAYO TRUST LTD">
-<label>Company RC (CAC NIG / Companies House UK / Delaware US)</label><input id="cRC" placeholder="RC 1234567 / UK 12345678 / US DE">
-<label>Director Full Name</label><input id="dName" placeholder="John Doe">
-<label>NIN / ID Number</label><input id="nin" placeholder="12345678901">
-<label>Signature Image URL (Upload signature to imgbb.com copy link)</label><input id="sigUrl" placeholder="https://i.ibb.co/...signature.jpg">
-<label>20-sec Video URL (YouTube: 'I am John Doe, director of... today is... I authorize TrustSeal')</label><input id="vidUrl" placeholder="https://youtube.com/watch?v=...">
-<button id="btn" onclick="saveDirector()">✅ SAVE MASTER TRUSTSEAL - HASH SECURED</button>
-<a href="index.html" style="font-size:11px;color:#0a4d2a;font-weight:800;display:block;text-align:center">← Back to Home</a></div></body></html>
+<h3 style="text-align:center;color:#0a4d2a;margin:0 0 10px 0">➕ ADD DIRECTOR - 100% OWNED</h3>
+<button id="loginBtn" onclick="doLogin()" style="background:#4285f4">🔐 LOGIN WITH arnaudafrochain@gmail.com</button>
+<div id="loginStatus" style="font-size:10px;color:green;margin:6px 0">Not logged in</div>
+<label>Company Name *</label><input id="cName" value="ARNAUD AFROCHAINE LTD">
+<label>RC Number</label><input id="cRC" placeholder="RC 1234567">
+<label>Director Name *</label><input id="dName" placeholder="Arnaud">
+<label>NIN</label><input id="nin" placeholder="Optional">
+<label>Choose Signature Image from Phone/Laptop *</label>
+<input type="file" id="sigFile" accept="image/*">
+<button id="upBtn" onclick="uploadSig()" style="background:#ff9800">📤 UPLOAD SIGNATURE TO MY FIREBASE</button>
+<div id="status">No file uploaded yet</div>
+<label>Signature URL (auto-filled after upload)</label><input id="sigUrlDisplay" readonly placeholder="Will auto-fill">
+<button id="saveBtn" onclick="saveDirector()">💾 SAVE DIRECTOR TO DATABASE</button>
+<p style="font-size:9px;color:#666;margin-top:10px">✅ 100% Owned: No imgbb, No external link. Signature dey inside your Firebase Storage. Bank fit read, na only you fit write.</p>
+</div></body></html>
