@@ -1,100 +1,33 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Add Director - SECURED</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Director - Secured</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<style>
-body{font-family:Arial;background:#f5f5f5;padding:15px}
-.card{max-width:500px;margin:auto;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
-h2{color:#0d4a2e;text-align:center}
+<style>body{font-family:Arial;background:#f5f5f5;padding:15px} .card{max-width:500px;margin:20px auto;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.1);text-align:center}
 input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
-button{width:100%;padding:13px;background:#0d4a2e;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px}
-#loginBtn{background:#4285f4}
-#status{margin-top:12px;padding:10px;border-radius:8px;display:none;text-align:center}
-#userInfo{display:none;background:#e8f5e9;padding:10px;border-radius:8px;margin:10px 0;text-align:center;font-weight:bold}
-</style>
-</head>
-<body>
-<div class="card">
-<h2>➕ ADD DIRECTOR - SECURED</h2>
-<button id="loginBtn" onclick="login()">🔐 LOGIN WITH arnaudafrochain@gmail.com</button>
-<div id="userInfo"></div>
-<input type="text" id="directorName" placeholder="Director Full Name">
-<input type="text" id="directorTitle" placeholder="Title e.g. Managing Director">
-<input type="text" id="directorID" placeholder="Director ID e.g. DIR001">
-<button onclick="addDirector()">💾 SAVE DIRECTOR</button>
-<div id="status"></div>
-</div>
+button{width:100%;padding:12px;margin-top:8px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+.green{background:#0d4a2e;color:white} .red{background:#c62828;color:white} .blue{background:#1565c0;color:white}
+.msg{margin-top:10px;padding:12px;border-radius:8px;display:none}
+.ok{background:#e8f5e9;color:#2e7d32} .err{background:#ffebee;color:#c62828}
+.logged{background:#e8f5e9;padding:10px;border-radius:8px;margin-bottom:10px;font-size:14px}
+</style></head><body><div class="card">
+<h2 style="color:#0d4a2e">➕ ADD DIRECTOR - SECURED</h2>
+<div id="loginBox"><button class="blue" onclick="login()">🔐 LOGIN WITH GOOGLE</button></div>
+<div id="userBox" style="display:none"><div id="loggedInfo" class="logged"></div>
+<button class="red" onclick="logout()">🚪 LOGOUT (Will ask password next time)</button>
+<input id="dName" placeholder="Director Full Name">
+<input id="dTitle" placeholder="Title e.g. Managing Director">
+<input id="dID" placeholder="Director ID e.g. DIR001">
+<button class="green" onclick="saveDirector()">💾 SAVE DIRECTOR</button>
+<div id="msg" class="msg"></div></div></div>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-  authDomain: "arnaudafrochaineverification.firebaseapp.com",
-  projectId: "arnaudafrochaineverification",
-  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
-  messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
-  measurementId: "G-Y52LEBJM7Q"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-let currentUser = null;
-
-function login(){
- const provider = new firebase.auth.GoogleAuthProvider();
- auth.signInWithPopup(provider).then(r=>{
-   currentUser=r.user; showUser(r.user);
- }).catch(e=>{
-   // If popup blocked for phone, use redirect
-   if(e.code==='auth/popup-blocked' || e.code==='auth/popup-closed-by-user'){
-     auth.signInWithRedirect(provider);
-   } else {
-     showStatus('❌ '+e.message,'#ffebee');
-   }
- });
-}
-
-auth.getRedirectResult().then(r=>{
- if(r.user){ currentUser=r.user; showUser(r.user); }
-});
-
-auth.onAuthStateChanged(user=>{
- if(user){ currentUser=user; showUser(user); }
-});
-
-function showUser(user){
- document.getElementById('userInfo').style.display='block';
- document.getElementById('userInfo').innerHTML='✅ Logged as: '+user.email;
- document.getElementById('loginBtn').style.display='none';
- showStatus('✅ Login OK - Add director now','#e8f5e9');
-}
-
-function addDirector(){
- if(!currentUser){ alert('Login first Oga!'); return; }
- const name=document.getElementById('directorName').value.trim();
- const title=document.getElementById('directorTitle').value.trim();
- const id=document.getElementById('directorID').value.trim() || 'DIR'+Date.now();
- if(!name){ showStatus('❌ Enter name','#ffebee'); return; }
- db.collection('directors').doc(id).set({
-   name:name, title:title, id:id,
-   createdBy:currentUser.email,
-   createdAt:firebase.firestore.FieldValue.serverTimestamp()
- }).then(()=>{
-   showStatus('✅ Director '+name+' SAVED! Go check seal-document dropdown','#e8f5e9');
-   document.getElementById('directorName').value='';
-   document.getElementById('directorTitle').value='';
-   document.getElementById('directorID').value='';
- }).catch(e=>{ showStatus('❌ Error: '+e.message,'#ffebee'); });
-}
-
-function showStatus(msg,color){
- const s=document.getElementById('status');
- s.style.display='block'; s.style.background=color; s.textContent=msg;
-}
-</script>
-</body>
-</html>
+const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47",measurementId:"G-Y52LEBJM7Q"};
+firebase.initializeApp(firebaseConfig); const auth=firebase.auth(); const db=firebase.firestore();
+function login(){auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());}
+function logout(){auth.signOut().then(()=>location.reload());}
+auth.onAuthStateChanged(user=>{if(user){document.getElementById('loginBox').style.display='none';document.getElementById('userBox').style.display='block';document.getElementById('loggedInfo').innerHTML='✅ Logged as:<br><b>'+user.email+'</b>';}else{document.getElementById('loginBox').style.display='block';document.getElementById('userBox').style.display='none';}});
+function showMsg(t,ok){const m=document.getElementById('msg');m.style.display='block';m.className='msg '+(ok?'ok':'err');m.innerHTML=t;}
+function saveDirector(){const n=document.getElementById('dName').value.trim(),ti=document.getElementById('dTitle').value.trim(),id=document.getElementById('dID').value.trim();if(!n||!ti||!id){showMsg('Fill all fields Oga!',false);return;}
+db.collection('directors').doc(id).set({name:n,title:ti,id:id,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email}).then(()=>{showMsg('✅ Director '+n+' SAVED! Go check seal-document dropdown',true);document.getElementById('dName').value='';document.getElementById('dTitle').value='';document.getElementById('dID').value='';}).catch(e=>showMsg('❌ '+e.message,false));}
+</script></body></html>
