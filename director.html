@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Add Director - ARNAUD AFROCHAINE</title>
+<title>Add Director - SECURED</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -11,83 +11,80 @@
 body{font-family:Arial;background:#f5f5f5;padding:15px}
 .card{max-width:500px;margin:auto;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
 h2{color:#0d4a2e;text-align:center}
-input,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
+input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
 button{width:100%;padding:13px;background:#0d4a2e;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px}
 #loginBtn{background:#4285f4}
 #status{margin-top:12px;padding:10px;border-radius:8px;display:none;text-align:center}
+#userInfo{display:none;background:#e8f5e9;padding:10px;border-radius:8px;margin:10px 0;text-align:center;font-weight:bold}
 </style>
 </head>
 <body>
 <div class="card">
 <h2>➕ ADD DIRECTOR - SECURED</h2>
-
 <button id="loginBtn" onclick="login()">🔐 LOGIN WITH arnaudafrochain@gmail.com</button>
-<div id="userInfo" style="display:none;background:#e8f5e9;padding:10px;border-radius:8px;margin:10px 0;text-align:center"></div>
-
-<input type="text" id="directorName" placeholder="Director Full Name (e.g., Arnaud Example)">
-<input type="text" id="directorTitle" placeholder="Title (e.g., Managing Director)">
-<input type="text" id="directorID" placeholder="Director ID (e.g., DIR001)">
-
+<div id="userInfo"></div>
+<input type="text" id="directorName" placeholder="Director Full Name">
+<input type="text" id="directorTitle" placeholder="Title e.g. Managing Director">
+<input type="text" id="directorID" placeholder="Director ID e.g. DIR001">
 <button onclick="addDirector()">💾 SAVE DIRECTOR</button>
 <div id="status"></div>
 </div>
-
 <script>
-// SAME FIREBASE CONFIG AS SEAL-DOCUMENT
 const firebaseConfig = {
-  apiKey: "AIzaSyC2jEk2aeaV7qs-3e6R3M1p4p4p4p4p4p4p4p",
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
   authDomain: "arnaudafrochaineverification.firebaseapp.com",
   projectId: "arnaudafrochaineverification",
-  storageBucket: "arnaudafrochaineverification.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+  measurementId: "G-Y52LEBJM7Q"
 };
-
-// ⚠️ OGA REPLACE THIS WITH YOUR REAL CONFIG FROM seal-document.html
-// Copy firebaseConfig from your seal-document.html wey dey work
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-
 let currentUser = null;
 
 function login(){
- auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
- .then(result=>{
-   currentUser = result.user;
-   document.getElementById('userInfo').style.display='block';
-   document.getElementById('userInfo').innerHTML = '✅ Logged as: ' + currentUser.email;
-   document.getElementById('loginBtn').style.display='none';
-   showStatus('✅ Login successful! Now you can add directors', '#e8f5e9');
- })
- .catch(e=>{ showStatus('❌ Login failed: '+e.message, '#ffebee'); });
+ const provider = new firebase.auth.GoogleAuthProvider();
+ auth.signInWithPopup(provider).then(r=>{
+   currentUser=r.user; showUser(r.user);
+ }).catch(e=>{
+   // If popup blocked for phone, use redirect
+   if(e.code==='auth/popup-blocked' || e.code==='auth/popup-closed-by-user'){
+     auth.signInWithRedirect(provider);
+   } else {
+     showStatus('❌ '+e.message,'#ffebee');
+   }
+ });
 }
 
-auth.onAuthStateChanged(user=>{
- if(user){
-  currentUser=user;
-  document.getElementById('userInfo').style.display='block';
-  document.getElementById('userInfo').innerHTML='✅ Logged as: '+user.email;
-  document.getElementById('loginBtn').style.display='none';
- }
+auth.getRedirectResult().then(r=>{
+ if(r.user){ currentUser=r.user; showUser(r.user); }
 });
 
+auth.onAuthStateChanged(user=>{
+ if(user){ currentUser=user; showUser(user); }
+});
+
+function showUser(user){
+ document.getElementById('userInfo').style.display='block';
+ document.getElementById('userInfo').innerHTML='✅ Logged as: '+user.email;
+ document.getElementById('loginBtn').style.display='none';
+ showStatus('✅ Login OK - Add director now','#e8f5e9');
+}
+
 function addDirector(){
- if(!currentUser){ alert('Abeg login first!'); return; }
+ if(!currentUser){ alert('Login first Oga!'); return; }
  const name=document.getElementById('directorName').value.trim();
  const title=document.getElementById('directorTitle').value.trim();
- const id=document.getElementById('directorID').value.trim() || Date.now().toString();
- if(!name){ showStatus('❌ Enter director name','#ffebee'); return; }
-
+ const id=document.getElementById('directorID').value.trim() || 'DIR'+Date.now();
+ if(!name){ showStatus('❌ Enter name','#ffebee'); return; }
  db.collection('directors').doc(id).set({
-   name:name,
-   title:title,
-   id:id,
+   name:name, title:title, id:id,
    createdBy:currentUser.email,
    createdAt:firebase.firestore.FieldValue.serverTimestamp()
  }).then(()=>{
-   showStatus('✅ Director '+name+' saved! Bank can now see am for seal-document dropdown','#e8f5e9');
+   showStatus('✅ Director '+name+' SAVED! Go check seal-document dropdown','#e8f5e9');
    document.getElementById('directorName').value='';
    document.getElementById('directorTitle').value='';
    document.getElementById('directorID').value='';
@@ -96,9 +93,7 @@ function addDirector(){
 
 function showStatus(msg,color){
  const s=document.getElementById('status');
- s.style.display='block';
- s.style.background=color;
- s.textContent=msg;
+ s.style.display='block'; s.style.background=color; s.textContent=msg;
 }
 </script>
 </body>
