@@ -12,9 +12,9 @@ input,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-r
 .hash{font-family:monospace;font-size:11px;background:#f5f5f5;padding:8px;border-radius:6px;margin:8px 0}
 </style></head><body><div class="card">
 <h2 style="color:#0d4a2e;text-align:center">📜 SEAL DOCUMENT - SECURED</h2>
-<div id="loginBox" style="text-align:center"><button class="blue" onclick="login()">🔐 LOGIN WITH GOOGLE</button></div>
+<div id="loginBox" style="text-align:center"><p>Click login - e go go Google and come back!</p><button class="blue" onclick="login()">🔐 LOGIN WITH GOOGLE</button></div>
 <div id="userBox" style="display:none"><div id="loggedInfo" class="logged"></div>
-<button class="red" onclick="logout()">🚪 LOGOUT (Will ask password next time)</button>
+<button class="red" onclick="logout()">🚪 LOGOUT</button>
 <label>Director:</label><select id="directorSelect"><option>Loading directors...</option></select>
 <label>Document Name:</label><input id="docName" placeholder="e.g. Board Resolution 2026">
 <label>Document Type:</label><select id="docType"><option>Board Resolution</option><option>CAC Form</option><option>Share Certificate</option><option>Bank Mandate</option><option>Other</option></select>
@@ -23,9 +23,10 @@ input,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-r
 <script>
 const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47",measurementId:"G-Y52LEBJM7Q"};
 firebase.initializeApp(firebaseConfig); const auth=firebase.auth(); const db=firebase.firestore();
-function login(){auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());}
+function login(){ const provider = new firebase.auth.GoogleAuthProvider(); auth.signInWithRedirect(provider); }
 function logout(){auth.signOut().then(()=>location.reload());}
 auth.onAuthStateChanged(user=>{if(user){document.getElementById('loginBox').style.display='none';document.getElementById('userBox').style.display='block';document.getElementById('loggedInfo').innerHTML='✅ Logged as:<br><b>'+user.email+'</b>';loadDirectors();}else{document.getElementById('loginBox').style.display='block';document.getElementById('userBox').style.display='none';}});
+auth.getRedirectResult().then(()=>{}).catch(e=>alert(e.message));
 function loadDirectors(){db.collection('directors').get().then(snap=>{const sel=document.getElementById('directorSelect');sel.innerHTML='';if(snap.empty){sel.innerHTML='<option>No directors - Go add for add-director.html</option>';return;}snap.forEach(doc=>{const d=doc.data();const opt=document.createElement('option');opt.value=doc.id;opt.textContent=d.name+' - '+d.title;sel.appendChild(opt);});}).catch(e=>{document.getElementById('directorSelect').innerHTML='<option>Error: '+e.message+'</option>';});}
 async function sha256(m){const b=new TextEncoder().encode(m);const h=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('');}
 function showMsg(t,ok){const m=document.getElementById('msg');m.style.display='block';m.className='msg '+(ok?'ok':'err');m.innerHTML=t;}
