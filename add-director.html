@@ -13,9 +13,9 @@ button{width:100%;padding:12px;margin-top:8px;border:none;border-radius:8px;font
 .logged{background:#e8f5e9;padding:10px;border-radius:8px;margin-bottom:10px;font-size:14px}
 </style></head><body><div class="card">
 <h2 style="color:#0d4a2e">➕ ADD DIRECTOR - SECURED</h2>
-<div id="loginBox"><button class="blue" onclick="login()">🔐 LOGIN WITH GOOGLE</button></div>
+<div id="loginBox"><p>Click login, e go carry you go Google, then bring you back!</p><button class="blue" onclick="login()">🔐 LOGIN WITH GOOGLE</button></div>
 <div id="userBox" style="display:none"><div id="loggedInfo" class="logged"></div>
-<button class="red" onclick="logout()">🚪 LOGOUT (Will ask password next time)</button>
+<button class="red" onclick="logout()">🚪 LOGOUT</button>
 <input id="dName" placeholder="Director Full Name">
 <input id="dTitle" placeholder="Title e.g. Managing Director">
 <input id="dID" placeholder="Director ID e.g. DIR001">
@@ -24,10 +24,11 @@ button{width:100%;padding:12px;margin-top:8px;border:none;border-radius:8px;font
 <script>
 const firebaseConfig={apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47",measurementId:"G-Y52LEBJM7Q"};
 firebase.initializeApp(firebaseConfig); const auth=firebase.auth(); const db=firebase.firestore();
-function login(){auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());}
+function login(){ const provider = new firebase.auth.GoogleAuthProvider(); auth.signInWithRedirect(provider); }
 function logout(){auth.signOut().then(()=>location.reload());}
 auth.onAuthStateChanged(user=>{if(user){document.getElementById('loginBox').style.display='none';document.getElementById('userBox').style.display='block';document.getElementById('loggedInfo').innerHTML='✅ Logged as:<br><b>'+user.email+'</b>';}else{document.getElementById('loginBox').style.display='block';document.getElementById('userBox').style.display='none';}});
+auth.getRedirectResult().then(()=>{}).catch(e=>{alert(e.message)});
 function showMsg(t,ok){const m=document.getElementById('msg');m.style.display='block';m.className='msg '+(ok?'ok':'err');m.innerHTML=t;}
 function saveDirector(){const n=document.getElementById('dName').value.trim(),ti=document.getElementById('dTitle').value.trim(),id=document.getElementById('dID').value.trim();if(!n||!ti||!id){showMsg('Fill all fields Oga!',false);return;}
-db.collection('directors').doc(id).set({name:n,title:ti,id:id,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email}).then(()=>{showMsg('✅ Director '+n+' SAVED! Go check seal-document dropdown',true);document.getElementById('dName').value='';document.getElementById('dTitle').value='';document.getElementById('dID').value='';}).catch(e=>showMsg('❌ '+e.message,false));}
+db.collection('directors').doc(id).set({name:n,title:ti,id:id,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email}).then(()=>{showMsg('✅ Director '+n+' SAVED! Go check seal-document',true);}).catch(e=>showMsg('❌ '+e.message,false));}
 </script></body></html>
