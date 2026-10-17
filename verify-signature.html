@@ -16,7 +16,7 @@ button{width:100%; padding:14px; background:#0a5c36; color:white; border:none; b
 <div class="box">
 <h2>🔍 VERIFY DOCUMENT</h2>
 <p style="color:#555; font-size:13px;">ARNAUD AFROCHAINE VERIFICATION LTD</p>
-<input id="hashInput" placeholder="Enter Hash or scan QR" />
+<input id="hashInput" placeholder="Enter Hash or Scan QR" />
 <button onclick="verify()">✅ VERIFY NOW</button>
 <div id="result" style="margin-top:20px;"></div>
 <div id="qrBox" style="margin-top:20px; text-align:center; display:none; border-top:2px dashed #0a5c36; padding-top:20px;">
@@ -68,10 +68,10 @@ window.verify = async function(){
       document.getElementById('result').className='green';
       document.getElementById('result').innerHTML = `
         <h2 style="color:#0a5c36;">✅ VERIFIED - AUTHENTIC</h2>
-        <p><b>Document:</b> ${d.docName || d.name || d.docType || 'Board Resolution'}</p>
+        <p><b>Document:</b> ${d.docName || d.name || 'Document'}</p>
         <p><b>Type:</b> ${d.docType || d.type || ''}</p>
-        <p><b>Director:</b> ${d.director || d.directorName || ''}</p>
-        <p><b>Sealed By:</b> ${d.sealedBy}</p>
+        <p><b>Director:</b> ${d.director || ''}</p>
+        <p><b>Sealed By:</b> ${d.sealedBy || ''}</p>
         <p><b>Date:</b> ${d.timestamp ? new Date(d.timestamp.seconds*1000).toLocaleString() : (d.date || '')}</p>
         <p style="font-size:10px; background:white; padding:8px; word-break:break-all; border:1px dashed #0a5c36;">${hash}</p>
       `;
@@ -84,9 +84,8 @@ window.verify = async function(){
     document.getElementById('result').innerHTML = 'Error: '+e.message;
   }
 }
-
 const urlHash = new URLSearchParams(location.search).get('hash');
 if(urlHash){ document.getElementById('hashInput').value=urlHash; verify(); }
 </script>
 </body>
-</html>
+                                            </html>
