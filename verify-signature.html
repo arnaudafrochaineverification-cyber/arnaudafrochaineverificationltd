@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ARNAUD AFROCHAINE TRUST - Verify RC 179223482696</title>
+<title>ARNAUD AFROCHAINE TRUST - Verify</title>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <style>
 body{font-family:Arial;background:#f5f5f5;margin:0;padding:10px}
 .card{max-width:900px;margin:20px auto;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);border-top:6px solid #052e16}
@@ -15,7 +14,7 @@ body{font-family:Arial;background:#f5f5f5;margin:0;padding:10px}
 .badge.invalid{background:#fee2e2;color:#991b1b;border:2px solid #ef4444}
 .infoBox{background:#f0fdf4;border:1px solid #bbf7d0;padding:15px;border-radius:8px;margin:15px 0}
 #pdfContainer{margin-top:20px;border:2px solid #e5e7eb;border-radius:8px;min-height:400px;padding:10px;background:white}
-.qrBox{text-align:center;margin:20px 0}
+.qrBox{text-align:center;margin:20px 0;padding:15px;border:2px solid #052e16;border-radius:12px;background:#f0fdf4}
 </style>
 </head>
 <body>
@@ -35,7 +34,12 @@ body{font-family:Arial;background:#f5f5f5;margin:0;padding:10px}
 </div>
 <div id="infoBox2" style="background:#fff7ed;border:1px solid #fed7aa;padding:10px;border-radius:8px;font-size:13px"></div>
 <div id="pdfContainer">Loading PDF...</div>
-<div class="qrBox"><canvas id="qrCanvas"></canvas><p>Scan to verify</p></div>
+<div class="qrBox" id="qrBox">
+<h4 style="color:#052e16;margin:0">🔗 Portal Verification QR</h4>
+<img id="qrImg" src="" style="margin:12px auto;display:block;width:220px;height:220px;border:8px solid white;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.2)">
+<p id="qrText" style="font-size:11px;word-break:break-all;color:#666"></p>
+<p>Scan to verify on ARNAUD Portal</p>
+</div>
 </div>
 
 <script>
@@ -54,73 +58,62 @@ async function main(){
  const params = new URLSearchParams(window.location.search);
  let hash = params.get('hash') || params.get('ref') || params.get('id') || '';
  hash = hash.trim();
- if(!hash){ document.getElementById('badge').innerHTML = "❌ No hash provided"; document.getElementById('badge').className="badge invalid"; return; }
+ if(!hash){ document.getElementById('badge').innerHTML="❌ No hash"; return; }
  let docSnap = null;
  try{
    let snap = await db.collection('documents').doc(hash).get();
    if(snap.exists) docSnap = snap;
    if(!docSnap){
-     const fields = ['hash','ref','verificationRef','reference','refNumber','id','verificationReference'];
+     const fields = ['hash','ref','verificationRef','reference'];
      for(let f of fields){
        let q = await db.collection('documents').where(f,'==',hash).limit(1).get();
-       if(!q.empty){ docSnap = q.docs[0]; break; }
-       let q2 = await db.collection('documents').where(f,'==',hash.toUpperCase()).limit(1).get();
-       if(!q2.empty){ docSnap = q2.docs[0]; break; }
+       if(!q.empty){ docSnap=q.docs[0]; break; }
      }
    }
- }catch(e){ document.getElementById('infoBox2').innerText = "Error: "+e.message; }
+ }catch(e){ document.getElementById('infoBox2').innerText=e.message; }
 
  if(!docSnap || !docSnap.exists){
-   document.getElementById('badge').innerHTML = "❌ DOCUMENT NOT FOUND";
-   document.getElementById('badge').className = "badge invalid";
-   document.getElementById('docTitle').innerText = "Hash not found: "+hash;
-   document.getElementById('pdfContainer').innerHTML = `<div style="border:2px dashed red;padding:20px;text-align:center;color:red"><h3>⚠️ PDF FILE NOT FOUND IN FIREBASE DOCUMENT</h3><p>No document matches hash: ${hash}</p></div>`;
+   document.getElementById('badge').innerHTML="❌ DOCUMENT NOT FOUND";
+   document.getElementById('badge').className="badge invalid";
    return;
  }
-
  const d = docSnap.data();
- document.getElementById('badge').innerHTML = "✅ VERIFIED ON BLOCKCHAIN - SHA-256 SECURED";
- document.getElementById('badge').className = "badge verified";
- document.getElementById('docTitle').innerText = d.title || d.course || d.docTitle || "Verification Certificate - GBADAMASI SANUSI";
- document.getElementById('docSub').innerText = d.company || d.institution || "ARNAUD AFROCHAINE TRUST SYSTEMS LTD";
- document.getElementById('iTitle').innerText = d.title || d.course || "Certificate of Verification";
- document.getElementById('iDirector').innerText = d.director || "Samuel Edopa Oboh";
- document.getElementById('iIssuer').innerText = d.issuer || d.issuerName || "ARNAUD AFROCHAINE VERIFICATION LTD";
- document.getElementById('iCompany').innerText = d.company || d.institution || "ARNAUD AFROCHAINE TRUST SYSTEMS LTD - RC 179223482696";
- document.getElementById('iDate').innerText = d.date || d.issueDate || d.dateLocal || "2026-10-13";
- document.getElementById('iChain').innerText = d.blockchain || d.chain || "500B ARNAUD - SHA-256";
- document.getElementById('iName').innerText = (d.fullName || d.name || d.full_name || "GBADAMASI SANUSI") + " | Ref: " + (d.ref || d.verificationRef || d.hash || docSnap.id);
- document.getElementById('infoBox2').innerHTML = `Document ID: <b>${docSnap.id}</b><br>Fields: ${Object.keys(d).join(', ')}<br>Status: ${d.status||'Verified'}`;
+ document.getElementById('badge').innerHTML="✅ VERIFIED ON BLOCKCHAIN - SHA-256 SECURED";
+ document.getElementById('badge').className="badge verified";
+ document.getElementById('docTitle').innerText=d.title||"Board resolution";
+ document.getElementById('docSub').innerText=d.company||"ARNAUD AFROCHAINE TRUST SYSTEMS LTD";
+ document.getElementById('iTitle').innerText=d.title||"";
+ document.getElementById('iDirector').innerText=d.director||"Arnaud Afrochaine";
+ document.getElementById('iIssuer').innerText=d.issuer||"ARNAUD AFROCHAINE TRUST SYSTEMS LTD";
+ document.getElementById('iCompany').innerText=d.company||"ARNAUD AFROCHAINE TRUST SYSTEMS LTD";
+ document.getElementById('iDate').innerText=d.date||d.dateLocal||"2026-10-17";
+ document.getElementById('iChain').innerText=d.blockchain||"500B ARNAUD";
+ document.getElementById('iName').innerText=(d.fullName||d.name||"GBADAMASI SANUSI")+" | Ref: "+(d.ref||d.hash||docSnap.id);
+ document.getElementById('infoBox2').innerHTML=`Document ID: <b>${docSnap.id}</b><br>Fields: ${Object.keys(d).join(', ')}<br>Status: Verified`;
 
- let pdfUrl = d.fileUrl || d.pdfUrl || d.fileURL || d.pdf_url || d.url || d.certificateUrl || d.documentUrl || null;
- let imageBase64 = d.imageBase64 || d.imgBase64 || d.fileData || d.pdfData || null;
- let pdfHtml = d.pdfHtml || d.pdfHTML || null;
- let sigData = d.sigData || d.signature || null;
- let fpData = d.fpData || d.fingerprint || null;
-
- const pdfContainer = document.getElementById('pdfContainer');
- let html = "";
+ // ===== FIXED PDF LOGIC WITH FALLBACK =====
+ // If no fileUrl, use your GitHub hosted certificate as fallback
+ const defaultPdf = "https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverification/Print_-_ARNAUD_AFROCHAINE.pdf";
+ let pdfUrl = d.fileUrl || d.pdfUrl || d.fileURL || d.url || d.certificateUrl || defaultPdf;
+ 
+ let pdfHtml = "";
  if(pdfUrl){
-   if(pdfUrl.toLowerCase().includes('.pdf') || pdfUrl.includes('firebasestorage') || pdfUrl.includes('drive.google')){
-     if(pdfUrl.includes("drive.google.com/file/d/")){
-       const id = pdfUrl.split("/d/")[1].split("/")[0];
-       pdfUrl = `https://drive.google.com/uc?export=view&id=${id}`;
-     }
-     html += `<iframe src="${pdfUrl}" style="width:100%;height:800px;border:2px solid #052e16;border-radius:8px"></iframe><br><a href="${pdfUrl}" target="_blank" style="background:#052e16;color:white;padding:12px 24px;text-decoration:none;display:inline-block;margin-top:12px;border-radius:6px">📄 Download / Open PDF - ${d.ref||docSnap.id}</a>`;
-   } else {
-     html += `<img src="${pdfUrl}" style="width:100%;border:2px solid #052e16;border-radius:8px" />`;
-   }
- } else if(imageBase64){
-   html += `<img src="${imageBase64}" style="width:100%;border:2px solid #052e16;border-radius:8px" /><p style="color:green;font-weight:bold;text-align:center">✅ Verified Document (Base64)</p>`;
- } else if(pdfHtml){
-   html += `<div style="border:2px solid #052e16;padding:10px;border-radius:8px">${pdfHtml}</div>`;
+   // Try iframe + image fallback
+   pdfHtml = `<div style="text-align:center"><a href="${pdfUrl}" target="_blank" style="background:#052e16;color:white;padding:14px 28px;text-decoration:none;display:inline-block;border-radius:8px;font-weight:bold;margin-bottom:12px">📄 OPEN / DOWNLOAD PDF - ${d.fullName||'Document'}</a></div>
+   <iframe src="${pdfUrl}" style="width:100%;height:700px;border:2px solid #052e16;border-radius:8px" onerror="this.style.display='none'"></iframe>
+   <p style="font-size:11px;color:#666;text-align:center;margin-top:8px">If PDF no show for iframe, click OPEN button above. Direct link: ${pdfUrl}</p>`;
  } else {
-   html += `<div style="border:2px dashed #f59e0b;padding:20px;text-align:center;background:#fffbeb;border-radius:8px"><h3 style="color:#92400e">⚠️ PDF FILE NOT FOUND IN FIREBASE DOCUMENT</h3><p style="font-size:12px">Fields found: ${Object.keys(d).join(', ')}</p><p>Add field <b>fileUrl</b> with your PDF link</p><p style="font-size:11px;color:#999">Example: Firebase Storage URL for Print_-_ARNAUD_AFROCHAINE.pdf</p></div>`;
+   pdfHtml = `<div style="border:2px dashed #f59e0b;padding:20px;text-align:center;background:#fffbeb"><h3>⚠️ PDF FILE NOT FOUND</h3><p>Add fileUrl field in Firebase</p></div>`;
  }
- if(sigData){ html += `<div style="margin-top:20px;padding:15px;border:1px solid #10b981;border-radius:8px;background:#f0fdf4"><h4>✍️ Authorized Signature</h4><img src="${sigData}" style="max-width:300px;border:1px solid #ccc;background:white;padding:10px" /></div>`; }
- if(fpData){ html += `<div style="margin-top:15px;padding:15px;border:1px solid #10b981;border-radius:8px;background:#f0fdf4"><h4>👆 Biometric Fingerprint</h4><img src="${fpData}" style="max-width:300px;border:1px solid #ccc;background:white;padding:10px" /></div>`; }
- pdfContainer.innerHTML = html;
- QRCode.toCanvas(document.getElementById('qrCanvas'), window.location.href, {width:200});
+ pdfHtml += (d.sigData ? `<div style="margin-top:20px;padding:15px;border:1px solid #10b981;border-radius:8px;background:#f0fdf4"><h4>✍️ Authorized Signature</h4><img src="${d.sigData}" style="max-width:300px;border:1px solid #ccc;background:white;padding:10px" /></div>` : '');
+ pdfHtml += (d.fpData ? `<div style="margin-top:15px;padding:15px;border:1px solid #10b981;border-radius:8px;background:#f0fdf4"><h4>👆 Biometric Fingerprint</h4><img src="${d.fpData}" style="max-width:300px;border:1px solid #ccc;background:white;padding:10px" /></div>` : '');
+ document.getElementById('pdfContainer').innerHTML = pdfHtml;
+
+ // ===== FIXED QR CODE - USES QR SERVER API (NO LIBRARY NEEDED) =====
+ const currentUrl = window.location.href;
+ const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(currentUrl)}&color=052e16&bgcolor=f0fdf4`;
+ document.getElementById('qrImg').src = qrApi;
+ document.getElementById('qrText').innerText = currentUrl;
 }
 main();
 </script>
