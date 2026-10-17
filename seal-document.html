@@ -29,36 +29,36 @@ input{width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px;font-si
 <div class="card">
 <div style="text-align:center;background:#0a1f0f;color:#4ade80;padding:6px 12px;border-radius:20px;font-size:9px;font-weight:800">ARNAUD AFROCHAINE TRUST SYSTEMS LTD • RC 179223482696</div>
 <h2>🔒 Seal Board Resolution</h2>
-<p style="text-align:center;font-size:11px;color:#64748b">Upload PDF + Spikey Fingerprint + Signature → Generate SHA-256 + QR → Save to Firebase Global</p>
+<p style="text-align:center;font-size:11px;color:#64748b">Upload PDF + Spikey + Signature → SHA-256 + QR → Firebase Global</p>
 
-<label>📄 PDF File (Board Resolution)</label>
+<label>📄 PDF File</label>
 <input type="file" id="pdfFile" accept=".pdf">
 
-<label>👆 Fingerprint (Your Spikey) - UPLOAD HERE</label>
+<label>👆 Spikey Fingerprint</label>
 <input type="file" id="fpFile" accept="image/*" onchange="previewFP(this)">
-<div id="fpPrev" class="preview" style="display:none"><img id="fpImg"><div class="ok">✅ Spikey / Fingerprint Ready</div></div>
+<div id="fpPrev" class="preview" style="display:none"><img id="fpImg"><div class="ok">✅ Spikey Ready (Compressed)</div></div>
 
 <label>✍️ Signature</label>
 <input type="file" id="sigFile" accept="image/*" onchange="previewSig(this)">
-<div id="sigPrev" class="preview" style="display:none"><img id="sigImg"><div class="ok">✅ Signature Ready</div></div>
+<div id="sigPrev" class="preview" style="display:none"><img id="sigImg"><div class="ok">✅ Signature Ready (Compressed)</div></div>
 
-<label>📌 Document Title</label>
-<input id="title" placeholder="e.g. Board Resolution 2026 - Share Allotment">
-<label>👤 Director Name</label>
+<label>📌 Title</label>
+<input id="title" placeholder="e.g. Board Resolution 2026">
+<label>👤 Director</label>
 <input id="director" value="Arnaud Afrochaine">
 <label>🏢 Issuer</label>
 <input id="issuer" value="ARNAUD AFROCHAINE TRUST SYSTEMS LTD">
 <label>📅 Date</label>
 <input id="date" type="date">
 
-<button class="btn btn-seal" onclick="sealDoc()">🔒 SEAL & GENERATE HASH + QR + SAVE TO FIREBASE</button>
+<button class="btn btn-seal" onclick="sealDoc()">🔒 SEAL & SAVE TO FIREBASE</button>
 
 <div id="result" style="display:none">
 <div class="ok" style="text-align:center;font-size:14px;margin:12px 0">✅ Saved to Firebase Global Network!<br>ARNAUD TRUST SYSTEMS LTD</div>
 <div id="qrcode"></div>
 <div class="hashbox">
-<b>Hash (SHA-256):</b><br><span id="hashOut"></span><br><br>
-<b>Verification Link:</b><br><span id="linkOut"></span>
+<b>Hash:</b><br><span id="hashOut"></span><br><br>
+<b>Link:</b><br><span id="linkOut"></span>
 </div>
 <button class="btn btn-test" onclick="testNow()">🧪 CLICK TO TEST VERIFICATION →</button>
 <button class="btn btn-print" onclick="window.print()">🖨️ PRINT WITH QR</button>
@@ -80,13 +80,40 @@ const db = firebase.firestore();
 
 let fpData='', sigData='', currentHash='', currentLink='';
 
+function compressImage(file, callback){
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX = 300;
+      let w = img.width, h = img.height;
+      if(w>h){ if(w>MAX){ h*=MAX/w; w=MAX; } } else { if(h>MAX){ w*=MAX/h; h=MAX; } }
+      canvas.width=w; canvas.height=h;
+      const ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      callback(canvas.toDataURL('image/jpeg',0.6));
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 function previewFP(input){
  const file=input.files[0]; if(!file) return;
- const r=new FileReader(); r.onload=e=>{ fpData=e.target.result; document.getElementById('fpImg').src=fpData; document.getElementById('fpPrev').style.display='block'; }; r.readAsDataURL(file);
+ compressImage(file, (compressed)=>{
+   fpData=compressed;
+   document.getElementById('fpImg').src=fpData;
+   document.getElementById('fpPrev').style.display='block';
+ });
 }
 function previewSig(input){
  const file=input.files[0]; if(!file) return;
- const r=new FileReader(); r.onload=e=>{ sigData=e.target.result; document.getElementById('sigImg').src=sigData; document.getElementById('sigPrev').style.display='block'; }; r.readAsDataURL(file);
+ compressImage(file, (compressed)=>{
+   sigData=compressed;
+   document.getElementById('sigImg').src=sigData;
+   document.getElementById('sigPrev').style.display='block';
+ });
 }
 
 async function sealDoc(){
@@ -96,7 +123,7 @@ async function sealDoc(){
  const date=document.getElementById('date').value;
  const pdf=document.getElementById('pdfFile').files[0];
  if(!title||!director||!pdf){ alert('Fill Title, Director and PDF'); return; }
- if(!fpData){ alert('Upload Spikey Fingerprint first!'); return; }
+ if(!fpData){ alert('Upload Spikey first!'); return; }
  if(!sigData){ alert('Upload Signature first!'); return; }
  
  const text = title+director+issuer+date+Date.now()+Math.random();
@@ -105,7 +132,7 @@ async function sealDoc(){
  const hash = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
  currentHash=hash;
  
- const base = location.href.replace('seal.html','').replace(/\/$/,'') + '/';
+ const base = location.href.replace('seal-document.html','').replace('seal.html','').replace(/\/$/,'') + '/';
  currentLink = base + 'verify-signature.html?hash=' + hash;
  
  const data = {
@@ -116,15 +143,14 @@ async function sealDoc(){
  
  try{
   await db.collection('documents').doc(hash).set(data);
-  localStorage.setItem('lastData', JSON.stringify(data));
   document.getElementById('hashOut').innerText=hash;
   document.getElementById('linkOut').innerText=currentLink;
   document.getElementById('qrcode').innerHTML='';
   new QRCode(document.getElementById('qrcode'), {text: currentLink, width:160, height:160});
   document.getElementById('result').style.display='block';
   window.scrollTo(0, document.body.scrollHeight);
-  alert('✅ SEALED! Hash: '+hash.substring(0,16)+'... Saved to Firebase!');
- }catch(e){ alert('Firebase Error: '+e.message + '\n\nCheck Firebase Rules!'); }
+  alert('✅ SEALED! Saved to Firebase!');
+ }catch(e){ alert('Firebase Error: '+e.message); }
 }
 
 function testNow(){
