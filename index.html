@@ -15,16 +15,15 @@
 .map-toggle button{padding:7px 14px;border-radius:25px;border:1px solid rgba(201,162,39,0.6);background:rgba(0,0,0,0.4);color:#C9A227;font-size:9.5px;font-weight:800;cursor:pointer;transition:all 0.3s;backdrop-filter:blur(5px)}
 .map-toggle button.active{background:linear-gradient(135deg,#C9A227,#ffd700);color:#000;box-shadow:0 0 20px rgba(201,162,39,0.6);border-color:#ffd700;transform:scale(1.05)}
 .hero{background:linear-gradient(135deg,#0a4d2a 0%,#129a55 100%);color:white;text-align:center;padding:22px 14px;position:relative;overflow:hidden}.hero h1{font-size:15px;line-height:1.3}
-.box{background:white;margin:-20px 10px 10px 10px;padding:18px;border-radius:16px;box-shadow:0 12px 35px rgba(0,0,0,0.12);position:relative;z-index:5;border:1px solid rgba(201,162,39,0.15)}.box h3{color:#0a4d2a;text-align:center;font-size:14px;margin-bottom:12px;font-weight:800}.box input{width:100%;padding:14px;border:2px solid #a5d6a7;border-radius:10px;margin-bottom:11px;font-size:14px;text-transform:uppercase;transition:all 0.2s}.box input:focus{border-color:#0a4d2a;box-shadow:0 0 0 3px rgba(10,77,42,0.1);outline:none}.box button{width:100%;padding:14px;background:linear-gradient(135deg,#0a4d2a,#0f7a42);color:white;border:none;border-radius:10px;font-weight:800;cursor:pointer;margin-bottom:9px;box-shadow:0 4px 12px rgba(10,77,42,0.25);transition:all 0.2s}.box button.blockchain{background:linear-gradient(135deg,#0a4d2a 0%,#C9A227 100%);border:1px solid #C9A227;box-shadow:0 4px 15px rgba(201,162,39,0.3)}
+.box{background:white;margin:-20px 10px 10px 10px;padding:18px;border-radius:16px;box-shadow:0 12px 35px rgba(0,0,0,0.12);position:relative;z-index:5;border:1px solid rgba(201,162,39,0.15)}.box h3{color:#0a4d2a;text-align:center;font-size:14px;margin-bottom:12px;font-weight:800}.box input{width:100%;padding:14px;border:2px solid #a5d6a7;border-radius:10px;margin-bottom:11px;font-size:14px;transition:all 0.2s}.box input:focus{border-color:#0a4d2a;box-shadow:0 0 0 3px rgba(10,77,42,0.1);outline:none}.box button{width:100%;padding:14px;background:linear-gradient(135deg,#0a4d2a,#0f7a42);color:white;border:none;border-radius:10px;font-weight:800;cursor:pointer;margin-bottom:9px;box-shadow:0 4px 12px rgba(10,77,42,0.25);transition:all 0.2s}.box button.blockchain{background:linear-gradient(135deg,#0a4d2a 0%,#C9A227 100%);border:1px solid #C9A227;box-shadow:0 4px 15px rgba(201,162,39,0.3)}
 .dept-toggle{display:flex;gap:8px;margin-bottom:14px}.dept-toggle button{flex:1;padding:12px;border-radius:12px;font-size:11px;font-weight:800;border:2px solid #ddd;background:white;color:#0a4d2a}.dept-toggle button.active{background:#0a4d2a;color:white;border-color:#0a4d2a;box-shadow:0 4px 10px rgba(10,77,42,0.3)}.dept-toggle button.active.student{background:#0d2a5e;color:white;border-color:#0d2a5e}
 .sec{margin:14px 10px;padding:16px;background:white;border-radius:14px;box-shadow:0 4px 15px #0001;border:1px solid rgba(0,0,0,0.04)}.sec h2{color:#0a4d2a;font-size:15px;margin-bottom:10px;border-left:4px solid #C9A227;padding-left:10px;font-weight:800}.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.gallery img{width:100%;height:165px;object-fit:cover;border-radius:10px;border:1px solid #eee}.foot{background:linear-gradient(180deg,#0a4d2a,#082e1a);color:white;padding:20px;text-align:center;font-size:10px;line-height:1.6}.wa{position:fixed;bottom:18px;right:18px;background:linear-gradient(135deg,#25D366,#1ebe5b);width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;z-index:999;box-shadow:0 6px 20px rgba(37,211,102,0.4)}.resbox{margin-top:14px;border-radius:12px;overflow:hidden;border:2px solid #0a4d2a;display:none}.certificate-file{margin:14px;border:2px dashed #0a4d2a;padding:12px;text-align:center;border-radius:12px}.certificate-file img{width:100%;max-height:700px;object-fit:contain;border-radius:8px;margin-top:10px}.pdf-button{display:inline-block;margin-top:10px;background:#0a4d2a;color:white;padding:10px 15px;border-radius:8px;text-decoration:none;font-weight:bold}.badge{display:inline-block;background:linear-gradient(135deg,#C9A227,#ffd700);color:black;padding:3px 8px;border-radius:20px;font-size:8px;font-weight:800;margin-left:5px}.blockchain-status{background:linear-gradient(90deg,#051208,#0a2810);border:1px solid #C9A227;color:#C9A227;padding:8px;border-radius:8px;font-size:9.5px;text-align:center;margin-bottom:11px;letter-spacing:0.3px}
 </style>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {getFirestore, collection, query, where, getDocs} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {getFirestore, collection, query, where, getDocs, doc, getDoc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 const firebaseConfig = {apiKey:"AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",authDomain:"arnaudafrochaineverification.firebaseapp.com",projectId:"arnaudafrochaineverification",storageBucket:"arnaudafrochaineverification.firebasestorage.app",messagingSenderId:"268502946630",appId:"1:268502946630:web:c7abe320c83a1d9c3b4b47",measurementId:"G-Y52LEBJM7Q"};
 const app=initializeApp(firebaseConfig);const db=getFirestore(app);
-// COMPANY CONFIG - NEW LTD NAME + AV CODE
 const COMPANY = {name:"ARNAUD AFROCHAINE TRUST SYSTEMS LTD", av:"179223482696", status:"VERIFIED GLOBALLY"};
 const OWNER_WALLET="0x64478336d9018927C8E45AcC35e9e24c969EfAE2";
 const REGISTRY_ADDRESS="REPLACE_WITH_DEPLOYED_ADDRESS";
@@ -36,31 +35,50 @@ currentDept=dept;
 document.getElementById('btnDeptGlobal').classList.toggle('active',dept==='global');
 document.getElementById('btnDeptStudent').classList.toggle('active',dept==='student');
 document.getElementById('boxTitle').innerText= dept==='global'? '🔍 Verify Company Document - Global' : '🎓 Verify Student Certificate';
-document.getElementById('cert').placeholder= dept==='global'? 'Enter Company Code e.g. AA-2025-001' : 'Enter Matric No e.g. POLY-2025-001';
+document.getElementById('cert').placeholder= dept==='global'? 'Enter Company Code e.g. AA-2025-001 or paste SHA-256 hash' : 'Enter Matric No e.g. POLY-2025-001';
 }
 window.check=async function(valueFromQR=null){
 const input=document.getElementById("cert");
-const raw=String(valueFromQR||input.value||"").trim().toUpperCase();
+const raw=String(valueFromQR||input.value||"").trim();
+const rawUpper=raw.toUpperCase();
 const resDiv=document.getElementById("res");
 if(!raw){resDiv.style.display="block";resDiv.innerHTML=`<div style="padding:15px;background:#ffebee;text-align:center">❌ Please enter a reference.</div>`;return;}
 input.value=raw;resDiv.style.display="block";resDiv.innerHTML=`<div style="padding:20px;text-align:center;background:#fff8e1">⏳ Checking ${currentDept==='global'?'company document':'student certificate'}... ${raw}<br><small>Checking Firebase + Blockchain (Owner: 0x6447...fAE2)</small></div>`;
 try{
-const q=query(collection(db,"certificates"),where("ref","==",raw));
+// ===== FIX: CHECK documents COLLECTION FIRST FOR HASH =====
+if(raw.length >= 20){
+  try{
+    const docRef = doc(db, "documents", raw);
+    const docSnap = await getDoc(docRef);
+    if(docSnap.exists()){
+      window.location.href='verify-signature.html?hash='+encodeURIComponent(raw);
+      return;
+    }
+    const qHash = query(collection(db,"documents"), where("hash","==",raw));
+    const snapHash = await getDocs(qHash);
+    if(!snapHash.empty){
+      window.location.href='verify-signature.html?hash='+encodeURIComponent(snapHash.docs[0].data().hash);
+      return;
+    }
+  }catch(e){ console.log("documents check error", e); }
+}
+// ===== CHECK certificates COLLECTION =====
+const q=query(collection(db,"certificates"),where("ref","==",rawUpper));
 const snapshot=await getDocs(q);
-const chainResult=await checkBlockchain(raw);
+const chainResult=await checkBlockchain(rawUpper);
 if(snapshot.empty&&(!chainResult.enabled||!chainResult.isValid)){
-resDiv.innerHTML=`<div style="padding:20px;background:#ffebee;text-align:center"><b>❌ ${currentDept==='global'?'DOCUMENT':'CERTIFICATE'} NOT FOUND</b><br><br>Reference <b>${raw}</b> not found.<br><small>Contact 0913 285 1465</small></div>`;return;
+resDiv.innerHTML=`<div style="padding:20px;background:#ffebee;text-align:center"><b>❌ ${currentDept==='global'?'DOCUMENT':'CERTIFICATE'} NOT FOUND</b><br><br>Reference <b>${raw}</b> not found.<br>For Board Resolutions paste full hash e.g.<br><small style="word-break:break-all;color:#0a4d2a">bc6fa8216908fcb6a2db2e0b54047b2faca8fbde8e7a48b480ffba9dc260320</small><br><br><small>Contact 0913 285 1465</small></div>`;return;
 }
 let d={};
-if(!snapshot.empty){d=snapshot.docs[0].data()}else if(chainResult.isValid){d={fullName:chainResult.name,school:chainResult.school,ref:raw,status:"VERIFIED ON BLOCKCHAIN",issueDate:new Date(Number(chainResult.date)*1000).toLocaleDateString()}}
+if(!snapshot.empty){d=snapshot.docs[0].data()}else if(chainResult.isValid){d={fullName:chainResult.name,school:chainResult.school,ref:rawUpper,status:"VERIFIED ON BLOCKCHAIN",issueDate:new Date(Number(chainResult.date)*1000).toLocaleDateString()}}
 const status=d.status||(chainResult.isValid?"VERIFIED ON BLOCKCHAIN + FIREBASE":"VERIFIED");
 const fullName=d.fullName||d.name||chainResult.name||"Not provided";
 const certificateType=d.certificateType||d.course||d.docType|| (currentDept==='global'? 'Corporate Document' : 'Student Certificate');
 const certificateNumber=d.certificateNumber||d.certNo||"Not provided";
 const issuer=d.school||d.issuer||chainResult.school||"Not provided";
 const issueDate=d.issueDate||d.dateVerified||(chainResult.date?new Date(Number(chainResult.date)*1000).toLocaleDateString():"Not provided");
-const reference=d.ref||raw;
-const publicVerifyUrl="https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/?id="+encodeURIComponent(reference)+"&dept="+currentDept;
+const reference=d.ref||rawUpper;
+const publicVerifyUrl="https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverification/?id="+encodeURIComponent(reference)+"&dept="+currentDept;
 const qrUrl="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="+encodeURIComponent(publicVerifyUrl);
 let blockchainBadge="";
 if(chainResult.enabled&&chainResult.isValid){blockchainBadge=`<div style="background:#0a2a12;border:1px solid #00ff66;color:#00ff66;padding:6px;border-radius:6px;font-size:10px;margin:8px;text-align:center">🔗 BLOCKCHAIN VERIFIED - Owner: ${OWNER_WALLET.substring(0,10)}... - Immutable</div>`}else{blockchainBadge=`<div style="background:#111;border:1px solid #C9A227;color:#C9A227;padding:6px;border-radius:6px;font-size:9px;margin:8px;text-align:center">⏳ Dual Layer: Firebase + Blockchain Ready - Owner: 0x6447...fAE2 | 500B ARNAUD</div>`}
@@ -74,8 +92,9 @@ resDiv.scrollIntoView({behavior:"smooth"}) }catch(error){resDiv.innerHTML=`<div 
 };
 window.addEventListener("DOMContentLoaded",()=>{
 const params=new URLSearchParams(window.location.search);
-const id=params.get("id")||params.get("code");
+const id=params.get("id")||params.get("code")||params.get("hash");
 const dept=params.get("dept");
+if(params.get("hash")){ window.location.href='verify-signature.html?hash='+encodeURIComponent(params.get("hash")); return; }
 if(dept==='global'||dept==='student'){currentDept=dept;switchDept(dept); if(dept==='global'){document.getElementById('btnDeptStudent').style.display='none'} if(dept==='student'){document.getElementById('btnDeptGlobal').style.display='none'} document.getElementById('deptToggle').style.justifyContent='center'}
 if(id){document.getElementById('cert').value=id;check(id)}
 });
@@ -111,7 +130,7 @@ if(id){document.getElementById('cert').value=id;check(id)}
 <button id="btnDeptStudent" class="active student" onclick="switchDept('student')">🎓<br>Verify Student Cert</button>
 </div>
 <h3 id="boxTitle">🔍 Verify Company Document - Global</h3>
-<input id="cert" placeholder="Enter Certificate Reference e.g. AA-2025-001">
+<input id="cert" placeholder="Enter Certificate Reference e.g. AA-2025-001 or paste SHA-256 hash">
 <button onclick="check()">VERIFY NOW →</button>
 <button class="blockchain" onclick="check()">🔗 VERIFY ON GLOBAL BLOCKCHAIN + FIREBASE</button>
 <div id="res" class="resbox"></div>
