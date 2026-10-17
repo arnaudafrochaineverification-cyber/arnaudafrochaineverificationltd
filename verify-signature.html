@@ -9,7 +9,7 @@
 <style>
 *{box-sizing:border-box;font-family:'Inter',sans-serif}
 body{background:#f0fdf4;margin:0;padding:12px}
-.card{max-width:620px;margin:0 auto;background:white;border-radius:18px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,0.12)}
+.card{max-width:680px;margin:0 auto;background:white;border-radius:18px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,0.12)}
 .badge{text-align:center;background:linear-gradient(135deg,#dcfce7,#22c55e);border:2px solid #22c55e;color:#052e16;padding:12px;border-radius:30px;font-weight:900;font-size:14px}
 .title{text-align:center;font-size:22px;font-weight:900;margin:16px 0 4px}
 .sub{text-align:center;color:#16a34a;font-weight:700;font-size:14px}
@@ -20,9 +20,12 @@ body{background:#f0fdf4;margin:0;padding:12px}
 .box-title{font-size:10px;font-weight:900;color:#64748b;margin-bottom:8px;letter-spacing:0.5px}
 .box-foot{font-size:11px;font-weight:800;color:#166534;margin-top:8px}
 .hashbox{background:#052e16;color:#4ade80;padding:14px;border-radius:12px;font-size:11px;word-break:break-all;margin-top:16px}
-.btn{width:100%;padding:14px;border:none;border-radius:10px;font-weight:900;font-size:13px;cursor:pointer;margin-top:12px}
+.pdfbox{border:2px dashed #16a34a;border-radius:14px;padding:14px;text-align:center;background:#f0fdf4;margin:16px 0}
+.pdfbox iframe{width:100%;height:500px;border:1px solid #ccc;border-radius:8px;background:white;margin-top:10px}
+.btn{width:100%;padding:14px;border:none;border-radius:10px;font-weight:900;font-size:13px;cursor:pointer;margin-top:12px;display:block;text-decoration:none;text-align:center}
+.btn-pdf{background:#16a34a;color:white}
 .btn-print{background:#0a1f0f;color:#4ade80}
-.btn-home{background:white;border:2px solid #e2e8f0}
+.btn-home{background:white;border:2px solid #e2e8f0;color:#333}
 @media print{.btn{display:none} body{background:white}}
 </style>
 </head>
@@ -61,6 +64,15 @@ body{background:#f0fdf4;margin:0;padding:12px}
 </div>
 </div>
 
+<!-- NEW PDF SECTION -->
+<div class="pdfbox" id="pdfBox" style="display:none">
+<div style="font-weight:900;color:#052e16;font-size:13px">📄 VERIFIED DOCUMENT FILE</div>
+<div style="font-size:11px;color:#64748b;margin-top:4px">Original PDF stored on Firebase • No tampering</div>
+<a id="pdfOpen" class="btn btn-pdf" href="#" target="_blank">📄 OPEN FULL PDF</a>
+<a id="pdfDownload" class="btn btn-pdf" style="background:#0a4d2a" href="#" download>⬇️ DOWNLOAD PDF</a>
+<iframe id="pdfFrame" src=""></iframe>
+</div>
+
 <div class="hashbox" id="hashBox" style="display:none">
 <b style="color:#86efac">SHA-256 Digital Fingerprint:</b><br>
 <span id="hVal"></span><br><br>
@@ -89,24 +101,38 @@ const db = firebase.firestore();
 
 async function load(){
  const params = new URLSearchParams(location.search);
- const hash = params.get('hash');
+ let hash = params.get('hash');
  if(!hash){
    document.getElementById('badge').innerHTML='❌ NO HASH PROVIDED';
    document.getElementById('badge').style.background='#fee2e2';
-   document.getElementById('badge').style.borderColor='#ef4444';
    return;
  }
  try{
-  const doc = await db.collection('documents').doc(hash).get();
-  if(!doc.exists){
+  // 1. Try direct doc ID
+  let docSnap = await db.collection('documents').doc(hash).get();
+  // 2. If not found, try where hash == hash (for auto-ID docs)
+  if(!docSnap.exists){
+    const q = await db.collection('documents').where('hash','==',hash).get();
+    if(!q.empty){ docSnap = q.docs[0]; }
+  }
+  // 3. NEW: Prefix search - if user pasted half hash
+  if(!docSnap.exists){
+    const all = await db.collection('documents').get();
+    all.forEach(d=>{
+      if((d.data().hash||'').toLowerCase().startsWith(hash.toLowerCase())){
+        docSnap = d;
+      }
+    });
+  }
+
+  if(!docSnap.exists){
     document.getElementById('badge').innerHTML='❌ DOCUMENT NOT FOUND • HASH NOT IN FIREBASE';
     document.getElementById('badge').style.background='#fee2e2';
-    document.getElementById('badge').style.borderColor='#ef4444';
     document.getElementById('docTitle').innerText='Not Found';
     document.getElementById('docSub').innerText='Hash: '+hash.substring(0,24)+'...';
     return;
   }
-  const d = doc.data();
+  const d = docSnap.data();
   document.getElementById('badge').innerHTML='✅ VERIFIED AUTHENTIC • ISSUER CONFIRMED • FIREBASE GLOBAL';
   document.getElementById('docTitle').innerText=d.title || 'Board Resolution';
   document.getElementById('docSub').innerText=(d.type||'Board Resolution')+' • '+(d.date||d.dateLocal||'');
@@ -126,6 +152,25 @@ async function load(){
     document.getElementById('sigOut').src=d.sigData;
     document.getElementById('bioGrid').style.display='grid';
   }
+
+  // ===== NEW PDF LOGIC - CHECK ALL POSSIBLE FIELD NAMES =====
+  const pdfUrl = d.fileUrl || d.pdfUrl || d.documentUrl || d.url || d.file || d.pdf || d.docUrl || d.storageUrl || "";
+  const pdfBase64 = d.fileData || d.pdfData || d.docData || "";
+  let finalPdf = pdfUrl;
+  if(!finalPdf && pdfBase64){
+    finalPdf = pdfBase64; // if stored as base64 data:application/pdf;base64,...
+  }
+  if(finalPdf){
+    document.getElementById('pdfBox').style.display='block';
+    document.getElementById('pdfOpen').href = finalPdf;
+    document.getElementById('pdfDownload').href = finalPdf;
+    document.getElementById('pdfFrame').src = finalPdf;
+  } else {
+    // If no PDF found, still show message so you know
+    document.getElementById('pdfBox').style.display='block';
+    document.getElementById('pdfBox').innerHTML = '<div style="color:#b91c1c;font-weight:800">⚠️ PDF FILE NOT FOUND IN FIREBASE DOCUMENT</div><div style="font-size:11px;margin-top:6px">Fields found: '+Object.keys(d).join(', ')+'<br>Please add field: fileUrl with your PDF link (Firebase Storage or drive link)</div>';
+  }
+
   document.getElementById('hVal').innerText=d.hash||hash;
   document.getElementById('hashBox').style.display='block';
  }catch(e){
@@ -136,4 +181,4 @@ async function load(){
 load();
 </script>
 </body>
-  </html>
+                   </html>
