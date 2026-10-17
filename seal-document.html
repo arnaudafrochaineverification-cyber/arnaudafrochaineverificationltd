@@ -1,105 +1,174 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>SEAL DOCUMENT - ARNAUD TRUST VERIFY</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body{font-family:Arial; padding:15px; background:#f5f5f5}
-.box{background:white; padding:20px; border-radius:12px; max-width:650px; margin:auto; box-shadow:0 2px 15px #ccc}
-input, select{width:100%; padding:12px; margin:8px 0; border-radius:8px; border:1px solid #aaa; font-size:15px}
-button{width:100%; padding:14px; background:#0a5c36; color:white; border:none; border-radius:8px; font-weight:bold; font-size:16px; cursor:pointer}
-.green{border:3px solid #0a5c36; background:#f0f9f0; padding:15px; border-radius:8px; margin-top:15px}
-#qr{width:280px; height:280px; border:8px solid #0a5c36; border-radius:12px; margin:10px auto; display:block}
-</style>
-</head>
-<body>
-<div class="box">
-<h2>🔒 SEAL DOCUMENT</h2>
-<p style="font-size:13px; color:#555;">ARNAUD AFROCHAINE VERIFICATION LTD - Anti-Fraud</p>
-
-<input type="text" id="docName" placeholder="Document Name e.g Board Resolution 2024" />
-<input type="text" id="docType" placeholder="Document Type e.g Board Resolution" />
-<input type="text" id="director" placeholder="Director Name" />
-<input type="text" id="sealedBy" placeholder="Sealed By (Your Name)" value="Arnaud Trust Verify Admin" />
-<input type="file" id="fileInput" />
-
-<button onclick="sealDoc()">🔐 SEAL & GENERATE HASH</button>
-
-<div id="result"></div>
-<div id="qrBox" style="display:none; text-align:center; margin-top:20px;">
-<h3 style="color:#0a5c36;">✅ SEALED SUCCESSFULLY</h3>
-<img id="qrImg" />
-<p id="hashText" style="font-size:11px; word-break:break-all; background:#fff; padding:10px; border:1px dashed #0a5c36;"></p>
-<p id="linkText" style="font-size:11px; word-break:break-all; color:#0a5c36;"></p>
-<button onclick="window.print()" style="background:#222; margin-top:10px;">🖨️ PRINT CERTIFICATE WITH QR</button>
-<a id="verifyLink" target="_blank"><button style="background:#007bff; margin-top:10px;">🔍 TEST VERIFY NOW</button></a>
-</div>
-</div>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seal Document - Arnaud Afrochaine Verification Ltd</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
   authDomain: "arnaudafrochaineverification.firebaseapp.com",
   projectId: "arnaudafrochaineverification",
   storageBucket: "arnaudafrochaineverification.firebasestorage.app",
-  messagingSenderId: "268502946630",
-  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
-  measurementId: "G-Y52LEBJM7Q"
+  messagingSenderId: "1040282440264",
+  appId: "1:1040282440264:web:xxxx"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-async function sha256(file){
-  const buffer = await file.arrayBuffer();
-  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-window.sealDoc = async function(){
-  const file = document.getElementById('fileInput').files[0];
-  const docName = document.getElementById('docName').value.trim();
-  const docType = document.getElementById('docType').value.trim();
-  const director = document.getElementById('director').value.trim();
-  const sealedBy = document.getElementById('sealedBy').value.trim();
-
-  if(!file || !docName){ alert('Select file and enter document name'); return; }
+window.sealDocument = async function() {
+  const docName = document.getElementById('docName').value;
+  const docType = document.getElementById('docType').value;
+  const director = document.getElementById('director').value;
+  const sealedBy = document.getElementById('sealedBy').value;
+  const fileInput = document.getElementById('fileInput');
   
-  document.getElementById('result').innerHTML = 'Calculating hash & sealing...';
+  if(!docName || !docType || !director || !sealedBy || fileInput.files.length==0){
+    alert("Fill all fields and choose file!");
+    return;
+  }
 
+  const file = fileInput.files[0];
+  const buffer = await file.arrayBuffer();
+  const hashArray = await crypto.subtle.digest('SHA-256', buffer);
+  const hashHex = Array.from(new Uint8Array(hashArray)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  
+  const now = new Date();
+  const dateStr = now.toLocaleString('en-GB', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit'});
+
+  // SAVE TO FIRESTORE
   try{
-    const hash = await sha256(file);
-    await setDoc(doc(db, "sealedDocs", hash), {
-      docName: docName,
-      docType: docType,
+    await setDoc(doc(db, "sealed_documents", hashHex), {
+      documentName: docName,
+      documentType: docType,
       director: director,
       sealedBy: sealedBy,
-      hash: hash,
-      fileName: file.name,
-      fileSize: file.size,
-      timestamp: serverTimestamp(),
-      date: new Date().toISOString()
+      date: dateStr,
+      hash: hashHex,
+      timestamp: now
     });
-
-    const verifyUrl = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify-signature.html?hash=${hash}`;
-    const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(verifyUrl)}`;
-
-    document.getElementById('result').innerHTML = '';
-    document.getElementById('qrImg').src = qrApi;
-    document.getElementById('hashText').innerText = hash;
-    document.getElementById('linkText').innerText = verifyUrl;
-    document.getElementById('verifyLink').href = verifyUrl;
-    document.getElementById('qrBox').style.display='block';
-    
   }catch(e){
-    document.getElementById('result').innerHTML = `<p style="color:red;">Error: ${e.message}<br>Check Firestore Rules: allow read, write: if true;</p>`;
-    console.error(e);
+    alert("Error: "+e.message);
+    return;
   }
+
+  // SHOW RESULT
+  document.getElementById('result').style.display='block';
+  document.getElementById('hashText').innerText = hashHex;
+  const verifyUrl = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify-signature.html?hash=${hashHex}`;
+  document.getElementById('verifyLink').innerText = verifyUrl;
+  document.getElementById('verifyLink').href = verifyUrl;
+  
+  document.getElementById('qrcode').innerHTML="";
+  new QRCode(document.getElementById('qrcode'), {text: verifyUrl, width:256, height:256});
+
+  // SAVE FOR PRINT
+  window.lastSealData = {docName, docType, director, sealedBy, dateStr, hashHex, verifyUrl};
+  
+  document.getElementById('status').innerHTML="✅ SEALED SUCCESSFULLY";
+  document.getElementById('status').style.color="green";
+}
+
+window.printCertificate = function(){
+  if(!window.lastSealData){ alert("Seal a document first!"); return; }
+  const d = window.lastSealData;
+  const qrDiv = document.getElementById('qrcode').innerHTML;
+  
+  const certWindow = window.open('', '_blank');
+  certWindow.document.write(`
+<html><head><title>Certificate - ${d.docName}</title>
+<style>
+body{font-family: 'Times New Roman', serif; margin:0; background:#fff;}
+.cert{border:12px double #b8860b; margin:20px; padding:0; position:relative; background:white; max-width:900px; margin:20px auto;}
+.inner{border:3px solid #0a4a2a; margin:6px; padding:30px 30px 15px 30px;}
+.header{text-align:center; color:#b8860b; font-weight:bold; font-size:28px; letter-spacing:1px;}
+.sub{color:#0a4a2a; font-size:12px; text-align:center; margin:5px 0 15px 0; letter-spacing:1px;}
+.title{color:#0a4a2a; text-align:center; font-size:22px; font-weight:bold; margin:15px 0; border-bottom:2px solid #b8860b; padding-bottom:10px; display:inline-block; width:100%;}
+.desc{text-align:center; font-size:14px; margin:10px 0 20px 0;}
+.boxes{display:flex; gap:15px; justify-content:space-between;}
+.box{flex:1; background:#f0f7f0; border:1px solid #b8860b; border-radius:10px; padding:15px; font-size:13px;}
+.box b{color:#0a4a2a; display:block; margin-top:8px;}
+.box b:first-child{margin-top:0;}
+.verif{background:#e8f0e8; padding:12px; text-align:center; margin:15px 0; border-radius:8px; font-size:12px;}
+.footer{display:flex; justify-content:space-between; align-items:flex-end; margin-top:20px;}
+.seal{width:110px; height:110px; background:radial-gradient(#ffd700, #b8860b); border-radius:50%; display:flex; align-items:center; justify-content:center; text-align:center; font-size:10px; font-weight:bold; color:#0a4a2a; border:3px double #0a4a2a; line-height:1.2;}
+.qr{text-align:center;}
+.qr canvas, .qr img{width:130px !important; height:130px !important;}
+.sign{text-align:center; border-top:1px solid #0a4a2a; padding-top:5px; width:300px; font-size:12px;}
+.bottom{background:linear-gradient(to right, #b8860b, #0a4a2a); color:white; text-align:center; padding:8px; font-size:11px; margin-top:15px; letter-spacing:1px;}
+.hash{font-family:monospace; font-size:9px; word-break:break-all; border:1px dashed #999; padding:5px; margin-top:5px; background:white;}
+@media print{body{margin:0} .cert{margin:0; border-width:8px} button{display:none}}
+</style></head><body>
+<div class="cert"><div class="inner">
+<div class="header">ARNAUD AFROCHAINE VERIFICATION LTD</div>
+<div class="sub">INCORPORATED • DOCUMENT VERIFICATION & COMPLIANCE • REGISTERED</div>
+<div style="text-align:center"><span class="title">CERTIFICATE OF AUTHENTICITY & DOCUMENT SEAL</span></div>
+<div class="desc">This is to certify that the following document has been officially verified and authenticated by Arnaud Afrochaine Verification Ltd</div>
+<div class="boxes">
+<div class="box">
+<b>DOCUMENT NAME:</b>${d.docName}
+<b>DOCUMENT TYPE:</b>${d.docType}
+<b>DIRECTOR:</b>${d.director}
+</div>
+<div class="box">
+<b>SEALED BY:</b>${d.sealedBy}
+<b>DATE:</b>${d.dateStr}
+<b>HASH:</b><div class="hash">${d.hashHex}</div>
+</div>
+</div>
+<div class="verif"><b>VERIFICATION STATEMENT:</b><br>The above-referenced document has been examined, validated, and confirmed as authentic and unaltered in accordance with ARNAUD AFROCHAINE VERIFICATION LTD's verification protocols and compliance standards.</div>
+<div class="footer">
+<div class="seal">OFFICIAL SEAL<br>✅ VERIFIED<br>2026<br>ARNAUD AFROCHAINE</div>
+<div class="sign"><b>AUTHORIZED SIGNATURE</b><br><br><br>Director / Authorised Officer</div>
+<div class="qr"><div id="printQR"></div><div style="font-size:9px; margin-top:5px;">QR CODE • SCAN TO VERIFY</div><div style="font-size:8px; word-break:break-all; width:140px;">${d.verifyUrl}</div></div>
+</div>
+</div>
+<div class="bottom">CERTIFICATE NO.: AAVL-COA-${new Date().getFullYear()}-${d.hashHex.substring(0,6).toUpperCase()} • ISSUED UNDER OFFICIAL VERIFICATION AUTHORITY</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"><\/script>
+<script>
+new QRCode(document.getElementById('printQR'), {text: "${d.verifyUrl}", width:130, height:130});
+setTimeout(()=>{window.print();}, 800);
+<\/script>
+</body></html>
+  `);
+}
+
+window.testVerify = function(){
+  if(!window.lastSealData) return;
+  window.open(window.lastSealData.verifyUrl, '_blank');
 }
 </script>
+<style>
+body{font-family:Arial; padding:15px; max-width:500px; margin:auto;}
+input{width:100%; padding:12px; margin:6px 0; border:1px solid #ccc; border-radius:8px; box-sizing:border-box;}
+button{width:100%; padding:14px; margin:8px 0; border:none; border-radius:8px; font-weight:bold; cursor:pointer;}
+#result{border:2px solid #0a4a2a; padding:15px; border-radius:10px; margin-top:15px; display:none; background:#f9fff9;}
+#qrcode{display:flex; justify-content:center; margin:15px 0;}
+.hash{font-size:10px; word-break:break-all; background:#eee; padding:8px; border-radius:5px;}
+</style>
+</head>
+<body>
+<h2 style="text-align:center; color:#0a4a2a;">🔒 SEAL DOCUMENT</h2>
+<p style="text-align:center; font-size:12px;">ARNAUD AFROCHAINE VERIFICATION LTD</p>
+<input id="docName" placeholder="Document Name e.g. Contract">
+<input id="docType" placeholder="Document Type e.g. Board RESOLUTION">
+<input id="director" placeholder="Director e.g. Ikeshuku">
+<input id="sealedBy" placeholder="Sealed By e.g. Arnaud Trust Verify Admin" value="Arnaud Trust Verify Admin">
+<input type="file" id="fileInput" style="border:1px dashed #0a4a2a; padding:10px;">
+<button onclick="sealDocument()" style="background:#0a4a2a; color:white;">🔒 SEAL & GENERATE HASH</button>
+<div id="status" style="text-align:center; font-weight:bold; margin:10px 0;"></div>
+<div id="result">
+<div id="qrcode"></div>
+<div class="hash" id="hashText"></div>
+<a id="verifyLink" target="_blank" style="font-size:10px; word-break:break-all; display:block; margin:10px 0;"></a>
+<button onclick="printCertificate()" style="background:#111; color:white;">🖨️ PRINT CERTIFICATE WITH QR</button>
+<button onclick="testVerify()" style="background:#1a73e8; color:white;">🔍 TEST VERIFY NOW</button>
+</div>
 </body>
   </html>
