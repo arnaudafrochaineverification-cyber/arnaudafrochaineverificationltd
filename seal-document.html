@@ -1,52 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seal Document - SECURED</title>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<title>SEAL DOCUMENT - ARNAUD TRUST VERIFY</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body{font-family:Arial;background:#f5f5f5;padding:15px}
-.card{max-width:600px;margin:auto;background:white;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
-h2{color:#0d4a2e;text-align:center}
-input,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
-button{width:100%;padding:13px;background:#0d4a2e;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:10px}
-#loginBtn{background:#4285f4}
-#logoutBtn{background:#c62828;display:none}
-#status{margin-top:12px;padding:12px;border-radius:8px;display:none;word-break:break-all}
-#userInfo{display:none;background:#e8f5e9;padding:10px;border-radius:8px;margin:10px 0;text-align:center;font-weight:bold}
-.hash{font-family:monospace;font-size:11px;background:#f5f5f5;padding:8px;border-radius:6px;margin:8px 0}
+body{font-family:Arial; padding:15px; background:#f5f5f5}
+.box{background:white; padding:20px; border-radius:12px; max-width:650px; margin:auto; box-shadow:0 2px 15px #ccc}
+input, select{width:100%; padding:12px; margin:8px 0; border-radius:8px; border:1px solid #aaa; font-size:15px}
+button{width:100%; padding:14px; background:#0a5c36; color:white; border:none; border-radius:8px; font-weight:bold; font-size:16px; cursor:pointer}
+.green{border:3px solid #0a5c36; background:#f0f9f0; padding:15px; border-radius:8px; margin-top:15px}
+#qr{width:280px; height:280px; border:8px solid #0a5c36; border-radius:12px; margin:10px auto; display:block}
 </style>
 </head>
 <body>
-<div class="card">
-<h2>📜 SEAL DOCUMENT - SECURED</h2>
-<button id="loginBtn" onclick="login()">🔐 LOGIN WITH arnaudafrochain@gmail.com</button>
-<div id="userInfo"></div>
-<button id="logoutBtn" onclick="logout()">🚪 LOGOUT</button>
+<div class="box">
+<h2>🔒 SEAL DOCUMENT</h2>
+<p style="font-size:13px; color:#555;">ARNAUD AFROCHAINE VERIFICATION LTD - Anti-Fraud</p>
 
-<label>Director:</label>
-<select id="directorSelect"><option>Loading directors...</option></select>
+<input type="text" id="docName" placeholder="Document Name e.g Board Resolution 2024" />
+<input type="text" id="docType" placeholder="Document Type e.g Board Resolution" />
+<input type="text" id="director" placeholder="Director Name" />
+<input type="text" id="sealedBy" placeholder="Sealed By (Your Name)" value="Arnaud Trust Verify Admin" />
+<input type="file" id="fileInput" />
 
-<label>Document Name:</label>
-<input id="docName" placeholder="e.g. Board Resolution 2026">
+<button onclick="sealDoc()">🔐 SEAL & GENERATE HASH</button>
 
-<label>Document Type:</label>
-<select id="docType">
-<option>Board Resolution</option>
-<option>CAC Form</option>
-<option>Share Certificate</option>
-<option>Bank Mandate</option>
-<option>Other</option>
-</select>
-
-<button onclick="sealDoc()">🔒 SEAL DOCUMENT</button>
-<div id="status"></div>
+<div id="result"></div>
+<div id="qrBox" style="display:none; text-align:center; margin-top:20px;">
+<h3 style="color:#0a5c36;">✅ SEALED SUCCESSFULLY</h3>
+<img id="qrImg" />
+<p id="hashText" style="font-size:11px; word-break:break-all; background:#fff; padding:10px; border:1px dashed #0a5c36;"></p>
+<p id="linkText" style="font-size:11px; word-break:break-all; color:#0a5c36;"></p>
+<button onclick="window.print()" style="background:#222; margin-top:10px;">🖨️ PRINT CERTIFICATE WITH QR</button>
+<a id="verifyLink" target="_blank"><button style="background:#007bff; margin-top:10px;">🔍 TEST VERIFY NOW</button></a>
+</div>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
   authDomain: "arnaudafrochaineverification.firebaseapp.com",
@@ -56,81 +49,57 @@ const firebaseConfig = {
   appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
   measurementId: "G-Y52LEBJM7Q"
 };
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-let currentUser = null;
 
-function login(){
- const provider = new firebase.auth.GoogleAuthProvider();
- auth.signInWithPopup(provider).then(r=>{
-   currentUser=r.user; showUser(r.user);
- }).catch(e=>{
-   if(e.code==='auth/popup-blocked' || e.code==='auth/popup-closed-by-user' || e.code==='auth/cancelled-popup-request'){
-     auth.signInWithRedirect(provider);
-   } else {
-     showStatus('❌ '+e.message,'#ffebee');
-   }
- });
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+async function sha256(file){
+  const buffer = await file.arrayBuffer();
+  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-auth.getRedirectResult().then(r=>{
- if(r.user){ currentUser=r.user; showUser(r.user); }
-});
+window.sealDoc = async function(){
+  const file = document.getElementById('fileInput').files[0];
+  const docName = document.getElementById('docName').value.trim();
+  const docType = document.getElementById('docType').value.trim();
+  const director = document.getElementById('director').value.trim();
+  const sealedBy = document.getElementById('sealedBy').value.trim();
 
-auth.onAuthStateChanged(user=>{
- if(user){ currentUser=user; showUser(user); loadDirectors(); }
-});
+  if(!file || !docName){ alert('Select file and enter document name'); return; }
+  
+  document.getElementById('result').innerHTML = 'Calculating hash & sealing...';
 
-function logout(){ auth.signOut().then(()=>location.reload()); }
+  try{
+    const hash = await sha256(file);
+    await setDoc(doc(db, "sealedDocs", hash), {
+      docName: docName,
+      docType: docType,
+      director: director,
+      sealedBy: sealedBy,
+      hash: hash,
+      fileName: file.name,
+      fileSize: file.size,
+      timestamp: serverTimestamp(),
+      date: new Date().toISOString()
+    });
 
-function showUser(user){
- document.getElementById('userInfo').style.display='block';
- document.getElementById('userInfo').innerHTML='✅ Logged as: '+user.email;
- document.getElementById('loginBtn').style.display='none';
- document.getElementById('logoutBtn').style.display='block';
- showStatus('✅ Login OK - Directors loading...','#e8f5e9');
-}
+    const verifyUrl = `https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify-signature.html?hash=${hash}`;
+    const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(verifyUrl)}`;
 
-function loadDirectors(){
- db.collection('directors').get().then(snap=>{
-  const sel=document.getElementById('directorSelect'); sel.innerHTML='';
-  if(snap.empty){ sel.innerHTML='<option>No directors - Add first</option>'; return; }
-  snap.forEach(doc=>{
-    const d=doc.data(); const opt=document.createElement('option');
-    opt.value=doc.id; opt.textContent=d.name+' - '+d.title;
-    sel.appendChild(opt);
-  });
-  showStatus('✅ Directors loaded - Ready to seal','#e8f5e9');
- }).catch(e=>{ showStatus('❌ '+e.message,'#ffebee'); });
-}
-
-async function sha256(m){ const b=new TextEncoder().encode(m); const h=await crypto.subtle.digest('SHA-256',b); return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join(''); }
-
-function showStatus(msg,color){
- const s=document.getElementById('status');
- s.style.display='block'; s.style.background=color; s.innerHTML=msg;
-}
-
-async function sealDoc(){
- if(!currentUser){ alert('Login first Oga!'); return; }
- const dirId=document.getElementById('directorSelect').value;
- const dirText=document.getElementById('directorSelect').options[document.getElementById('directorSelect').selectedIndex]?.textContent||'';
- const docName=document.getElementById('docName').value.trim();
- const docType=document.getElementById('docType').value;
- if(!docName){ showStatus('❌ Enter Document Name','#ffebee'); return; }
- if(!dirId || dirId.includes('No directors')){ showStatus('❌ No director - Add first','#ffebee'); return; }
- const raw=dirId+'|'+docName+'|'+docType+'|'+Date.now();
- const hash=await sha256(raw);
- showStatus('⏳ Sealing...','#e8f5e9');
- db.collection('sealedDocuments').doc(hash).set({
-  directorId:dirId, directorInfo:dirText, documentName:docName, documentType:docType,
-  hash:hash, sealedAt:firebase.firestore.FieldValue.serverTimestamp(), sealedBy:currentUser.email
- }).then(()=>{
-  const verifyLink='https://arnaudafrochaineverification-cyber.github.io/arnaudafrochaineverificationltd/verify-signature.html?hash='+hash;
-  showStatus(`✅ <b>DOCUMENT SEALED!</b><br><br><b>Doc:</b> ${docName}<br><b>Director:</b> ${dirText}<br><div class="hash"><b>HASH:</b><br>${hash}</div><div class="hash"><b>VERIFY LINK (Give Bank):</b><br>${verifyLink}</div><br><a href="${verifyLink}" target="_blank">🔍 CLICK TO TEST</a>`,'#e8f5e9');
- }).catch(e=>showStatus('❌ '+e.message,'#ffebee'));
+    document.getElementById('result').innerHTML = '';
+    document.getElementById('qrImg').src = qrApi;
+    document.getElementById('hashText').innerText = hash;
+    document.getElementById('linkText').innerText = verifyUrl;
+    document.getElementById('verifyLink').href = verifyUrl;
+    document.getElementById('qrBox').style.display='block';
+    
+  }catch(e){
+    document.getElementById('result').innerHTML = `<p style="color:red;">Error: ${e.message}<br>Check Firestore Rules: allow read, write: if true;</p>`;
+    console.error(e);
+  }
 }
 </script>
 </body>
-</html>
+  </html>
