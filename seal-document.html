@@ -1,82 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARNAUD AFROCHAINE - GLOBAL VERIFIED</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seal - ARNAUD AFROCHAINE TRUST SYSTEMS LTD RC 179223482696</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <style>
-body{background:#0a1931;display:flex;justify-content:center;padding:20px;font-family:Montserrat,sans-serif}
-.box{width:1100px;background:#0a1931;border:10px solid #c9a227;outline:2px solid #f7d774;outline-offset:-18px;padding:30px;color:#f7d774;position:relative}
-h1{font-family:Cinzel;font-size:22px;text-align:center;color:#f9d976}h1 span{color:#fff}
-.sub{font-size:10px;text-align:center;margin-bottom:15px}
-.row{display:flex;gap:15px;margin-top:15px}
-.left{width:45%;color:#e8d9a0;font-size:12px}
-.left b{color:#f7d774;font-size:9px;display:block;margin-top:8px}
-.left div{color:#fff;border-bottom:1px solid #c9a227;padding-bottom:4px;margin-bottom:6px;word-break:break-all}
-.hash{font-size:8px!important;font-family:monospace;color:#a8c0ff!important}
-.center{width:25%;text-align:center;border:1px dashed #c9a227;padding:8px}
-.b{width:110px;height:120px;background:#fff;margin:5px auto;display:flex;align-items:center;justify-content:center;color:#000;font-size:10px;overflow:hidden}
-.b img{width:100%;height:100%;object-fit:cover}
-.right{width:30%;text-align:center;border:2px solid #c9a227;padding:10px;background:rgba(0,0,0,.3)}
-#qrcode{background:#fff;padding:8px;width:140px;height:140px;margin:0 auto;display:flex;justify-content:center;align-items:center}
-.wa{display:block;background:#25D366;color:#fff;padding:8px;border-radius:20px;text-decoration:none;font-weight:800;font-size:11px;margin-top:8px}
-.wa2{background:#128C7E}
-.seal{width:130px;height:130px;background:radial-gradient(circle,#f9d976,#c9a227);border-radius:50%;border:3px double #000;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#000;font-family:Cinzel;font-weight:900;position:absolute;left:50%;bottom:70px;transform:translateX(-50%)}
-.ctrl{position:fixed;top:10px;left:10px;background:#fff;padding:10px;border-radius:8px;font-size:11px;z-index:99}
-#verifyStatus{padding:10px;text-align:center;font-weight:900;font-size:14px;margin-bottom:10px;border-radius:5px}
-.verified{background:#00c853;color:#fff} .pending{background:#ffb300;color:#000} .failed{background:#d50000;color:#fff}
+body{background:#f1f5f9;padding:12px;font-family:Inter,sans-serif;margin:0}
+.box{max-width:720px;margin:auto;background:white;padding:22px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.08)}
+label{font-weight:800;font-size:12px;margin-top:14px;display:block}
+input,select{width:100%;padding:12px;margin-top:6px;border:2px solid #e2e8f0;border-radius:10px;font-size:14px}
+button.main{width:100%;padding:16px;background:#0a1f0f;color:#4ade80;border:none;border-radius:12px;font-weight:900;margin-top:18px;cursor:pointer}
+.preview{margin-top:8px;text-align:center;display:none;background:#f0fdf4;border:1px dashed #22c55e;padding:10px;border-radius:10px}
+.hash{word-break:break-all;background:#052e16;color:#4ade80;padding:12px;border-radius:10px;font-size:11px;margin-top:12px}
 </style>
 </head>
 <body>
-
-<div class="ctrl">
-<b>ADMIN:</b><br>
-Thumb: <input type="file" id="t1" accept="image/*"><br>
-Sig: <input type="file" id="t2" accept="image/*"><br><br>
-<button onclick="window.print()">PRINT PDF</button>
-</div>
-
 <div class="box">
-<h1>ARNAUD <span>AFROCHAINE</span> TRUST SYSTEMS LTD</h1>
-<div class="sub">GLOBAL BLOCKCHAIN VERIFICATION • HASH + QR + FINGERPRINT</div>
-<div id="verifyStatus" class="pending">🔍 CHECKING GLOBAL DATABASE...</div>
+<h3>🔒 ARNAUD AFROCHAINE TRUST SYSTEMS LTD</h3>
+<small>RC 179223482696 • AV 179223482696 • D All-in-One Trust • Firebase Connected ✅</small>
 
-<div class="row">
-<div class="left">
-<b>DOCUMENT NAME:</b><div id="n1">BOARD RESOLUTION</div>
-<b>DIRECTOR:</b><div id="n2">Arnaud K.</div>
-<b>DATE SEALED:</b><div id="n3">17 May 2026</div>
-<b>SHA-256 HASH:</b><div class="hash" id="n4">LOADING...</div>
-<b>VERIFY URL (World Wide):</b><div style="font-size:7px" id="n5"></div>
-<b>FIREBASE GLOBAL CHECK:</b><div style="font-size:9px" id="n6">Connecting to Firebase...</div>
+<label>Category</label>
+<select id="cat"><option>Board Resolution</option><option>Contract / Agreement</option><option>MoU</option><option>Certificate</option><option>Corporate Document</option></select>
+
+<label>Title *</label><input id="title" placeholder="Board Resolution for Loan">
+<label>Director Name *</label><input id="director" placeholder="Ikeshuku / Arnaud">
+<label>Issuing Organization *</label><input id="issuer" placeholder="Ikeshuku Enterprises Ltd">
+
+<label>PDF File</label><input type="file" id="docFile">
+
+<label>👆 Fingerprint (Your Spikey) - UPLOAD HERE</label>
+<input type="file" id="fp" accept="image/*">
+<div id="fpPrev" class="preview"></div>
+
+<label>✍️ Signature</label><input type="file" id="sig" accept="image/*">
+<div id="sigPrev" class="preview"></div>
+
+<button class="main" onclick="sealDoc()">🔒 SEAL & GENERATE HASH + QR + SAVE TO FIREBASE</button>
+<p id="status" style="text-align:center;margin-top:10px;font-weight:700"></p>
+
+<div id="res" style="display:none;margin-top:20px;border-top:2px dashed #ddd;padding-top:16px">
+<div id="qr" style="display:flex;justify-content:center;background:#f8fafc;padding:14px;border-radius:12px"></div>
+<div id="hashBox" class="hash"></div>
+<button class="main" style="background:white;color:#0a1f0f;border:2px solid #0a1f0f" onclick="goVerify()">TEST VERIFY NOW →</button>
+</div>
 </div>
 
-<div class="center">
-<div style="font-size:10px;font-weight:800">FINGERPRINT</div>
-<div class="b" id="b1">No Print</div>
-<div style="font-size:10px;font-weight:800;margin-top:10px">SIGNATURE</div>
-<div class="b" style="height:70px" id="b2">No Sig</div>
-</div>
-
-<div class="right">
-<div style="font-size:11px;font-weight:800;margin-bottom:5px">QR CODE</div>
-<div id="qrcode"></div>
-<a id="w1" class="wa" target="_blank">WhatsApp 0913 285 1465</a>
-<a id="w2" class="wa wa2" target="_blank">WhatsApp 0810 752 2186</a>
-<div style="font-size:7px;margin-top:6px">Scan to verify worldwide</div>
-</div>
-</div>
-
-<div class="seal"><span style="font-size:8px">TRUST SEAL</span><span>VERIFIED</span><span style="font-size:8px">2026</span></div>
-<br><br><br><br>
-<div style="text-align:center;font-size:8px;border-top:1px solid #c9a227;padding-top:5px">ARNAUD AFROCHAINE TRUST SYSTEMS LTD • RC 179223482696 • Global Verify: arnaudafrochaineverification-cyber.github.io • 09132851465 / 08107522186</div>
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
+<script>
+// YOUR REAL FIREBASE CONFIG - EMBEDDED - NO MORE WHITE SCREEN
 const firebaseConfig = {
   apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
   authDomain: "arnaudafrochaineverification.firebaseapp.com",
@@ -87,64 +61,49 @@ const firebaseConfig = {
   measurementId: "G-Y52LEBJM7Q"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-const W1="2349132851465",W2="2348107522186";
-let d={}; try{d=JSON.parse(localStorage.getItem('lastSealData'))}catch(e){d={}}
+let fpData='',sigData='',myHash='';
 
-// Get hash from URL ?hash= or localStorage
-const urlParams = new URLSearchParams(window.location.search);
-const hashFromUrl = urlParams.get('hash') || urlParams.get('id');
-const hash = hashFromUrl || d.hashHex || "A7F3D9C2E6B1F84E5D9C0B2A6F7E3D8C1B4A9F5E8D1C2B3A7F0E44E0E4C1D6B9A2F5E8D1C2B3A7F0E44E0E4C1D6B9A2F5E8D1C2B3A4F5E6D7C8B9A0F1E2D3C4B5";
-const url = window.location.href;
+document.getElementById('fp').addEventListener('change',e=>{
+ const f=e.target.files[0]; if(!f)return;
+ const r=new FileReader();
+ r.onload=ev=>{ fpData=ev.target.result; let p=document.getElementById('fpPrev'); p.style.display='block'; p.innerHTML='<img src="'+fpData+'" style="width:90px;height:90px;object-fit:cover;border-radius:10px;border:2px solid green"><br><small>✅ Spikey / Fingerprint Ready</small>'; };
+ r.readAsDataURL(f);
+});
+document.getElementById('sig').addEventListener('change',e=>{
+ const f=e.target.files[0]; if(!f)return;
+ const r=new FileReader();
+ r.onload=ev=>{ sigData=ev.target.result; let p=document.getElementById('sigPrev'); p.style.display='block'; p.innerHTML='<img src="'+sigData+'" style="width:150px;height:60px;object-fit:contain;border:2px solid green;border-radius:6px"><br><small>✅ Signature Ready</small>'; };
+ r.readAsDataURL(f);
+});
 
-document.getElementById('n1').innerText=d.docName||"BOARD RESOLUTION - ARNAUD AFROCHAINE";
-document.getElementById('n2').innerText=d.director||"Arnaud K. - Director";
-document.getElementById('n3').innerText=d.dateStr||new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
-document.getElementById('n4').innerText=hash;
-document.getElementById('n5').innerText=url;
-document.getElementById('qrcode').innerHTML="";
-new QRCode(document.getElementById('qrcode'),{text:url,width:124,height:124,colorDark:"#0a1931",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});
-document.getElementById('w1').href=`https://wa.me/${W1}?text=Hello%20Arnaud%20Afrochaine%20Verify%20Hash:%20${encodeURIComponent(hash)}`;
-document.getElementById('w2').href=`https://wa.me/${W2}?text=Hello%20Arnaud%20Afrochaine%20Verify%20Hash:%20${encodeURIComponent(hash)}`;
-
-// GLOBAL VERIFICATION FROM FIREBASE - WORLD WIDE
-async function globalVerify(){
- const statusEl = document.getElementById('verifyStatus');
- const infoEl = document.getElementById('n6');
+async function sealDoc(){
+ let title=document.getElementById('title').value.trim();
+ let director=document.getElementById('director').value.trim();
+ let issuer=document.getElementById('issuer').value.trim();
+ let cat=document.getElementById('cat').value;
+ if(!title||!director){alert('Fill Title and Director');return;}
+ document.getElementById('status').innerText='⏳ Sealing...';
+ myHash=CryptoJS.SHA256(title+director+issuer+Date.now()).toString();
+ const payload={title,director,issuer,category:cat,hash:myHash,fpData,sigData,rc:"179223482696",company:"ARNAUD AFROCHAINE TRUST SYSTEMS LTD",date:new Date().toISOString(),dateLocal:new Date().toLocaleString(),blockchain:"500B ARNAUD"};
  try{
-   // Try 3 collections where you fit store seals
-   let found = false;
-   const collectionsToCheck = ["seals", "documents", "verifiedDocs"];
-   for(const colName of collectionsToCheck){
-     try{
-       const q = query(collection(db, colName), where("hashHex", "==", hash));
-       const snap = await getDocs(q);
-       if(!snap.empty){ found = true; break; }
-       // Also try direct doc id
-       const dRef = doc(db, colName, hash);
-       const dSnap = await getDoc(dRef);
-       if(dSnap.exists()){ found = true; break; }
-     }catch(e){}
-   }
-   if(found){
-     statusEl.className="verified"; statusEl.innerText="✅ VERIFIED GLOBALLY — Document exists in Arnaud Afrochaine Trust Database";
-     infoEl.innerText="✅ Firebase: Document FOUND in global blockchain — REAL";
-   }else{
-     // If not in Firebase yet, still show as verified via hash (for old docs)
-     statusEl.className="verified"; statusEl.innerText="✅ VERIFIED — Authentic Hash + QR + Fingerprint Seal";
-     infoEl.innerText="⚠️ Firebase: Not yet in cloud DB (local seal) — but hash is authentic, verify via WhatsApp";
-   }
+   await db.collection('documents').doc(myHash).set(payload);
+   document.getElementById('status').innerText='✅ Saved to Firebase Global Network! ARNAUD TRUST SYSTEMS LTD';
  }catch(err){
-   statusEl.className="pending"; statusEl.innerText="⚠️ OFFLINE VERIFIED — Hash + QR Valid (Internet needed for cloud check)";
-   infoEl.innerText="Error: "+err.message+" — But local hash valid, use WhatsApp";
+   document.getElementById('status').innerText='❌ Firebase Error: '+err.message;
+   console.error(err);
+   return;
  }
+ localStorage.setItem('lastHash',myHash);
+ localStorage.setItem('lastData',JSON.stringify(payload));
+ document.getElementById('res').style.display='block';
+ document.getElementById('hashBox').innerText='SHA-256: '+myHash;
+ document.getElementById('qr').innerHTML='';
+ new QRCode(document.getElementById('qr'),{text:'https://arnaudafrochaineverification-cyber.github.io/verify.html?hash='+myHash,width:220,height:220});
 }
-globalVerify();
-
-window.up = function(i,b){document.getElementById(i).addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=x=>{document.getElementById(b).innerHTML=`<img src="${x.target.result}">`};r.readAsDataURL(f)})}
-up('t1','b1');up('t2','b2');
+function goVerify(){ window.open('verify.html?hash='+myHash,'_blank'); }
 </script>
 </body>
-                  </html>
+</html>
