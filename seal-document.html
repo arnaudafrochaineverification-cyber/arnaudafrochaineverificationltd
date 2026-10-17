@@ -1,85 +1,163 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Seal Document - ARNAUD TRUST RC 179223482696</title>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>*{box-sizing:border-box}body{margin:0;padding:20px;font-family:Arial;background:#f1f5f9;color:#1e293b}.container{max-width:850px;margin:auto;background:white;padding:25px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.08)}header{text-align:center;border-bottom:3px solid #b8860b;padding-bottom:18px;margin-bottom:25px}header h1{color:#14532d;font-size:25px}h2{color:#14532d}label{display:block;margin-top:17px;margin-bottom:7px;font-weight:bold}input,textarea{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:6px;font-size:15px}button{padding:13px;border:none;border-radius:6px;font-weight:bold;cursor:pointer}.primary{background:#166534;color:white;width:100%;margin-top:24px}.secondary{background:#e2e8f0;margin-top:12px}.notice{background:#fef3c7;color:#92400e;padding:12px;border-radius:6px;margin-bottom:18px}.status{margin-top:18px;padding:12px;border-radius:6px}.success{background:#dcfce7;color:#166534}.error{background:#fee2e2;color:#991b1b}#result{display:none;margin-top:30px;border-top:2px solid #b8860b;padding-top:20px}#qrcode{margin:20px auto;display:flex;justify-content:center}.details{background:#f8fafc;padding:15px;border-radius:8px}.hash{font-family:monospace;word-break:break-all}.hidden{display:none!important}</style>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:#f0fdf4;margin:0;padding:12px}
+.card{max-width:560px;margin:0 auto;background:white;border-radius:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,0.1)}
+h2{text-align:center;margin:6px 0}
+label{font-size:11px;font-weight:800;display:block;margin:10px 0 4px}
+input{width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px;font-size:13px}
+.preview{border:2px dashed #22c55e;border-radius:12px;padding:10px;text-align:center;background:#f0fdf4;margin-top:8px}
+.preview img{max-width:140px;max-height:140px;border-radius:8px;border:2px solid #22c55e}
+.ok{color:#166534;font-weight:800;font-size:12px;margin-top:6px}
+.btn{width:100%;padding:14px;border:none;border-radius:10px;font-weight:900;font-size:13px;cursor:pointer;margin-top:12px}
+.btn-seal{background:#0a1f0f;color:#4ade80}
+.btn-test{background:#22c55e;color:white;margin-top:8px}
+.btn-print{background:#3b82f6;color:white}
+.hashbox{background:#052e16;color:#4ade80;padding:12px;border-radius:10px;font-size:10px;word-break:break-all;margin-top:12px}
+#qrcode{display:flex;justify-content:center;margin:12px 0}
+</style>
 </head>
 <body>
-<div class="container">
-<header><h1>ARNAUD TRUST</h1><p><strong>RC 179223482696</strong></p><p>Secure Document Sealing & Verification System</p></header>
-<div id="formSection">
-<div class="notice"><strong>Important:</strong> Upload original PDF. Its SHA-256 will be calculated and file uploaded to Firebase Storage.</div>
-<h2>Seal a Document</h2>
-<form id="sealForm">
-<label>Document Title *</label><input id="documentTitle" required placeholder="e.g. Board Resolution - GBADAMASI SANUSI">
-<label>Director *</label><input id="director" required value="Arnaud Afrochaine">
-<label>Issuing Organisation *</label><input id="issuer" required value="ARNAUD AFROCHAINE TRUST SYSTEMS LTD">
-<label>Issue Date *</label><input id="issueDate" type="date" required>
-<label>Select Original PDF *</label><input id="pdfFile" type="file" accept=".pdf" required>
-<label>Spikey / Security Image</label><input id="spikeyImage" type="file" accept="image/*">
-<label>Director's Signature</label><input id="signatureImage" type="file" accept="image/*">
-<label>Notes</label><textarea id="notes" placeholder="Full Name: GBADAMASI SANUSI, Ref: AAC12345"></textarea>
-<button type="submit" class="primary" id="sealButton">SEAL & SAVE TO FIREBASE</button>
-</form>
-<div id="statusMessage" class="status hidden"></div>
+<div class="card">
+<div style="text-align:center;background:#0a1f0f;color:#4ade80;padding:6px 12px;border-radius:20px;font-size:9px;font-weight:800">ARNAUD AFROCHAINE TRUST SYSTEMS LTD • RC 179223482696</div>
+<h2>🔒 Seal Board Resolution</h2>
+<p style="text-align:center;font-size:11px;color:#64748b">Upload PDF + Spikey + Signature → SHA-256 + QR → Firebase Global</p>
+
+<label>📄 PDF File</label>
+<input type="file" id="pdfFile" accept=".pdf">
+
+<label>👆 Spikey Fingerprint</label>
+<input type="file" id="fpFile" accept="image/*" onchange="previewFP(this)">
+<div id="fpPrev" class="preview" style="display:none"><img id="fpImg"><div class="ok">✅ Spikey Ready (Compressed)</div></div>
+
+<label>✍️ Signature</label>
+<input type="file" id="sigFile" accept="image/*" onchange="previewSig(this)">
+<div id="sigPrev" class="preview" style="display:none"><img id="sigImg"><div class="ok">✅ Signature Ready (Compressed)</div></div>
+
+<label>📌 Title</label>
+<input id="title" placeholder="e.g. Board Resolution 2026">
+<label>👤 Director</label>
+<input id="director" value="Arnaud Afrochaine">
+<label>🏢 Issuer</label>
+<input id="issuer" value="ARNAUD AFROCHAINE TRUST SYSTEMS LTD">
+<label>📅 Date</label>
+<input id="date" type="date">
+
+<button class="btn btn-seal" onclick="sealDoc()">🔒 SEAL & SAVE TO FIREBASE</button>
+
+<div id="result" style="display:none">
+<div class="ok" style="text-align:center;font-size:14px;margin:12px 0">✅ Saved to Firebase Global Network!<br>ARNAUD TRUST SYSTEMS LTD</div>
+<div id="qrcode"></div>
+<div class="hashbox">
+<b>Hash:</b><br><span id="hashOut"></span><br><br>
+<b>Link:</b><br><span id="linkOut"></span>
 </div>
-<section id="result"><h2>Document Sealed Successfully</h2><div class="details" id="documentDetails"></div><h3>Verification QR Code</h3><div id="qrcode"></div><p><a id="verificationLink" href="#" target="_blank">Open verification page</a></p><button class="secondary" onclick="window.print()">PRINT SEAL RECORD</button><button class="secondary" id="downloadPdfButton">DOWNLOAD ORIGINAL PDF</button></section>
-<section id="verificationSection" class="hidden"><h2>Document Verification</h2><div id="verificationMessage" class="status">Checking...</div><div id="verificationDetails" class="details hidden"></div></section>
+<button class="btn btn-test" onclick="testNow()">🧪 CLICK TO TEST VERIFICATION →</button>
+<button class="btn btn-print" onclick="window.print()">🖨️ PRINT WITH QR</button>
+<button class="btn" style="background:white;border:2px solid #0a1f0f" onclick="location.href='index.html'">← HOME</button>
 </div>
+</div>
+
 <script>
 const firebaseConfig = {
-    apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
-    authDomain: "arnaudafrochaineverification.firebaseapp.com",
-    projectId: "arnaudafrochaineverification",
-    storageBucket: "arnaudafrochaineverification.firebasestorage.app",
-    messagingSenderId: "268502946630",
-    appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
+  authDomain: "arnaudafrochaineverification.firebaseapp.com",
+  projectId: "arnaudafrochaineverification",
+  storageBucket: "arnaudafrochaineverification.firebasestorage.app",
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47"
 };
-if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const storage = firebase.storage();
-const form = document.getElementById("sealForm");
-const sealButton = document.getElementById("sealButton");
-const statusMessage = document.getElementById("statusMessage");
-function showStatus(m,t="success"){statusMessage.textContent=m;statusMessage.className="status "+t;statusMessage.classList.remove("hidden")}
-function escapeHTML(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function formatDate(v){return v?escapeHTML(v):"Not provided"}
-async function calculateSHA256(f){const b=await f.arrayBuffer();const h=await crypto.subtle.digest("SHA-256",b);return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,"0")).join("")}
-async function uploadOptionalImage(file,path){if(!file)return null;const r=storage.ref().child(path);await r.put(file,{contentType:file.type});return await r.getDownloadURL()}
-form.addEventListener("submit",async e=>{
-e.preventDefault();sealButton.disabled=true;sealButton.textContent="PROCESSING...";document.getElementById("result").style.display="none";
-try{
-const title=document.getElementById("documentTitle").value.trim();const director=document.getElementById("director").value.trim();const issuer=document.getElementById("issuer").value.trim();const issueDate=document.getElementById("issueDate").value;const notes=document.getElementById("notes").value.trim();
-const pdfFile=document.getElementById("pdfFile").files[0];const spikeyFile=document.getElementById("spikeyImage").files[0];const sigFile=document.getElementById("signatureImage").files[0];
-if(!pdfFile)throw new Error("Select PDF");if(pdfFile.size>20*1024*1024)throw new Error("PDF too large 20MB");
-showStatus("Step 1: Calculating SHA-256...");const pdfHash=await calculateSHA256(pdfFile);
-const recordRef=db.collection("sealedDocuments").doc();const documentId=recordRef.id;const safeFilename=pdfFile.name.replace(/[^a-zA-Z0-9._-]/g,"_");const storagePath="sealed-documents/"+documentId+"/"+safeFilename;
-showStatus("Step 2: Uploading PDF to Storage...");const pdfRef=storage.ref().child(storagePath);await pdfRef.put(pdfFile,{contentType:"application/pdf",customMetadata:{documentId,sha256:pdfHash}});const pdfUrl=await pdfRef.getDownloadURL();
-showStatus("Step 3: Uploading images...");const spikeyUrl=await uploadOptionalImage(spikeyFile,"sealed-documents/"+documentId+"/security-image");const signatureUrl=await uploadOptionalImage(sigFile,"sealed-documents/"+documentId+"/signature");
-const verificationUrl=new URL(window.location.href);verificationUrl.search="";verificationUrl.hash="";verificationUrl.searchParams.set("id",documentId);
-const record={documentId,title,director,issuer,issueDate,notes,originalFilename:pdfFile.name,fileSize:pdfFile.size,contentType:"application/pdf",pdfHash,hashAlgorithm:"SHA-256",storagePath,pdfUrl,spikeyUrl,signatureUrl,verificationUrl:verificationUrl.href,company:"ARNAUD TRUST",registrationNumber:"179223482696",status:"Sealed",createdAt:firebase.firestore.FieldValue.serverTimestamp()};
-showStatus("Step 4: Saving to Firestore...");await recordRef.set(record);
-document.getElementById("documentDetails").innerHTML=`<p><b>ID:</b> ${escapeHTML(documentId)}</p><p><b>Title:</b> ${escapeHTML(title)}</p><p><b>Director:</b> ${escapeHTML(director)}</p><p><b>Issuer:</b> ${escapeHTML(issuer)}</p><p><b>Date:</b> ${formatDate(issueDate)}</p><p><b>SHA-256:</b></p><p class="hash">${escapeHTML(pdfHash)}</p><p><a href="${escapeHTML(pdfUrl)}" target="_blank">Open PDF</a></p>`;
-const qrContainer=document.getElementById("qrcode");qrContainer.innerHTML="";new QRCode(qrContainer,{text:verificationUrl.href,width:200,height:200,correctLevel:QRCode.CorrectLevel.H});
-const link=document.getElementById("verificationLink");link.href=verificationUrl.href;link.textContent=verificationUrl.href;
-document.getElementById("downloadPdfButton").onclick=()=>window.open(pdfUrl,"_blank");document.getElementById("result").style.display="block";showStatus("SUCCESS: PDF uploaded and sealed!","success");
-}catch(err){showStatus("ERROR: "+err.message,"error")}finally{sealButton.disabled=false;sealButton.textContent="SEAL & SAVE TO FIREBASE"}
-});
-async function verifyDocument(documentId){
-document.getElementById("formSection").classList.add("hidden");const sec=document.getElementById("verificationSection");sec.classList.remove("hidden");const msg=document.getElementById("verificationMessage");const det=document.getElementById("verificationDetails");
-try{
-const snap=await db.collection("sealedDocuments").doc(documentId).get();if(!snap.exists){msg.textContent="DOCUMENT NOT FOUND";msg.className="status error";return}
-const r=snap.data();msg.textContent="RECORD FOUND: Document sealed in ARNAUD TRUST.";msg.className="status success";
-det.innerHTML=`<p><b>ID:</b> ${escapeHTML(r.documentId)}</p><p><b>Title:</b> ${escapeHTML(r.title)}</p><p><b>Director:</b> ${escapeHTML(r.director)}</p><p><b>Issuer:</b> ${escapeHTML(r.issuer)}</p><p><b>Date:</b> ${formatDate(r.issueDate)}</p><p><b>SHA-256:</b></p><p class="hash">${escapeHTML(r.pdfHash)}</p>${r.pdfUrl?`<p><a href="${escapeHTML(r.pdfUrl)}" target="_blank">Open sealed PDF</a></p><iframe src="${escapeHTML(r.pdfUrl)}" style="width:100%;height:700px;border:2px solid #14532d;border-radius:8px;margin-top:15px"></iframe>`: ""}${r.spikeyUrl?`<p><b>Security Image:</b><br><img src="${escapeHTML(r.spikeyUrl)}" style="max-width:250px;border:1px solid #ccc"></p>`: ""}${r.signatureUrl?`<p><b>Signature:</b><br><img src="${escapeHTML(r.signatureUrl)}" style="max-width:250px;border:1px solid #ccc"></p>`: ""}`;det.classList.remove("hidden");
-}catch(e){msg.textContent="Unable to retrieve record. Check Firebase rules.";msg.className="status error"}
+
+let fpData='', sigData='', currentHash='', currentLink='';
+
+function compressImage(file, callback){
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX = 300;
+      let w = img.width, h = img.height;
+      if(w>h){ if(w>MAX){ h*=MAX/w; w=MAX; } } else { if(h>MAX){ w*=MAX/h; h=MAX; } }
+      canvas.width=w; canvas.height=h;
+      const ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      callback(canvas.toDataURL('image/jpeg',0.6));
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
-const qp=new URLSearchParams(window.location.search);const reqId=qp.get("id");if(reqId){verifyDocument(reqId)}
+
+function previewFP(input){
+ const file=input.files[0]; if(!file) return;
+ compressImage(file, (compressed)=>{
+   fpData=compressed;
+   document.getElementById('fpImg').src=fpData;
+   document.getElementById('fpPrev').style.display='block';
+ });
+}
+function previewSig(input){
+ const file=input.files[0]; if(!file) return;
+ compressImage(file, (compressed)=>{
+   sigData=compressed;
+   document.getElementById('sigImg').src=sigData;
+   document.getElementById('sigPrev').style.display='block';
+ });
+}
+
+async function sealDoc(){
+ const title=document.getElementById('title').value.trim();
+ const director=document.getElementById('director').value.trim();
+ const issuer=document.getElementById('issuer').value.trim();
+ const date=document.getElementById('date').value;
+ const pdf=document.getElementById('pdfFile').files[0];
+ if(!title||!director||!pdf){ alert('Fill Title, Director and PDF'); return; }
+ if(!fpData){ alert('Upload Spikey first!'); return; }
+ if(!sigData){ alert('Upload Signature first!'); return; }
+ 
+ const text = title+director+issuer+date+Date.now()+Math.random();
+ const enc = new TextEncoder().encode(text);
+ const buf = await crypto.subtle.digest('SHA-256', enc);
+ const hash = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+ currentHash=hash;
+ 
+ const base = location.href.replace('seal-document.html','').replace('seal.html','').replace(/\/$/,'') + '/';
+ currentLink = base + 'verify-signature.html?hash=' + hash;
+ 
+ const data = {
+   title, director, issuer: issuer||'ARNAUD AFROCHAINE TRUST', company:'ARNAUD AFROCHAINE TRUST SYSTEMS LTD', rc:'179223482696',
+   date, dateLocal: new Date().toLocaleDateString(), hash, fpData, sigData, type:'Board Resolution', category:'Board Resolution',
+   blockchain:'500B ARNAUD', created: firebase.firestore.FieldValue.serverTimestamp()
+ };
+ 
+ try{
+  await db.collection('documents').doc(hash).set(data);
+  document.getElementById('hashOut').innerText=hash;
+  document.getElementById('linkOut').innerText=currentLink;
+  document.getElementById('qrcode').innerHTML='';
+  new QRCode(document.getElementById('qrcode'), {text: currentLink, width:160, height:160});
+  document.getElementById('result').style.display='block';
+  window.scrollTo(0, document.body.scrollHeight);
+  alert('✅ SEALED! Saved to Firebase!');
+ }catch(e){ alert('Firebase Error: '+e.message); }
+}
+
+function testNow(){
+ if(!currentLink){ alert('Seal first'); return; }
+ location.href=currentLink;
+}
+document.getElementById('date').valueAsDate=new Date();
 </script>
 </body>
-  </html>
+</html>
