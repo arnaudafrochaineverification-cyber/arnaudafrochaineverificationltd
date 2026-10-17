@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARNAUD AFROCHAINE TRUST SYSTEMS LTD - Gold Certificate + Biometric</title>
+<title>ARNAUD AFROCHAINE TRUST SYSTEMS LTD - Gold Certificate</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -12,105 +12,99 @@
   body{background:#0a1931; display:flex; flex-direction:column; align-items:center; min-height:100vh; font-family:'Montserrat',sans-serif; padding-top:20px;}
   .controls{width:1100px; background:#132a4c; padding:15px; border-radius:10px; margin-bottom:15px; display:flex; gap:15px; flex-wrap:wrap;}
   .controls div{color:#f7d774; font-size:12px;}
-  .controls input{margin-top:5px;}
   .certificate-wrapper{width:1100px; height:800px; background:#0a1931; position:relative; padding:12px; box-shadow:0 0 50px rgba(0,0,0,0.8);}
   .gold-border{width:100%; height:100%; border:10px solid #c9a227; outline:2px solid #f7d774; outline-offset:-18px; position:relative; background:radial-gradient(ellipse at center, #132a4c 0%, #0a1931 70%); padding:25px 35px;}
   .header{text-align:center; color:#f7d774;}
-  .header h1{font-family:'Cinzel',serif; font-size:30px; letter-spacing:1px; color:#f9d976; font-weight:900;}
-  .header h1 span{color:#fff; text-shadow:0 0 10px #f9d976;}
-  .sub{font-size:12px; letter-spacing:1.5px; margin-top:4px; color:#e0c56a;}
-  .title{font-family:'Cinzel',serif; font-size:22px; font-weight:700; margin-top:12px; line-height:1.2; color:#f7d774; border-bottom:2px solid #c9a227; display:inline-block; padding-bottom:6px;}
-  .content{display:flex; margin-top:20px; justify-content:space-between;}
+  .header h1{font-family:'Cinzel',serif; font-size:28px; color:#f9d976; font-weight:900;}
+  .header h1 span{color:#fff;}
+  .sub{font-size:11px; margin-top:4px; color:#e0c56a;}
+  .title{font-family:'Cinzel',serif; font-size:18px; font-weight:700; margin-top:10px; color:#f7d774; border-bottom:2px solid #c9a227; display:inline-block; padding-bottom:5px;}
+  .content{display:flex; margin-top:15px; justify-content:space-between;}
   .left{width:50%; color:#e8d9a0;}
-  .field{margin-bottom:12px; border-bottom:1px solid #c9a227; padding-bottom:4px;}
-  .field label{font-size:11px; color:#f7d774; font-weight:600;}
-  .field .value{font-size:13px; color:#fff; margin-top:3px; word-break:break-all;}
-  .hash{font-size:8px !important; font-family:monospace; color:#a8c0ff !important;}
+  .field{margin-bottom:10px; border-bottom:1px solid #c9a227; padding-bottom:3px;}
+  .field label{font-size:10px; color:#f7d774; font-weight:600;}
+  .field .value{font-size:12px; color:#fff; margin-top:2px; word-break:break-all;}
+  .hash{font-size:7px !important; font-family:monospace; color:#a8c0ff !important;}
   .center-biometric{width:22%; text-align:center; border:1px dashed #c9a227; padding:8px; background:rgba(0,0,0,0.2);}
   .bio-box{width:100px; height:120px; border:1px solid #c9a227; margin:5px auto; background:white; display:flex; align-items:center; justify-content:center; overflow:hidden;}
   .bio-box img{width:100%; height:100%; object-fit:cover;}
   .bio-label{font-size:9px; color:#f7d774; margin-top:4px; font-weight:600;}
   .right{width:26%; text-align:center;}
   .qr-box{border:2px solid #c9a227; background:rgba(0,0,0,0.3); padding:10px; border-radius:4px;}
-  .qr-box h3{font-size:10px; color:#f7d774; margin-bottom:8px;}
   #qrcode{display:flex; justify-content:center; background:white; padding:8px; width:140px; height:140px; margin:0 auto;}
-  .wa-btn{display:block; background:#25D366; color:white; padding:6px; border-radius:20px; text-decoration:none; font-weight:700; font-size:10px; margin-top:8px;}
-  .seal{width:140px; height:140px; background:radial-gradient(circle, #f9d976, #c9a227); border-radius:50%; border:3px double #7a5a00; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#3d2d00; font-family:'Cinzel',serif; font-weight:900; position:absolute; left:48%; bottom:85px; transform:translateX(-50%); box-shadow:0 0 15px rgba(201,162,39,0.6); z-index:10;}
-  .seal .big{font-size:14px;} .seal span{font-size:8px;}
+  .wa-btn{display:block; background:#25D366; color:white; padding:7px; border-radius:20px; text-decoration:none; font-weight:700; font-size:10px; margin-top:6px;}
+  .wa-btn2{background:#128C7E;}
+  .seal{width:140px; height:140px; background:radial-gradient(circle, #f9d976, #c9a227); border-radius:50%; border:3px double #7a5a00; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#3d2d00; font-family:'Cinzel',serif; font-weight:900; position:absolute; left:48%; bottom:85px; transform:translateX(-50%);}
   .signatures{display:flex; justify-content:space-between; position:absolute; bottom:35px; left:35px; right:35px; color:#f7d774;}
   .sig{border-top:1px solid #c9a227; width:180px; text-align:center; padding-top:4px; font-size:11px;}
   .sig img{height:35px; display:block; margin:0 auto 3px;}
-  .footer{position:absolute; bottom:0; left:0; right:0; background:#1a1a4a; color:#f7d774; text-align:center; font-size:9px; padding:6px;}
-  @media print{.no-print{display:none !important;} body{padding:0; background:white;} .certificate-wrapper{box-shadow:none;}}
+  .footer{position:absolute; bottom:0; left:0; right:0; background:#1a1a4a; color:#f7d774; text-align:center; font-size:8px; padding:6px;}
+  @media print{.no-print{display:none !important;}}
 </style>
 </head>
 <body>
-
 <div class="controls no-print">
-  <div>📸 Director Thumbprint Image:<br><input type="file" id="thumbInput" accept="image/*"></div>
-  <div>✍️ Director Signature Image:<br><input type="file" id="sigInput" accept="image/*"></div>
-  <div>✍️ Seal Officer Signature:<br><input type="file" id="officerSigInput" accept="image/*"></div>
-  <div style="align-self:center;"><button onclick="window.print()" style="padding:10px 20px; background:#c9a227; border:none; font-weight:700; cursor:pointer; border-radius:5px;">🖨️ PRINT WITH BIOMETRIC</button></div>
+  <div style="color:#25D366; font-weight:700;">✅ DUAL WHATSAPP ACTIVE<br>1: 09132851465<br>2: 08107522186</div>
+  <div>📸 Thumbprint:<br><input type="file" id="thumbInput" accept="image/*"></div>
+  <div>✍️ Signature:<br><input type="file" id="sigInput" accept="image/*"></div>
+  <div>✍️ Officer:<br><input type="file" id="officerSigInput" accept="image/*"></div>
+  <div><button onclick="window.print()" style="padding:10px 20px; background:#c9a227; border:none; font-weight:700; cursor:pointer; border-radius:5px;">🖨️ PRINT</button></div>
 </div>
-
-<div class="certificate-wrapper" id="cert">
+<div class="certificate-wrapper">
   <div class="gold-border">
     <div class="header">
       <h1>ARNAUD <span>AFROCHAINE</span> TRUST SYSTEMS LTD</h1>
       <div class="sub">Digital Document Integrity • Corporate Trust • Global Verification</div>
-      <div class="title">CERTIFICATE OF DOCUMENT SEAL • AUTHENTICITY & INTEGRITY • DOUBLE FINGERPRINT</div>
+      <div class="title">CERTIFICATE OF DOCUMENT SEAL • DOUBLE FINGERPRINT</div>
     </div>
     <div class="content">
       <div class="left">
         <div class="field"><label>Document Name:</label><div class="value" id="docName">-</div></div>
         <div class="field"><label>Document Type:</label><div class="value" id="docType">-</div></div>
-        <div class="field"><label>Director / Authorized Person:</label><div class="value" id="director">-</div></div>
+        <div class="field"><label>Director:</label><div class="value" id="director">-</div></div>
         <div class="field"><label>Sealed By:</label><div class="value" id="sealedBy">-</div></div>
         <div class="field"><label>Date Sealed:</label><div class="value" id="date">-</div></div>
-        <div class="field"><label>SHA-256 Digital Fingerprint (Document):</label><div class="value hash" id="hash">-</div></div>
+        <div class="field"><label>SHA-256 Fingerprint:</label><div class="value hash" id="hash">-</div></div>
       </div>
-
       <div class="center-biometric">
         <div class="bio-label">BIOMETRIC FINGERPRINT</div>
         <div class="bio-box" id="thumbBox"><span style="font-size:9px; color:#666;">No Thumbprint</span></div>
-        <div class="bio-label" style="margin-top:10px;">DIRECTOR SIGNATURE</div>
+        <div class="bio-label" style="margin-top:10px;">SIGNATURE</div>
         <div class="bio-box" style="height:60px;" id="sigBox"><span style="font-size:9px; color:#666;">No Signature</span></div>
-        <div style="font-size:7px; color:#f7d774; margin-top:6px;">Human Fingerprint + Digital Hash = Double Trust</div>
       </div>
-
       <div class="right">
         <div class="qr-box">
-          <h3>QR CODE • VERIFY</h3>
           <div id="qrcode"></div>
-          <a id="waLink" class="wa-btn" target="_blank">💬 WHATSAPP VERIFY</a>
+          <a id="waLink1" class="wa-btn" target="_blank">💬 VERIFY: 0913 285 1465</a>
+          <a id="waLink2" class="wa-btn wa-btn2" target="_blank">💬 BACKUP: 0810 752 2186</a>
           <div style="font-size:6px; color:#f7d774; margin-top:5px; word-break:break-all;" id="verifyUrl">-</div>
         </div>
       </div>
     </div>
-    <div class="seal"><span>TRUST SEAL</span><div class="big">TRUST SEAL</div><span>VERIFIED</span><span id="year">2026</span></div>
+    <div class="seal"><span>TRUST SEAL</span><div style="font-size:14px;">TRUST SEAL</div><span>VERIFIED</span></div>
     <div class="signatures">
       <div class="sig"><div id="sigPreview"></div>Director Signature</div>
-      <div class="sig"><div id="officerSigPreview"></div>Seal Officer Signature</div>
+      <div class="sig"><div id="officerSigPreview"></div>Seal Officer</div>
     </div>
-    <div class="footer">A product of Arnaud Afrochaine Trust Systems Ltd | Document Seal | Corporate Trust | Certificate Verification • Double Fingerprint System: SHA-256 + Biometric • RC: [To Be Assigned]</div>
+    <div class="footer">Arnaud Afrochaine Trust Systems Ltd • AV Code: 179223482696 • Verify: +2349132851465 / +2348107522186 • SHA-256 + Biometric</div>
   </div>
 </div>
-
 <script>
-const WHATSAPP_NUMBER = "2348012345678";
+const WHATSAPP_1 = "2349132851465";
+const WHATSAPP_2 = "2348107522186";
 function loadData(){
   let d=null; try{d=JSON.parse(localStorage.getItem('lastSealData'));}catch(e){}
-  if(!d){ d={docName:"BOARD RESOLUTION - ARNAUD TRUST SYSTEMS LTD", docType:"Board Resolution", director:"Arnaud K.", sealedBy:"Arnaud Admin", dateStr:new Date().toLocaleDateString(), hashHex:"a7f3d9c2e6b1f84e5d9c0b2a6f7e3d8c1b4a9f6e2c5d8b3a7f0e44e0e4c1d6b9a2f5e8", verifyUrl:"https://arnaudafrochaineverification.web.app/verify.html?hash=demo"}; }
-  document.getElementById('docName').innerText=d.docName||d.documentName||'-';
-  document.getElementById('docType').innerText=d.docType||d.documentType||'-';
-  document.getElementById('director').innerText=d.director||'-';
-  document.getElementById('sealedBy').innerText=d.sealedBy||'-';
-  document.getElementById('date').innerText=d.dateStr||d.date||'-';
-  document.getElementById('hash').innerText=d.hashHex||d.hash||'-';
-  document.getElementById('verifyUrl').innerText=d.verifyUrl||'';
-  document.getElementById('year').innerText=new Date().getFullYear();
-  new QRCode(document.getElementById("qrcode"), {text:d.verifyUrl||window.location.href, width:124, height:124, colorDark:"#c9a227", colorLight:"#ffffff"});
-  document.getElementById('waLink').href=`https://wa.me/${WHATSAPP_NUMBER}?text=VERIFY%20${d.hashHex||d.hash}`;
+  if(!d){ d={docName:"BOARD RESOLUTION - ARNAUD TRUST", docType:"Board Resolution", director:"Arnaud K.", sealedBy:"Arnaud Admin", dateStr:new Date().toLocaleDateString(), hashHex:"a7f3d9c2e6b1f84e5d9c0b2a6f7e3d8c1b4a9f6e2c5d8b3a7f0e44e0e4c1d6b9a2f5e8", verifyUrl:"https://arnaudafrochaineverification.web.app/verify.html?hash=demo"}; }
+  document.getElementById('docName').innerText=d.docName;
+  document.getElementById('docType').innerText=d.docType;
+  document.getElementById('director').innerText=d.director;
+  document.getElementById('sealedBy').innerText=d.sealedBy;
+  document.getElementById('date').innerText=d.dateStr;
+  document.getElementById('hash').innerText=d.hashHex;
+  document.getElementById('verifyUrl').innerText=d.verifyUrl;
+  new QRCode(document.getElementById("qrcode"), {text:d.verifyUrl, width:124, height:124, colorDark:"#0a1931", colorLight:"#ffffff"});
+  document.getElementById('waLink1').href=`https://wa.me/${WHATSAPP_1}?text=Verify%20Doc:%20${encodeURIComponent(d.hashHex)}`;
+  document.getElementById('waLink2').href=`https://wa.me/${WHATSAPP_2}?text=Verify%20Doc:%20${encodeURIComponent(d.hashHex)}`;
 }
 function handleImage(inputId, boxId, previewId){
   document.getElementById(inputId).addEventListener('change', function(e){
@@ -128,4 +122,4 @@ handleImage('sigInput','sigBox','sigPreview');
 handleImage('officerSigInput','officerSigPreview','officerSigPreview');
 </script>
 </body>
-          </html>
+</html>
