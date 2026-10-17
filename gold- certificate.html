@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARNAUD AFROCHAINE TRUST SYSTEMS LTD - Gold Certificate</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0a1931; display:flex; justify-content:center; align-items:center; min-height:100vh; font-family:'Montserrat',sans-serif;}
+  .certificate-wrapper{width:1100px; height:780px; background:#0a1931; position:relative; padding:12px; box-shadow:0 0 50px rgba(0,0,0,0.8);}
+  .gold-border{width:100%; height:100%; border:10px solid #c9a227; outline:2px solid #f7d774; outline-offset:-18px; position:relative; background:radial-gradient(ellipse at center, #132a4c 0%, #0a1931 70%); padding:30px 40px;}
+  .corner{position:absolute; width:80px; height:80px; font-size:70px; color:#c9a227; line-height:1;}
+  .tl{top:10px; left:15px;} .tr{top:10px; right:15px; transform:rotate(90deg)} .bl{bottom:10px; left:15px; transform:rotate(-90deg)} .br{bottom:10px; right:15px; transform:rotate(180deg)}
+  .header{text-align:center; color:#f7d774;}
+  .header h1{font-family:'Cinzel',serif; font-size:32px; letter-spacing:1px; color:#f9d976; text-shadow:0 2px 4px #000; font-weight:900;}
+  .header h1 span{color:#fff; text-shadow:0 0 10px #f9d976;}
+  .sub{font-size:13px; letter-spacing:1.5px; margin-top:6px; color:#e0c56a;}
+  .title{font-family:'Cinzel',serif; font-size:26px; font-weight:700; margin-top:18px; line-height:1.2; color:#f7d774; border-bottom:2px solid #c9a227; display:inline-block; padding-bottom:8px;}
+  .content{display:flex; margin-top:30px; justify-content:space-between;}
+  .left{width:58%; color:#e8d9a0;}
+  .field{margin-bottom:18px; border-bottom:1px solid #c9a227; padding-bottom:5px;}
+  .field label{font-size:13px; color:#f7d774; font-weight:600;}
+  .field .value{font-size:14px; color:#fff; margin-top:4px; word-break:break-all;}
+  .hash{font-size:9px !important; font-family:monospace; color:#a8c0ff !important;}
+  .right{width:38%; text-align:center;}
+  .qr-box{border:2px solid #c9a227; background:rgba(0,0,0,0.3); padding:12px; border-radius:4px;}
+  .qr-box h3{font-size:11px; color:#f7d774; margin-bottom:10px; letter-spacing:1px;}
+  #qrcode{display:flex; justify-content:center; background:white; padding:10px; width:160px; height:160px; margin:0 auto;}
+  .wa-btn{display:block; background:#25D366; color:white; padding:8px; border-radius:25px; text-decoration:none; font-weight:700; font-size:12px; margin-top:12px;}
+  .seal{width:180px; height:180px; background:radial-gradient(circle, #f9d976, #c9a227); border-radius:50%; border:4px double #7a5a00; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#3d2d00; font-family:'Cinzel',serif; font-weight:900; position:absolute; left:50%; bottom:80px; transform:translateX(-50%); box-shadow:0 0 20px rgba(201,162,39,0.6);}
+  .seal span{font-size:10px;}
+  .seal .big{font-size:18px;}
+  .signatures{display:flex; justify-content:space-between; position:absolute; bottom:35px; left:40px; right:40px; color:#f7d774;}
+  .sig{border-top:1px solid #c9a227; width:220px; text-align:center; padding-top:6px; font-size:13px;}
+  .footer{position:absolute; bottom:0; left:0; right:0; background:#1a1a4a; color:#f7d774; text-align:center; font-size:10px; padding:8px; letter-spacing:0.5px;}
+  @media print{body{background:white;} .no-print{display:none;} .certificate-wrapper{box-shadow:none; width:100%; height:100vh;}}
+</style>
+</head>
+<body>
+<div class="certificate-wrapper" id="cert">
+  <div class="gold-border">
+    <div class="corner tl">❧</div><div class="corner tr">❧</div><div class="corner bl">❧</div><div class="corner br">❧</div>
+    <div class="header">
+      <h1>ARNAUD <span>AFROCHAINE</span> TRUST SYSTEMS LTD</h1>
+      <div class="sub">Digital Document Integrity • Corporate Trust • Global Verification</div>
+      <div class="title">CERTIFICATE OF DOCUMENT SEAL<br>AUTHENTICITY & INTEGRITY</div>
+    </div>
+    <div class="content">
+      <div class="left">
+        <div class="field"><label>Document Name:</label><div class="value" id="docName">-</div></div>
+        <div class="field"><label>Document Type:</label><div class="value" id="docType">-</div></div>
+        <div class="field"><label>Director / Authorized Person:</label><div class="value" id="director">-</div></div>
+        <div class="field"><label>Sealed By:</label><div class="value" id="sealedBy">-</div></div>
+        <div class="field"><label>Date Sealed:</label><div class="value" id="date">-</div></div>
+        <div class="field"><label>SHA-256 Digital Fingerprint:</label><div class="value hash" id="hash">-</div></div>
+      </div>
+      <div class="right">
+        <div class="qr-box">
+          <h3>QR CODE • VERIFY DOCUMENT</h3>
+          <div id="qrcode"></div>
+          <a id="waLink" class="wa-btn" target="_blank">💬 WHATSAPP VERIFY • VERIFIED</a>
+          <div style="font-size:7px; color:#f7d774; margin-top:6px; word-break:break-all;" id="verifyUrl">-</div>
+        </div>
+      </div>
+    </div>
+    <div class="seal"><span>TRUST SEAL</span><div class="big">TRUST SEAL</div><span>VERIFIED</span><span id="year">2026</span></div>
+    <div class="signatures"><div class="sig">Director Signature</div><div class="sig">Seal Officer Signature</div></div>
+    <div class="footer">A product of Arnaud Afrochaine Trust Systems Ltd | Document Seal | Corporate Trust | Certificate Verification • RC: [To Be Assigned] • arnaudafrochaine.com</div>
+  </div>
+</div>
+<button class="no-print" onclick="window.print()" style="position:fixed; top:20px; right:20px; padding:12px 20px; background:#c9a227; border:none; font-weight:700; cursor:pointer; border-radius:5px;">🖨️ PRINT GOLD CERTIFICATE</button>
+
+<script>
+// CONFIG
+const WHATSAPP_NUMBER = "2348012345678"; // CHANGE TO YOUR BUSINESS WHATSAPP
+
+function loadData(){
+  // Try to get from localStorage lastSealData set by seal-document.html
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem('lastSealData')); } catch(e){}
+  if(!d){
+    // Fallback demo data
+    d = {docName:"BOARD RESOLUTION - ARNAUD TRUST SYSTEMS LTD", docType:"Board Resolution", director:"Arnaud K.", sealedBy:"Arnaud Admin", dateStr:new Date().toLocaleDateString(), hashHex:"a7f3d9c2e6b1f84e5d9c0b2a6f7e3d8c1b4a9f6e2c5d8b3a7f0e44e0e4c1d6b9a2f5e8", verifyUrl:"https://arnaudafrochaineverification.web.app/verify.html?hash=demo"};
+  }
+  document.getElementById('docName').innerText = d.docName || d.documentName || '-';
+  document.getElementById('docType').innerText = d.docType || d.documentType || '-';
+  document.getElementById('director').innerText = d.director || '-';
+  document.getElementById('sealedBy').innerText = d.sealedBy || '-';
+  document.getElementById('date').innerText = d.dateStr || d.date || '-';
+  document.getElementById('hash').innerText = d.hashHex || d.hash || '-';
+  document.getElementById('verifyUrl').innerText = d.verifyUrl || '';
+  document.getElementById('year').innerText = new Date().getFullYear();
+
+  // QR
+  new QRCode(document.getElementById("qrcode"), {text: d.verifyUrl || window.location.href, width:140, height:140, colorDark:"#c9a227", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.H});
+
+  // WhatsApp Link
+  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=VERIFY%20${d.hashHex || d.hash}`;
+  document.getElementById('waLink').href = waUrl;
+}
+loadData();
+</script>
+</body>
+</html>
