@@ -3,54 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Verify Document - ARNAUD TRUST SYSTEMS LTD RC 179223482696</title>
+<title>Verify - ARNAUD TRUST SYSTEMS LTD RC 179223482696</title>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:#f0fdf4;margin:0;padding:16px}
-.container{max-width:560px;margin:0 auto}
-.card{background:white;border-radius:20px;padding:24px;box-shadow:0 20px 40px rgba(0,0,0,0.1);text-align:center}
-.header{border-bottom:2px dashed #e2e8f0;padding-bottom:16px;margin-bottom:16px}
-.rc{font-size:10px;background:#0a1f0f;color:#4ade80;padding:4px 10px;border-radius:20px;font-weight:800;display:inline-block}
-.badge{display:inline-block;padding:8px 16px;border-radius:30px;font-weight:900;font-size:13px;margin:12px 0}
-.badge.ok{background:#dcfce7;color:#166534;border:2px solid #22c55e}
-.badge.fail{background:#fee2e2;color:#991b1b;border:2px solid #ef4444}
-h2{margin:8px 0;font-weight:900;font-size:18px}
-.meta{text-align:left;background:#f8fafc;border-radius:12px;padding:14px;font-size:13px;line-height:1.7;margin:14px 0}
-.meta b{color:#0f172a}
-.hash{word-break:break-all;background:#052e16;color:#4ade80;padding:12px;border-radius:10px;font-size:10px;margin-top:12px;text-align:left;line-height:1.6}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-.box{border:2px solid #e2e8f0;border-radius:14px;padding:10px;background:#fafafa}
+body{background:#f0fdf4;margin:0;padding:14px}
+.card{max-width:560px;margin:0 auto;background:white;border-radius:18px;padding:20px;box-shadow:0 15px 35px rgba(0,0,0,0.1);text-align:center}
+.rc{font-size:9px;background:#0a1f0f;color:#4ade80;padding:5px 12px;border-radius:20px;font-weight:800;display:inline-block}
+.badge{padding:10px 16px;border-radius:30px;font-weight:900;font-size:13px;margin:14px 0;display:inline-block}
+.ok{background:#dcfce7;color:#166534;border:2px solid #22c55e}
+.fail{background:#fee2e2;color:#991b1b;border:2px solid #ef4444}
+.meta{text-align:left;background:#f8fafc;border-radius:12px;padding:12px;font-size:13px;line-height:1.6;margin:12px 0}
+.hash{word-break:break-all;background:#052e16;color:#4ade80;padding:12px;border-radius:10px;font-size:10px;margin-top:12px;text-align:left}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.box{border:2px solid #e2e8f0;border-radius:12px;padding:10px;background:#fafafa}
 .box img{max-width:100%;border-radius:8px}
-.box small{font-size:10px;font-weight:800;color:#64748b;display:block;margin-bottom:6px}
-.btn{width:100%;margin-top:16px;padding:14px;border:none;border-radius:12px;font-weight:900;cursor:pointer}
+.box small{font-size:9px;font-weight:800;color:#64748b;display:block;margin-bottom:6px}
+.btn{width:100%;margin-top:12px;padding:13px;border:none;border-radius:10px;font-weight:900;cursor:pointer}
 .btn-print{background:#0a1f0f;color:#4ade80}
 .btn-home{background:white;color:#0a1f0f;border:2px solid #0a1f0f}
-.trust{margin-top:16px;font-size:10px;color:#64748b;background:#f1f5f9;padding:10px;border-radius:8px}
 </style>
 </head>
 <body>
-<div class="container">
 <div class="card">
-<div class="header">
-<div class="rc">ARNAUD AFROCHAINE TRUST SYSTEMS LTD • RC 179223482696 • AV 179223482696 • LTD</div>
-<h2 style="margin-top:12px">🔍 Global Document Verification</h2>
-<small style="color:#64748b">Official Seal Verification Portal - Ikeshuku & Sango Ota Enterprises</small>
+<div class="rc">ARNAUD AFROCHAINE TRUST SYSTEMS LTD • RC 179223482696 • LTD</div>
+<h2 style="margin:10px 0 4px">🔍 Document Verification</h2>
+<small style="color:#64748b">Official Seal Verification Portal - Sango Ota</small>
+<div id="content" style="margin-top:16px"><p>⏳ Fetching from ARNAUD Global Trust Network...</p><small id="hShow" style="word-break:break-all;color:#94a3b8;font-size:10px"></small></div>
 </div>
-
-<div id="content">
-<p>⏳ Fetching from ARNAUD Global Trust Network...</p>
-<small id="hashShow" style="word-break:break-all;color:#94a3b8"></small>
-</div>
-
-</div>
-<p style="text-align:center;font-size:10px;color:#94a3b8;margin-top:12px">Secured by 500B ARNAUD Blockchain Anchor • SHA-256 Integrity • Issuer Verified • Fingerprint & Signature Bound</p>
-</div>
+<p style="text-align:center;font-size:9px;color:#94a3b8;margin-top:10px">Secured by 500B ARNAUD Blockchain Anchor • SHA-256 • Issuer Verified • Fingerprint & Signature Bound</p>
 
 <script>
-// YOUR REAL FIREBASE - SAME AS SEAL - NO WHITE SCREEN
 const firebaseConfig = {
   apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
   authDomain: "arnaudafrochaineverification.firebaseapp.com",
@@ -60,85 +45,63 @@ const firebaseConfig = {
   appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
   measurementId: "G-Y52LEBJM7Q"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 const params = new URLSearchParams(window.location.search);
 const hash = params.get('hash');
-document.getElementById('hashShow').innerText = hash ? 'Checking hash: ' + hash : '';
+document.getElementById('hShow').innerText = hash ? 'Checking hash: ' + hash : '';
 
-async function verify(){
+async function run(){
  const box = document.getElementById('content');
- if(!hash){
-   box.innerHTML = '<div class="badge fail">❌ NO HASH PROVIDED</div><p>Scan a valid QR from ARNAUD TRUST seal.</p>';
-   return;
- }
+ if(!hash){ box.innerHTML = '<div class="badge fail">❌ NO HASH</div><p>Scan valid QR</p>'; return; }
  try{
-   // Try Firebase first
-   const doc = await db.collection('documents').doc(hash).get();
-   if(doc.exists){
-     const d = doc.data();
-     box.innerHTML = `
-       <div class="badge ok">✅ VERIFIED AUTHENTIC • ISSUER CONFIRMED</div>
-       <h2>${d.title}</h2>
-       <small style="color:#166534;font-weight:700">${d.category} • Sealed ${d.dateLocal}</small>
-       
-       <div class="meta">
-         <b>📌 Title:</b> ${d.title}<br>
-         <b>👤 Director / Signatory:</b> ${d.director}<br>
-         <b>🏢 Issuing Organization (Verified Issuer):</b> ${d.issuer}<br>
-         <b>🏛️ Trust Authority:</b> ${d.company} • RC ${d.rc}<br>
-         <b>⛓️ Blockchain Anchor:</b> ${d.blockchain} ARNAUD<br>
-         <b>📅 Date:</b> ${d.dateLocal}
-       </div>
-
-       <div class="grid">
-         <div class="box">
-           <small>👆 FINGERPRINT (SPIKEY) - DIRECTOR BIOMETRIC</small>
-           ${d.fpData ? `<img src="${d.fpData}" style="width:100px;height:100px;object-fit:cover;border:2px solid #22c55e">` : '<p style="font-size:11px;color:#999">No fingerprint on record</p>'}
-           <small style="margin-top:6px;color:#166534">Biometric bound to document</small>
-         </div>
-         <div class="box">
-           <small>✍️ AUTHORIZED SIGNATURE</small>
-           ${d.sigData ? `<img src="${d.sigData}" style="width:130px;height:70px;object-fit:contain;border:2px solid #22c55e;background:white">` : '<p style="font-size:11px;color:#999">No signature on record</p>'}
-           <small style="margin-top:6px;color:#166534">Signature verified</small>
-         </div>
-       </div>
-
-       <div class="hash">
-         <b>SHA-256 Digital Fingerprint:</b><br>${d.hash}<br><br>
-         <b>Integrity Status:</b> File content matches original hash — No tampering detected<br>
-         <b>Authenticity Status:</b> Issuer ${d.issuer} confirmed • Signature + Fingerprint present
-       </div>
-
-       <button class="btn btn-print" onclick="window.print()">🖨️ PRINT VERIFICATION CERTIFICATE</button>
-       <button class="btn btn-home" onclick="window.location.href='index.html'">← BACK TO HOME</button>
-       
-       <div class="trust">
-         This document was sealed by ARNAUD AFROCHAINE TRUST SYSTEMS LTD (RC 179223482696).<br>
-         Verification performed on ARNAUD Global Trust Network + Firebase Firestore + Blockchain Anchor.<br>
-         If issuer name does not match expected company, contact ARNAUD TRUST immediately.
-       </div>
-     `;
-     return;
-   }
-
-   // Fallback: check localStorage (if you sealed on same phone)
-   const last = JSON.parse(localStorage.getItem('lastData')||'null');
-   if(last && last.hash === hash){
-     box.innerHTML = '<div class="badge ok">✅ VERIFIED LOCALLY (Same Device)</div><p><b>'+last.title+'</b><br>Director: '+last.director+'</p><div class="hash">'+hash+'</div><p style="font-size:11px">This was sealed on this phone - not yet in global network? Check seal page Firebase status.</p>';
-     return;
-   }
-
-   box.innerHTML = `<div class="badge fail">❌ HASH NOT FOUND</div><p>This hash does not exist in ARNAUD Global Network.</p><div class="hash">Queried: ${hash}<br><br>Possible reasons:<br>1. Document not sealed yet<br>2. Typo in QR<br>3. Firebase key mismatch</div>`;
-
- }catch(e){
-   box.innerHTML = '<div class="badge fail">❌ VERIFICATION ERROR</div><p>'+e.message+'</p><div class="hash">'+hash+'</div>';
- }
+  const doc = await db.collection('documents').doc(hash).get();
+  if(doc.exists){
+   const d = doc.data();
+   box.innerHTML = `
+    <div class="badge ok">✅ VERIFIED AUTHENTIC • ISSUER CONFIRMED</div>
+    <h3 style="margin:8px 0">${d.title || 'Document'}</h3>
+    <small style="color:#166534;font-weight:700">${d.category || d.type || 'Board Resolution'} • ${d.dateLocal || d.date || ''}</small>
+    <div class="meta">
+      <b>📌 Title:</b> ${d.title}<br>
+      <b>👤 Director:</b> ${d.director}<br>
+      <b>🏢 Issuer:</b> ${d.issuer || 'ARNAUD AFROCHAINE TRUST'}<br>
+      <b>🏛️ Company:</b> ${d.company || 'ARNAUD AFROCHAINE TRUST SYSTEMS LTD'} • RC ${d.rc || '179223482696'}<br>
+      <b>📅 Date:</b> ${d.dateLocal || d.date || ''}<br>
+      <b>⛓️ Blockchain:</b> ${d.blockchain || '500B ARNAUD'}
+    </div>
+    <div class="grid">
+      <div class="box">
+        <small>👆 FINGERPRINT (SPIKEY)</small>
+        ${d.fpData ? `<img src="${d.fpData}" style="width:100px;height:100px;object-fit:cover;border:2px solid #22c55e">` : '<p style="font-size:11px;color:#999">No fingerprint on record<br><small>Seal again with fingerprint</small></p>'}
+        <small style="margin-top:6px;color:#166534">Biometric bound</small>
+      </div>
+      <div class="box">
+        <small>✍️ AUTHORIZED SIGNATURE</small>
+        ${d.sigData ? `<img src="${d.sigData}" style="width:140px;height:70px;object-fit:contain;border:2px solid #22c55e;background:white">` : '<p style="font-size:11px;color:#999">No signature on record<br><small>Seal again with signature</small></p>'}
+        <small style="margin-top:6px;color:#166534">Signature verified</small>
+      </div>
+    </div>
+    <div class="hash">
+      <b>SHA-256 Digital Fingerprint:</b><br>${d.hash}<br><br>
+      <b>Integrity:</b> File matches original hash — No tampering<br>
+      <b>Authenticity:</b> Issuer confirmed • Signature + Fingerprint present
+    </div>
+    <button class="btn btn-print" onclick="window.print()">🖨️ PRINT CERTIFICATE</button>
+    <button class="btn btn-home" onclick="location.href='index.html'">← HOME</button>
+   `;
+   return;
+  }
+  const last = JSON.parse(localStorage.getItem('lastData')||'null');
+  if(last && last.hash === hash){
+   box.innerHTML = `<div class="badge ok">✅ VERIFIED LOCALLY</div><p><b>${last.title}</b><br>${last.director}</p><div class="hash">${hash}</div>`;
+   return;
+  }
+  box.innerHTML = `<div class="badge fail">❌ HASH NOT FOUND</div><p>This hash no dey for Global Network.</p><div class="hash">Queried: ${hash}</div>`;
+ }catch(e){ box.innerHTML = `<div class="badge fail">❌ ERROR</div><p>${e.message}</p><div class="hash">${hash}</div>`; }
 }
-
-verify();
+run();
 </script>
 </body>
 </html>
