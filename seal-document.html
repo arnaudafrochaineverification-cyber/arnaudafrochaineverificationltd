@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seal Board Resolution</title>
+<title>Seal Board Resolution - ARNAUD AFROCHAINE TRUST</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
@@ -25,7 +25,7 @@ label{font-weight:700;font-size:14px;margin:12px 0 4px;display:block}
 <div class="card">
 <div class="header">ARNAUD AFROCHAINE TRUST SYSTEMS LTD • RC 179223482696</div>
 <h2>🔒 Seal Board Resolution</h2>
-<div class="sub">Upload Document + Spikey + Signature → SHA-256 + QR → Firebase</div>
+<div class="sub">Upload Document + Spikey + Signature → SHA-256 + QR → Firebase Global</div>
 
 <label>📄 Document</label>
 <input type="file" id="pdfFile" class="input-box">
@@ -40,37 +40,31 @@ label{font-weight:700;font-size:14px;margin:12px 0 4px;display:block}
 <div id="sigPreview" class="preview">Choose Signature Image</div>
 
 <label>📌 Title</label>
-<input id="title" class="input-box" placeholder="e.g. Board Resolution 2026">
-
+<input id="title" class="input-box" placeholder="e.g. Board Resolution 2026" value="Board resolution">
 <label>👤 Director</label>
 <input id="director" class="input-box" value="Arnaud Afrochaine">
-
 <label>🏢 Issuer</label>
 <input id="issuer" class="input-box" value="ARNAUD AFROCHAINE TRUST SYSTEMS LTD">
-
 <label>📅 Date</label>
 <input id="date" type="date" class="input-box">
-
 <div id="status" style="margin-top:10px;padding:10px;border-radius:10px;display:none;background:#eee"></div>
 <div id="qrcode" style="text-align:center;margin-top:10px"></div>
-
 <button class="btn" onclick="sealDocument()">🔒 SEAL & SAVE TO FIREBASE</button>
 </div>
 
 <script>
-// USE YOUR OWN FIREBASE CONFIG FROM YOUR OLD FILE HERE
 const firebaseConfig = {
-  apiKey: "AIzaSy...",
+  apiKey: "AIzaSyBef7ts19mynG9Er4U8qaUYcS7Ye3SYpbs",
   authDomain: "arnaudafrochaineverification.firebaseapp.com",
   projectId: "arnaudafrochaineverification",
   storageBucket: "arnaudafrochaineverification.firebasestorage.app",
-  messagingSenderId: "...",
-  appId: "..."
+  messagingSenderId: "268502946630",
+  appId: "1:268502946630:web:c7abe320c83a1d9c3b4b47",
+  measurementId: "G-Y52LEBJM7Q"
 };
 try{ firebase.initializeApp(firebaseConfig); }catch(e){}
 
 let spikeyBase64="", sigBase64="", pdfFileObj=null;
-
 function compress(file, cb){
  const r=new FileReader();
  r.onload=e=>{
@@ -81,10 +75,11 @@ function compress(file, cb){
    if(w>max||h>max){ if(w>h){h*=max/w;w=max;}else{w*=max/h;h=max;} }
    c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
    cb(c.toDataURL('image/jpeg',0.6));
-  }; img.src=e.target.result;
+  }; 
+  img.onerror=()=>cb(e.target.result);
+  img.src=e.target.result;
  }; r.readAsDataURL(file);
 }
-
 document.getElementById('pdfFile').addEventListener('change', e=>{
  pdfFileObj=e.target.files[0];
  if(pdfFileObj){
@@ -99,9 +94,7 @@ document.getElementById('pdfFile').addEventListener('change', e=>{
 });
 document.getElementById('spikeyFile').addEventListener('change', e=>{ compress(e.target.files[0], d=>{ spikeyBase64=d; document.getElementById('spikeyPreview').innerHTML=`<img src="${d}" style="max-width:120px;border-radius:8px"><div class=ok>✅ Spikey Ready</div>`; }); });
 document.getElementById('sigFile').addEventListener('change', e=>{ compress(e.target.files[0], d=>{ sigBase64=d; document.getElementById('sigPreview').innerHTML=`<img src="${d}" style="max-width:120px;border-radius:8px"><div class=ok>✅ Signature Ready</div>`; }); });
-
 async function sha256(file){ const b=await file.arrayBuffer(); const h=await crypto.subtle.digest('SHA-256',b); return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join(''); }
-
 async function sealDocument(){
  const s=document.getElementById('status'); s.style.display='block';
  if(!pdfFileObj){ s.innerHTML='❌ Choose Document first'; return; }
@@ -122,7 +115,9 @@ async function sealDocument(){
    timestamp:firebase.firestore.FieldValue.serverTimestamp()
   });
   s.innerHTML=`✅ SEALED!<br>Hash: ${hash}<br><a href="${url}" target="_blank">View Document</a>`;
+  s.style.background='#d4edda';
   document.getElementById('qrcode').innerHTML=''; new QRCode(document.getElementById('qrcode'),{text:hash,width:128,height:128});
+  alert('✅ SEALED SUCCESSFULLY!');
  }catch(err){ s.innerHTML='❌ '+err.message; console.error(err); }
 }
 document.getElementById('date').valueAsDate=new Date();
